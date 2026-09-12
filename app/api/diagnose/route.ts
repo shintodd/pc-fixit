@@ -85,6 +85,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const lang =
+      body?.lang === "ms" || req.nextUrl.searchParams.get("lang") === "ms"
+        ? "ms"
+        : "en";
+
     const rawHistory = Array.isArray(body)
       ? body
       : Array.isArray(body?.history)
@@ -277,6 +282,20 @@ export async function POST(req: NextRequest) {
         "REFERENCE FACTS FROM KNOWLEDGE BASE:\nNo local guide matched this exact query. Provide general, easy-to-follow computer troubleshooting steps.";
     }
 
+    const langInstruction =
+      lang === "ms"
+        ? `5. BAHASA / LANGUAGE REQUIREMENT:
+   - ANDA WAJIB MENJAWAB SEPENUHNYA DALAM BAHASA MELAYU YANG TEPAT, NATURAL, DAN MUDAH DIFAHAMI OLEH PENGGUNA PC DI MALAYSIA.
+   - Gunakan istilah perkakasan yang biasa difahami (cth: 'skrin gelap', 'wayar kuasa', 'butang suis', 'papan induk' atau 'motherboard', 'kad grafik', 'kipas menderu').
+   - Istilah standard seperti RAM, GPU, CPU, USB, HDMI, BIOS, Windows, SSD dikekalkan seperti biasa.
+   - Kekalkan jawapan padat (bawah 200 patah perkataan) dengan langkah bernombor (1., 2., 3.).
+   - Akhiri dengan soalan mesra: "Beritahu saya apa yang berlaku selepas anda semak langkah ini, dan kita akan teruskan dari situ!"
+   - Jika pengguna bertanya topik luar selain masalah PC, tolak dengan sopan dalam Bahasa Melayu: "Saya dibina khusus untuk penyelesaian masalah PC dan tidak dapat membantu dengan topik lain. Sila terangkan masalah komputer anda, dan saya berbesar hati untuk membantu!"`
+        : `5. LANGUAGE & TONE:
+   - Respond in friendly, concise, easy-to-read English (under 200 words).
+   - Use clean numbered steps: 1., 2., 3.
+   - End with a friendly, supportive question: "Let me know what happens when you check these, and we will take it from there!"`;
+
     const systemPrompt = `You are PC Fixit, a friendly, patient, and easy-to-understand PC repair technician helping everyday computer users who have zero technical background.
 
 CRITICAL INSTRUCTIONS:
@@ -302,7 +321,8 @@ CRITICAL INSTRUCTIONS:
    - Keep answers concise, clear, and easy to read (under 200 words).
    - Use clean numbered steps: 1., 2., 3.
    - Do NOT dump multiple massive "Scenarios" or long essays. Give the most likely fixes first.
-   - End with a friendly, supportive question: "Let me know what happens when you check these, and we will take it from there!"
+
+${langInstruction}
 
 ${referenceSection}`;
 
@@ -319,7 +339,11 @@ ${referenceSection}`;
           ? top.fix_steps
           : JSON.stringify(top.fix_steps);
 
-        const fallbackReply = `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Running in local offline mode; retrieved from local verified guides.)*`;
+        const fallbackReply =
+          lang === "ms"
+            ? `Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Langkah Pembaikan:\n${stepsText}\n\n*(Nota: Berjalan dalam mod setempat; diambil daripada panduan disahkan tempatan.)*`
+            : `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Running in local offline mode; retrieved from local verified guides.)*`;
+
         return NextResponse.json(
           {
             reply: fallbackReply,
@@ -339,7 +363,9 @@ ${referenceSection}`;
       return NextResponse.json(
         {
           reply:
-            "PC Fixit assistant is running in local mode. Please configure GEMINI_API_KEY in your .env file to enable live AI diagnoses.",
+            lang === "ms"
+              ? "Pembantu PC Fixit sedang berjalan dalam mod setempat. Sila konfigurasikan GEMINI_API_KEY dalam fail .env anda untuk mengaktifkan diagnosis AI secara langsung."
+              : "PC Fixit assistant is running in local mode. Please configure GEMINI_API_KEY in your .env file to enable live AI diagnoses.",
           path: pathUsed,
           matchedKbEntries: totalMatches,
           source: "offline_local",
@@ -489,7 +515,10 @@ ${referenceSection}`;
           ? top.fix_steps
           : JSON.stringify(top.fix_steps);
 
-        const fallbackReply = `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Cloud AI is currently at quota capacity; this diagnosis was retrieved from local verified guides.)*`;
+        const fallbackReply =
+          lang === "ms"
+            ? `Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Langkah Pembaikan:\n${stepsText}\n\n*(Nota: AI Awan sedang mencapai had kuota; diagnosis ini diambil daripada panduan disahkan tempatan.)*`
+            : `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Cloud AI is currently at quota capacity; this diagnosis was retrieved from local verified guides.)*`;
 
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
@@ -513,8 +542,12 @@ ${referenceSection}`;
       return NextResponse.json(
         {
           error: isRateLimited
-            ? "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry."
-            : "Unable to establish live AI diagnosis connection. Please tap Retry.",
+            ? (lang === "ms"
+                ? "Perkhidmatan AI PC Fixit mengalami had kuota sementara kerana permintaan tinggi (kuota Gemini 429 penuh). Sila tunggu sebentar dan tekan Cuba semula."
+                : "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry.")
+            : (lang === "ms"
+                ? "Tidak dapat menyambung ke perkhidmatan diagnosis AI secara langsung. Sila tekan Cuba semula."
+                : "Unable to establish live AI diagnosis connection. Please tap Retry."),
           code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
         },
         { status: isRateLimited ? 429 : 503 }
@@ -582,13 +615,20 @@ ${referenceSection}`;
           ? top.fix_steps
           : JSON.stringify(top.fix_steps);
 
-        responseText = `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Cloud AI is currently at quota capacity; this diagnosis was retrieved from local verified guides.)*`;
+        responseText =
+          lang === "ms"
+            ? `Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Langkah Pembaikan:\n${stepsText}\n\n*(Nota: AI Awan sedang mencapai had kuota; diagnosis ini diambil daripada panduan disahkan tempatan.)*`
+            : `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Cloud AI is currently at quota capacity; this diagnosis was retrieved from local verified guides.)*`;
       } else {
         return NextResponse.json(
           {
             error: isRateLimited
-              ? "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry."
-              : "Unable to retrieve diagnosis right now. Please tap Retry.",
+              ? (lang === "ms"
+                  ? "Perkhidmatan AI PC Fixit mengalami had kuota sementara kerana permintaan tinggi (kuota Gemini 429 penuh). Sila tunggu sebentar dan tekan Cuba semula."
+                  : "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry.")
+              : (lang === "ms"
+                  ? "Tidak dapat mengambil diagnosis pada masa ini. Sila tekan Cuba semula."
+                  : "Unable to retrieve diagnosis right now. Please tap Retry."),
             code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
           },
           { status: isRateLimited ? 429 : 503 }

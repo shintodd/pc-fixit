@@ -20,16 +20,7 @@ import {
 import { CATEGORIES } from "@/lib/categories";
 import { diagnoseProblem as mockDiagnose, type ChatMessage } from "@/lib/diagnose-client";
 import { motion, AnimatePresence } from "framer-motion";
-
-const INTRO =
-  "Hi there! I'm PC Fixit. Describe what's going on with your computer in your own words: what you're seeing, any lights or beeps, and what you've already tried.";
-
-const QUICK_STARTERS = [
-  { label: "Screen turns on but stays black", color: "bg-critical" },
-  { label: "Computer turns on and immediately shuts off", color: "bg-warn" },
-  { label: "Blue screen with a stop code", color: "bg-critical" },
-  { label: "Wi-Fi icon disappeared", color: "bg-accent" },
-];
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function Chat({
   initialQuery,
@@ -40,11 +31,37 @@ export default function Chat({
   topic?: string;
   guideSlug?: string;
 }) {
+  const { t, language } = useLanguage();
   const category = CATEGORIES.find((c) => c.slug === topic);
   const targetGuideSlug = guideSlug || (topic && CATEGORIES.some((c) => c.slug === topic) ? topic : undefined);
 
+  const QUICK_STARTERS = [
+    { label: t("chat_starter_1"), color: "bg-critical" },
+    { label: t("chat_starter_2"), color: "bg-warn" },
+    { label: t("chat_starter_3"), color: "bg-critical" },
+    { label: t("chat_starter_4"), color: "bg-accent" },
+  ];
+
+  const QUICK_SCENARIOS = language === "ms"
+    ? [
+        { label: "Mati: Tiada Lampu atau Kipas", query: "PC saya langsung tak boleh hidup, tiada lampu, tiada kipas berpusing" },
+        { label: "Kipas Berpusing, Skrin Gelap", query: "Kipas berpusing, skrin kekal gelap, lampu LED DRAM menyala pada motherboard" },
+        { label: "Kod Ralat Skrin Biru", query: "Dapat kod ralat blue screen semasa main game" },
+        { label: "Penggunaan Cakera 100%", query: "Komputer tersekat-sekat dan disk usage 100%" },
+        { label: "Wi-Fi Tiada Internet", query: "Wi-Fi bersambung tapi tiada internet, dapat IP 169.254" },
+        { label: "Panas Melampau & Throttling", query: "Suhu GPU cecah 90C dan lag teruk bila main game" },
+      ]
+    : [
+        { label: "Dead: No Lights or Fans", query: "My PC won't turn on at all, no lights, no fans" },
+        { label: "Fans Spin, Black Screen", query: "Fans spin, screen stays black, DRAM LED is lit" },
+        { label: "Blue Screen Stop Code", query: "Got blue screen error code while playing games" },
+        { label: "Disk Stuck at 100%", query: "Computer is frozen and disk usage is stuck at 100%" },
+        { label: "Wi-Fi No Internet", query: "Wi-Fi connected but says no internet, 169.254 IP" },
+        { label: "Overheating & Throttle", query: "GPU reaches 90C and thermal throttles under load" },
+      ];
+
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
-    const seed: ChatMessage[] = [{ role: "assistant", content: INTRO }];
+    const seed: ChatMessage[] = [{ role: "assistant", content: t("chat_intro") }];
     if (initialQuery) seed.push({ role: "user", content: initialQuery });
     return seed;
   });
@@ -53,6 +70,16 @@ export default function Chat({
   const bottomRef = useRef<HTMLDivElement>(null);
   const hasRun = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Update initial intro message if user switches language before asking anything
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].role === "assistant") {
+        return [{ role: "assistant", content: t("chat_intro") }];
+      }
+      return prev;
+    });
+  }, [language, t]);
 
   useEffect(() => {
     const frameId = requestAnimationFrame(() => {
@@ -76,7 +103,7 @@ export default function Chat({
           updated[updated.length - 1] = { role: "assistant", content: streamed };
           return updated;
         });
-      })
+      }, language)
         .then((finalText) => {
           if (!isMounted) return;
           setMessages((m) => {
@@ -86,7 +113,7 @@ export default function Chat({
               content:
                 finalText ||
                 streamed ||
-                "[DIAGNOSTIC_ERROR]: The diagnosis connection ended without a response. Please tap Retry.",
+                `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`,
             };
             return updated;
           });
@@ -97,7 +124,7 @@ export default function Chat({
             const updated = [...m];
             updated[updated.length - 1] = {
               role: "assistant",
-              content: `[DIAGNOSTIC_ERROR]: ${err?.message || "Could not connect to diagnosis service. Please tap Retry."}`,
+              content: `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke perkhidmatan diagnostik. Sila tekan Cuba semula." : "Could not connect to diagnosis service. Please tap Retry.")}`,
             };
             return updated;
           });
@@ -128,7 +155,6 @@ export default function Chat({
     setLoading(true);
 
     let streamed = "";
-    // Add empty assistant placeholder immediately
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
 
     try {
@@ -139,7 +165,7 @@ export default function Chat({
           updated[updated.length - 1] = { role: "assistant", content: streamed };
           return updated;
         });
-      });
+      }, language);
 
       setMessages((m) => {
         const updated = [...m];
@@ -148,7 +174,7 @@ export default function Chat({
           content:
             reply ||
             streamed ||
-            "[DIAGNOSTIC_ERROR]: The diagnosis connection ended without a response. Please tap Retry.",
+            `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`,
         };
         return updated;
       });
@@ -157,7 +183,7 @@ export default function Chat({
         const updated = [...m];
         updated[updated.length - 1] = {
           role: "assistant",
-          content: `[DIAGNOSTIC_ERROR]: ${err?.message || "Unable to reach the diagnosis server. Please tap Retry."}`,
+          content: `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke pelayan diagnostik. Sila tekan Cuba semula." : "Unable to reach the diagnosis server. Please tap Retry.")}`,
         };
         return updated;
       });
@@ -171,7 +197,6 @@ export default function Chat({
     const lastUser = [...messages].reverse().find((m) => m.role === "user");
     if (!lastUser) return;
 
-    // Prune the last assistant error message synchronously
     const pruned = messages.filter((m, idx) => {
       if (
         idx === messages.length - 1 &&
@@ -193,8 +218,6 @@ export default function Chat({
   }
 
   const isInitialOnly = messages.length === 1;
-
-  // Show typing bubble when loading AND the last assistant message is empty (not yet streaming)
   const lastMsg = messages[messages.length - 1];
   const showTypingBubble =
     loading && (lastMsg?.role === "user" || (lastMsg?.role === "assistant" && !lastMsg.content.trim()));
@@ -205,36 +228,35 @@ export default function Chat({
       <aside className="hidden lg:flex flex-col w-80 shrink-0 gap-5">
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-3 border-b border-line/70 dark:border-dark-line/70">
-            <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">Diagnostic Engine</span>
+            <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">
+              {language === "ms" ? "Enjin Diagnostik" : "Diagnostic Engine"}
+            </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              Active
+              {language === "ms" ? "Aktif" : "Active"}
             </span>
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
-            Cross-referencing hardware failure patterns, Windows error codes, and step-by-step resolution paths.
+            {language === "ms"
+              ? "Membandingkan corak kerosakan perkakasan, kod ralat Windows, dan langkah penyelesaian sah."
+              : "Cross-referencing hardware failure patterns, Windows error codes, and step-by-step resolution paths."}
           </p>
           <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex items-center justify-between text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
-            <span>Knowledge Base</span>
-            <span className="font-semibold text-ink dark:text-dark-ink">144 Guides</span>
+            <span>{t("nav_knowledge_base")}</span>
+            <span className="font-semibold text-ink dark:text-dark-ink">
+              {t("cat_guides_count", { count: 180 })}
+            </span>
           </div>
         </div>
 
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
-              Quick Failure Scenarios
+              {language === "ms" ? "Senario Masalah Pantas" : "Quick Failure Scenarios"}
             </span>
           </div>
           <div className="flex flex-col gap-1.5">
-            {[
-              { label: "Dead: No Lights or Fans", query: "My PC won't turn on at all, no lights, no fans" },
-              { label: "Fans Spin, Black Screen", query: "Fans spin, screen stays black, DRAM LED is lit" },
-              { label: "Blue Screen Stop Code", query: "Got blue screen error code while playing games" },
-              { label: "Disk Stuck at 100%", query: "Computer is frozen and disk usage is stuck at 100%" },
-              { label: "Wi-Fi No Internet", query: "Wi-Fi connected but says no internet, 169.254 IP" },
-              { label: "Overheating & Throttle", query: "GPU reaches 90C and thermal throttles under load" },
-            ].map((item) => (
+            {QUICK_SCENARIOS.map((item) => (
               <button
                 key={item.label}
                 type="button"
@@ -254,155 +276,157 @@ export default function Chat({
         <div className="rounded-2xl border border-line/80 dark:border-dark-line/80 bg-subtle/60 dark:bg-dark-subtle/60 p-4 text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed space-y-1.5">
           <div className="flex items-center gap-1.5 font-semibold text-ink dark:text-dark-ink">
             <ShieldCheck className="h-3.5 w-3.5 text-accent dark:text-dark-accent" />
-            <span>Technician Safety</span>
+            <span>{language === "ms" ? "Keselamatan Juruteknik" : "Technician Safety"}</span>
           </div>
           <p>
-            Always unplug the AC power cord and touch unpainted metal on the case to discharge static before handling internal parts.
+            {language === "ms"
+              ? "Sentiasa cabut wayar kuasa AC dan sentuh bahagian logam casing yang tidak dicat untuk membuang cas statik sebelum memegang bahagian dalaman."
+              : "Always unplug the AC power cord and touch unpainted metal on the case to discharge static before handling internal parts."}
           </p>
         </div>
       </aside>
 
       {/* Main Chat Workspace */}
       <div className="flex-1 min-w-0 flex flex-col">
-        {/* Category context banner */}
-      {category && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-line dark:border-dark-line bg-subtle/80 dark:bg-dark-subtle/80 px-4 py-3 backdrop-blur-sm shadow-xs"
-        >
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            <span className="text-[14px] font-medium text-ink dark:text-dark-ink">{category.title}</span>
-          </div>
-          {targetGuideSlug && (
-            <Link
-              href={`/issues/${targetGuideSlug}`}
-              className="flex items-center gap-1.5 text-[13px] font-medium text-accent hover:underline"
-            >
-              <FileText className="h-3.5 w-3.5" />
-              View full guide
-            </Link>
-          )}
-        </motion.div>
-      )}
-
-      {/* Message List */}
-      <div
-        role="log"
-        aria-live="polite"
-        aria-label="Diagnostic conversation"
-        className="flex-1 space-y-5 py-4 pb-20"
-      >
-        <AnimatePresence initial={false}>
-          {messages.map((m, i) => (
-            <Bubble
-              key={i}
-              message={m}
-              isLast={i === messages.length - 1}
-              isStreaming={loading && i === messages.length - 1 && m.role === "assistant" && m.content.trim().length > 0}
-              onRetry={handleRetry}
-            />
-          ))}
-        </AnimatePresence>
-
-        {/* Apple-style typing indicator: shows while waiting for first token */}
-        <AnimatePresence>
-          {showTypingBubble && <TypingBubble />}
-        </AnimatePresence>
-
-        {/* Quick starter suggestions when no conversation yet */}
-        {isInitialOnly && (
+        {category && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="pt-2"
+            className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-line dark:border-dark-line bg-subtle/80 dark:bg-dark-subtle/80 px-4 py-3 backdrop-blur-sm shadow-xs"
           >
-            <div className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary mb-3 flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-              <span>Or click a common symptom to begin:</span>
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+              <span className="text-[14px] font-medium text-ink dark:text-dark-ink">{category.title}</span>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {QUICK_STARTERS.map((starter) => (
-                <motion.button
-                  key={starter.label}
-                  type="button"
-                  whileHover={{ y: -2, scale: 1.01 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => sendMessage(starter.label)}
-                  aria-label={`Start with: ${starter.label}`}
-                  className="flex items-center gap-2 rounded-xl border border-line dark:border-dark-line bg-white dark:bg-dark-card px-4 py-2.5 text-left text-[13px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs transition-colors hover:border-accent/40 hover:bg-accent-soft dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                >
-                  <span className={`h-1.5 w-1.5 rounded-full ${starter.color}`} aria-hidden="true" />
-                  <span>{starter.label}</span>
-                </motion.button>
-              ))}
-            </div>
+            {targetGuideSlug && (
+              <Link
+                href={`/issues/${targetGuideSlug}`}
+                className="flex items-center gap-1.5 text-[13px] font-medium text-accent hover:underline"
+              >
+                <FileText className="h-3.5 w-3.5" />
+                {t("triage_guide_link")}
+              </Link>
+            )}
           </motion.div>
         )}
 
-        <div ref={bottomRef} />
-      </div>
-
-      {/* Sticky Input Bar */}
-      <form
-        aria-label="Diagnostic chat input"
-        onSubmit={handleSubmit}
-        className="sticky bottom-4 mt-2 flex items-center gap-2 rounded-pill border border-line dark:border-dark-line bg-white/96 dark:bg-dark-surface/96 py-1.5 pl-5 pr-1.5 shadow-card dark:shadow-card-dark backdrop-blur-2xl transition-all focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10"
-      >
-        <input
-          ref={inputRef}
-          id="chat-input"
-          name="message"
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Describe what you see or what happened…"
-          aria-label="Describe what you see or what happened with your computer"
-          autoComplete="off"
-          disabled={loading}
-          className="flex-1 bg-transparent py-1.5 text-[15px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none disabled:opacity-50"
-        />
-
-        {/* Clear button */}
-        <AnimatePresence>
-          {input && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.12 }}
-              onClick={() => { setInput(""); inputRef.current?.focus(); }}
-              className="p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              aria-label="Clear input"
-            >
-              <X className="h-4 w-4" aria-hidden="true" />
-            </motion.button>
-          )}
-        </AnimatePresence>
-
-        <motion.button
-          type="submit"
-          disabled={loading || !input.trim()}
-          whileHover={{ scale: 1.06 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 450, damping: 20 }}
-          className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-150 hover:bg-accent-hover active:scale-95 disabled:opacity-25 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-          aria-label={loading ? "Diagnosis in progress" : "Send message"}
+        {/* Message List */}
+        <div
+          role="log"
+          aria-live="polite"
+          aria-label="Diagnostic conversation"
+          className="flex-1 space-y-5 py-4 pb-20"
         >
-          <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-        </motion.button>
-      </form>
+          <AnimatePresence initial={false}>
+            {messages.map((m, i) => (
+              <Bubble
+                key={i}
+                message={m}
+                isLast={i === messages.length - 1}
+                isStreaming={loading && i === messages.length - 1 && m.role === "assistant" && m.content.trim().length > 0}
+                onRetry={handleRetry}
+              />
+            ))}
+          </AnimatePresence>
+
+          {/* Apple-style typing indicator */}
+          <AnimatePresence>
+            {showTypingBubble && <TypingBubble />}
+          </AnimatePresence>
+
+          {/* Quick starter suggestions */}
+          {isInitialOnly && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+              className="pt-2"
+            >
+              <div className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary mb-3 flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                <span>
+                  {language === "ms"
+                    ? "Atau pilih simptom biasa untuk mula:"
+                    : "Or click a common symptom to begin:"}
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {QUICK_STARTERS.map((starter) => (
+                  <motion.button
+                    key={starter.label}
+                    type="button"
+                    whileHover={{ y: -2, scale: 1.01 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => sendMessage(starter.label)}
+                    aria-label={`Start with: ${starter.label}`}
+                    className="flex items-center gap-2 rounded-xl border border-line dark:border-dark-line bg-white dark:bg-dark-card px-4 py-2.5 text-left text-[13px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs transition-colors hover:border-accent/40 hover:bg-accent-soft dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${starter.color}`} aria-hidden="true" />
+                    <span>{starter.label}</span>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          <div ref={bottomRef} />
+        </div>
+
+        {/* Sticky Input Bar */}
+        <form
+          aria-label="Diagnostic chat input"
+          onSubmit={handleSubmit}
+          className="sticky bottom-4 mt-2 flex items-center gap-2 rounded-pill border border-line dark:border-dark-line bg-white/96 dark:bg-dark-surface/96 py-1.5 pl-5 pr-1.5 shadow-card dark:shadow-card-dark backdrop-blur-2xl transition-all focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10"
+        >
+          <input
+            ref={inputRef}
+            id="chat-input"
+            name="message"
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t("chat_input_placeholder")}
+            aria-label={t("chat_input_placeholder")}
+            autoComplete="off"
+            disabled={loading}
+            className="flex-1 bg-transparent py-1.5 text-[15px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none disabled:opacity-50"
+          />
+
+          {/* Clear button */}
+          <AnimatePresence>
+            {input && (
+              <motion.button
+                type="button"
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.7 }}
+                transition={{ duration: 0.12 }}
+                onClick={() => { setInput(""); inputRef.current?.focus(); }}
+                className="p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                aria-label="Clear input"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <motion.button
+            type="submit"
+            disabled={loading || !input.trim()}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 450, damping: 20 }}
+            className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-150 hover:bg-accent-hover active:scale-95 disabled:opacity-25 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            aria-label={loading ? t("chat_thinking") : t("chat_send_btn")}
+          >
+            <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+          </motion.button>
+        </form>
       </div>
     </div>
   );
 }
 
-/* ─────────────────────────────────────────────
-   Text formatter: bold markdown to <strong>
-───────────────────────────────────────────── */
 function renderFormattedText(text: string) {
   const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
   return parts.map((part, idx) => {
@@ -427,9 +451,6 @@ function renderFormattedText(text: string) {
   });
 }
 
-/* ─────────────────────────────────────────────
-   Chat Bubble
-───────────────────────────────────────────── */
 function Bubble({
   message,
   isLast,
@@ -441,14 +462,13 @@ function Bubble({
   isStreaming?: boolean;
   onRetry?: () => void;
 }) {
+  const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const isUser = message.role === "user";
 
-  // Don't render empty assistant placeholder: TypingBubble covers this
   if (!message.content.trim()) return null;
 
-  // Render dedicated error recovery card when diagnosis fails
   if (message.content.startsWith("[DIAGNOSTIC_ERROR]:")) {
     const errorText = message.content.replace("[DIAGNOSTIC_ERROR]:", "").trim();
     const isRateLimit =
@@ -465,7 +485,11 @@ function Bubble({
       >
         <div className="flex items-center gap-1.5 px-1 text-[11px] font-semibold text-critical">
           <AlertCircle className="h-3.5 w-3.5" />
-          <span>{isRateLimit ? "AI Rate-Limit Notice" : "Diagnosis Service Notice"}</span>
+          <span>
+            {isRateLimit
+              ? (language === "ms" ? "Notis Had Kuota AI" : "AI Rate-Limit Notice")
+              : (language === "ms" ? "Notis Perkhidmatan Diagnostik" : "Diagnosis Service Notice")}
+          </span>
         </div>
 
         <div className="rounded-[20px] rounded-bl-[5px] border border-critical/30 bg-critical/5 dark:bg-critical/10 p-5 text-[14px] leading-relaxed text-ink dark:text-dark-ink shadow-card dark:shadow-card-dark space-y-3.5 select-text">
@@ -481,7 +505,7 @@ function Bubble({
                 className="inline-flex items-center gap-1.5 rounded-pill bg-accent px-4 py-2 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                <span>Retry Diagnosis</span>
+                <span>{t("chat_retry_btn")}</span>
               </motion.button>
             )}
 
@@ -490,7 +514,7 @@ function Bubble({
               className="inline-flex items-center gap-1.5 rounded-pill border border-line dark:border-dark-line bg-white dark:bg-dark-card px-3.5 py-2 text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink hover:border-accent/40 transition-colors shadow-xs"
             >
               <Wrench className="h-3.5 w-3.5 text-accent" />
-              <span>Guided Step-by-Step Fix</span>
+              <span>{t("nav_guided_fix")}</span>
             </Link>
 
             <Link
@@ -498,7 +522,7 @@ function Bubble({
               className="inline-flex items-center gap-1.5 rounded-pill border border-line dark:border-dark-line bg-white dark:bg-dark-card px-3.5 py-2 text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink hover:border-accent/40 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5 text-accent" />
-              <span>Browse All Guides</span>
+              <span>{t("issue_all_guides")}</span>
             </Link>
           </div>
         </div>
@@ -536,7 +560,6 @@ function Bubble({
       transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
       className="group flex flex-col items-start gap-1.5"
     >
-      {/* Label */}
       <div className="flex items-center gap-1.5 px-1 text-[11px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary">
         <div className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/10">
           <Wrench className="h-2.5 w-2.5 text-accent" aria-hidden="true" />
@@ -544,7 +567,6 @@ function Bubble({
         <span>PC Fixit</span>
       </div>
 
-      {/* Bubble body */}
       <div className="relative max-w-[90%] sm:max-w-[85%] rounded-[20px] rounded-bl-[5px] border border-line dark:border-dark-line bg-white dark:bg-dark-card px-5 py-4 text-[15px] leading-[1.65] text-ink dark:text-dark-ink shadow-card dark:shadow-card-dark select-text space-y-2.5 break-words [overflow-wrap:anywhere]">
         {lines.map((line, idx) => {
           const trimmed = line.trim();
@@ -566,7 +588,6 @@ function Bubble({
             );
           }
 
-          // Numbered steps like "1." or "1)"
           const numMatch = cleanLine.match(/^(\d+)[.)]\s+(.+)/);
           if (numMatch) {
             return (
@@ -586,7 +607,6 @@ function Bubble({
           );
         })}
 
-        {/* Live streaming cursor */}
         {isStreaming && (
           <motion.span
             animate={{ opacity: [1, 0] }}
@@ -597,23 +617,22 @@ function Bubble({
         )}
       </div>
 
-      {/* Action row */}
       <div className="flex items-center gap-3 px-1 pt-0.5 text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary">
         <button
           type="button"
           onClick={copyText}
           className="inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 hover:text-ink dark:hover:text-dark-ink hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-          aria-label={copied ? "Copied to clipboard" : "Copy response to clipboard"}
+          aria-label={copied ? t("chat_copied_btn") : t("chat_copy_btn")}
         >
           {copied ? (
             <>
               <Check className="h-3 w-3 text-ok" aria-hidden="true" />
-              <span className="text-ok font-medium">Copied</span>
+              <span className="text-ok font-medium">{t("chat_copied_btn")}</span>
             </>
           ) : (
             <>
               <Copy className="h-3 w-3" aria-hidden="true" />
-              <span>Copy</span>
+              <span>{t("chat_copy_btn")}</span>
             </>
           )}
         </button>
@@ -622,14 +641,14 @@ function Bubble({
 
         <div className="flex items-center gap-1">
           {feedback ? (
-            <span className="text-ok font-medium">Thanks!</span>
+            <span className="text-ok font-medium">{language === "ms" ? "Terima kasih!" : "Thanks!"}</span>
           ) : (
             <>
               <button
                 type="button"
                 onClick={() => setFeedback("up")}
                 className="rounded-md p-0.5 hover:text-ok hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                title="Helpful"
+                title={language === "ms" ? "Membantu" : "Helpful"}
                 aria-label="Mark response as helpful"
               >
                 <ThumbsUp className="h-3 w-3" aria-hidden="true" />
@@ -638,7 +657,7 @@ function Bubble({
                 type="button"
                 onClick={() => setFeedback("down")}
                 className="rounded-md p-0.5 hover:text-critical hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                title="Not helpful"
+                title={language === "ms" ? "Tidak membantu" : "Not helpful"}
                 aria-label="Mark response as unhelpful"
               >
                 <ThumbsDown className="h-3 w-3" aria-hidden="true" />
@@ -651,11 +670,6 @@ function Bubble({
   );
 }
 
-/* ─────────────────────────────────────────────
-   Apple-style Typing Indicator
-   Three dots that bounce sequentially, exactly
-   like iMessage.
-───────────────────────────────────────────── */
 function TypingBubble() {
   return (
     <motion.div

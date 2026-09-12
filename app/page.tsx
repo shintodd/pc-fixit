@@ -1,13 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import {
   Sparkles,
   MessageSquare,
   Cpu,
   Wrench,
-  CheckCircle2,
-  Zap,
-  ShieldAlert,
-  HelpCircle,
   Layers,
   ArrowRight,
 } from "lucide-react";
@@ -15,52 +13,55 @@ import HeroScan from "@/components/HeroScan";
 import CategoryGrid from "@/components/CategoryGrid";
 import HeroInput from "@/components/HeroInput";
 import QuickTriageDeck from "@/components/QuickTriageDeck";
-
-const HOW_IT_WORKS = [
-  {
-    step: "01",
-    icon: MessageSquare,
-    title: "Describe in Plain Words",
-    body: "Tell it what you see, hear, or smell: flashing LEDs, sudden power loss, blue screen codes, or loud fans. No tech jargon needed.",
-    glow: "border-blue-500/20 bg-blue-500/5",
-    iconColor: "text-blue-500",
-  },
-  {
-    step: "02",
-    icon: Cpu,
-    title: "Hardware Analysis",
-    body: "The engine cross-references your symptoms against verified hardware documentation, Windows error references, and diagnostic AI.",
-    glow: "border-purple-500/20 bg-purple-500/5",
-    iconColor: "text-purple-500",
-  },
-  {
-    step: "03",
-    icon: Wrench,
-    title: "Follow Step-by-Step Fixes",
-    body: "Clear numbered steps ordered from easiest, no-risk checks first (cables, ports) to advanced component isolation.",
-    glow: "border-emerald-500/20 bg-emerald-500/5",
-    iconColor: "text-emerald-500",
-  },
-];
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function HomePage() {
+  const { t } = useLanguage();
+
+  const HOW_IT_WORKS = [
+    {
+      step: "01",
+      icon: MessageSquare,
+      title: t("how_step1_title"),
+      body: t("how_step1_desc"),
+      glow: "border-blue-500/20 bg-blue-500/5",
+      iconColor: "text-blue-500",
+    },
+    {
+      step: "02",
+      icon: Cpu,
+      title: t("how_step2_title"),
+      body: t("how_step2_desc"),
+      glow: "border-purple-500/20 bg-purple-500/5",
+      iconColor: "text-purple-500",
+    },
+    {
+      step: "03",
+      icon: Wrench,
+      title: t("how_step3_title"),
+      body: t("how_step3_desc"),
+      glow: "border-emerald-500/20 bg-emerald-500/5",
+      iconColor: "text-emerald-500",
+    },
+  ];
+
   return (
     <>
-      {/* ── HERO SECTION ── */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24">
         <HeroScan />
         <div className="relative mx-auto w-full max-w-5xl 2xl:max-w-6xl px-4 text-center sm:px-8 lg:px-12">
           {/* Main Headline */}
           <h1 className="text-4xl font-extrabold leading-[1.12] tracking-tight text-ink dark:text-dark-ink sm:text-6xl md:text-7xl 2xl:text-8xl">
-            Diagnose PC Problems.
+            {t("hero_title_prefix")}
             <br />
             <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300">
-              Get the Actual Fix.
+              {t("hero_title_accent")}
             </span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl 2xl:max-w-3xl text-lg sm:text-xl 2xl:text-2xl text-ink-secondary dark:text-dark-ink-secondary leading-relaxed font-normal">
-            No confusing jargon or dead forum links. Describe what your computer is doing and receive clear, step-by-step diagnostic solutions.
+            {t("hero_description")}
           </p>
 
           {/* Interactive Command Deck */}
@@ -68,22 +69,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── INSTANT SYMPTOM TRIAGE DECK ── */}
+      {/* Instant Symptom Triage Deck */}
       <QuickTriageDeck />
 
-      {/* ── CATEGORY BROWSE SECTION ── */}
+      {/* Category Browse Section */}
       <section className="mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16 py-14 sm:py-20 border-t border-line/60 dark:border-dark-line/60">
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-3 py-1 text-[12px] font-semibold uppercase tracking-wider text-accent dark:text-dark-accent shadow-xs mb-2.5">
               <Layers className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Diagnostic Library</span>
+              <span>{t("cat_library_badge")}</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink dark:text-dark-ink">
-              Browse by Hardware &amp; System Area
+              {t("cat_browse_title")}
             </h2>
             <p className="mt-1.5 text-[15px] text-ink-secondary dark:text-dark-ink-secondary max-w-xl">
-              Select your specific symptom category to explore targeted resolution guides.
+              {t("cat_browse_subtitle")}
             </p>
           </div>
 
@@ -91,7 +92,7 @@ export default function HomePage() {
             href="/troubleshoot"
             className="inline-flex items-center gap-2 text-[14px] font-semibold text-accent dark:text-dark-accent hover:underline shrink-0"
           >
-            <span>Ask AI directly</span>
+            <span>{t("cat_ask_ai")}</span>
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
@@ -99,19 +100,19 @@ export default function HomePage() {
         <CategoryGrid />
       </section>
 
-      {/* ── HOW IT WORKS ── */}
+      {/* How It Works */}
       <section className="border-t border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16">
           <div className="mb-14 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-line dark:border-dark-line bg-white dark:bg-dark-card px-3.5 py-1 text-[12px] font-semibold text-ink-secondary dark:text-dark-ink-secondary shadow-xs mb-3">
               <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
-              <span>Engineering Workflow</span>
+              <span>{t("how_badge")}</span>
             </div>
             <h2 className="text-2xl font-bold tracking-tight text-ink dark:text-dark-ink sm:text-4xl">
-              Three Steps to a Working Computer
+              {t("how_title")}
             </h2>
             <p className="mt-3 text-ink-secondary dark:text-dark-ink-secondary text-base max-w-lg mx-auto leading-relaxed">
-              Designed for ordinary computer users and technicians alike. Clean instructions from external cables to internal parts.
+              {t("how_subtitle")}
             </p>
           </div>
 

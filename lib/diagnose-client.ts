@@ -9,16 +9,18 @@ export interface ChatMessage {
  */
 export async function diagnoseProblem(
   history: ChatMessage[],
-  onChunk?: (chunk: string) => void
+  onChunk?: (chunk: string) => void,
+  lang: "en" | "ms" = "en"
 ): Promise<string> {
   try {
-    const url = onChunk ? "/api/diagnose?stream=true" : "/api/diagnose";
+    const streamQuery = onChunk ? "&stream=true" : "";
+    const url = `/api/diagnose?lang=${lang}${streamQuery}`;
     const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ history }),
+      body: JSON.stringify({ history, lang }),
     });
 
     if (!res.ok) {

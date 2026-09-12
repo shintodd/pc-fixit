@@ -15,6 +15,8 @@ import {
   AlertTriangle,
   Zap,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { TranslationKey } from "@/lib/i18n/translations";
 
 interface TriageProblem {
   slug: string;
@@ -24,16 +26,22 @@ interface TriageProblem {
   severity: "critical" | "warn" | "info";
 }
 
-const TRIAGE_TABS = [
-  { id: "wont-boot", label: "Won't Boot", icon: Power, color: "text-rose-500", activeBg: "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400" },
-  { id: "blue-screen", label: "Blue Screen", icon: MonitorX, color: "text-blue-500", activeBg: "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400" },
-  { id: "running-slow", label: "Freezes & Lag", icon: Gauge, color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400" },
-  { id: "no-internet", label: "No Internet", icon: WifiOff, color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/30 text-sky-600 dark:text-sky-400" },
-  { id: "overheating", label: "Overheating", icon: Flame, color: "text-orange-500", activeBg: "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400" },
-  { id: "driver-issues", label: "Device & Drivers", icon: Cpu, color: "text-purple-500", activeBg: "bg-purple-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400" },
+const TRIAGE_TABS: Array<{
+  id: string;
+  labelKey: TranslationKey;
+  icon: typeof Power;
+  color: string;
+  activeBg: string;
+}> = [
+  { id: "wont-boot", labelKey: "triage_tab_wont_boot", icon: Power, color: "text-rose-500", activeBg: "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400" },
+  { id: "blue-screen", labelKey: "triage_tab_blue_screen", icon: MonitorX, color: "text-blue-500", activeBg: "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400" },
+  { id: "running-slow", labelKey: "triage_tab_running_slow", icon: Gauge, color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400" },
+  { id: "no-internet", labelKey: "triage_tab_no_internet", icon: WifiOff, color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/30 text-sky-600 dark:text-sky-400" },
+  { id: "overheating", labelKey: "triage_tab_overheating", icon: Flame, color: "text-orange-500", activeBg: "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400" },
+  { id: "driver-issues", labelKey: "triage_tab_driver_issues", icon: Cpu, color: "text-purple-500", activeBg: "bg-purple-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400" },
 ];
 
-const TRIAGE_DATA: Record<string, TriageProblem[]> = {
+const TRIAGE_DATA_EN: Record<string, TriageProblem[]> = {
   "wont-boot": [
     {
       slug: "no-power-led-off",
@@ -216,9 +224,195 @@ const TRIAGE_DATA: Record<string, TriageProblem[]> = {
   ],
 };
 
+const TRIAGE_DATA_MS: Record<string, TriageProblem[]> = {
+  "wont-boot": [
+    {
+      slug: "no-power-led-off",
+      title: "Mati sepenuhnya: Tiada lampu atau putaran kipas",
+      summary: "Tiada aliran elektrik langsung. Biasanya disebabkan soket dinding terpelantik, suis rocker PSU, atau wayar panel hadapan tercabut.",
+      quickCheck: "Sentuhkan dua pin PWR_SW pada motherboard dengan pemutar skru rata untuk pintas butang kuasa casing yang rosak.",
+      severity: "critical",
+    },
+    {
+      slug: "fans-spin-briefly",
+      title: "Kipas berpusing setengah saat terus terpadam",
+      summary: "Perlindungan litar pintas (SCP) terpelantik serta-merta untuk mengelakkan komponen terbakar.",
+      quickCheck: "Cabut wayar USB 3.0 panel hadapan dan semua kabel SATA RGB. Periksa pin bengkok di dalam port USB.",
+      severity: "critical",
+    },
+    {
+      slug: "no-post-dram-led",
+      title: "Kipas hidup, monitor gelap, lampu LED DRAM menyala kekal",
+      summary: "Kegagalan memory training atau modul RAM DDR4/DDR5 longgar/tidak dipasang rapat.",
+      quickCheck: "Cabut semua kepingan RAM. Pasang satu keping sahaja dengan kemas ke dalam slot A2 sehingga klip berbunyi 'klik'.",
+      severity: "critical",
+    },
+    {
+      slug: "cmos-battery-dead-date-reset",
+      title: "Masa BIOS dan tetapan memori reset setiap kali boot",
+      summary: "Bateri syiling CR2032 3V telah habis, menyebabkan NVRAM CMOS hilang tetapan bila kabel kuasa AC dimatikan.",
+      quickCheck: "Gantikan bateri syiling CR2032 pada motherboard dengan bateri 3V baharu (bahagian positif menghadap atas).",
+      severity: "warn",
+    },
+  ],
+  "blue-screen": [
+    {
+      slug: "irql-not-less-or-equal",
+      title: "IRQL_NOT_LESS_OR_EQUAL (0x0000000A)",
+      summary: "Proses kernel atau driver cuba mengakses memori pageable tahap tinggi tanpa kebenaran.",
+      quickCheck: "Pasang semula driver GPU menggunakan DDU dalam Safe Mode. Uji kestabilan RAM dengan mdsched.exe.",
+      severity: "critical",
+    },
+    {
+      slug: "whea-uncorrectable-error",
+      title: "WHEA_UNCORRECTABLE_ERROR (0x00000124)",
+      summary: "Ralat perkakasan kritikal daripada CPU, bas PCIe, atau voltan teras tidak stabil.",
+      quickCheck: "Nyahaktifkan CPU undervolting dan Curve Optimizer dalam BIOS. Sahkan cooler CPU dipasang ketat.",
+      severity: "critical",
+    },
+    {
+      slug: "dpc-watchdog-violation",
+      title: "DPC_WATCHDOG_VIOLATION (0x00000133)",
+      summary: "Panggilan prosedur bertangguh tersangkut melepasi had masa, sering disebabkan firmware SSD NVMe lama.",
+      quickCheck: "Kemas kini driver pengawal storan kepada Standard NVM Express Controller dan kemas kini firmware SSD.",
+      severity: "critical",
+    },
+    {
+      slug: "bsod-video-scheduler-internal-error",
+      title: "VIDEO_SCHEDULER_INTERNAL_ERROR (0x00000119)",
+      summary: "Driver paparan mengalami timeout semasa penjadualan arahan grafik GPU.",
+      quickCheck: "Matikan Hardware-accelerated GPU scheduling (HAGS) dalam tetapan Windows Display Graphics.",
+      severity: "critical",
+    },
+  ],
+  "running-slow": [
+    {
+      slug: "100-percent-disk-usage",
+      title: "Penggunaan cakera terkunci pada 100% dengan masa tindak balas melebihi 1000ms",
+      summary: "Indeks latar belakang atau telemetri memenuhi sepenuhnya jalur lebar I/O storan.",
+      quickCheck: "Matikan perkhidmatan SysMain dalam services.msc. Periksa kesihatan cakera dalam CrystalDiskInfo.",
+      severity: "warn",
+    },
+    {
+      slug: "prochot-vrm-throttling-0-79ghz",
+      title: "CPU terkunci pada 0.79 GHz akibat pendikit PROCHOT motherboard",
+      summary: "Sensor VRM motherboard atau bendera suhu EC tersangkut mengunci pengganda CPU ke minimum 8x.",
+      quickCheck: "Lakukan buang cas elektrik AC selama 30 saat. Semak suhu VRM motherboard dalam HWInfo64.",
+      severity: "critical",
+    },
+    {
+      slug: "tiworker-trustedinstaller-high-cpu",
+      title: "TiWorker.exe (Windows Modules Installer) 100% CPU",
+      summary: "Enjin penyelenggaraan latar belakang Windows Update tersangkut dalam gelung imbasan berulang.",
+      quickCheck: "Jalankan DISM /Online /Cleanup-Image /StartComponentCleanup dalam Command Prompt Pentadbir.",
+      severity: "warn",
+    },
+    {
+      slug: "onedrive-sync-constant-cpu-disk-lockup",
+      title: "Imbasan fail OneDrive berterusan dan penggunaan CPU tinggi",
+      summary: "Enjin penyegerakan mengimbas ribuan fail cache kecil tanpa henti.",
+      quickCheck: "Jalankan: onedrive.exe /reset dari dialog Run, atau jeda penyegerakan selama 2 jam.",
+      severity: "warn",
+    },
+  ],
+  "no-internet": [
+    {
+      slug: "dns-server-not-responding",
+      title: "Pelayan DNS tidak bertindak balas: Laman web gagal dibuka",
+      summary: "Resolver ISP terputus sambungan atau cache DNS tempatan telah rosak.",
+      quickCheck: "Jalankan: ipconfig /flushdns dalam CMD, dan tetapkan DNS utama kepada 1.1.1.1 dan 8.8.8.8.",
+      severity: "warn",
+    },
+    {
+      slug: "default-gateway-not-available",
+      title: "Default gateway tidak tersedia (tanda seru kuning)",
+      summary: "Penyesuai rangkaian terputus laluan ke router tempatan semasa mod penjimatan kuasa.",
+      quickCheck: "Nyahpilih 'Allow computer to turn off this device to save power' dalam sifat Device Manager adapter.",
+      severity: "warn",
+    },
+    {
+      slug: "ethernet-drops-intel-i225v-i226v",
+      title: "Intel I225-V / I226-V 2.5G Ethernet sering terputus sesaat",
+      summary: "Energy Efficient Ethernet (EEE) mematikan transceiver semasa sesi permainan berlangsung.",
+      quickCheck: "Nyahaktifkan Energy Efficient Ethernet dan Ultra Low Power Mode dalam tab Advanced Device Manager.",
+      severity: "warn",
+    },
+    {
+      slug: "wifi-invalid-ip-configuration-169-254",
+      title: "Wi-Fi tidak mempunyai konfigurasi IP yang sah (169.254.x.x)",
+      summary: "Komputer gagal mendapatkan pajakan DHCP daripada router, beralih ke subnet APIPA.",
+      quickCheck: "Jalankan: ipconfig /release diikuti ipconfig /renew dalam Command Prompt Pentadbir.",
+      severity: "critical",
+    },
+  ],
+  "overheating": [
+    {
+      slug: "cpu-thermal-shutdown-under-load",
+      title: "PC padam tiba-tiba semasa bermain game atau rendering berat",
+      summary: "Pemproses mencapai suhu persimpangan TJMax (100C - 105C), mencetuskan penutupan kecemasan perkakasan.",
+      quickCheck: "Sahkan tekanan skru cooler. Pastikan plastik lutsinar pelindung di tapak cooler telah dicabut.",
+      severity: "critical",
+    },
+    {
+      slug: "aio-liquid-cooler-pump-failure",
+      title: "Kegagalan pam penyejuk cecair AIO (suhu melonjak 100C masa idle)",
+      summary: "Motor pam cecair tersekat atau rosak, menyebabkan cecair penyejuk tidak mengalir dalam blok CPU.",
+      quickCheck: "Sentuh kedua-dua tiub cecair. Jika satu tiub sangat panas dan satu lagi sejuk, pam telah rosak.",
+      severity: "critical",
+    },
+    {
+      slug: "gpu-vram-memory-junction-thermal-throttle",
+      title: "Suhu sambungan memori GDDR6X VRAM lampau panas (105C - 110C)",
+      summary: "Pad haba memori kilang telah reput atau berminyak menyebabkan kelajuan GPU diturunkan mendadak.",
+      quickCheck: "Hadkan FPS dalam game mengikut kadar segar semula monitor. Ganti pad haba VRAM dengan kekonduksian tinggi.",
+      severity: "critical",
+    },
+    {
+      slug: "motherboard-fan-speed-stuck-100-percent",
+      title: "Kipas casing tersangkut pada kelajuan 100% bunyi bising enjin jet",
+      summary: "Kipas 4-pin PWM menerima voltan tetap 12V disebabkan mod legasi DC aktif dalam BIOS.",
+      quickCheck: "Buka BIOS Hardware Monitor / Q-Fan dan tukar mod header kipas daripada DC kepada PWM.",
+      severity: "info",
+    },
+  ],
+  "driver-issues": [
+    {
+      slug: "gpu-driver-crash-black-screen",
+      title: "Driver paparan nvlddmkm atau amdkmdag berhenti bertindak balas",
+      summary: "Driver grafik terhenti dan gagal memulihkan penetapan semula TDR (Timeout Detection and Recovery).",
+      quickCheck: "Mulakan semula driver grafik serta-merta dengan pintasan papan kekunci: Win + Ctrl + Shift + B.",
+      severity: "critical",
+    },
+    {
+      slug: "device-manager-code-43",
+      title: "Windows telah menghentikan peranti ini (Kod 43) pada kad grafik",
+      summary: "Perkakasan melaporkan ralat dalaman atau driver gagal melakukan komunikasi jabat tangan.",
+      quickCheck: "Pasang semula driver dengan bersih menggunakan DDU. Pasang semula kad grafik ke slot PCIe x16 utama.",
+      severity: "critical",
+    },
+    {
+      slug: "usb-hub-power-surge-exceeded",
+      title: "Lonjakan kuasa pada port USB: Peranti melebihi had arus",
+      summary: "Port rosak atau kabel litar pintas menarik arus melebihi had 500mA/900mA.",
+      quickCheck: "Cabut semua peranti USB. Periksa bahagian plastik dalaman port dengan lampu suluh untuk pin bengkok.",
+      severity: "critical",
+    },
+    {
+      slug: "realtek-audio-front-panel-jack-not-detected",
+      title: "Bicu fon kepala 3.5mm pada panel hadapan tidak mengeluarkan bunyi",
+      summary: "Ketidakpadanan pengesanan impedans antara HD Audio motherboard dan pendawaian casing.",
+      quickCheck: "Buka Realtek Audio Console > Settings > Hidupkan 'Disable front panel jack detection'.",
+      severity: "warn",
+    },
+  ],
+};
+
 export default function QuickTriageDeck() {
   const [activeTab, setActiveTab] = useState("wont-boot");
-  const problems = TRIAGE_DATA[activeTab] || TRIAGE_DATA["wont-boot"];
+  const { t, language } = useLanguage();
+
+  const dataset = language === "ms" ? TRIAGE_DATA_MS : TRIAGE_DATA_EN;
+  const problems = dataset[activeTab] || dataset["wont-boot"];
 
   return (
     <section className="relative mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16 py-12">
@@ -227,13 +421,13 @@ export default function QuickTriageDeck() {
         <div>
           <div className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-3 py-1 text-[12px] font-semibold uppercase tracking-wider text-accent dark:text-dark-accent shadow-xs mb-2.5">
             <Zap className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Instant Symptom Triage</span>
+            <span>{t("triage_badge")}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink dark:text-dark-ink">
-            Find Your Exact Failure Point
+            {t("triage_title")}
           </h2>
           <p className="mt-1.5 text-[15px] text-ink-secondary dark:text-dark-ink-secondary max-w-xl">
-            Select what your PC is doing to see the most frequent verified hardware and OS causes.
+            {t("triage_subtitle")}
           </p>
         </div>
 
@@ -241,7 +435,7 @@ export default function QuickTriageDeck() {
           href="/wizard"
           className="inline-flex items-center gap-2 text-[14px] font-semibold text-accent dark:text-dark-accent hover:underline shrink-0"
         >
-          <span>Need full diagnostic wizard?</span>
+          <span>{t("triage_need_wizard")}</span>
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </div>
@@ -263,7 +457,7 @@ export default function QuickTriageDeck() {
               }`}
             >
               <Icon className={`h-4 w-4 ${tab.color}`} aria-hidden="true" />
-              <span>{tab.label}</span>
+              <span>{t(tab.labelKey)}</span>
             </button>
           );
         })}
@@ -318,7 +512,7 @@ export default function QuickTriageDeck() {
               <div className="mt-4 rounded-xl border border-line/70 dark:border-dark-line/70 bg-subtle/50 dark:bg-dark-subtle/50 p-3 text-[12px] leading-relaxed">
                 <div className="flex items-center gap-1.5 font-semibold text-ink dark:text-dark-ink mb-1">
                   <Wrench className="h-3 w-3 text-accent dark:text-dark-accent" aria-hidden="true" />
-                  <span>Immediate Step:</span>
+                  <span>{t("triage_immediate_step")}</span>
                 </div>
                 <div className="text-ink-secondary dark:text-dark-ink-secondary">
                   {prob.quickCheck}

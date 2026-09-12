@@ -16,18 +16,20 @@ import {
   WifiOff,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const POPULAR_QUERIES = [
-  { label: "No display / Black screen", icon: MonitorX, color: "text-rose-500" },
-  { label: "PC turns on then clicks off", icon: Zap, color: "text-amber-500" },
-  { label: "Blue screen stop code", icon: Sparkles, color: "text-blue-500" },
-  { label: "Wi-Fi connected no internet", icon: WifiOff, color: "text-sky-500" },
-  { label: "Fans roaring at 100%", icon: Flame, color: "text-orange-500" },
-];
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function HeroInput() {
   const [value, setValue] = useState("");
   const router = useRouter();
+  const { t } = useLanguage();
+
+  const POPULAR_QUERIES = [
+    { label: t("hero_pill_no_display"), icon: MonitorX, color: "text-rose-500" },
+    { label: t("hero_pill_clicks_off"), icon: Zap, color: "text-amber-500" },
+    { label: t("hero_pill_bsod"), icon: Sparkles, color: "text-blue-500" },
+    { label: t("hero_pill_no_internet"), icon: WifiOff, color: "text-sky-500" },
+    { label: t("hero_pill_fans_100"), icon: Flame, color: "text-orange-500" },
+  ];
 
   function handleSubmit(e?: FormEvent) {
     if (e) e.preventDefault();
@@ -65,8 +67,8 @@ export default function HeroInput() {
           type="text"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Describe your PC problem: e.g. Fans spin for a second then shut off"
-          aria-label="Describe your PC issue"
+          placeholder={t("hero_input_placeholder")}
+          aria-label={t("hero_input_placeholder")}
           autoComplete="off"
           className="flex-1 bg-transparent text-[15px] sm:text-[16px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
         />
@@ -93,9 +95,9 @@ export default function HeroInput() {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.96 }}
           className="flex h-10 items-center gap-2 rounded-xl bg-accent dark:bg-accent px-4 text-[13.5px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-          aria-label="Start diagnosis"
+          aria-label={t("hero_btn_diagnose")}
         >
-          <span>Diagnose</span>
+          <span>{t("hero_btn_diagnose")}</span>
           <CornerDownLeft className="h-3.5 w-3.5 opacity-80" aria-hidden="true" />
         </motion.button>
       </form>
@@ -103,7 +105,7 @@ export default function HeroInput() {
       {/* Interactive Quick-Prompt Chips */}
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
         <span className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary mr-1">
-          Try asking:
+          {t("hero_try_asking")}
         </span>
         {POPULAR_QUERIES.map((q, idx) => {
           const Icon = q.icon;
@@ -134,7 +136,7 @@ export default function HeroInput() {
           className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-ink dark:bg-white px-5 py-2.5 text-[14px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           <Sparkles className="h-4 w-4 text-accent dark:text-accent" aria-hidden="true" />
-          <span>Launch AI Diagnostician</span>
+          <span>{t("hero_action_launch_ai")}</span>
         </Link>
 
         <Link
@@ -142,7 +144,7 @@ export default function HeroInput() {
           className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-line-strong dark:border-dark-line-strong bg-white/80 dark:bg-dark-card/80 px-5 py-2.5 text-[14px] font-semibold text-ink dark:text-dark-ink backdrop-blur-sm transition-all duration-150 hover:bg-subtle dark:hover:bg-dark-subtle active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           <Wrench className="h-4 w-4 text-ink-secondary dark:text-dark-ink-secondary" aria-hidden="true" />
-          <span>Step-by-Step Guided Fix</span>
+          <span>{t("hero_action_wizard")}</span>
           <ArrowRight className="h-3.5 w-3.5 text-ink-tertiary" aria-hidden="true" />
         </Link>
       </div>

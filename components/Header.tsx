@@ -7,11 +7,8 @@ import { Menu, X, Sparkles, Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import Logo from "@/components/Logo";
-
-const NAV_LINKS = [
-  { href: "/troubleshoot", label: "AI Diagnostician" },
-  { href: "/wizard", label: "Guided Fix" },
-];
+import LanguageToggle from "@/components/LanguageToggle";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -85,6 +82,12 @@ function ThemeToggle() {
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const navLinks = [
+    { href: "/troubleshoot", label: t("nav_diagnostician") },
+    { href: "/wizard", label: t("nav_guided_fix") },
+  ];
 
   // Close mobile menu on Escape key press
   useEffect(() => {
@@ -113,7 +116,7 @@ export default function Header() {
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-1 sm:flex">
-          {NAV_LINKS.map((link) => {
+          {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -139,6 +142,8 @@ export default function Header() {
 
           <div className="mx-2 h-4 w-px bg-line dark:bg-dark-line" />
 
+          <LanguageToggle />
+
           <ThemeToggle />
 
           <Link
@@ -146,11 +151,12 @@ export default function Header() {
             className="ml-2 group inline-flex items-center gap-1.5 rounded-pill bg-accent px-4 py-1.5 text-[13px] font-medium text-white transition-all duration-200 hover:bg-accent-hover active:scale-95 shadow-sm shadow-accent/20"
           >
             <Sparkles className="h-3.5 w-3.5 opacity-80 transition-transform duration-200 group-hover:rotate-12" aria-hidden="true" />
-            <span>Start diagnosis</span>
+            <span>{t("nav_start_diagnosis")}</span>
           </Link>
         </nav>
 
         <div className="flex items-center gap-2 sm:hidden">
+          <LanguageToggle />
           <ThemeToggle />
           <button
             type="button"
@@ -177,7 +183,7 @@ export default function Header() {
             className="overflow-hidden border-t border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-5 py-3 sm:hidden"
           >
             <div className="flex flex-col gap-1">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -198,7 +204,7 @@ export default function Header() {
                   onClick={() => setOpen(false)}
                 >
                   <Sparkles className="h-4 w-4 opacity-80" aria-hidden="true" />
-                  <span>Start diagnosis</span>
+                  <span>{t("nav_start_diagnosis")}</span>
                 </Link>
               </div>
             </div>
