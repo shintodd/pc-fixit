@@ -12,11 +12,11 @@ export const translations = {
     lang_toggle_label: "Switch language",
 
     // Hero Section
-    hero_badge: "Your Friendly 24/7 PC Repair Tech",
+    hero_badge: "Your 24/7 PC Repair Tech",
     hero_title_prefix: "Got a PC Problem?",
-    hero_title_accent: "Let's Fix It Together.",
+    hero_title_accent: "Let's Fix It.",
     hero_description:
-      "No confusing tech jargon or dead-end forum posts. Tell your friendly technician what your PC is doing and get clear, step-by-step guidance right away.",
+      "Describe what your PC is doing and get clear, straight-to-the-point fix steps from your tech.",
     hero_input_placeholder:
       "Tell your tech: e.g. Fans spin for a second then shut off",
     hero_btn_diagnose: "Ask Tech",
@@ -89,11 +89,11 @@ export const translations = {
       "Your tech starts with zero-risk, no-tools checks first (cables, plugs) before touching anything inside.",
 
     // Chat / Diagnostician Page
-    chat_header_title: "Friendly AI Technician",
+    chat_header_title: "AI Technician",
     chat_header_status: "Active & Ready",
-    chat_header_sub: "Your personal, patient PC repair buddy on standby",
+    chat_header_sub: "Straight-to-the-point PC repair technician on standby",
     chat_intro:
-      "Hey there! I'm your PC Fixit tech. Don't stress if your computer is acting up, we can figure this out together! Tell me what's happening in your own words: what do you see or hear, and what have you tried so far?",
+      "Hey! What's going on with your PC? Tell me what you're seeing, any beeps or lights, and what you've tried so far.",
     chat_quick_prompts: "Popular Tech Questions",
     chat_starter_1: "Screen turns on but stays black",
     chat_starter_2: "Computer turns on and immediately shuts off",
@@ -101,9 +101,9 @@ export const translations = {
     chat_starter_4: "Wi-Fi icon disappeared",
     chat_input_placeholder: "Tell your technician what's happening with your PC...",
     chat_send_btn: "Send",
-    chat_thinking: "Your tech is checking the symptoms and finding the best solution...",
+    chat_thinking: "Checking symptoms and finding direct fix steps...",
     chat_disclaimer:
-      "Friendly technician guidance based on official vendor documentation and Windows error diagnostics. Feel free to ask follow-up questions anytime!",
+      "Straight-to-the-point tech fixes based on vendor documentation and Windows diagnostics.",
     chat_retry_btn: "Ask tech again",
     chat_copy_btn: "Copy diagnosis",
     chat_copied_btn: "Copied!",
@@ -156,11 +156,11 @@ export const translations = {
     lang_toggle_label: "Tukar bahasa",
 
     // Hero Section
-    hero_badge: "Technician PC Mesra 24/7 Anda",
+    hero_badge: "Technician PC 24/7 Anda",
     hero_title_prefix: "PC Anda Buat Hal?",
-    hero_title_accent: "Jom Kita Baiki Sama-Sama.",
+    hero_title_accent: "Jom Selesaikannya.",
     hero_description:
-      "Tak perlu pening istilah pelik atau baca forum lama. Cerita je masalah PC anda kat technician kami dan dapatkan cara baiki yang mudah difahami langkah demi langkah.",
+      "Cerita apa yang berlaku pada PC anda dan terus dapatkan langkah baiki pantas dan tepat daripada technician.",
     hero_input_placeholder:
       "Cerita kat technician: cth. Kipas pusing sekejap lepas tu mati",
     hero_btn_diagnose: "Tanya Tech",
@@ -221,7 +221,7 @@ export const translations = {
     how_badge: "Cara Kami Bantu",
     how_title: "3 Langkah Mudah Baiki PC Anda",
     how_subtitle:
-      "Macam ada kawan technician yang penyabar tolong tengokkan PC sebelah meja anda.",
+      "Macam ada kawan technician yang tolong tengokkan PC sebelah meja anda.",
     how_step1_title: "Cerita Guna Ayat Sendiri",
     how_step1_desc:
       "Tak perlu tahu istilah komputer pun. Cerita je apa yang anda nampak atau dengar: lampu kelip, bunyi beep, atau kipas pusing.",
@@ -233,11 +233,11 @@ export const translations = {
       "Technician akan ajar semak benda paling selamat dan mudah dulu (kabel, plug) sebelum usik part dalam.",
 
     // Chat / Diagnostician Page
-    chat_header_title: "Technician AI Mesra",
+    chat_header_title: "Technician AI",
     chat_header_status: "Sedia Membantu",
-    chat_header_sub: "Kawan technician PC peribadi anda yang sedia membantu",
+    chat_header_sub: "Technician pantas sedia bantu terus ke punca kerosakan",
     chat_intro:
-      "Hai! Saya abang technician PC Fixit anda. Jangan risau kalau PC buat hal ya, jom kita check sama-sama sampai elok! Cerita je apa masalah yang jadi: ada lampu menyala ke, screen hitam ke, atau kipas tak pusing?",
+      "Hai! Apa masalah PC anda? Cerita apa yang jadi: ada lampu menyala, screen hitam, atau kipas pusing sekejap? Saya terus tolong semak.",
     chat_quick_prompts: "Soalan Popular Kepada Tech",
     chat_starter_1: "PC on tapi screen hitam",
     chat_starter_2: "PC hidup sekejap terus padam",
@@ -245,9 +245,9 @@ export const translations = {
     chat_starter_4: "Ikon Wi-Fi hilang tak boleh connect",
     chat_input_placeholder: "Cerita kat technician apa masalah PC anda...",
     chat_send_btn: "Hantar",
-    chat_thinking: "Technician tengah semak punca masalah dan cari jalan penyelesaian...",
+    chat_thinking: "Tengah semak simptom dan cari langkah baiki terus...",
     chat_disclaimer:
-      "Panduan santai daripada technician berpandukan manual rasmi. Kalau ada apa-apa langkah yang tak faham, tanya je ya!",
+      "Panduan baiki terus ke punca berpandukan dokumentasi perkakasan rasmi dan diagnostik Windows.",
     chat_retry_btn: "Tanya technician lagi",
     chat_copy_btn: "Salin",
     chat_copied_btn: "Dah salin!",

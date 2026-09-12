@@ -238,8 +238,8 @@ export default function Chat({
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
             {language === "ms"
-              ? "Tanya je apa-apa masalah komputer anda. Technician kami sedia bantu semak punca kerosakan dan ajar cara baiki langkah demi langkah."
-              : "Ask anything about your PC or laptop. Your friendly technician is on standby to diagnose the fault and guide you through the fix."}
+              ? "Tanya apa-apa masalah komputer anda. Technician sedia bantu terus ke punca kerosakan dan langkah baiki."
+              : "Describe your PC problem. Your technician pinpoints the fault and gives you direct fix steps."}
           </p>
           <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex items-center justify-between text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
             <span>{t("nav_knowledge_base")}</span>
