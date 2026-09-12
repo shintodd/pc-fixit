@@ -79,7 +79,7 @@ export default function PhoneQrModal({
           role="dialog"
           aria-modal="true"
           aria-labelledby="qr-modal-title"
-          className="relative w-full max-w-md rounded-3xl border border-line dark:border-dark-line bg-white dark:bg-dark-card p-6 sm:p-7 shadow-2xl z-10 space-y-5 text-center"
+          className="glass-element glass-adaptive relative w-full max-w-md p-6 sm:p-7 z-10 space-y-5 text-center"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-2 border-b border-line dark:border-dark-line">

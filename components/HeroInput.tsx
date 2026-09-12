@@ -54,7 +54,7 @@ export default function HeroInput() {
         role="search"
         aria-label="Search diagnostic guides"
         onSubmit={handleSubmit}
-        className="group relative flex items-center gap-3 rounded-2xl border border-line-strong/80 dark:border-dark-line-strong/80 bg-white/95 dark:bg-dark-card/95 p-2.5 pl-5 shadow-lg shadow-black/[0.03] dark:shadow-black/20 backdrop-blur-xl transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
+        className="glass-element glass-adaptive group relative flex items-center gap-3 p-2.5 pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
       >
         <Search
           className="h-5 w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"

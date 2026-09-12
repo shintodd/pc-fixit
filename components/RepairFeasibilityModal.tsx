@@ -96,7 +96,7 @@ export default function RepairFeasibilityModal({
           role="dialog"
           aria-modal="true"
           aria-labelledby="feasibility-modal-title"
-          className="relative w-full max-w-xl rounded-3xl border border-line dark:border-dark-line bg-white dark:bg-dark-card p-6 sm:p-8 shadow-2xl z-10 space-y-5 max-h-[90vh] flex flex-col overflow-hidden text-[13px]"
+          className="glass-element glass-adaptive relative w-full max-w-xl p-6 sm:p-8 z-10 space-y-5 max-h-[90vh] flex flex-col overflow-hidden text-[13px]"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-line dark:border-dark-line shrink-0">

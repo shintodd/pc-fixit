@@ -132,7 +132,7 @@ export default function CommandExplainerModal({
           role="dialog"
           aria-modal="true"
           aria-labelledby="cmd-modal-title"
-          className="relative w-full max-w-2xl rounded-3xl border border-line dark:border-dark-line bg-white dark:bg-dark-card p-6 sm:p-8 shadow-2xl z-10 space-y-6 max-h-[90vh] flex flex-col overflow-hidden"
+          className="glass-element glass-adaptive relative w-full max-w-2xl p-6 sm:p-8 z-10 space-y-6 max-h-[90vh] flex flex-col overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-line dark:border-dark-line shrink-0">
