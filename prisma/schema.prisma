@@ -1,0 +1,84 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Source {
+  researched
+  verified
+  live_search
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  severity    String   // "info" | "warn" | "critical"
+  issues      Issue[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([title])
+  @@index([severity])
+  @@map("categories")
+}
+
+model Issue {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  title         String
+  summary       String
+  severity      String      // "info" | "warn" | "critical"
+  symptoms      String[]
+  fix_steps     Json        // Array of { title: string, detail: string }
+  source        Source      @default(researched)
+  verified      Boolean     @default(false)
+  category_slug String?
+  category      Category?   @relation(fields: [category_slug], references: [slug])
+  error_codes   ErrorCode[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([category_slug])
+  @@index([category_slug, severity])
+  @@index([severity])
+  @@index([verified, source])
+  @@index([source, verified])
+  @@map("issues")
+}
+
+model ErrorCode {
+  id          Int      @id @default(autoincrement())
+  code        Int      @unique
+  name        String
+  explanation String
+  fix_guide   String
+  source      Source   @default(researched)
+  verified    Boolean  @default(false)
+  issues      Issue[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([name])
+  @@index([verified, source])
+  @@index([source, verified])
+  @@map("error_codes")
+}
+
+model WizardNode {
+  id        String   @id
+  question  String
+  options   Json     // Array of { label: string, next_id: string | null, resolves_to_issue_slug?: string | null }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@map("wizard_nodes")
+}
+

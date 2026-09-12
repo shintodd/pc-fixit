@@ -1,0 +1,313 @@
+[
+  {
+    "id": "start",
+    "question": "What's happening with your PC?",
+    "options": [
+      {
+        "label": "It won't turn on, POST, or boot into Windows",
+        "next_id": "wizard-wont-boot-power",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "It crashes with a Blue Screen of Death (BSOD)",
+        "next_id": "wizard-bsod-timing",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "It turns on, but runs sluggish, hitches, or freezes",
+        "next_id": "wizard-slow-pattern",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "Internet, Wi-Fi, or Ethernet connection is failing",
+        "next_id": "wizard-network-type",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "Fans are roaring, PC is overheating, or shutting down from heat",
+        "next_id": "wizard-thermal-symptom",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "A graphics card, audio, or peripheral driver is malfunctioning",
+        "next_id": "wizard-driver-device",
+        "resolves_to_issue_slug": null
+      }
+    ]
+  },
+  {
+    "id": "wizard-wont-boot-power",
+    "question": "What happens when you press the power button?",
+    "options": [
+      {
+        "label": "Completely dead (zero lights, zero fan movement)",
+        "next_id": null,
+        "resolves_to_issue_slug": "no-power-led-off"
+      },
+      {
+        "label": "Fans spin for half a second then immediately shut off",
+        "next_id": null,
+        "resolves_to_issue_slug": "fans-spin-briefly"
+      },
+      {
+        "label": "Lights and fans turn on, but the display stays completely blank",
+        "next_id": "wizard-wont-boot-debug-led",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "Shows the motherboard or Windows logo, but then freezes or loops",
+        "next_id": "wizard-wont-boot-freeze",
+        "resolves_to_issue_slug": null
+      }
+    ]
+  },
+  {
+    "id": "wizard-wont-boot-debug-led",
+    "question": "Does the motherboard show any debug indicator LEDs or beep codes?",
+    "options": [
+      {
+        "label": "The CPU debug LED is illuminated (red or white)",
+        "next_id": null,
+        "resolves_to_issue_slug": "no-post-cpu-led"
+      },
+      {
+        "label": "The DRAM debug LED is illuminated (yellow or amber)",
+        "next_id": null,
+        "resolves_to_issue_slug": "no-post-dram-led"
+      },
+      {
+        "label": "The VGA debug LED is lit, or monitor says 'No Signal'",
+        "next_id": null,
+        "resolves_to_issue_slug": "no-post-vga-led"
+      },
+      {
+        "label": "The BOOT LED is lit, or the PC boots directly into the BIOS menu",
+        "next_id": null,
+        "resolves_to_issue_slug": "no-post-boot-led"
+      }
+    ]
+  },
+  {
+    "id": "wizard-wont-boot-freeze",
+    "question": "Where does the startup freeze occur?",
+    "options": [
+      {
+        "label": "Frozen on the motherboard logo with stuck spinning dots",
+        "next_id": null,
+        "resolves_to_issue_slug": "stuck-on-motherboard-logo"
+      },
+      {
+        "label": "Stuck in a 'Preparing Automatic Repair' diagnostic loop",
+        "next_id": null,
+        "resolves_to_issue_slug": "automatic-repair-loop"
+      },
+      {
+        "label": "Black screen with 'BOOTMGR is missing. Press Ctrl+Alt+Del'",
+        "next_id": null,
+        "resolves_to_issue_slug": "bootmgr-is-missing"
+      },
+      {
+        "label": "Crashes on boot with INACCESSIBLE_BOOT_DEVICE",
+        "next_id": null,
+        "resolves_to_issue_slug": "inaccessible-boot-device"
+      }
+    ]
+  },
+  {
+    "id": "wizard-bsod-timing",
+    "question": "When does the Blue Screen crash happen?",
+    "options": [
+      {
+        "label": "During heavy gaming, rendering, or 3D loads",
+        "next_id": "wizard-bsod-gaming",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "Randomly, even when sitting idle on the desktop or web browsing",
+        "next_id": "wizard-bsod-random",
+        "resolves_to_issue_slug": null
+      },
+      {
+        "label": "When waking from sleep, closing laptop lid, or during shutdown",
+        "next_id": null,
+        "resolves_to_issue_slug": "driver-power-state-failure"
+      }
+    ]
+  },
+  {
+    "id": "wizard-bsod-gaming",
+    "question": "What error code or symptom describes the crash during load?",
+    "options": [
+      {
+        "label": "IRQL_NOT_LESS_OR_EQUAL or lists a graphics driver file",
+        "next_id": null,
+        "resolves_to_issue_slug": "irql-not-less-or-equal"
+      },
+      {
+        "label": "WHEA_UNCORRECTABLE_ERROR (hardware bus error or voltage dip)",
+        "next_id": null,
+        "resolves_to_issue_slug": "whea-uncorrectable-error"
+      },
+      {
+        "label": "SYSTEM_SERVICE_EXCEPTION (often with game anticheat)",
+        "next_id": null,
+        "resolves_to_issue_slug": "system-service-exception"
+      },
+      {
+        "label": "Screen freezes solid for 5-10 seconds before DPC_WATCHDOG_VIOLATION",
+        "next_id": null,
+        "resolves_to_issue_slug": "dpc-watchdog-violation"
+      }
+    ]
+  },
+  {
+    "id": "wizard-bsod-random",
+    "question": "What stop code appears on the blue screen?",
+    "options": [
+      {
+        "label": "MEMORY_MANAGEMENT or web browser tabs frequently crash with access violations",
+        "next_id": null,
+        "resolves_to_issue_slug": "memory-management"
+      },
+      {
+        "label": "PAGE_FAULT_IN_NONPAGED_AREA",
+        "next_id": null,
+        "resolves_to_issue_slug": "page-fault-in-nonpaged-area"
+      },
+      {
+        "label": "KERNEL_DATA_INPAGE_ERROR or an SSD/hard drive disappears after reboot",
+        "next_id": null,
+        "resolves_to_issue_slug": "kernel-data-inpage-error"
+      },
+      {
+        "label": "CRITICAL_PROCESS_DIED or immediate restart without dump file",
+        "next_id": null,
+        "resolves_to_issue_slug": "critical-process-died"
+      }
+    ]
+  },
+  {
+    "id": "wizard-slow-pattern",
+    "question": "What behavior are you seeing in Task Manager?",
+    "options": [
+      {
+        "label": "Disk 0 is continuously stuck at 100% active time",
+        "next_id": null,
+        "resolves_to_issue_slug": "100-percent-disk-usage"
+      },
+      {
+        "label": "'System Interrupts' is consuming 20-100% of CPU capacity",
+        "next_id": null,
+        "resolves_to_issue_slug": "high-cpu-system-idle-interrupts"
+      },
+      {
+        "label": "CPU speed is throttled and locked at 0.79 GHz",
+        "next_id": null,
+        "resolves_to_issue_slug": "thermal-throttling-slowdown"
+      },
+      {
+        "label": "RAM usage sits at 90%+ even with minimal applications open",
+        "next_id": null,
+        "resolves_to_issue_slug": "high-ram-usage-standby-memory"
+      },
+      {
+        "label": "Booting and signing into the desktop takes several minutes",
+        "next_id": null,
+        "resolves_to_issue_slug": "bloatware-startup-apps-overload"
+      }
+    ]
+  },
+  {
+    "id": "wizard-network-type",
+    "question": "What type of network problem are you encountering?",
+    "options": [
+      {
+        "label": "Wi-Fi shows 'Connected, no internet' with a yellow warning or globe",
+        "next_id": null,
+        "resolves_to_issue_slug": "wifi-connected-no-internet"
+      },
+      {
+        "label": "Wi-Fi option or toggle is completely gone from Windows",
+        "next_id": null,
+        "resolves_to_issue_slug": "no-wifi-networks-found"
+      },
+      {
+        "label": "Ethernet cable is plugged in but reports 'Unidentified network'",
+        "next_id": null,
+        "resolves_to_issue_slug": "ethernet-unidentified-network"
+      },
+      {
+        "label": "Websites fail to open with 'DNS server not responding'",
+        "next_id": null,
+        "resolves_to_issue_slug": "dns-server-not-responding"
+      },
+      {
+        "label": "Wi-Fi drops connection every 10-20 minutes, especially while gaming",
+        "next_id": null,
+        "resolves_to_issue_slug": "random-wifi-disconnects-gaming"
+      }
+    ]
+  },
+  {
+    "id": "wizard-thermal-symptom",
+    "question": "What is the primary thermal or noise symptom?",
+    "options": [
+      {
+        "label": "PC abruptly shuts off with no blue screen during load (100°C+ CPU temp)",
+        "next_id": null,
+        "resolves_to_issue_slug": "cpu-thermal-shutdown-under-load"
+      },
+      {
+        "label": "Liquid cooler tubes are hot, radiator is cold, CPU hits 95°C at idle",
+        "next_id": null,
+        "resolves_to_issue_slug": "aio-liquid-cooler-pump-failure"
+      },
+      {
+        "label": "New PC build hits 90-100°C instantly on desktop (suspected peel sticker)",
+        "next_id": null,
+        "resolves_to_issue_slug": "peel-sticker-left-on-cooler"
+      },
+      {
+        "label": "GPU fans scream at 100% while core looks cool (hotspot delta over 30°C)",
+        "next_id": null,
+        "resolves_to_issue_slug": "gpu-hotspot-delta-high"
+      },
+      {
+        "label": "PC was quiet previously, but now heatsink fins are clogged with dust",
+        "next_id": null,
+        "resolves_to_issue_slug": "dust-clogged-heatsink-fins"
+      }
+    ]
+  },
+  {
+    "id": "wizard-driver-device",
+    "question": "Which hardware device or driver is malfunctioning?",
+    "options": [
+      {
+        "label": "Display driver crashed or screen turns black for a few seconds (nvlddmkm)",
+        "next_id": null,
+        "resolves_to_issue_slug": "gpu-driver-crash-black-screen"
+      },
+      {
+        "label": "No audio output, sound crackles, or Realtek device is missing",
+        "next_id": null,
+        "resolves_to_issue_slug": "audio-crackling-or-no-sound-realtek"
+      },
+      {
+        "label": "USB device not recognized (Device Descriptor Request Failed, Code 43)",
+        "next_id": null,
+        "resolves_to_issue_slug": "usb-device-not-recognized-code-43"
+      },
+      {
+        "label": "Bluetooth toggle completely vanished from Settings and Device Manager",
+        "next_id": null,
+        "resolves_to_issue_slug": "bluetooth-missing-from-device-manager"
+      },
+      {
+        "label": "Second monitor is not detected or shows 'No Signal'",
+        "next_id": null,
+        "resolves_to_issue_slug": "dual-monitor-not-detected"
+      }
+    ]
+  }
+]

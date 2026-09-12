@@ -1,0 +1,39 @@
+import Link from "next/link";
+import Logo from "@/components/Logo";
+
+export default function Footer() {
+  return (
+    <footer className="border-t border-line dark:border-dark-line bg-surface/80 dark:bg-dark-surface/80 backdrop-blur-sm">
+      <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] flex-col gap-6 px-4 sm:px-8 lg:px-12 2xl:px-16 py-10">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <Link href="/" className="group flex items-center">
+            <Logo size={28} />
+          </Link>
+
+          <div className="flex items-center gap-2 rounded-full border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3 py-1 text-[12px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs">
+            <span className="h-2 w-2 rounded-full bg-ok" aria-hidden="true" />
+            <span>AI Diagnostician Ready</span>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[13px] text-ink-secondary dark:text-dark-ink-secondary border-t border-line/60 dark:border-dark-line/60 pt-6">
+          <p>
+            Compiled from vendor documentation and Windows error-code references. Not affiliated with any commercial hardware manufacturer.
+          </p>
+
+          <nav aria-label="Footer navigation" className="flex items-center gap-6">
+            <Link href="/troubleshoot" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+              Diagnose
+            </Link>
+            <Link href="/wizard" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+              Guided Fix
+            </Link>
+            <Link href="/" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+              Knowledge Base
+            </Link>
+          </nav>
+        </div>
+      </div>
+    </footer>
+  );
+}

@@ -1,0 +1,888 @@
+[
+  {
+    "slug": "no-internet",
+    "title": "No internet connection or intermittent drops",
+    "summary": "The computer cannot establish network connectivity, drops offline during tasks, or connects with limited or local-only access.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Globe icon with 'No internet access' in system tray",
+      "Webpages fail to load with DNS or timeout errors",
+      "Network connection drops every few minutes"
+    ],
+    "fix_steps": [
+      {
+        "title": "Power cycle modem and router",
+        "detail": "Unplug power from both modem and router for 30 seconds. Plug modem in first, wait for all status lights to stabilize, then power on router."
+      },
+      {
+        "title": "Run Windows Network Reset",
+        "detail": "Go to Settings → Network & Internet → Advanced network settings → Network reset → Reset now. This reinstalls adapters and restores default network stacks."
+      },
+      {
+        "title": "Flush DNS and release IP configuration",
+        "detail": "Open Command Prompt as admin and execute: 'ipconfig /flushdns', 'ipconfig /release', and 'ipconfig /renew'."
+      },
+      {
+        "title": "Change DNS servers to Cloudflare or Google",
+        "detail": "In adapter properties, set IPv4 DNS manually to 1.1.1.1 (Cloudflare) and 8.8.8.8 (Google) to bypass ISP DNS outages."
+      }
+    ],
+    "related_error_codes": [
+      37,
+      39,
+      40,
+      45,
+      53
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "wifi-connected-no-internet",
+    "title": "Wi-Fi shows 'Connected, no internet'",
+    "summary": "The computer associates with the local wireless access point successfully, but cannot reach the default gateway or WAN upstream servers.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Wi-Fi icon has an exclamation point or globe overlay",
+      "Network status states 'No Internet, secured'",
+      "Other devices on the same Wi-Fi can browse normally"
+    ],
+    "fix_steps": [
+      {
+        "title": "Forget and reconnect to the Wi-Fi network",
+        "detail": "Go to Settings → Network & Internet → Wi-Fi → Manage known networks → select your SSID → click 'Forget'. Reconnect and re-enter the WPA password."
+      },
+      {
+        "title": "Reset TCP/IP stack and Winsock catalog",
+        "detail": "In administrative Command Prompt, run 'netsh int ip reset' followed by 'netsh winsock reset' and reboot the PC."
+      },
+      {
+        "title": "Check for invalid static IP configuration",
+        "detail": "Open 'ncpa.cpl' → right click Wi-Fi → Properties → Internet Protocol Version 4 (TCP/IPv4) → ensure 'Obtain an IP address automatically' and 'Obtain DNS server address automatically' are selected."
+      },
+      {
+        "title": "Turn off Random Hardware MAC addresses",
+        "detail": "In Settings → Wi-Fi, disable 'Random hardware addresses'. Some routers reject DHCP leases from rotating MAC addresses."
+      }
+    ],
+    "related_error_codes": [
+      39,
+      44,
+      45,
+      51
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "no-wifi-networks-found",
+    "title": "Wi-Fi option missing or 'No Wi-Fi networks found'",
+    "summary": "The Wi-Fi toggle disappears from the Windows taskbar, or the adapter fails to detect any surrounding wireless broadcast signals.",
+    "severity": "critical",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Wi-Fi quick settings tile is completely missing in Windows 11",
+      "Device Manager shows yellow hazard mark on Intel Wi-Fi or Realtek Wireless adapter",
+      "Airplane mode is stuck enabled or disabled"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform a cold power cycle (EC reset)",
+        "detail": "Modern Intel AX200/AX210 Wi-Fi cards can enter an unrecoverable low-power state. Shut down PC, unplug power cord (or hold laptop power button for 30 seconds), wait 2 minutes, and power on."
+      },
+      {
+        "title": "Verify WLAN AutoConfig service is running",
+        "detail": "Press Win+R, type 'services.msc', find 'WLAN AutoConfig'. Ensure Startup type is set to 'Automatic' and Service status is 'Running'."
+      },
+      {
+        "title": "Reinstall Wi-Fi adapter drivers in Device Manager",
+        "detail": "Open Device Manager → Network adapters → right-click wireless adapter → Uninstall device (leave 'attempt to remove driver' unchecked) → Action → Scan for hardware changes."
+      },
+      {
+        "title": "Check physical Wi-Fi switch or antenna",
+        "detail": "On desktops, ensure the external high-gain Wi-Fi antennas are screwed into the back motherboard gold SMA terminals. On laptops, verify Fn+F-key airplane toggle is off."
+      }
+    ],
+    "related_error_codes": [
+      29,
+      41,
+      43,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "ethernet-unidentified-network",
+    "title": "Ethernet cable plugged in but shows 'Unidentified network'",
+    "summary": "Windows establishes a physical Ethernet link but fails to receive a valid DHCP lease from the router, defaulting to an unusable 169.254.x.x APIPA address.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Ethernet icon shows yellow triangle or globe with 'Unidentified network'",
+      "Running 'ipconfig' reveals an IPv4 address starting with 169.254",
+      "Default gateway is blank in ipconfig output"
+    ],
+    "fix_steps": [
+      {
+        "title": "Test Ethernet cable and router LAN port",
+        "detail": "Inspect Ethernet RJ45 connectors for bent gold pins or broken locking tabs. Plug cable into a different numbered LAN port on the router, or test with a replacement CAT6 cable."
+      },
+      {
+        "title": "Force DHCP lease renewal",
+        "detail": "Open Command Prompt as admin and run: 'ipconfig /release' then 'ipconfig /renew'. If it times out, the router DHCP server is unreachable."
+      },
+      {
+        "title": "Disable and re-enable the Ethernet network adapter",
+        "detail": "Press Win+R, run 'ncpa.cpl', right-click 'Ethernet', select 'Disable', wait 10 seconds, then select 'Enable'."
+      },
+      {
+        "title": "Reinstall manufacturer LAN controller driver",
+        "detail": "Download the latest Realtek PCIe GbE / Intel I225-V LAN driver installer from the motherboard vendor website on another device and install."
+      }
+    ],
+    "related_error_codes": [
+      39,
+      41,
+      43,
+      45
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "dns-server-not-responding",
+    "title": "DNS server is not responding (DNS_PROBE_FINISHED_BAD_CONFIG)",
+    "summary": "The operating system cannot translate domain names into IP addresses because the assigned DNS server is unreachable or timing out.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Web browser shows error 'DNS_PROBE_FINISHED_NXDOMAIN' or 'Server IP could not be found'",
+      "Pinging numeric IPs (e.g., 'ping 1.1.1.1') works, but pinging domain names ('ping google.com') fails",
+      "Chat apps like Discord stay connected while browser websites refuse to load"
+    ],
+    "fix_steps": [
+      {
+        "title": "Switch to public secure DNS servers",
+        "detail": "Open Settings → Network & Internet → select your adapter → DNS server assignment → Edit → Manual → IPv4 On. Preferred DNS: 1.1.1.1, Alternate DNS: 1.0.0.1 (Cloudflare) or 8.8.8.8 (Google)."
+      },
+      {
+        "title": "Clear the local Windows DNS cache",
+        "detail": "Open Command Prompt as admin and execute 'ipconfig /flushdns'. Verify message 'Successfully flushed the DNS Resolver Cache'."
+      },
+      {
+        "title": "Restart the DNS Client service",
+        "detail": "Run 'net stop dnscache' and 'net start dnscache' in Command Prompt, or reboot the PC."
+      },
+      {
+        "title": "Disable third-party VPN and DNS blockers",
+        "detail": "Ad-blocking software (AdGuard, Pi-hole) or stale VPN configurations redirect DNS traffic to dead local loopback addresses."
+      }
+    ],
+    "related_error_codes": [
+      39,
+      44,
+      53
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "wifi-adapter-code-10-or-43",
+    "title": "Wi-Fi adapter displays Code 10 or Code 43 in Device Manager",
+    "summary": "The operating system hardware manager halted the wireless network card because the device firmware or driver failed to initialize.",
+    "severity": "critical",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Device Manager shows yellow warning icon next to Wi-Fi adapter",
+      "Device status: 'This device cannot start. (Code 10)' or 'Windows has stopped this device (Code 43)'",
+      "Wi-Fi toggle disappears entirely from Windows settings"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform a complete static discharge (Drain flea power)",
+        "detail": "Shut down PC. Disconnect AC power cord. Hold down chassis power button for 30 seconds to drain capacitors. Reconnect power and turn on. This fixes stuck firmware state in 90% of Intel Code 10 incidents."
+      },
+      {
+        "title": "Install clean Intel/Realtek OEM wireless drivers",
+        "detail": "Download the standalone Wi-Fi driver from Intel or motherboard manufacturer. Uninstall existing driver with 'delete driver software' checked, reboot, and run clean installer."
+      },
+      {
+        "title": "Reseat M.2 Wi-Fi card inside PC/laptop",
+        "detail": "If hardware is accessible, unscrew the M.2 2230 wireless card, clean gold contacts, reconnect tiny coaxial antenna cables firmly, and screw back into place."
+      },
+      {
+        "title": "Disable Fast Startup",
+        "detail": "Fast Startup skips cold hardware resets. Disable 'Turn on fast startup' in Control Panel Power Options."
+      }
+    ],
+    "related_error_codes": [
+      18,
+      29,
+      43,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "random-wifi-disconnects-gaming",
+    "title": "Wi-Fi drops connection every 10-30 minutes, especially in games",
+    "summary": "The wireless connection intermittently drops packet streams or disconnects briefly due to aggressive power saving or Wi-Fi band steering conflicts.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Sudden disconnects from Discord and multiplayer game lobbies",
+      "Ping spikes from 20ms to 999ms every few minutes",
+      "Wi-Fi reconnects automatically after 10-15 seconds"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable adapter power saving in Device Manager",
+        "detail": "Open Device Manager → Network adapters → right-click Wi-Fi adapter → Properties → Power Management tab → UNCHECK 'Allow the computer to turn off this device to save power'."
+      },
+      {
+        "title": "Separate 2.4 GHz and 5 GHz Wi-Fi SSID bands on router",
+        "detail": "Log in to router admin panel. Disable 'Smart Connect' or band steering, and create distinct SSIDs for 2.4GHz and 5GHz. Connect gaming PC solely to the 5GHz or 6GHz network."
+      },
+      {
+        "title": "Set Roaming Aggressiveness to Lowest",
+        "detail": "In Device Manager → Wi-Fi adapter → Advanced tab → find 'Roaming Aggressiveness' → set value to '1. Lowest'. This stops the card from constantly scanning and dropping packets."
+      },
+      {
+        "title": "Set 802.11 Channel Width to 20MHz only for 2.4GHz",
+        "detail": "Reduce channel width to 20MHz to prevent adjacent neighbor channel interference on crowded frequencies."
+      }
+    ],
+    "related_error_codes": [
+      40,
+      41,
+      45
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "vpn-tap-adapter-blocking-traffic",
+    "title": "Internet blocked after disconnecting VPN (Kill Switch residue)",
+    "summary": "A third-party VPN application left its virtual TAP/TUN interface or firewall kill-switch rules active upon exiting, blocking all standard network traffic.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Internet worked while VPN was active, but completely died after turning VPN off",
+      "All browsers show connection refused or timeout",
+      "Network status says connected but zero data flows"
+    ],
+    "fix_steps": [
+      {
+        "title": "Launch VPN and disable Kill Switch setting",
+        "detail": "Reopen your VPN client (NordVPN, ExpressVPN, Proton, etc.), navigate to Settings → Kill Switch → toggle Off, then disconnect cleanly."
+      },
+      {
+        "title": "Disable virtual TAP network adapters in ncpa.cpl",
+        "detail": "Press Win+R, type 'ncpa.cpl'. Right-click any adapters named 'TAP-Windows Adapter' or 'WireGuard Tunnel' and select 'Disable'."
+      },
+      {
+        "title": "Reset Windows Filtering Platform (Firewall rules)",
+        "detail": "Open Command Prompt as admin and run: 'netsh advfirewall reset' to clear custom IP drop rules created by VPN software."
+      },
+      {
+        "title": "Uninstall stale VPN virtual network adapters",
+        "detail": "In Device Manager, find Network Adapters, right-click leftover virtual VPN adapters, and select 'Uninstall device'."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      44,
+      51,
+      58
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "winsock-ip-stack-corruption",
+    "title": "Winsock catalog or TCP/IP stack corruption",
+    "summary": "Low-level Windows network socket bindings are corrupted, preventing network socket APIs from binding ports or transmitting packet buffers.",
+    "severity": "critical",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Browser gives error 'ERR_NETWORK_ACCESS_DENIED' or 'Socket error'",
+      "Ping works in CMD, but zero Windows applications can open web connections",
+      "Occurred following malware removal or registry cleaner usage"
+    ],
+    "fix_steps": [
+      {
+        "title": "Execute complete Winsock catalog reset",
+        "detail": "Open Command Prompt as Administrator and execute: 'netsh winsock reset catalog'. Do not open any other apps until rebooted."
+      },
+      {
+        "title": "Reset IPv4 and IPv6 stacks to factory state",
+        "detail": "In the same command prompt, run 'netsh int ip reset resetlog.txt' and 'netsh int ipv6 reset'."
+      },
+      {
+        "title": "Restart computer immediately",
+        "detail": "Reboot Windows to allow the kernel network subsystem to rebuild the protocol catalog from scratch."
+      },
+      {
+        "title": "Verify no malicious Layered Service Providers (LSPs)",
+        "detail": "Run 'netsh winsock show catalog' to ensure only official Microsoft kernel providers are registered."
+      }
+    ],
+    "related_error_codes": [
+      2,
+      12,
+      45,
+      83
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "proxy-settings-hijacked",
+    "title": "'Windows could not automatically detect network's proxy settings'",
+    "summary": "A rogue browser proxy or legacy corporate PAC script is configured in Windows settings, diverting web requests into a non-existent port.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Windows Network Troubleshooter reports 'Proxy settings issue'",
+      "Browsers display 'ERR_PROXY_CONNECTION_FAILED'",
+      "Steam or Spotify connect fine while Edge and Chrome cannot load sites"
+    ],
+    "fix_steps": [
+      {
+        "title": "Turn off manual and automatic proxy in Windows Settings",
+        "detail": "Go to Settings → Network & Internet → Proxy. Under 'Automatic proxy setup', turn OFF 'Automatically detect settings'. Under 'Manual proxy setup', turn OFF 'Use a proxy server'."
+      },
+      {
+        "title": "Inspect WinHTTP system proxy via CMD",
+        "detail": "Open Command Prompt as admin and run: 'netsh winhttp show proxy'. If a proxy server is listed, run 'netsh winhttp reset proxy' to restore direct access."
+      },
+      {
+        "title": "Clean proxy entries in Windows Registry",
+        "detail": "Navigate to 'HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings'. Set 'ProxyEnable' to 0 and delete 'ProxyServer' key."
+      },
+      {
+        "title": "Scan for adware with Malwarebytes",
+        "detail": "Malicious browser hijackers install local proxy servers to inject advertisements into unencrypted HTTP traffic."
+      }
+    ],
+    "related_error_codes": [
+      39,
+      44,
+      51
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "slow-lan-speed-negotiated-100mbps",
+    "title": "Gigabit Ethernet capping at 100 Mbps or 10 Mbps speed",
+    "summary": "A damaged cable, dirty RJ45 port, or driver negotiation flaw restricts a Gigabit/2.5GbE connection to Fast Ethernet (100 Mbps) limits.",
+    "severity": "info",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Internet speed test caps at exactly 90-95 Mbps on a 500+ Mbps plan",
+      "Network connection status in Windows shows 'Link speed (Receive/Transmit): 100/100 (Mbps)'",
+      "LAN file transfers are excruciatingly slow"
+    ],
+    "fix_steps": [
+      {
+        "title": "Replace the Ethernet cable with CAT6",
+        "detail": "Gigabit Ethernet requires all 8 wires inside the cable. If a single pin (especially pins 4, 5, 7, 8) is severed or corroded, the NIC drops to 4-wire 100 Mbps mode."
+      },
+      {
+        "title": "Verify router port is Gigabit capable",
+        "detail": "Ensure the cable is plugged into a 1Gbps or 2.5Gbps LAN port on the router, not an auxiliary 100Mbps or IPTV-designated port."
+      },
+      {
+        "title": "Inspect Speed & Duplex setting in Device Manager",
+        "detail": "Open Device Manager → Network adapters → Ethernet adapter → Properties → Advanced tab → Speed & Duplex. Ensure it is set to 'Auto Negotiation' or '1.0 Gbps Full Duplex'."
+      },
+      {
+        "title": "Clean dust out of RJ45 motherboard jack",
+        "detail": "Inspect the Ethernet port with a flashlight. Clean dust buildup on the 8 angled gold pins with compressed air or an isopropyl swab."
+      }
+    ],
+    "related_error_codes": [
+      28,
+      43,
+      52
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "wifi-roaming-aggressiveness-issue",
+    "title": "Laptop constantly switches Wi-Fi access points in mesh networks",
+    "summary": "Wireless network card excessively scans and roams between mesh nodes, causing periodic micro-freezes and packet drops.",
+    "severity": "info",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Repeated brief 2-second voice dropouts on Zoom or Teams calls",
+      "Laptop switches between 2.4GHz and 5GHz every few minutes",
+      "Event Viewer logs continuous WLAN-AutoConfig event ID 8003"
+    ],
+    "fix_steps": [
+      {
+        "title": "Reduce Roaming Aggressiveness to Lowest",
+        "detail": "Device Manager → Network adapters → Intel/Realtek Wi-Fi → Properties → Advanced tab → Roaming Aggressiveness → change to 'Lowest'."
+      },
+      {
+        "title": "Set Preferred Band to 5GHz or 6GHz",
+        "detail": "In the same Advanced tab, set 'Preferred Band' to '3. Prefer 5GHz band' to stop falling back to crowded 2.4GHz frequencies."
+      },
+      {
+        "title": "Bind device to nearest mesh satellite",
+        "detail": "Open your mesh router app (eero, Google Nest, ASUS AiMesh) and bind your PC/laptop to the specific closest node in the room."
+      },
+      {
+        "title": "Update wireless adapter driver",
+        "detail": "Modern Intel Wi-Fi drivers contain algorithm updates designed for Wi-Fi 6/6E 802.11k/v/r fast roaming protocols."
+      }
+    ],
+    "related_error_codes": [
+      40,
+      41,
+      54
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "network-reset-after-windows-update",
+    "title": "Network adapter stops working immediately after a Windows Update",
+    "summary": "A Windows cumulative update replaced the working vendor network driver with an incompatible generic driver or corrupted adapter bindings.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Ethernet or Wi-Fi was working before rebooting for an update",
+      "Network adapter properties show 'Driver is unavailable'",
+      "IP address shows 0.0.0.0 or configuration tab is greyed out"
+    ],
+    "fix_steps": [
+      {
+        "title": "Roll back network driver in Device Manager",
+        "detail": "Open Device Manager → Network adapters → right-click adapter → Properties → Driver tab → click 'Roll Back Driver'."
+      },
+      {
+        "title": "Uninstall the latest Windows Quality Update",
+        "detail": "Go to Settings → Windows Update → Update history → Uninstall updates → find the update installed immediately prior to the failure and click 'Uninstall'."
+      },
+      {
+        "title": "Use manufacturer standalone offline installer",
+        "detail": "Download the official driver installer from the motherboard vendor (Intel, Realtek, Marvell) on another PC, transfer via USB flash drive, and install."
+      },
+      {
+        "title": "Prevent Windows Update from replacing hardware drivers",
+        "detail": "Open 'sysdm.cpl' → Hardware tab → Device Installation Settings → select 'No (your device might not work as expected)'."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85,
+      90
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "metered-connection-blocking-traffic",
+    "title": "Metered connection setting blocking background apps and updates",
+    "summary": "Windows flagged the Wi-Fi or Ethernet connection as metered, blocking cloud synchronization, email updates, and game launcher downloads.",
+    "severity": "info",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Outlook and OneDrive say 'Metered Network Warning'",
+      "Steam and Epic Games refuse to download updates automatically",
+      "Windows Update pauses and prompts for manual approval"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Metered Connection toggle",
+        "detail": "Go to Settings → Network & Internet → select Wi-Fi (or Ethernet) → click your network name → toggle 'Metered connection' to OFF."
+      },
+      {
+        "title": "Allow downloads over metered networks",
+        "detail": "In Settings → Windows Update → Advanced options → toggle ON 'Download updates over metered connections'."
+      },
+      {
+        "title": "Reset network data usage limit",
+        "detail": "Go to Settings → Network & Internet → Data usage → remove any configured monthly megabyte limits."
+      },
+      {
+        "title": "Restart background sync applications",
+        "detail": "Close and reopen OneDrive, Dropbox, and cloud backup software to restore normal upload/download bandwidth."
+      }
+    ],
+    "related_error_codes": [
+      56,
+      58
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "duplicate-ip-address-conflict",
+    "title": "IP address conflict with another system on the network",
+    "summary": "Two devices on the local LAN were assigned the identical static or dynamic private IPv4 address, causing network collisions and connection drops.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Windows balloon notification: 'There is an IP address conflict with another system on this network'",
+      "Internet immediately disconnects or alternates packets with another device",
+      "Router log shows MAC address collision for the same IP"
+    ],
+    "fix_steps": [
+      {
+        "title": "Release and renew DHCP lease",
+        "detail": "Open Command Prompt as admin and run 'ipconfig /release' followed by 'ipconfig /renew' to request an unused IP address from the router."
+      },
+      {
+        "title": "Reboot the router to clear stale DHCP tables",
+        "detail": "Power cycle the router to flush expired DHCP lease reservations from smartphones, TVs, and IoT appliances."
+      },
+      {
+        "title": "Ensure PC is set to automatic DHCP",
+        "detail": "Open 'ncpa.cpl' → adapter properties → IPv4 → verify 'Obtain an IP address automatically' is selected instead of a hardcoded static IP."
+      },
+      {
+        "title": "Assign an out-of-range static IP if necessary",
+        "detail": "If you require a static IP, choose a high host number outside the router's automatic DHCP pool (e.g., 192.168.1.220)."
+      }
+    ],
+    "related_error_codes": [
+      38,
+      50,
+      54
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "ipv6-leak-or-broken-prefix",
+    "title": "IPv6 enabled on router but lacking upstream routing (20-second page load lag)",
+    "summary": "Windows attempts to connect via IPv6 by default, but times out repeatedly before falling back to IPv4 (Happy Eyeballs timeout).",
+    "severity": "info",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Websites take 15-20 seconds before beginning to load, then load quickly",
+      "Testing on 'test-ipv6.com' results in 0/10 or broken IPv6 score",
+      "Discord and gaming connections intermittently freeze on connecting"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Internet Protocol Version 6 (TCP/IPv6) on the adapter",
+        "detail": "Press Win+R, type 'ncpa.cpl'. Right-click your active network adapter → Properties → UNCHECK 'Internet Protocol Version 6 (TCP/IPv6)' → click OK."
+      },
+      {
+        "title": "Configure IPv4 preference over IPv6 via registry",
+        "detail": "Microsoft provides an official wizard to prefer IPv4 over IPv6 in prefix policies, eliminating lookup timeouts."
+      },
+      {
+        "title": "Check router IPv6 WAN settings",
+        "detail": "Log in to your router. If your ISP does not provide native IPv6 routing, toggle IPv6 to Disabled on the router WAN interface."
+      },
+      {
+        "title": "Flush DNS resolver cache",
+        "detail": "Run 'ipconfig /flushdns' in Command Prompt to purge cached AAAA (IPv6) DNS resource records."
+      }
+    ],
+    "related_error_codes": [
+      44,
+      45,
+      53
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "default-gateway-not-available",
+    "title": "The default gateway is not available (yellow exclamation mark)",
+    "summary": "The network adapter loses route connectivity to the local router or access point, causing Windows network diagnostics to continually reset the gateway adapter.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Windows Troubleshooter reports: 'The default gateway is not available - Fixed', but it breaks again 10 minutes later",
+      "Yellow warning triangle on taskbar network icon",
+      "Cannot access local router web interface at 192.168.1.1 or 192.168.0.1"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable network adapter power management sleep",
+        "detail": "Open Device Manager > Network adapters > Right-click your Wi-Fi or Ethernet adapter > Properties > Power Management tab > Uncheck 'Allow the computer to turn off this device to save power' > Click OK."
+      },
+      {
+        "title": "Assign a static Default Gateway and IP address",
+        "detail": "Open ncpa.cpl > Right-click network adapter > Properties > Double-click Internet Protocol Version 4 (TCP/IPv4) > Set manual IP: 192.168.1.150, Subnet: 255.255.255.0, Gateway: 192.168.1.1, DNS: 1.1.1.1."
+      },
+      {
+        "title": "Perform full network stack reset in CMD",
+        "detail": "Run in Administrator Command Prompt: netsh int ip reset && netsh winsock reset && ipconfig /flushdns, then restart the computer."
+      },
+      {
+        "title": "Update router firmware and check for IP lease exhaustion",
+        "detail": "Log in to your router admin panel. Increase the DHCP IP pool range or update the router firmware to resolve ARP table dropouts."
+      }
+    ],
+    "related_error_codes": [
+      37,
+      51
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "wifi-6e-6ghz-band-missing-intel",
+    "title": "Wi-Fi 6E / 7 (6 GHz band) SSID not showing in Windows 11",
+    "summary": "Intel AX210/AX211 or Qualcomm Wi-Fi 6E adapters fail to broadcast or detect 6 GHz SSIDs due to outdated drivers, regional regulatory domain locks, or WPA3 requirement mismatches.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Router broadcasts 2.4 GHz, 5 GHz, and 6 GHz, but 6 GHz network is completely invisible in Windows",
+      "Smartphones connect to the 6 GHz Wi-Fi 6E network without issues in the same room",
+      "Wi-Fi adapter is verified as Wi-Fi 6E capable in Device Manager"
+    ],
+    "fix_steps": [
+      {
+        "title": "Update to the latest Intel PROSet / Wireless Wi-Fi driver",
+        "detail": "Download the latest Wi-Fi driver directly from Intel Driver & Support Assistant. Driver versions older than 22.190 frequently disable 6 GHz discovery in Windows 11."
+      },
+      {
+        "title": "Ensure router security is set strictly to WPA3-Personal",
+        "detail": "The Wi-Fi 6E specification requires WPA3 encryption. In router wireless settings, change the 6 GHz security mode from 'WPA2/WPA3 Mixed' to pure 'WPA3-Personal (AES)'."
+      },
+      {
+        "title": "Enable 802.11ax / WiFi 6E Mode in Device Manager",
+        "detail": "Open Device Manager > Network adapters > Intel Wi-Fi 6E adapter > Properties > Advanced tab > Ensure '802.11ax / 6GHz Band' is set to Enabled."
+      },
+      {
+        "title": "Upgrade Windows 10 to Windows 11",
+        "detail": "Microsoft and Intel restrict native 6 GHz Wi-Fi 6E and Wi-Fi 7 band access to Windows 11 Build 22000 and newer. Windows 10 lacks official 6 GHz regulatory support."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      28
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "ethernet-drops-intel-i225v-i226v",
+    "title": "Intel I225-V and I226-V Ethernet micro-drops connection while gaming",
+    "summary": "The 2.5 GbE Intel I225-V and I226-V onboard Ethernet controllers suffer from hardware packet buffer drops when Energy Efficient Ethernet (EEE) powers down the PHY transceiver.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Ethernet connection drops for 2-3 seconds and reconnects during multiplayer games or Discord calls",
+      "Event Viewer shows e2fnexpress Event ID 27: 'Intel Ethernet Controller network link is disconnected'",
+      "Affects Intel Z690, Z790, and B650 / X670 motherboards with 2.5G ports"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Energy Efficient Ethernet (EEE) in adapter settings",
+        "detail": "Open Device Manager > Network adapters > Intel Ethernet Controller > Properties > Advanced tab > Scroll to 'Energy Efficient Ethernet' and set to Disabled."
+      },
+      {
+        "title": "Disable Ultra Low Power Mode and Green Ethernet",
+        "detail": "In the same Advanced tab, set 'Ultra Low Power Mode' to Disabled, and set 'Green Ethernet' to Disabled."
+      },
+      {
+        "title": "Force Link Speed to 1.0 Gbps Full Duplex",
+        "detail": "If connecting to a 1 Gbps Gigabit home router, change 'Speed & Duplex' from 'Auto Negotiation' to '1.0 Gbps Full Duplex' to prevent continuous negotiation renegotiation."
+      },
+      {
+        "title": "Install Intel NVM Firmware Update from motherboard support",
+        "detail": "Visit your motherboard support page and download the 'Intel I225/I226 NVM Firmware Update tool' to flash the onboard network controller microcode."
+      }
+    ],
+    "related_error_codes": [
+      29,
+      37
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "wifi-invalid-ip-configuration-169-254",
+    "title": "Wi-Fi does not have a valid IP configuration (169.254.x.x APIPA)",
+    "summary": "The computer connects to the wireless router radio but fails to receive a DHCP IP address lease, defaulting to an unroutable 169.254.x.x Automatic Private IP Addressing (APIPA) address.",
+    "severity": "critical",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Windows network troubleshooter reports 'Wi-Fi does not have a valid IP configuration'",
+      "Running ipconfig shows IPv4 Address: 169.254.x.x and empty Default Gateway",
+      "Wi-Fi status reports 'No Internet, secured'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Release and renew IP address lease in Command Prompt",
+        "detail": "Open Command Prompt as Administrator and execute: ipconfig /release followed by ipconfig /renew. If it reports 'unable to contact DHCP server', proceed to reset services."
+      },
+      {
+        "title": "Restart the DHCP Client service",
+        "detail": "Press Win + R, type 'services.msc', find 'DHCP Client', confirm its status is 'Running', and ensure its Startup Type is set to Automatic."
+      },
+      {
+        "title": "Reboot home router to clear full DHCP table",
+        "detail": "Unplug your internet modem and Wi-Fi router from the wall outlet for 30 seconds, plug them back in, and wait 2 minutes for the router DHCP pool to reinitialize."
+      },
+      {
+        "title": "Forget and reconnect to the Wi-Fi network",
+        "detail": "Go to Settings > Network & internet > Wi-Fi > Manage known networks > Click 'Forget' next to your network name > Reconnect and enter the Wi-Fi password freshly."
+      }
+    ],
+    "related_error_codes": [
+      37,
+      51
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "slow-wifi-bluetooth-coexistence-interference",
+    "title": "2.4 GHz Wi-Fi speed drops drastically when Bluetooth is turned on",
+    "summary": "The single Wi-Fi/Bluetooth combo card shares one internal antenna, causing packet collisions between Bluetooth audio/peripherals and 2.4 GHz Wi-Fi bands.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Wi-Fi speed drops from 50 Mbps down to 2 Mbps whenever Bluetooth headphones or mouse are connected",
+      "Audio cuts out or crackles when downloading files over Wi-Fi",
+      "Turning off Bluetooth in Windows settings immediately restores normal Wi-Fi speeds"
+    ],
+    "fix_steps": [
+      {
+        "title": "Connect to your router 5 GHz or 6 GHz Wi-Fi band",
+        "detail": "Open Wi-Fi settings and connect to your router 5 GHz network (often named NetworkName_5G). 5 GHz is completely immune to 2.4 GHz Bluetooth radio interference."
+      },
+      {
+        "title": "Enable Bluetooth AMP / Coexistence in Advanced adapter settings",
+        "detail": "Open Device Manager > Network adapters > Right-click Wi-Fi card > Properties > Advanced > Set 'Bluetooth AMP' or 'Coexistence Support' to Enabled."
+      },
+      {
+        "title": "Change 2.4 GHz channel width in router settings to 20 MHz",
+        "detail": "Log in to your router settings, navigate to 2.4 GHz wireless, and change Channel Bandwidth from '40 MHz' to '20 MHz' to reduce spectral overlap with Bluetooth frequency hopping."
+      },
+      {
+        "title": "Screw in external motherboard magnetic shark-fin antenna",
+        "detail": "If using a desktop PC, ensure the dual-wire antenna included with the motherboard is screwed securely into the rear golden coaxial RP-SMA connectors."
+      }
+    ],
+    "related_error_codes": [
+      28
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "network-profile-stuck-public-printer-sharing",
+    "title": "Network profile stuck on Public blocking network printer and file sharing",
+    "summary": "Windows sets the network profile type to Public by default, activating strict Windows Defender Firewall rules that block local printer discovery, SMB shares, and ping requests.",
+    "severity": "info",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Network printer shows 'Offline' even though other devices can print",
+      "Cannot access shared folders (\\\\PCNAME) across the home network",
+      "Network profile toggle missing or greyed out in Windows Settings"
+    ],
+    "fix_steps": [
+      {
+        "title": "Change network profile to Private in Windows Settings",
+        "detail": "Go to Settings > Network & internet > Click 'Wi-Fi' or 'Ethernet' > Click your connected network name > Under Network profile type, select 'Private network'."
+      },
+      {
+        "title": "Change profile to Private using PowerShell",
+        "detail": "Open PowerShell as Administrator and run: Get-NetConnectionProfile. Note the InterfaceAlias name and execute: Set-NetConnectionProfile -Name 'YourNetworkName' -NetworkCategory Private."
+      },
+      {
+        "title": "Enable Network Discovery and File Sharing",
+        "detail": "Go to Settings > Network & internet > Advanced network settings > Advanced sharing settings > Under Private networks, toggle 'Network discovery' and 'File and printer sharing' to ON."
+      },
+      {
+        "title": "Restart Function Discovery services in services.msc",
+        "detail": "Open services.msc and set 'Function Discovery Provider Host' and 'Function Discovery Resource Publication' Startup Types to Automatic and start both."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      37
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "captive-portal-hotel-wifi-login-not-opening",
+    "title": "Captive portal hotel / airport Wi-Fi login splash page not loading",
+    "summary": "The browser fails to open the hotel, café, or airport authentication redirect page because third-party DNS-over-HTTPS (DoH), VPNs, or HSTS security headers block cleartext HTTP interception.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Connected to public Wi-Fi with 'No internet, open' status",
+      "Opening browser shows 'DNS_PROBE_FINISHED_NO_INTERNET' instead of hotel login page",
+      "Network prompt 'Action needed' fails to load login screen"
+    ],
+    "fix_steps": [
+      {
+        "title": "Navigate to cleartext neverssl.com in browser",
+        "detail": "Open your web browser and type: http://neverssl.com into the address bar. Because this site uses unencrypted HTTP without HSTS, the captive portal router will easily intercept and display the login screen."
+      },
+      {
+        "title": "Temporarily turn off VPN software",
+        "detail": "Disconnect and fully exit VPN applications (NordVPN, ExpressVPN, Tailscale, Cloudflare WARP). VPN kill-switches block all unencrypted portal redirect gateways."
+      },
+      {
+        "title": "Disable DNS-over-HTTPS (Secure DNS) in browser",
+        "detail": "In Chrome/Edge settings, search for 'Secure DNS' or 'Use secure DNS' and toggle it off temporarily so local hotel DNS servers can intercept domain requests."
+      },
+      {
+        "title": "Type default gateway router IP directly into address bar",
+        "detail": "Open Command Prompt, run ipconfig, note the Default Gateway (e.g. 192.168.0.1 or 10.0.0.1), and type http://[Default_Gateway_IP] directly into your browser address bar."
+      }
+    ],
+    "related_error_codes": [
+      37,
+      51
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "wake-on-lan-nic-power-state-sleep-hang",
+    "title": "Network card remains asleep and disconnected after computer wakes",
+    "summary": "Windows Power Management puts the PCIe network interface card (NIC) into D3hot power state during sleep, but the device driver fails to restore D0 operating state upon wake.",
+    "severity": "warn",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Internet works perfectly on cold boot, but stays disconnected every time the PC wakes from sleep",
+      "Network icon shows a red X or globe for 60 seconds after waking",
+      "Requires disabling and re-enabling the network adapter in Control Panel to restore connection"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Fast Startup in Windows Control Panel",
+        "detail": "Press Win + R, type 'powercfg.cpl', click 'Choose what the power buttons do', click 'Change settings that are currently unavailable', uncheck 'Turn on fast startup', and click Save changes."
+      },
+      {
+        "title": "Disable selective suspend and adapter sleep settings",
+        "detail": "In Device Manager, open Network adapters > Right-click NIC > Properties > Advanced tab > Disable 'Energy Efficient Ethernet', 'Green Ethernet', and 'System Idle Power Saver'."
+      },
+      {
+        "title": "Turn off Energy-Saving Ethernet in Device Power Management",
+        "detail": "In the same Properties window, open the 'Power Management' tab and uncheck 'Allow the computer to turn off this device to save power'."
+      },
+      {
+        "title": "Install OEM driver package over generic Windows Update driver",
+        "detail": "Windows Update provides basic generic Microsoft-packaged drivers that lack proper PCIe D-state power transition firmware. Download the full driver installer from Realtek or Intel."
+      }
+    ],
+    "related_error_codes": [
+      28,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  }
+]

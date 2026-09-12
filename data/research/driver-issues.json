@@ -1,0 +1,884 @@
+[
+  {
+    "slug": "driver-issues",
+    "title": "Hardware device, graphics, or peripheral driver issues",
+    "summary": "Hardware components fail to function correctly due to outdated, corrupt, missing, or conflicting device drivers.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Yellow exclamation triangle in Device Manager",
+      "Peripheral device fails to respond or disconnects repeatedly",
+      "Features such as display resolution, audio outputs, or gestures are unavailable"
+    ],
+    "fix_steps": [
+      {
+        "title": "Open Device Manager and find flagged devices",
+        "detail": "Press Win+X and select 'Device Manager'. Expand all sections and locate entries with a yellow exclamation mark, red 'X', or listed under 'Other devices'."
+      },
+      {
+        "title": "Perform a clean driver reinstall",
+        "detail": "Right-click the problematic device → Uninstall device → check 'Attempt to remove the driver for this device' → click Uninstall. Reboot and install the latest WHQL driver from the vendor website."
+      },
+      {
+        "title": "Install motherboard chipset drivers",
+        "detail": "Download and run the official AMD Chipset Driver installer or Intel Management Engine / INF Update Utility from your motherboard manufacturer's support portal."
+      },
+      {
+        "title": "Roll back recently updated drivers",
+        "detail": "If the issue started after an automatic update, right-click the device in Device Manager → Properties → Driver tab → click 'Roll Back Driver'."
+      }
+    ],
+    "related_error_codes": [
+      2,
+      13,
+      18,
+      83,
+      85,
+      90
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gpu-driver-crash-black-screen",
+    "title": "Display driver nvlddmkm or amdkmdag stopped responding and recovered",
+    "summary": "The graphics driver crashed and was restarted by Windows Timeout Detection and Recovery (TDR), causing black screens and game crashes.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Screen turns black for 2-3 seconds during 3D gaming then returns to desktop",
+      "Game crashes with error: 'DXGI_ERROR_DEVICE_REMOVED' or 'D3D Device Lost'",
+      "Event Viewer logs Display Event ID 4101: 'Display driver nvlddmkm stopped responding'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform clean DDU driver wipe in Safe Mode",
+        "detail": "Download Display Driver Uninstaller (DDU). Boot into Safe Mode, run DDU, select GPU (Nvidia/AMD/Intel) → 'Clean and restart'. Install the latest stable WHQL driver on normal boot."
+      },
+      {
+        "title": "Increase TDR delay in Windows Registry",
+        "detail": "Open Regedit, navigate to 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers'. Create a DWORD (32-bit) named 'TdrDelay' and set decimal value to 8 (seconds) to prevent premature driver restarts."
+      },
+      {
+        "title": "Disable GPU factory overclock / undervolt slightly",
+        "detail": "Use MSI Afterburner to lower GPU Core Clock by -50 MHz or power limit to 95%. Unstable factory overclocks or decaying silicon cause TDR crashes."
+      },
+      {
+        "title": "Disable Windows Hardware-Accelerated GPU Scheduling (HAGS)",
+        "detail": "In Settings → System → Display → Graphics → Change default graphics settings → toggle 'Hardware-accelerated GPU scheduling' OFF and reboot."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85,
+      87
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "windows-update-overwriting-gpu-driver",
+    "title": "Windows Update automatically overwrites newer GPU drivers",
+    "summary": "Windows Update repeatedly replaces clean Nvidia or AMD display drivers with outdated generic versions, breaking multi-monitor setups and control panels.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Nvidia Control Panel or AMD Software Adrenalin fails to open with 'driver mismatch' error",
+      "Screen flashes and resolution resets unexpectedly after reboot",
+      "Device Manager shows an older driver release date than the one you installed"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable automatic driver downloads in System Properties",
+        "detail": "Press Win+R, type 'sysdm.cpl' → Hardware tab → Device Installation Settings → select 'No (your device might not work as expected)' and save."
+      },
+      {
+        "title": "Use Microsoft 'Show or Hide Updates' troubleshooter (wushowhide)",
+        "detail": "Download the official 'wushowhide.diagcab' tool from Microsoft, run it, select 'Hide updates', and check the pending GPU driver update to block it permanently."
+      },
+      {
+        "title": "Configure Group Policy to block driver updates",
+        "detail": "In gpedit.msc (Pro/Enterprise editions), go to Computer Configuration → Administrative Templates → Windows Components → Windows Update → Manage updates offered from Windows Update → Enable 'Do not include drivers with Windows Updates'."
+      },
+      {
+        "title": "Reinstall latest vendor driver package",
+        "detail": "Reinstall the latest official driver from GeForce Experience, Nvidia app, or AMD Adrenalin."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "audio-crackling-or-no-sound-realtek",
+    "title": "No audio, missing output devices, or Realtek HD Audio crackling",
+    "summary": "Audio playback fails completely, outputs vanish from the taskbar list, or sound crackles due to corrupted High Definition Audio drivers.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Red 'X' appears over the speaker icon in the system tray",
+      "Windows reports 'No audio output device is installed'",
+      "Headphones or desktop speakers emit loud static, crackling, or buzzing"
+    ],
+    "fix_steps": [
+      {
+        "title": "Restart the Windows Audio service",
+        "detail": "Press Win+R, run 'services.msc', find 'Windows Audio' and 'Windows Audio Endpoint Builder'. Right-click each and select 'Restart'."
+      },
+      {
+        "title": "Switch to generic Microsoft 'High Definition Audio Device' driver",
+        "detail": "In Device Manager → Sound, video and game controllers → right-click Realtek Audio → Update driver → Browse my computer → Let me pick from a list → select 'High Definition Audio Device' (generic Microsoft driver) → reboot."
+      },
+      {
+        "title": "Disable audio enhancements in sound properties",
+        "detail": "Press Win+R, type 'mmsys.cpl' → select your playback device → Properties → Enhancements (or Advanced) tab → check 'Disable all enhancements'."
+      },
+      {
+        "title": "Set Default Format to 24-bit, 48000 Hz (Studio Quality)",
+        "detail": "In the Advanced tab of device properties, select '24 bit, 48000 Hz' to prevent sample rate mismatch crackling."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      43,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "usb-device-not-recognized-code-43",
+    "title": "USB device not recognized (Device Descriptor Request Failed, Code 43)",
+    "summary": "Windows cannot read the USB device descriptor, shutting down the port to prevent bus errors or short-circuit damage.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Notification popup: 'USB device not recognized. The last USB device you connected malfunctioned'",
+      "Device Manager shows 'Unknown USB Device (Device Descriptor Request Failed)' with Code 43",
+      "Mouse, keyboard, or flash drive stops functioning when plugged into specific ports"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform an AC flea power drain",
+        "detail": "Shut down the PC. Unplug the AC power cord from the wall. Hold down the chassis power button for 30 seconds to discharge the USB controller's internal logic. Reconnect and power on."
+      },
+      {
+        "title": "Disable USB Selective Suspend in Power Options",
+        "detail": "Open Control Panel → Power Options → Change plan settings → Change advanced power settings → expand 'USB settings' → USB selective suspend setting → set to 'Disabled'."
+      },
+      {
+        "title": "Uninstall USB Root Hubs in Device Manager",
+        "detail": "In Device Manager, expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' → Uninstall device. Restart PC to let Windows reinstall controllers automatically."
+      },
+      {
+        "title": "Test on rear motherboard ports directly",
+        "detail": "Bypass front chassis ports, unpowered external hubs, or USB extension cables which frequently drop voltage below USB specifications."
+      }
+    ],
+    "related_error_codes": [
+      19,
+      28,
+      29,
+      43,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bluetooth-missing-from-device-manager",
+    "title": "Bluetooth toggle completely missing in Windows 10/11",
+    "summary": "The Bluetooth on/off toggle disappears from Windows settings, and the entire Bluetooth category vanishes from Device Manager.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "No Bluetooth toggle under Settings → Bluetooth & devices",
+      "Action Center Bluetooth quick tile is gone",
+      "Wireless mice, keyboards, and headphones cannot connect"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform full power cut and motherboard cold reset",
+        "detail": "Intel combo Wi-Fi/Bluetooth cards share an internal PCIe/USB line that freezes if power states glitch. Shut down PC, unplug AC power for 60 seconds, reconnect, and boot."
+      },
+      {
+        "title": "Restart Bluetooth Support Service",
+        "detail": "Open 'services.msc', locate 'Bluetooth Support Service', right-click → Properties → set Startup type to 'Automatic' and click 'Start'."
+      },
+      {
+        "title": "Show Hidden Devices in Device Manager",
+        "detail": "In Device Manager, click View menu → check 'Show hidden devices'. If Bluetooth appears greyed out, right-click and select 'Update driver' or 'Uninstall device' and reboot."
+      },
+      {
+        "title": "Install official Intel / Realtek Wireless Bluetooth driver",
+        "detail": "Download and run the standalone Intel Wireless Bluetooth driver package from intel.com or your PC manufacturer."
+      }
+    ],
+    "related_error_codes": [
+      18,
+      29,
+      41,
+      43
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "dual-monitor-not-detected",
+    "title": "Second monitor not detected or displaying 'No Signal'",
+    "summary": "Windows graphics subsystem fails to establish a display handshake with a secondary monitor over HDMI or DisplayPort.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Primary monitor works fine, but second display stays black with 'No Signal'",
+      "Settings → Display → Multiple displays → 'Detect other display' reports 'Didn't detect another display'",
+      "Windows Project menu (Win+P) is set to 'Duplicate' or 'Extend' but nothing appears"
+    ],
+    "fix_steps": [
+      {
+        "title": "Restart graphics driver with hotkey shortcut",
+        "detail": "Press Windows Key + Ctrl + Shift + B simultaneously. The screen will flicker and emit a short beep as the display driver pipeline restarts."
+      },
+      {
+        "title": "Ensure both cables connect to the dedicated GPU",
+        "detail": "Verify both monitor cables are plugged directly into the horizontal graphics card ports on the back of the case, not into the vertical motherboard display outputs."
+      },
+      {
+        "title": "Verify active input source on the monitor OSD",
+        "detail": "Use the physical buttons on the second monitor to manually change the input source from Auto to the exact port in use (e.g., 'DisplayPort 1' or 'HDMI 2')."
+      },
+      {
+        "title": "Lower refresh rate and resolution temporarily",
+        "detail": "In Advanced display settings, lower the refresh rate of the primary display or second display to 60Hz to verify that PCIe/cable bandwidth limits are not exceeded."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "touchpad-gestures-stopped-working",
+    "title": "Laptop touchpad gestures (two-finger scroll, pinch zoom) stopped working",
+    "summary": "Windows downgraded the precision touchpad driver to a legacy PS/2 mouse fallback, disabling multi-touch gestures.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Basic pointer movement works, but two-finger scrolling and tap-to-click fail",
+      "Settings → Bluetooth & devices → Touchpad lacks gesture configuration sliders",
+      "Device Manager lists 'PS/2 Compatible Mouse' instead of 'I2C HID Device'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Update Intel Serial IO or AMD I2C Controller drivers",
+        "detail": "Precision touchpads communicate over the I2C bus. Install the Intel Serial IO / AMD I2C chipset driver from the laptop manufacturer's support site."
+      },
+      {
+        "title": "Update Synaptics / ELAN touchpad driver",
+        "detail": "In Device Manager → Human Interface Devices (HID) or Mice → right-click the touchpad device → Update driver → Search automatically for drivers."
+      },
+      {
+        "title": "Reset touchpad settings to default",
+        "detail": "Go to Settings → Bluetooth & devices → Touchpad → expand 'Touchpad' card → click the 'Reset' button."
+      },
+      {
+        "title": "Verify physical Fn lock switch",
+        "detail": "Ensure you have not accidentally toggled the physical touchpad disable key on your keyboard (often Fn+F9, Fn+F10, or a double-tap in the top-left corner of the touchpad)."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "printer-driver-is-unavailable",
+    "title": "Printer status shows 'Driver is unavailable'",
+    "summary": "Windows Print Spooler cannot communicate with the printer because required vendor print drivers are corrupt or missing.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Printer status under Printers & Scanners shows 'Driver is unavailable'",
+      "Print jobs enter print queue and immediately disappear or error out",
+      "Test page fails to send to the printer"
+    ],
+    "fix_steps": [
+      {
+        "title": "Remove printer and delete existing driver package",
+        "detail": "Go to Settings → Bluetooth & devices → Printers & scanners → select printer → Remove. Next, press Win+R, type 'printui.exe /s', go to Drivers tab, and remove the printer driver package."
+      },
+      {
+        "title": "Restart the Print Spooler service",
+        "detail": "Open Command Prompt as admin and run 'net stop spooler', delete all files inside 'C:\\Windows\\System32\\spool\\PRINTERS', and run 'net start spooler'."
+      },
+      {
+        "title": "Install official manufacturer full-feature software suite",
+        "detail": "Download the official offline driver package directly from HP, Canon, Epson, or Brother rather than relying on Windows Update generic drivers."
+      },
+      {
+        "title": "Use standard TCP/IP port for network printers",
+        "detail": "In printer properties, add a Standard TCP/IP Port using the printer's fixed IP address instead of relying on WSD (Web Services on Devices) ports."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      47,
+      48,
+      49
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "game-controller-unrecognized-input",
+    "title": "Xbox or PlayStation controller connected via Bluetooth but inputs ignored",
+    "summary": "The controller pairs via Bluetooth but games fail to read inputs due to Steam input mapping conflicts or outdated controller firmware.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Controller shows 'Connected' in Windows Bluetooth settings",
+      "Buttons and thumbsticks do not respond in games",
+      "Steam or game launcher registers the controller as an audio device or generic mouse"
+    ],
+    "fix_steps": [
+      {
+        "title": "Update controller firmware via official app",
+        "detail": "For Xbox controllers, open the 'Xbox Accessories' app from Microsoft Store, connect via USB-C, and update firmware. For PS5 DualSense, use Sony's 'Firmware updater for DualSense wireless controller'."
+      },
+      {
+        "title": "Configure Steam Controller Settings",
+        "detail": "In Steam → Settings → Controller → enable 'Enable Steam Input for Xbox/PlayStation controllers' to emulate standard XInput across non-Steam games."
+      },
+      {
+        "title": "Test inputs in Windows Game Controllers utility",
+        "detail": "Press Win+R, type 'joy.cpl', highlight your controller, and click 'Properties' to test if raw button and axis presses register in Windows."
+      },
+      {
+        "title": "Remove and re-pair Bluetooth device",
+        "detail": "In Settings → Bluetooth & devices, remove the controller. Hold the pairing button until the LED flashes rapidly, and pair again."
+      }
+    ],
+    "related_error_codes": [
+      2,
+      13,
+      41
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "webcam-shows-black-screen",
+    "title": "Webcam LED turns on but camera displays black screen",
+    "summary": "The integrated or USB webcam video stream is blocked by Windows privacy switches, antivirus shields, or corrupted UVC drivers.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Green camera indicator light illuminates, but video feed remains solid black",
+      "Apps report 'We can't find your camera' with error code 0xA00F4244",
+      "Video works in Windows Camera app but fails in browser or Zoom"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check physical camera privacy shutter",
+        "detail": "Many modern laptops and external webcams feature a physical plastic privacy slider over the lens. Inspect closely with your fingernail and slide it open."
+      },
+      {
+        "title": "Enable Camera Privacy permissions in Windows Settings",
+        "detail": "Go to Settings → Privacy & security → Camera. Ensure 'Camera access' is turned ON, and 'Let apps access your camera' is enabled for your target apps."
+      },
+      {
+        "title": "Disable third-party antivirus webcam protection",
+        "detail": "Antivirus suites (Kaspersky, Bitdefender, ESET) feature 'Webcam Protection' modules that silently block unauthorized processes from accessing video streams."
+      },
+      {
+        "title": "Roll back or reinstall USB Video Device driver",
+        "detail": "In Device Manager → Cameras, right-click the webcam → Uninstall device → restart PC to reload the clean Microsoft UVC driver."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      28,
+      29,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "chipset-drivers-missing-pci-device",
+    "title": "Yellow exclamation marks on PCI Device and PCI Simple Communications Controller",
+    "summary": "Core motherboard chipset drivers, including Intel Management Engine or AMD PSP, are missing after a clean Windows installation.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Device Manager shows multiple 'PCI Device', 'PCI Simple Communications Controller', or 'SM Bus Controller' under Other devices",
+      "Sleep and modern standby states behave erratically",
+      "Fan speed control software cannot detect motherboard sensors"
+    ],
+    "fix_steps": [
+      {
+        "title": "Install official motherboard Chipset drivers",
+        "detail": "Visit your motherboard or laptop support website. Download and install the latest AMD Chipset Driver package (for Ryzen) or Intel INF Chipset Software (for Core processors)."
+      },
+      {
+        "title": "Install Intel Management Engine Interface (Intel ME)",
+        "detail": "For Intel systems, download the 'Intel Management Engine Interface' driver package to resolve the 'PCI Simple Communications Controller' error."
+      },
+      {
+        "title": "Install Intel Serial IO drivers",
+        "detail": "Download the Intel Serial IO driver installer to enable I2C, SPI, and UART system controllers."
+      },
+      {
+        "title": "Verify all yellow exclamation marks disappear in Device Manager",
+        "detail": "Reboot after running the chipset installer and ensure the 'Other devices' category in Device Manager is empty."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      18,
+      29,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gpu-ddu-clean-installation-needed",
+    "title": "Display artifacts, micro-stutters, or crashes after swapping GPU brands",
+    "summary": "Residual registry keys and DLLs left behind from a previous AMD/Nvidia GPU conflict with the newly installed graphics card.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Games crash on launch after upgrading from AMD to Nvidia (or vice versa)",
+      "Screen displays colorful horizontal lines, checkerboard patterns, or micro-stutters",
+      "Old GPU control panel continues attempting to load in the background"
+    ],
+    "fix_steps": [
+      {
+        "title": "Download Display Driver Uninstaller (DDU) and latest GPU driver",
+        "detail": "Download DDU from Wagnardsoft and download the standalone installer for your new graphics card. Disconnect PC from internet so Windows Update cannot interfere."
+      },
+      {
+        "title": "Reboot into Windows Safe Mode",
+        "detail": "Hold Shift while clicking 'Restart' in Start Menu → Troubleshoot → Advanced options → Startup Settings → Restart → press 4 for Safe Mode."
+      },
+      {
+        "title": "Run DDU for the previous GPU brand first",
+        "detail": "In DDU, select GPU, choose the OLD vendor (e.g. AMD), and click 'Clean and do NOT restart'. Then select the NEW vendor (e.g. Nvidia) and click 'Clean and restart'."
+      },
+      {
+        "title": "Install fresh GPU driver on normal boot",
+        "detail": "Run the downloaded driver installer. Check 'Perform a clean installation' if prompted, then reconnect internet."
+      }
+    ],
+    "related_error_codes": [
+      14,
+      85,
+      90
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "signature-enforcement-driver-install-error",
+    "title": "Third-party INF does not contain digital signature information",
+    "summary": "Windows Driver Signature Enforcement blocks an unsigned or legacy peripheral driver from installing to protect kernel security.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Error: 'The third-party INF does not contain digital signature information'",
+      "Error code 52: 'Windows cannot verify the digital signature for the drivers required for this device'",
+      "Legacy hardware (simulators, OBD2 scanners, custom keyboards) refuses to install"
+    ],
+    "fix_steps": [
+      {
+        "title": "Temporarily disable Driver Signature Enforcement",
+        "detail": "Hold Shift while clicking Restart → Troubleshoot → Advanced options → Startup Settings → Restart → press '7' or 'F7' to 'Disable driver signature enforcement'."
+      },
+      {
+        "title": "Install the required driver while enforcement is disabled",
+        "detail": "In Device Manager, install the driver package. Accept the prompt: 'Install this driver software anyway'."
+      },
+      {
+        "title": "Enable Test Signing mode if permanent use is needed",
+        "detail": "Open administrative Command Prompt and run 'bcdedit /set testsigning on' if the device must run continuously across reboots."
+      },
+      {
+        "title": "Seek updated WHQL-certified driver",
+        "detail": "Contact hardware manufacturer for a 64-bit SHA-256 signed driver compatible with modern Windows Core Isolation."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      14,
+      294,
+      298,
+      300
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "keyboard-or-mouse-stuttering-polling-rate",
+    "title": "Extreme FPS drops and stuttering when moving mouse (high polling rate)",
+    "summary": "Gaming mice configured with 4000Hz or 8000Hz polling rates flood Windows with thousands of interrupt calls per second, overwhelming the CPU game thread.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Game runs smoothly at 140 FPS when standing still, but drops to 20 FPS whenever the mouse is moved",
+      "High CPU usage on Core 0 during rapid mouse motion",
+      "Affects high-end gaming mice (Razer Viper 8KHz, Logitech G Pro X 4KHz, etc.)"
+    ],
+    "fix_steps": [
+      {
+        "title": "Lower mouse polling rate to 1000 Hz in companion software",
+        "detail": "Open Razer Synapse, Logitech G Hub, or vendor software. Locate Polling Rate / Report Rate and reduce from 8000Hz / 4000Hz to 1000Hz (1ms)."
+      },
+      {
+        "title": "Plug mouse directly into rear USB 3.0 motherboard port",
+        "detail": "High-polling mice require direct CPU-connected USB root ports. Avoid front-panel ports, external USB hubs, or keyboard passthrough ports."
+      },
+      {
+        "title": "Enable 'Raw Input' in game settings",
+        "detail": "In game settings (Valorant, CS2, Overwatch), enable 'Raw Mouse Input' to bypass Windows OS cursor event translation bottlenecks."
+      },
+      {
+        "title": "Update mouse firmware and companion software",
+        "detail": "Manufacturers frequently release microcode firmware updates to optimize USB descriptor report size for high-frequency polling."
+      }
+    ],
+    "related_error_codes": [
+      42,
+      72,
+      87
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "hdmi-audio-device-disappears",
+    "title": "HDMI or DisplayPort monitor audio disappears after display sleep",
+    "summary": "The monitor's built-in speakers vanish from the Windows audio device list whenever the monitor enters power-saving sleep mode.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Audio plays through monitor speakers fine until PC locks or monitor sleeps, then sound switches to laptop speakers or vanishes",
+      "Windows reports monitor audio as 'Not plugged in' in Sound Control Panel",
+      "Power cycling the monitor brings audio back temporarily"
+    ],
+    "fix_steps": [
+      {
+        "title": "Update GPU HD Audio Driver",
+        "detail": "Monitor sound travels over HDMI/DisplayPort through the graphics card. Reinstall latest Nvidia HD Audio or AMD High Definition Audio Device driver."
+      },
+      {
+        "title": "Disable Deep Sleep on monitor OSD menu",
+        "detail": "Use monitor hardware buttons to open the On-Screen Display (OSD). Look under System / Power and disable 'Auto Source Detection' or 'DisplayPort / HDMI Deep Sleep'."
+      },
+      {
+        "title": "Show Disabled and Disconnected devices in Sound Control Panel",
+        "detail": "Press Win+R, type 'mmsys.cpl'. Right-click inside the device list and check both 'Show Disabled Devices' and 'Show Disconnected Devices'. Right-click your monitor and choose 'Enable'."
+      },
+      {
+        "title": "Disable PCIe Link State Power Management",
+        "detail": "In Control Panel Power Options → Change advanced power settings → PCI Express → Link State Power Management → set to 'Off'."
+      }
+    ],
+    "related_error_codes": [
+      19,
+      41,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "device-manager-code-10-cannot-start",
+    "title": "Device Manager Code 10: This device cannot start",
+    "summary": "The device driver attempted to load, but the operating system hardware abstraction layer received a failure status from the device firmware or bus controller.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Yellow exclamation point icon next to device in Device Manager",
+      "Device status reads: 'This device cannot start. (Code 10)'",
+      "Wi-Fi, Bluetooth, or Realtek Audio suddenly stops functioning"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform a full power drain to reset hardware controller",
+        "detail": "Shut down your computer, unplug the power cord from the wall, and hold the power button down for 30 seconds. This fully discharges peripheral controllers that got stuck in an invalid state."
+      },
+      {
+        "title": "Uninstall device and restart Windows",
+        "detail": "In Device Manager, right-click the failing device > select 'Uninstall device' > check 'Attempt to remove the driver for this device' if available > click Uninstall. Restart Windows to force Plug and Play re-enumeration."
+      },
+      {
+        "title": "Delete UpperFilters and LowerFilters registry values",
+        "detail": "Press Win + R, type 'regedit', navigate to HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Class\\{Device_Class_GUID}, and delete corrupted UpperFilters and LowerFilters keys."
+      },
+      {
+        "title": "Install official manufacturer chipset and device drivers",
+        "detail": "Download and install the latest standalone driver package directly from Intel, Realtek, or your motherboard manufacturer rather than relying on generic Windows Update drivers."
+      }
+    ],
+    "related_error_codes": [
+      10,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "device-manager-code-28-no-driver-installed",
+    "title": "Device Manager Code 28: The drivers for this device are not installed",
+    "summary": "Windows detected new hardware connected to the motherboard or PCIe bus, but cannot find a matching INF driver package in the local driver store or Windows Update.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Listed under 'Other devices' with a yellow exclamation mark as 'Unknown device' or 'PCI Simple Communications Controller'",
+      "Device status displays: 'The drivers for this device are not installed. (Code 28)'",
+      "Certain motherboard features, audio jacks, or card readers fail to respond"
+    ],
+    "fix_steps": [
+      {
+        "title": "Look up Hardware ID in Device Properties",
+        "detail": "Right-click the Code 28 device > Properties > Details tab > Select 'Hardware Ids' in the dropdown. Copy the string (e.g. VEN_8086&DEV_7A60) and search it on devicehunt.com to identify the exact component."
+      },
+      {
+        "title": "Install Intel Management Engine (ME) or AMD Chipset Driver",
+        "detail": "'PCI Simple Communications Controller' or 'PCI Device' with Code 28 almost always indicates the Intel Management Engine interface or AMD I2C/GPIO chipset drivers are missing."
+      },
+      {
+        "title": "Check Windows Optional Updates",
+        "detail": "Go to Settings > Windows Update > Advanced options > Optional updates > Driver updates. Check all available manufacturer drivers and install them."
+      },
+      {
+        "title": "Run automated hardware driver setup utility",
+        "detail": "Use the official Intel Driver & Support Assistant or AMD Auto-Detect and Install tool to scan your PCIe bus and automatically install missing drivers."
+      }
+    ],
+    "related_error_codes": [
+      28
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "device-manager-code-45-hardware-not-connected",
+    "title": "Device Manager Code 45: Hardware device is not connected to the computer",
+    "summary": "The device previously functioned and its driver remains registered, but Windows cannot physically detect electrical communication across the USB or PCIe interface.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Device icon appears translucent or faded in Device Manager",
+      "Status reads: 'Currently, this hardware device is not connected to the computer. (Code 45)'",
+      "Bluetooth adapter or webcam intermittently disappears completely"
+    ],
+    "fix_steps": [
+      {
+        "title": "Reseat the physical hardware cable or connector",
+        "detail": "If it is an internal M.2 Wi-Fi card, PCIe expansion card, or webcam cable, shut down the PC, unplug power, and reseat the card firmly into its motherboard slot."
+      },
+      {
+        "title": "Connect external USB devices to rear motherboard USB ports",
+        "detail": "Front-panel USB ports and unpowered USB hubs often fail to deliver sufficient current. Plug the device directly into a rear motherboard USB 3.0 port."
+      },
+      {
+        "title": "Uninstall ghost / hidden device entries",
+        "detail": "In Device Manager, click View > Show hidden devices > Expand the affected section > Right-click the greyed-out Code 45 entry and click 'Uninstall device'. Reconnect the device to trigger fresh detection."
+      },
+      {
+        "title": "Test device on a different computer",
+        "detail": "Connect the peripheral or USB hardware to a second PC or laptop. If it fails to register there as well, the device has suffered hardware failure (dead controller or broken solder connection)."
+      }
+    ],
+    "related_error_codes": [
+      18,
+      45
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "device-manager-code-52-unsigned-driver",
+    "title": "Device Manager Code 52: Digital signature cannot be verified",
+    "summary": "Windows 64-bit Kernel-Mode Driver Signature Enforcement blocks a third-party driver because its cryptographic signature is absent, expired, or self-signed.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Status: 'Windows cannot verify the digital signature for the drivers required for this device. (Code 52)'",
+      "Custom gamepad, legacy synthesizer, OBD2 car scanner, or microcontroller driver fails to start",
+      "Occurs after upgrading Windows 10 to a newer feature update"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check for an updated WHQL signed driver release",
+        "detail": "Visit the hardware manufacturer website to download the latest signed driver package updated for Windows 10/11 64-bit architecture."
+      },
+      {
+        "title": "Temporarily disable Driver Signature Enforcement",
+        "detail": "Hold Shift and click Restart from the Start Menu > Troubleshoot > Advanced Options > Startup Settings > Click Restart > Press 7 or F7 to 'Disable driver signature enforcement'. Test device functionality."
+      },
+      {
+        "title": "Install OEM digital security certificate into Windows Root Store",
+        "detail": "Right-click the driver's .inf or .sys file > Properties > Digital Signatures tab > Select signer > Details > View Certificate > Install Certificate > Select 'Trusted Root Certification Authorities'."
+      },
+      {
+        "title": "Use modern signed alternative driver packages",
+        "detail": "For USB serial devices (CH340, FTDI, CP2102) and controllers, download official WHQL drivers directly from FTDI Chip or Silicon Labs websites."
+      }
+    ],
+    "related_error_codes": [
+      193
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "realtek-audio-front-panel-jack-not-detected",
+    "title": "Realtek audio front panel 3.5mm headphone jack not detected",
+    "summary": "The motherboard Realtek HD Audio codec fails to detect 3.5mm headphone or microphone insertion due to legacy AC97 vs HD Audio front panel pin detection mismatches.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Headphones plugged into case front panel produce zero sound and show as 'Unplugged'",
+      "Rear motherboard audio works, but front jacks are completely ignored",
+      "Realtek Audio Console reports 'No supported audio device found' or spins continuously"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable front panel jack detection in Realtek Audio Console",
+        "detail": "Open the Realtek Audio Console app > Click Device advanced settings (gear icon) > Toggle 'Disable front panel jack detection' to ON. This forces continuous analog audio stream output regardless of impedance sensing."
+      },
+      {
+        "title": "Inspect HD Audio front panel cable connection on motherboard",
+        "detail": "Ensure the case front panel audio cable (labeled 'HD AUDIO') is firmly plugged into the AAFP / JAUD1 9-pin header on the bottom-left corner of the motherboard with no bent pins."
+      },
+      {
+        "title": "Install OEM Realtek UAD drivers from motherboard support",
+        "detail": "Windows Update frequently replaces Realtek high-definition audio drivers with generic Microsoft High Definition Audio Device drivers that lack front-panel impedance sensing. Reinstall the OEM Realtek driver package."
+      },
+      {
+        "title": "Set default playback device in Windows Sound settings",
+        "detail": "Press Win + R, type 'mmsys.cpl', right-click 'Headphones' or 'Speakers (Realtek Audio)', and select 'Set as Default Device' and 'Set as Default Communication Device'."
+      }
+    ],
+    "related_error_codes": [
+      28,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "usb-hub-power-surge-exceeded",
+    "title": "Power surge on the USB port: A USB device has exceeded power limits",
+    "summary": "A shorted USB cable, damaged peripheral port, or unpowered multi-port hub attempts to pull more than the 500mA (USB 2.0) or 900mA (USB 3.0) current limit, tripping the motherboard resettable polyfuse.",
+    "severity": "critical",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Notification toast: 'Power surge on the USB port : Unknown USB device needs more power than the port can supply'",
+      "All USB ports on the front panel or rear bracket shut down simultaneously",
+      "System shuts off USB power to prevent motherboard circuit board burning"
+    ],
+    "fix_steps": [
+      {
+        "title": "Unplug all USB peripherals immediately",
+        "detail": "Disconnect every single USB device (flash drives, keyboards, mouse, webcams, RGB hubs). Click the 'Reset' button on the Windows error notification."
+      },
+      {
+        "title": "Inspect all USB ports with a flashlight for physical damage",
+        "detail": "Look inside every USB Type-A port. If the plastic center tab is broken and the 4 gold pins are touching each other or the metal outer housing, gently bend them apart with a wooden toothpick with the PC unplugged."
+      },
+      {
+        "title": "Switch to an externally powered USB hub",
+        "detail": "High-draw peripherals (like external hard drives, capture cards, and audio interfaces) should be plugged into an active USB 3.0 hub that has its own dedicated wall outlet AC power adapter."
+      },
+      {
+        "title": "Disconnect front-panel USB 3.0 header from motherboard",
+        "detail": "If the surge alert happens with nothing plugged into the case, disconnect the thick 19-pin blue USB 3.0 front-panel cable from the motherboard to isolate a defective case front I/O PCB."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "mixed-refresh-rate-dual-monitor-stutter",
+    "title": "Dual monitor mixed refresh rate (144Hz + 60Hz) stuttering during video playback",
+    "summary": "The Windows Desktop Window Manager (DWM) drops the primary 144Hz monitor refresh down to 60Hz whenever GPU-accelerated video, animation, or streaming content plays on the secondary 60Hz screen.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Primary 144Hz/240Hz monitor feels laggy and stutters while playing a game whenever Twitch, YouTube, or Discord is open on the second 60Hz monitor",
+      "Mouse movement looks like 60Hz on the 144Hz screen when a video is playing",
+      "Minimizing the browser on the 60Hz screen instantly restores smooth 144Hz gameplay"
+    ],
+    "fix_steps": [
+      {
+        "title": "Ensure Windows 11 Build 22621 or newer is installed",
+        "detail": "Microsoft completely overhauled Desktop Window Manager (DWM) independent refresh rate synchronization in Windows 11, solving the legacy Windows 10 mixed refresh rate lock."
+      },
+      {
+        "title": "Disable Hardware Acceleration in browser and Discord",
+        "detail": "In Chrome/Edge settings, turn off 'Use graphics acceleration when available'. In Discord, go to User Settings > Advanced > Toggle Hardware Acceleration to OFF."
+      },
+      {
+        "title": "Set secondary monitor refresh rate to an exact integer divisor",
+        "detail": "If primary monitor is 144Hz, set it to 120Hz and keep secondary at 60Hz (exact 2:1 ratio). Integer division prevents frame pacing calculation jitter in GPU display engines."
+      },
+      {
+        "title": "Connect both monitors using identical cable types",
+        "detail": "Avoid mixing legacy HDMI 1.4 with DisplayPort 1.4. Connect both monitors via DisplayPort directly to the graphics card (never plug one into the motherboard and one into GPU)."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "hdmi-displayport-audio-device-disappears-after-sleep",
+    "title": "Monitor HDMI / DisplayPort audio device disappears after computer sleep",
+    "summary": "The GPU high-definition audio controller (NVIDIA High Definition Audio or AMD Audio Device) fails to re-detect the monitor audio sink after resuming from a low-power PCIe sleep state.",
+    "severity": "info",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Computer sound switches to internal motherboard speaker or cuts out completely after wake",
+      "Monitor built-in speakers or headphone jack missing from Windows sound devices list",
+      "Restarting the computer restores the monitor audio device immediately"
+    ],
+    "fix_steps": [
+      {
+        "title": "Restart the Windows Audio service in services.msc",
+        "detail": "Press Win + R, type 'services.msc', scroll to 'Windows Audio', right-click and choose 'Restart'. This forces Windows to rescan connected audio sinks without rebooting."
+      },
+      {
+        "title": "Disable and re-enable the display audio controller in Device Manager",
+        "detail": "Open Device Manager > Sound, video and game controllers > Right-click 'NVIDIA High Definition Audio' or 'AMD High Definition Audio Device' > Disable device > wait 3 seconds > Enable device."
+      },
+      {
+        "title": "Perform clean GPU driver installation with HD Audio component checked",
+        "detail": "Run the latest graphics driver installer. Choose 'Custom (Advanced)', ensure the 'HD Audio Driver' checkbox is selected, and check 'Perform a clean installation'."
+      },
+      {
+        "title": "Toggle monitor input selection button",
+        "detail": "Using the physical buttons on your monitor, cycle the input from DisplayPort to HDMI and back to DisplayPort. This forces a fresh hot-plug detection (HPD) handshake with the GPU audio controller."
+      }
+    ],
+    "related_error_codes": [
+      28,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  }
+]

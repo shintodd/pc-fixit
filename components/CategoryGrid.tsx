@@ -1,0 +1,179 @@
+"use client";
+
+import Link from "next/link";
+import {
+  ArrowUpRight,
+  Power,
+  MonitorX,
+  Gauge,
+  WifiOff,
+  Flame,
+  Cpu,
+  HelpCircle,
+  type LucideIcon,
+  BookOpen,
+} from "lucide-react";
+import { CATEGORIES, type Severity } from "@/lib/categories";
+import { motion } from "framer-motion";
+
+const SEVERITY_STYLE: Record<Severity, string> = {
+  critical: "bg-critical/10 text-critical border-critical/20 dark:bg-critical/15 dark:text-critical",
+  warn: "bg-warn/10 text-warn border-warn/20 dark:bg-warn/15 dark:text-warn",
+  info: "bg-accent/10 text-accent border-accent/20 dark:bg-dark-accent/15 dark:text-dark-accent",
+};
+
+const SEVERITY_LABEL: Record<Severity, string> = {
+  critical: "Critical Fault",
+  warn: "High Frequency",
+  info: "Hardware & Driver",
+};
+
+const CATEGORY_THEME: Record<
+  string,
+  {
+    icon: LucideIcon;
+    glow: string;
+    iconBg: string;
+    iconColor: string;
+    tags: string[];
+  }
+> = {
+  "wont-boot": {
+    icon: Power,
+    glow: "group-hover:border-rose-500/40 group-hover:shadow-[0_0_24px_rgba(244,63,94,0.12)]",
+    iconBg: "bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500 group-hover:text-white",
+    iconColor: "text-rose-500",
+    tags: ["No POST", "Black Screen", "DRAM LED", "Power Trip"],
+  },
+  "blue-screen": {
+    icon: MonitorX,
+    glow: "group-hover:border-blue-500/40 group-hover:shadow-[0_0_24px_rgba(59,130,246,0.12)]",
+    iconBg: "bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500 group-hover:text-white",
+    iconColor: "text-blue-500",
+    tags: ["IRQL_NOT_LESS", "WHEA Fault", "DPC Watchdog", "Kernel Heap"],
+  },
+  "running-slow": {
+    icon: Gauge,
+    glow: "group-hover:border-amber-500/40 group-hover:shadow-[0_0_24px_rgba(245,158,11,0.12)]",
+    iconBg: "bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500 group-hover:text-white",
+    iconColor: "text-amber-500",
+    tags: ["100% Disk", "TiWorker CPU", "0.79 GHz Lock", "SysMain"],
+  },
+  "no-internet": {
+    icon: WifiOff,
+    glow: "group-hover:border-sky-500/40 group-hover:shadow-[0_0_24px_rgba(14,165,233,0.12)]",
+    iconBg: "bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500 group-hover:text-white",
+    iconColor: "text-sky-500",
+    tags: ["Gateway Dropped", "Wi-Fi 6E/7", "APIPA 169.254", "DNS Timeout"],
+  },
+  overheating: {
+    icon: Flame,
+    glow: "group-hover:border-orange-500/40 group-hover:shadow-[0_0_24px_rgba(249,115,22,0.12)]",
+    iconBg: "bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white",
+    iconColor: "text-orange-500",
+    tags: ["GDDR6X VRAM", "AIO Air Bubble", "Thermal Paste", "Fan at 100%"],
+  },
+  "driver-issues": {
+    icon: Cpu,
+    glow: "group-hover:border-purple-500/40 group-hover:shadow-[0_0_24px_rgba(168,85,247,0.12)]",
+    iconBg: "bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:bg-purple-500 group-hover:text-white",
+    iconColor: "text-purple-500",
+    tags: ["Code 43", "Code 10", "DDU Clean", "Realtek Audio"],
+  },
+};
+
+export default function CategoryGrid() {
+  return (
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
+      {CATEGORIES.map((cat, idx) => {
+        const theme = CATEGORY_THEME[cat.slug] || {
+          icon: HelpCircle,
+          glow: "group-hover:border-accent/40",
+          iconBg: "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white",
+          iconColor: "text-accent",
+          tags: ["Diagnosis", "Repair"],
+        };
+        const IconComponent = theme.icon;
+
+        return (
+          <motion.div
+            key={cat.slug}
+            initial={false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.35,
+              delay: idx * 0.03,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.985 }}
+            className="group opacity-100"
+          >
+            <Link
+              href={`/troubleshoot?topic=${cat.slug}`}
+              className={`flex h-full flex-col justify-between rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-6 shadow-card dark:shadow-card-dark backdrop-blur-md transition-all duration-200 ${theme.glow} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
+            >
+              <div>
+                {/* Header row */}
+                <div className="mb-4 flex items-center justify-between">
+                  <div
+                    className={`flex h-12 w-12 items-center justify-center rounded-xl shadow-xs transition-all duration-200 group-hover:scale-105 ${theme.iconBg}`}
+                  >
+                    <IconComponent className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide ${
+                        SEVERITY_STYLE[cat.severity]
+                      }`}
+                    >
+                      {SEVERITY_LABEL[cat.severity]}
+                    </span>
+                    <ArrowUpRight
+                      className="h-4 w-4 text-ink-tertiary dark:text-dark-ink-tertiary transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink dark:group-hover:text-dark-ink"
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+
+                {/* Title and Description */}
+                <h3 className="text-[17px] font-bold tracking-tight text-ink dark:text-dark-ink group-hover:text-accent dark:group-hover:text-dark-accent transition-colors duration-150">
+                  {cat.title}
+                </h3>
+                <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
+                  {cat.description}
+                </p>
+
+                {/* Symptom chips */}
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {theme.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-md bg-subtle/80 dark:bg-dark-subtle/80 px-2 py-0.5 text-[11px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary border border-line/40 dark:border-dark-line/40"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer row */}
+              <div className="mt-6 flex items-center justify-between border-t border-line/60 dark:border-dark-line/60 pt-4 text-[12px] font-medium">
+                <span className="flex items-center gap-1.5 text-ink-secondary dark:text-dark-ink-secondary">
+                  <BookOpen className="h-3.5 w-3.5 text-ink-tertiary dark:text-dark-ink-tertiary" aria-hidden="true" />
+                  <span>{cat.label}</span>
+                </span>
+                <span className="flex items-center gap-1 text-accent dark:text-dark-accent font-semibold group-hover:underline">
+                  <span>Diagnose</span>
+                  <span className="transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true">
+                    &rarr;
+                  </span>
+                </span>
+              </div>
+            </Link>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}

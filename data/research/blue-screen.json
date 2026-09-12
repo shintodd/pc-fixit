@@ -1,0 +1,883 @@
+[
+  {
+    "slug": "blue-screen",
+    "title": "Blue screen of death (BSOD)",
+    "summary": "A stop-code crash usually points to a driver conflict, faulty RAM, or overheating, rarely the operating system itself.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "PC crashes to a blue screen with a stop code",
+      "Happens during specific tasks (gaming, sleep/wake) or randomly",
+      "Automatic restart before you can read the code"
+    ],
+    "fix_steps": [
+      {
+        "title": "Note the exact stop code",
+        "detail": "Disable automatic restart (System Properties → Advanced → Startup and Recovery) so the code stays on screen, or check Event Viewer → Windows Logs → System after a crash."
+      },
+      {
+        "title": "Check for the obvious cause first",
+        "detail": "Recently installed a driver, GPU, or RAM stick? Roll it back or remove it before going further."
+      },
+      {
+        "title": "Run a memory check",
+        "detail": "Windows Memory Diagnostic or MemTest86 overnight; RAM faults are a top cause."
+      },
+      {
+        "title": "Update or roll back GPU drivers",
+        "detail": "A clean driver reinstall (DDU + latest stable driver) resolves a large share of BSODs."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      72,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "irql-not-less-or-equal",
+    "title": "IRQL_NOT_LESS_OR_EQUAL (Stop 0x0000000A)",
+    "summary": "A kernel-mode process or driver attempted to access a pageable memory address at an elevated interrupt request level (IRQL) that is strictly prohibited.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Blue screen displaying stop code 0x0000000A or IRQL_NOT_LESS_OR_EQUAL",
+      "Often lists a specific driver file (e.g., ntoskrnl.exe, nvlddmkm.sys, tcpip.sys)",
+      "Occurs intermittently under heavy multitasking or gaming load"
+    ],
+    "fix_steps": [
+      {
+        "title": "Analyze the crash dump with WinDbg or BlueScreenView",
+        "detail": "Open 'C:\\Windows\\Minidump' with BlueScreenView or WinDbg Preview to pinpoint the offending third-party driver module causing the invalid memory call."
+      },
+      {
+        "title": "Perform clean reinstall of graphics and network drivers",
+        "detail": "Display and network adapters are the most frequent culprits. Download latest WHQL certified drivers from vendor websites and perform a clean install."
+      },
+      {
+        "title": "Verify memory stability with Windows Memory Diagnostic",
+        "detail": "Press Win+R, type 'mdsched.exe', select 'Restart now and check for problems' to test for defective RAM cells."
+      },
+      {
+        "title": "Disable aggressive CPU/RAM overclocks",
+        "detail": "Reset XMP/EXPO profiles in BIOS to base JEDEC clock speeds to test if memory timing instability is throwing memory access violations."
+      }
+    ],
+    "related_error_codes": [
+      9,
+      72,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "page-fault-in-nonpaged-area",
+    "title": "PAGE_FAULT_IN_NONPAGED_AREA (Stop 0x00000050)",
+    "summary": "The system attempted to reference nonexistent physical memory, typically indicating a failing RAM stick, bad L2/L3 CPU cache, or a corrupt NTFS volume.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000050 on blue screen",
+      "Crashes immediately upon waking from sleep or booting up",
+      "Occurs after installing a new RAM module or expansion card"
+    ],
+    "fix_steps": [
+      {
+        "title": "Run MemTest86 on each RAM stick individually",
+        "detail": "Create a bootable MemTest86 USB drive and test one stick at a time. A single error in Test 6 or 8 confirms hardware memory replacement is needed."
+      },
+      {
+        "title": "Run CHKDSK to repair filesystem metadata",
+        "detail": "Open Command Prompt as Administrator and run 'chkdsk C: /f /r'. Reboot to let Windows scan nonpaged storage blocks."
+      },
+      {
+        "title": "Recreate the Windows Pagefile",
+        "detail": "Go to System Properties → Advanced → Performance Settings → Advanced → Change Virtual Memory. Set to 'No paging file', reboot, and reset to 'System managed size' to discard corrupted pagefile blocks."
+      },
+      {
+        "title": "Disable third-party antivirus suites",
+        "detail": "Third-party kernel-level antivirus drivers frequently trigger nonpaged memory faults. Temporarily uninstall to isolate."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      21,
+      23
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "system-service-exception",
+    "title": "SYSTEM_SERVICE_EXCEPTION (Stop 0x0000003B)",
+    "summary": "An unhandled exception occurred during the execution of a system service routine, frequently caused by graphics drivers or anticheat software.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000003B with parameters",
+      "Commonly references win32kbase.sys, dxgkrnl.sys, or EasyAntiCheat.sys",
+      "Crashes while launching or alt-tabbing out of 3D games"
+    ],
+    "fix_steps": [
+      {
+        "title": "Update graphics drivers with a clean installation",
+        "detail": "Use Display Driver Uninstaller (DDU) in Safe Mode, then install the latest WHQL release for your GPU."
+      },
+      {
+        "title": "Update game anticheat software",
+        "detail": "Anticheat software (Easy Anti-Cheat, BattlEye, Vanguard) running at kernel level can crash when conflicting with Windows updates. Verify game files on Steam/Epic to reinstall anticheat."
+      },
+      {
+        "title": "Scan and restore system files with SFC and DISM",
+        "detail": "Run 'DISM /Online /Cleanup-Image /RestoreHealth' followed by 'sfc /scannow' in an elevated terminal to repair corrupted system DLLs."
+      },
+      {
+        "title": "Disable GPU hardware acceleration in apps",
+        "detail": "Turn off hardware acceleration in Discord, Spotify, and Chrome if crashes occur during media playback."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85,
+      90
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "kernel-data-inpage-error",
+    "title": "KERNEL_DATA_INPAGE_ERROR (Stop 0x0000007A)",
+    "summary": "The operating system kernel failed to read requested kernel data from disk storage into physical RAM due to hardware connection failure or bad sectors.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000007A with status codes like 0xC000009C (bad sector) or 0xC000009D (disconnected device)",
+      "System freezes completely before blue screen appears",
+      "Drive disappears from Windows File Explorer after crash"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect SSD / HDD health with CrystalDiskInfo",
+        "detail": "Check SMART attributes. Look for Reallocated Sectors, Current Pending Sectors, or Uncorrectable Error Count. Any non-zero count warns of drive degradation."
+      },
+      {
+        "title": "Reseat NVMe M.2 SSD or SATA cables",
+        "detail": "Turn off power, remove the M.2 SSD, clean the contacts, and firmly reinstall. For 2.5\"/3.5\" SATA drives, replace the SATA data cable and try another motherboard port."
+      },
+      {
+        "title": "Update SSD firmware",
+        "detail": "Open your drive manufacturer's software (Samsung Magician, WD Dashboard, Crucial Storage Executive) and apply pending firmware updates."
+      },
+      {
+        "title": "Run CHKDSK /F /R",
+        "detail": "Execute 'chkdsk /f /r' from an elevated prompt to flag and isolate damaged filesystem sectors."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      23,
+      25,
+      28
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "critical-process-died",
+    "title": "CRITICAL_PROCESS_DIED (Stop 0x000000EF)",
+    "summary": "An essential Windows system process (such as csrss.exe, wininit.exe, or svchost.exe) unexpectedly terminated, forcing an immediate safety kernel panic.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Sudden blue screen displaying CRITICAL_PROCESS_DIED",
+      "Crash dump file fails to save or stays stuck at 0%",
+      "System reboots into BIOS or displays 'No bootable device found'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check SSD health and connections immediately",
+        "detail": "When an SSD drops off the PCIe/SATA bus, Windows cannot read critical system files, causing csrss.exe to terminate. Reseat the SSD and check SMART logs."
+      },
+      {
+        "title": "Repair system file corruption",
+        "detail": "Open administrative PowerShell and run: 'sfc /scannow'. If violations are found and repaired, reboot and verify stability."
+      },
+      {
+        "title": "Use System Restore to roll back recent changes",
+        "detail": "Press Win+R, run 'rstrui.exe', and select a restore point created prior to the first occurrence of the crash."
+      },
+      {
+        "title": "Check for malware infections",
+        "detail": "Run a full scan with Microsoft Defender Offline scan to ensure malware has not hooked or injected malicious code into svchost.exe."
+      }
+    ],
+    "related_error_codes": [
+      3,
+      14,
+      67,
+      73
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "system-thread-exception-not-handled",
+    "title": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED (Stop 0x0000007E)",
+    "summary": "A system thread generated an exception that the kernel error handler did not catch, predominantly caused by outdated hardware device drivers.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000007E, often naming files like nvlddmkm.sys, atikmdag.sys, or RTKVHD64.sys",
+      "Repeated blue screen reboots during Windows startup",
+      "Occurs following a Windows Update or driver installation"
+    ],
+    "fix_steps": [
+      {
+        "title": "Identify the driver filename listed on the blue screen",
+        "detail": "Note the '.sys' file listed below the stop code. For example, nvlddmkm.sys is Nvidia, atikmdag.sys is AMD, and netwtw10.sys is Intel Wi-Fi."
+      },
+      {
+        "title": "Boot into Safe Mode and roll back driver",
+        "detail": "Boot into Windows Safe Mode, open Device Manager, right-click the corresponding hardware device, select Properties → Driver tab → Roll Back Driver."
+      },
+      {
+        "title": "Reinstall latest chipset and BIOS firmware",
+        "detail": "Download latest motherboard chipset INF drivers and audio drivers directly from the manufacturer motherboard support page."
+      },
+      {
+        "title": "Run DISM image repair",
+        "detail": "Execute 'dism /online /cleanup-image /restorehealth' in Command Prompt to fix corrupted system driver stores."
+      }
+    ],
+    "related_error_codes": [
+      83,
+      85,
+      90
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "dpc-watchdog-violation",
+    "title": "DPC_WATCHDOG_VIOLATION (Stop 0x00000133)",
+    "summary": "The Deferred Procedure Call (DPC) watchdog timer detected a single DPC routine that ran for excessive duration or spent too long at high IRQL.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000133 on crash screen",
+      "Cursor freezes completely for 5-10 seconds before BSOD triggers",
+      "Common on SSDs using standard Microsoft SATA AHCI driver"
+    ],
+    "fix_steps": [
+      {
+        "title": "Change SATA AHCI Controller driver in Device Manager",
+        "detail": "Open Device Manager → expand 'IDE ATA/ATAPI controllers'. If 'Standard SATA AHCI Controller' is listed, right-click → Update driver → Browse my computer → Let me pick → choose vendor driver or verify driver compatibility."
+      },
+      {
+        "title": "Update SSD firmware",
+        "detail": "Outdated solid-state drive firmware is the leading trigger for DPC watchdog timeouts. Use manufacturer utilities to flash latest SSD firmware."
+      },
+      {
+        "title": "Update Wi-Fi and Bluetooth drivers",
+        "detail": "Wireless adapters can hold DPC queues open if packet handshakes hang. Download the latest drivers from Intel or Qualcomm."
+      },
+      {
+        "title": "Check system DPC latency with LatencyMon",
+        "detail": "Run the free LatencyMon utility to detect which specific driver generates execution times over 1000 microseconds."
+      }
+    ],
+    "related_error_codes": [
+      87,
+      107
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "driver-power-state-failure",
+    "title": "DRIVER_POWER_STATE_FAILURE (Stop 0x0000009F)",
+    "summary": "A device driver was unable to transition between active and power-saving states (sleep, hibernation, or resume) within the kernel timeout window.",
+    "severity": "warn",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000009F appears when waking PC from sleep or closing laptop lid",
+      "PC hangs indefinitely on 'Shutting down' or 'Restarting' screen",
+      "Laptop battery drains rapidly while asleep"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Fast Startup in Windows",
+        "detail": "Go to Control Panel → Power Options → Choose what the power buttons do → click 'Change settings that are currently unavailable' → uncheck 'Turn on fast startup'."
+      },
+      {
+        "title": "Update Intel Management Engine (ME) or AMD Chipset drivers",
+        "detail": "Power-state transition commands depend on chipset firmware. Install the latest official chipset drivers for your motherboard."
+      },
+      {
+        "title": "Set PCIe Link State Power Management to Off",
+        "detail": "In Control Panel → Power Options → Edit Plan Settings → Change advanced power settings → expand 'PCI Express' → Link State Power Management → set to 'Off'."
+      },
+      {
+        "title": "Update GPU and USB controller drivers",
+        "detail": "Ensure third-party USB hubs or external docks have up-to-date firmware that supports ACPI D3 sleep states."
+      }
+    ],
+    "related_error_codes": [
+      19,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "whea-uncorrectable-error",
+    "title": "WHEA_UNCORRECTABLE_ERROR (Stop 0x00000124)",
+    "summary": "Windows Hardware Error Architecture (WHEA) detected a physical hardware error that cannot be corrected by CPU or bus architecture.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000124 on crash screen",
+      "Immediate reboot without writing dump file (0% progress)",
+      "Triggered by high CPU/GPU loads or extreme thermal spikes"
+    ],
+    "fix_steps": [
+      {
+        "title": "Remove CPU undervolts or overclocks",
+        "detail": "Enter BIOS and reset CPU Vcore, Load-Line Calibration (LLC), and PBO/Curve Optimizer settings to factory defaults. Insufficient core voltage is the #1 cause of WHEA errors."
+      },
+      {
+        "title": "Monitor CPU and VRM temperatures",
+        "detail": "Use HWInfo64 to ensure CPU temperature is below 90°C and motherboard VRMs are not thermal throttling under load."
+      },
+      {
+        "title": "Update motherboard BIOS for microcode patches",
+        "detail": "Motherboard vendors release BIOS updates containing Intel/AMD CPU microcode stability fixes to resolve internal bus parity errors."
+      },
+      {
+        "title": "Test with an alternate power supply",
+        "detail": "Transient voltage dips from a failing or underpowered PSU trigger internal CPU power-plane resets."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      29,
+      72
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "memory-management",
+    "title": "MEMORY_MANAGEMENT (Stop 0x0000001A)",
+    "summary": "The Windows memory manager encountered severe corruption in its internal page translation tables or physical memory structures.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000001A with subtype parameters",
+      "Web browser tabs crash frequently with 'STATUS_ACCESS_VIOLATION'",
+      "Large file decompression (.zip, game updates) throws CRC errors"
+    ],
+    "fix_steps": [
+      {
+        "title": "Test RAM with MemTest86",
+        "detail": "Boot to a MemTest86 flash drive and run a minimum of 4 passes. Any red errors indicate a defective physical RAM stick that must be replaced."
+      },
+      {
+        "title": "Disable XMP/EXPO memory profiles in BIOS",
+        "detail": "High-frequency DDR4 (3600MHz+) and DDR5 (6000MHz+) overclock profiles can destabilize the integrated memory controller (IMC). Run at stock JEDEC speeds to test."
+      },
+      {
+        "title": "Reseat RAM sticks in slots A2 and B2",
+        "detail": "Ensure modules are installed in the second and fourth slots from the CPU socket, and contacts are free of dust."
+      },
+      {
+        "title": "Run System File Checker",
+        "detail": "Open Command Prompt as Administrator and run 'sfc /scannow' to fix system files corrupted by memory write errors."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      21,
+      62
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "kmode-exception-not-handled",
+    "title": "KMODE_EXCEPTION_NOT_HANDLED (Stop 0x0000001E)",
+    "summary": "A kernel-mode program generated an exception that the error handler was unable to process, typically due to faulty drivers or memory corruption.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000001E on blue screen",
+      "Often mentions a driver such as ndis.sys, tcpip.sys, or athw8x.sys",
+      "Occurs during networking activity or peripheral plugging"
+    ],
+    "fix_steps": [
+      {
+        "title": "Note the exact driver name on the crash screen",
+        "detail": "If a driver is listed in parentheses after the stop code, boot to Safe Mode and uninstall or update that specific device driver."
+      },
+      {
+        "title": "Turn off Fast Startup",
+        "detail": "Fast Startup saves kernel sessions to disk and can reload corrupted kernel memory states. Disable it in Power Options."
+      },
+      {
+        "title": "Run Driver Verifier to catch faulty third-party drivers",
+        "detail": "Press Win+R, run 'verifier', create standard settings for all third-party drivers, and reboot. (Warning: know how to boot Safe Mode to turn Verifier off)."
+      },
+      {
+        "title": "Test memory with Windows Memory Diagnostic",
+        "detail": "Hardware memory defects frequently disguise themselves as unhandled kernel exceptions."
+      }
+    ],
+    "related_error_codes": [
+      9,
+      85,
+      90
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "clock-watchdog-timeout",
+    "title": "CLOCK_WATCHDOG_TIMEOUT (Stop 0x00000101)",
+    "summary": "An expected clock interrupt on a secondary processor core was not delivered within the allocated time interval, pointing to CPU core lockup or instability.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000101 on blue screen",
+      "System completely freezes; mouse cursor stops moving instantly",
+      "Sound buzzes violently through speakers or headphones"
+    ],
+    "fix_steps": [
+      {
+        "title": "Reset BIOS settings to factory defaults",
+        "detail": "Clear all CPU multiplier adjustments, manual voltages, and power limits in BIOS to verify stock processor stability."
+      },
+      {
+        "title": "Update motherboard BIOS firmware",
+        "detail": "Motherboard manufacturers release updated AGESA (AMD) or microcode (Intel) firmware specifically addressing inter-core communication deadlocks."
+      },
+      {
+        "title": "Check CPU operating temperature and mounting pressure",
+        "detail": "Extreme core temperatures (>100°C) or uneven cooler bracket mounting pressure can cause CPU cores to hang."
+      },
+      {
+        "title": "Run Intel Processor Diagnostic Tool or Prime95",
+        "detail": "Stress test individual CPU cores. If a specific core consistently halts while others continue, the CPU has a degraded physical core and requires RMA."
+      }
+    ],
+    "related_error_codes": [
+      72,
+      87
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "kernel-security-check-failure",
+    "title": "KERNEL_SECURITY_CHECK_FAILURE (Stop 0x00000139)",
+    "summary": "The operating system kernel detected corruption of critical kernel structures, indicating a driver or program violated kernel data integrity.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000139 on blue screen",
+      "Occurs when opening specific games, VPN software, or virtualization tools",
+      "System crashes after installing recent security patches"
+    ],
+    "fix_steps": [
+      {
+        "title": "Uninstall recently added third-party software",
+        "detail": "Virtual drive emulators, RGB control software, and outdated VPN clients frequently modify kernel structures. Uninstall them in Windows Settings."
+      },
+      {
+        "title": "Run SFC and DISM repair scans",
+        "detail": "Open an elevated Command Prompt and run 'sfc /scannow' to verify kernel binary integrity."
+      },
+      {
+        "title": "Update motherboard BIOS and chipset drivers",
+        "detail": "Security checks can fail if processor virtualization extensions (Intel VT-x / AMD-V) behave erratically on outdated firmware."
+      },
+      {
+        "title": "Perform clean boot to isolate startup services",
+        "detail": "Open 'msconfig', go to Services tab, check 'Hide all Microsoft services', click 'Disable all', and reboot to isolate conflicting background drivers."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      14,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bad-pool-header",
+    "title": "BAD_POOL_HEADER (Stop 0x00000019)",
+    "summary": "A device driver improperly allocated memory in the kernel pool, resulting in a corrupted memory allocation header.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000019 appears unexpectedly",
+      "Crashes when writing to external drives or transferring large files",
+      "Multiple applications crash with memory read errors"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disconnect recently connected external hardware",
+        "detail": "Unplug third-party USB hubs, external capture cards, and Wi-Fi dongles to determine if a driver allocated malformed pool memory."
+      },
+      {
+        "title": "Update network and storage controller drivers",
+        "detail": "Network adapter drivers are the most frequent source of bad pool allocation calls. Install latest manufacturer drivers."
+      },
+      {
+        "title": "Test RAM with MemTest86",
+        "detail": "Faulty physical memory addresses can corrupt pool headers as data is written."
+      },
+      {
+        "title": "Disable third-party antivirus suites",
+        "detail": "Real-time filesystem filter drivers from third-party security software can corrupt pool headers during deep file inspection."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      79,
+      88
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "driver-irql-not-less-or-equal",
+    "title": "DRIVER_IRQL_NOT_LESS_OR_EQUAL (Stop 0x000000D1)",
+    "summary": "A named kernel-mode driver attempted to access pageable memory at an improper IRQL level, identifying the driver at fault.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x000000D1 clearly displaying the driver filename on screen",
+      "Common files: storport.sys, netwtw08.sys, nvlddmkm.sys",
+      "Crashes while streaming video or heavy network downloading"
+    ],
+    "fix_steps": [
+      {
+        "title": "Identify and reinstall the offending driver",
+        "detail": "Search the filename shown on the crash screen. If it belongs to your Wi-Fi, Ethernet, audio, or GPU, download a clean installer from the vendor and reinstall."
+      },
+      {
+        "title": "Roll back to previous stable driver in Device Manager",
+        "detail": "If the crash started after a recent driver update, open Device Manager → right-click device → Properties → Driver → Roll Back Driver."
+      },
+      {
+        "title": "Run System File Checker",
+        "detail": "Execute 'sfc /scannow' in administrative Command Prompt to restore any damaged core Windows networking or storage components."
+      },
+      {
+        "title": "Disable network adapter energy efficient features",
+        "detail": "In Device Manager → Network adapters → right-click your adapter → Advanced → disable 'Energy Efficient Ethernet' and 'Green Ethernet'."
+      }
+    ],
+    "related_error_codes": [
+      9,
+      72,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-dxgkrnl-fatal-error",
+    "title": "BSOD: DXGKRNL_FATAL_ERROR (0x00000113)",
+    "summary": "The DirectX Graphics Kernel subsystem detects a fatal violation, typically triggered by an unstable GPU memory overclock, corrupt display driver, or failing PCIe power delivery.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Blue screen displaying stop code: DXGKRNL_FATAL_ERROR",
+      "Screen freezes or turns black for 3 seconds before blue screen",
+      "Occurs while playing 3D DirectX 12 games or rendering in Premiere"
+    ],
+    "fix_steps": [
+      {
+        "title": "Clean reinstall GPU driver with Display Driver Uninstaller (DDU)",
+        "detail": "Download DDU and the latest driver package from NVIDIA or AMD. Boot Windows into Safe Mode, run DDU to completely strip graphics drivers, restart, and perform a clean install."
+      },
+      {
+        "title": "Disable GPU VRAM and Core Overclock in MSI Afterburner",
+        "detail": "Open MSI Afterburner or AMD Adrenalin. Reset Core Clock and Memory Clock offsets to factory +0 MHz and disable any custom undervolting profiles."
+      },
+      {
+        "title": "Verify PCIe power cables are dedicated (not daisy-chained)",
+        "detail": "Ensure each 8-pin PCIe power connector on your graphics card runs a separate, dedicated cable directly from the power supply unit rather than sharing a pigtail splitter."
+      },
+      {
+        "title": "Run DirectX End-User Runtime installer",
+        "detail": "Download and run the Microsoft DirectX End-User Runtime installer to repair missing or corrupted legacy DirectX binaries in C:\\Windows\\System32."
+      }
+    ],
+    "related_error_codes": [
+      13
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-video-scheduler-internal-error",
+    "title": "BSOD: VIDEO_SCHEDULER_INTERNAL_ERROR (0x00000119)",
+    "summary": "The Windows GPU video scheduler detects that a display driver timed out while executing a graphics command and could not be recovered via Timeout Detection and Recovery (TDR).",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000119: VIDEO_SCHEDULER_INTERNAL_ERROR",
+      "Frequent display driver crashes when watching YouTube or hardware-accelerated video",
+      "Audio loops in a buzzing sound right before the crash"
+    ],
+    "fix_steps": [
+      {
+        "title": "Turn off Hardware Accelerated GPU Scheduling (HAGS)",
+        "detail": "Go to Windows Settings > System > Display > Graphics > Change default graphics settings. Toggle 'Hardware-accelerated GPU scheduling' to Off and reboot your PC."
+      },
+      {
+        "title": "Disable browser hardware acceleration as a test",
+        "detail": "In Chrome, Edge, or Discord, open Settings > System and turn off 'Use graphics acceleration when available'. If crashes halt, the graphics driver video decode engine is unstable."
+      },
+      {
+        "title": "Roll back to previous WHQL Studio or Game Ready driver",
+        "detail": "Open Device Manager > Display adapters > Right-click your GPU > Properties > Driver tab > Click 'Roll Back Driver' if the issue began immediately after a recent driver update."
+      },
+      {
+        "title": "Repair corrupted Windows system files with SFC and DISM",
+        "detail": "Open Terminal as Administrator and execute: DISM /Online /Cleanup-Image /RestoreHealth followed by sfc /scannow to fix damaged graphics subsystem components."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-pfn-list-corrupt",
+    "title": "BSOD: PFN_LIST_CORRUPT (0x0000004E)",
+    "summary": "The Page Frame Number (PFN) list, an internal operating system structure used to map physical memory addresses, became corrupted due to faulty RAM chips or disk I/O driver errors.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code: PFN_LIST_CORRUPT (0x0000004E)",
+      "Crash occurs randomly during web browsing, file copying, or gaming",
+      "Chkdsk finds indexing discrepancies on the system drive"
+    ],
+    "fix_steps": [
+      {
+        "title": "Run Windows Memory Diagnostic tool",
+        "detail": "Press Win + R, type 'mdsched.exe', and select 'Restart now and check for problems'. Allow the standard test pass to complete; if any hardware errors are found, RAM is defective."
+      },
+      {
+        "title": "Test memory sticks individually in slot A2",
+        "detail": "Power off the PC. Remove all RAM modules except one in the primary slot (usually A2). Test each stick one at a time to identify the specific failing physical module."
+      },
+      {
+        "title": "Disable aggressive RAM XMP / EXPO / DOCP profile",
+        "detail": "Reboot into BIOS and disable memory overclocking, letting RAM operate at base JEDEC speed (e.g. 4800 MHz DDR5 or 2133/2400 MHz DDR4) to test controller stability."
+      },
+      {
+        "title": "Run CHKDSK to repair bad filesystem sectors",
+        "detail": "Open Command Prompt as Admin and execute: chkdsk C: /f /r. Type Y to schedule at next boot, restart the PC, and allow Windows to relocate data away from damaged storage clusters."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-bad-object-header",
+    "title": "BSOD: BAD_OBJECT_HEADER (0x00000189)",
+    "summary": "The Windows kernel executive found that an internal object header was corrupted, almost always caused by a misbehaved third-party driver overwriting kernel memory pools.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x00000189: BAD_OBJECT_HEADER",
+      "Bugcheck occurs during shutdown, sleep, or wake transition",
+      "Minidump points to ntoskrnl.exe or a third-party .sys driver"
+    ],
+    "fix_steps": [
+      {
+        "title": "Analyze minidump with BlueScreenView or WinDbg",
+        "detail": "Download free BlueScreenView or Microsoft WinDbg from Microsoft Store. Open the crash dump in C:\\Windows\\Minidump to identify the exact third-party driver filename (e.g. AsIO.sys, CorsairVBus.sys)."
+      },
+      {
+        "title": "Uninstall conflicting RGB, tuning, or anti-virus utilities",
+        "detail": "Software like ASUS Armoury Crate, Corsair iCUE, Razer Synapse, or third-party firewalls install deep kernel drivers that frequently corrupt object memory. Uninstall them to test stability."
+      },
+      {
+        "title": "Update all motherboard chipset and serial IO drivers",
+        "detail": "Download the latest AMD Chipset Drivers or Intel Management Engine (ME) and Serial IO drivers from your motherboard support page."
+      },
+      {
+        "title": "Run Driver Verifier to isolate the offending driver",
+        "detail": "Press Win + R, type 'verifier', choose 'Create standard settings' > 'Select driver names from a list', check all non-Microsoft drivers, reboot, and observe which driver triggers an immediate pinpoint BSOD."
+      }
+    ],
+    "related_error_codes": [
+      9,
+      14
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-kernel-mode-heap-corruption",
+    "title": "BSOD: KERNEL_MODE_HEAP_CORRUPTION (0x0000013A)",
+    "summary": "A kernel-mode driver corrupted the operating system kernel heap memory manager, commonly triggered by kernel-level gaming anti-cheat engines or outdated network filter drivers.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x0000013A: KERNEL_MODE_HEAP_CORRUPTION",
+      "Crash happens upon launching Valorant (Vanguard), Fortnite (Easy Anti-Cheat), or Call of Duty (Ricochet)",
+      "Minidump blames vgk.sys, easyanticheat.sys, or e1d.sys"
+    ],
+    "fix_steps": [
+      {
+        "title": "Reinstall game anti-cheat service",
+        "detail": "Uninstall the game anti-cheat from Control Panel (e.g. Riot Vanguard or EasyAntiCheat). Launch the game launcher as Administrator to trigger a fresh, clean anti-cheat installation."
+      },
+      {
+        "title": "Update Wi-Fi and Ethernet network adapter drivers",
+        "detail": "Packet filtering drivers installed by network cards (like Intel Killer Suite or Realtek Dragon) frequently corrupt kernel memory. Download pure bare-metal INF drivers and uninstall the bloatware control center."
+      },
+      {
+        "title": "Enable Core Isolation / Memory Integrity in Windows Security",
+        "detail": "Open Windows Security > Device Security > Core isolation details > Turn on 'Memory Integrity' (HVCI). This forces Windows to isolate kernel processes and block insecure drivers."
+      },
+      {
+        "title": "Repair corrupt Windows system files with DISM",
+        "detail": "Run: DISM /Online /Cleanup-Image /RestoreHealth in PowerShell as Administrator to replace corrupted kernel memory libraries."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-hypervisor-error",
+    "title": "BSOD: HYPERVISOR_ERROR (0x00020001)",
+    "summary": "The Windows Hyper-V hypervisor encountered an unrecoverable exception, typically caused by conflicting third-party virtualization software (VirtualBox, VMware) or unstable CPU voltage.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code: HYPERVISOR_ERROR (0x00020001)",
+      "Occurs when launching WSL2, Windows Sandbox, or Docker Desktop",
+      "System hangs or reboots during virtualization workloads"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify CPU Virtualization (SVM / Intel VT-x) is enabled in BIOS",
+        "detail": "Enter BIOS setup, open Advanced CPU Configuration, and confirm that 'Intel Virtualization Technology' (VT-x) or AMD 'SVM Mode' is set to Enabled."
+      },
+      {
+        "title": "Disable conflicting third-party virtualization hypervisors",
+        "detail": "If VMware Workstation or Oracle VirtualBox is installed, update them to versions that support the Windows Hypervisor Platform (WHPX) API, or uninstall them temporarily."
+      },
+      {
+        "title": "Update WSL2 Linux kernel package",
+        "detail": "Open Command Prompt as Administrator and run: wsl --update followed by wsl --shutdown to refresh the Hyper-V microcode container."
+      },
+      {
+        "title": "Reset CPU curve optimizer / undervolt settings",
+        "detail": "Aggressive negative CPU Curve Optimizer (PBO) offsets frequently pass standard stress tests but fail under the nested virtualization context switching of Hyper-V. Reset offset to 0."
+      }
+    ],
+    "related_error_codes": [
+      13
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-driver-verifier-detected-violation",
+    "title": "BSOD: DRIVER_VERIFIER_DETECTED_VIOLATION (0x000000C4)",
+    "summary": "Windows Driver Verifier caught an active device driver performing an illegal operation, such as accessing paged memory at elevated IRQL or freeing already-released memory.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code: DRIVER_VERIFIER_DETECTED_VIOLATION (0x000000C4)",
+      "Names the failing driver file directly on the blue screen (e.g., driver.sys)",
+      "PC gets stuck in a blue screen boot loop until Safe Mode is accessed"
+    ],
+    "fix_steps": [
+      {
+        "title": "Boot into Safe Mode and turn off Driver Verifier",
+        "detail": "When Windows fails to boot twice, enter the Automatic Repair screen > Troubleshoot > Advanced Options > Startup Settings > Restart > Press 4 for Safe Mode. Open Command Prompt as Admin and execute: verifier /reset."
+      },
+      {
+        "title": "Identify the driver filename shown on the crash screen",
+        "detail": "Note the .sys file referenced on the blue screen (or inspect C:\\Windows\\MEMORY.DMP with BlueScreenView). Search the filename online to identify the associated hardware or software."
+      },
+      {
+        "title": "Update or uninstall the identified software or driver",
+        "detail": "In Safe Mode, open Device Manager or Control Panel and update the hardware driver or uninstall the utility responsible for the flagged .sys file."
+      },
+      {
+        "title": "Restart PC in normal mode",
+        "detail": "Reboot the PC normally. Verifier is now disabled, and the offending driver is either updated or removed."
+      }
+    ],
+    "related_error_codes": [
+      9,
+      14
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bsod-system-pte-misuse",
+    "title": "BSOD: SYSTEM_PTE_MISUSE (0x000000DA)",
+    "summary": "A driver attempted an illegal operation against Page Table Entries (PTEs) or conflicting memory protection flags, often triggered by outdated security software or firmware bugs.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code 0x000000DA: SYSTEM_PTE_MISUSE",
+      "Occurs during high memory pressure or intensive data streaming",
+      "System logs event ID 1001 in Windows Event Viewer"
+    ],
+    "fix_steps": [
+      {
+        "title": "Update motherboard BIOS firmware",
+        "detail": "System PTE tracking is heavily tied to motherboard ACPI tables and memory mapping registers. Download and flash the latest UEFI release from the manufacturer."
+      },
+      {
+        "title": "Check for incompatible third-party antivirus filters",
+        "detail": "Uninstall legacy antivirus or security tools (such as older Avast, AVG, or McAfee suites) using their official cleanup removal utilities."
+      },
+      {
+        "title": "Verify Windows system files with System File Checker",
+        "detail": "Run: sfc /scannow in an elevated Command Prompt to restore damaged memory management system binaries."
+      },
+      {
+        "title": "Reset Windows Virtual Memory paging file configuration",
+        "detail": "Open SystemPropertiesPerformance.exe > Advanced tab > Virtual Memory Change > Check 'Automatically manage paging file size for all drives' > Click OK and restart."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9
+    ],
+    "source": "researched",
+    "verified": false
+  }
+]

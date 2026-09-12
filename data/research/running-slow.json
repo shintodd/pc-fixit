@@ -1,0 +1,885 @@
+[
+  {
+    "slug": "running-slow",
+    "title": "General system sluggishness, freezes, and lag",
+    "summary": "The operating system feels unresponsive, with slow app launches, mouse stutter, or frequent freezes during daily operation.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Apps take 10-30 seconds to open",
+      "Mouse cursor hitches or stutters when opening windows",
+      "Task Manager shows high resource utilization even at idle"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect Task Manager for resource hogs",
+        "detail": "Press Ctrl+Shift+Esc, sort by CPU, Memory, and Disk columns to see which specific application or background service is saturating hardware."
+      },
+      {
+        "title": "Trim startup applications",
+        "detail": "Go to Task Manager → Startup apps tab. Right-click and Disable unnecessary updaters, launcher apps, and background sync clients."
+      },
+      {
+        "title": "Free up system drive space",
+        "detail": "Ensure drive C: has at least 15-20% free space. Windows uses free space for paging, temp files, and background defragmentation/trimming."
+      },
+      {
+        "title": "Run DISM and SFC maintenance",
+        "detail": "Open PowerShell as Administrator and run 'DISM /Online /Cleanup-Image /RestoreHealth' followed by 'sfc /scannow' to fix damaged OS components."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      35,
+      80
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "100-percent-disk-usage",
+    "title": "100% disk usage in Task Manager (HDD or budget SSD)",
+    "summary": "Storage drive response time spikes to thousands of milliseconds while active time stays pegged at 100%, causing Windows to grind to a halt.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Task Manager shows Disk 0 at 100% continuously",
+      "Opening simple text files or start menu takes over a minute",
+      "Drive activity light on case stays solid on"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable or restart the SysMain (Superfetch) service",
+        "detail": "Press Win+R, type 'services.msc', scroll down to 'SysMain', right-click → Properties → set Startup type to 'Disabled' and click 'Stop'."
+      },
+      {
+        "title": "Rebuild Windows Search indexing",
+        "detail": "In Settings, search for 'Indexing Options' → Advanced → click 'Rebuild'. If issues persist on older hard drives, consider setting Windows Search service to Manual."
+      },
+      {
+        "title": "Run CHKDSK to test for bad storage sectors",
+        "detail": "Open Command Prompt as Admin and run 'chkdsk C: /f /r'. A failing drive repeatedly retries reading damaged sectors, holding disk queue length at 100%."
+      },
+      {
+        "title": "Upgrade from mechanical HDD to an SSD",
+        "detail": "Modern Windows 10 and 11 are architected around SSD random I/O. Mechanical hard drives will almost inevitably suffer 100% disk saturation as system boot drives."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      23,
+      25,
+      35
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "high-cpu-system-idle-interrupts",
+    "title": "High CPU usage caused by 'System Interrupts'",
+    "summary": "System Interrupts consumes 20% to 100% of CPU capacity, signaling that a failing hardware device or corrupt driver is flooding the CPU with hardware interrupts.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "System Interrupts process sits at top of Task Manager CPU column",
+      "Audio crackles and mouse skips across screen",
+      "PC runs sluggish even with zero user applications open"
+    ],
+    "fix_steps": [
+      {
+        "title": "Unplug external USB devices one by one",
+        "detail": "Faulty USB mice, keyboards, webcams, or external soundcards frequently produce interrupt storms. Disconnect peripherals until CPU usage drops."
+      },
+      {
+        "title": "Run LatencyMon to identify the offending driver",
+        "detail": "Run LatencyMon, click Start Monitor, and check the 'Drivers' tab. Look for the driver file with the highest DPC/ISR count (e.g., ndis.sys, acpi.sys, nvlddmkm.sys)."
+      },
+      {
+        "title": "Update or reinstall network and audio drivers",
+        "detail": "Network cards and on-board Realtek audio are common triggers. Reinstall the latest manufacturer drivers."
+      },
+      {
+        "title": "Check SATA cable and drive SMART health",
+        "detail": "A failing drive or defective SATA data cable generates continuous CRC communication errors, resulting in high interrupt overhead."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      29,
+      43,
+      72
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "high-ram-usage-standby-memory",
+    "title": "High RAM usage and out of memory with few apps open",
+    "summary": "System RAM usage sits above 90% without obvious large processes in Task Manager, caused by kernel non-paged pool memory leaks.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Memory usage shows 95%+ in Task Manager Performance tab",
+      "Sum of processes in Task Manager doesn't match total memory consumed",
+      "Non-paged pool size exceeds 1-2 GB (normal is 200-400 MB)"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check non-paged pool size in Task Manager",
+        "detail": "In Task Manager → Performance → Memory, check 'Non-paged pool'. If it is several gigabytes, a driver has a severe memory leak."
+      },
+      {
+        "title": "Disable Network Data Usage (NDU) monitoring driver",
+        "detail": "Open Regedit, navigate to 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Ndu', double-click 'Start' and change value from 2 to 4. Reboot PC."
+      },
+      {
+        "title": "Update Killer Network / Realtek LAN drivers",
+        "detail": "Outdated Killer Network Suite and Realtek Ethernet drivers are notorious for non-paged pool leaks that grow until system crashes."
+      },
+      {
+        "title": "Use PoolMon to track memory tag allocations",
+        "detail": "Run PoolMon from the Windows Driver Kit to find the 4-letter tag allocating the leaked non-paged memory."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      62,
+      74
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "thermal-throttling-slowdown",
+    "title": "CPU stuck at 0.79 GHz or severe thermal throttling",
+    "summary": "The processor downclocks to its lowest base multiplier (often 799 MHz) due to thermal protection triggers or stuck PROCHOT sensor signals.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Task Manager CPU Speed locked at exactly 0.79 GHz or 0.54 GHz",
+      "System operates in extreme slow motion; opening Start menu takes 10 seconds",
+      "CPU fan runs at maximum RPM or completely silent"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check CPU core temperatures with HWInfo64",
+        "detail": "If CPU temperature is 95-105°C, thermal throttling is saving the processor from burning. Inspect CPU cooler mounting, pump operation, and thermal paste."
+      },
+      {
+        "title": "Check for BD PROCHOT false trigger in ThrottleStop",
+        "detail": "If CPU temperatures are cool (30-40°C) but frequency is stuck at 0.79 GHz, a faulty motherboard or power supply temperature sensor is sending a false PROCHOT signal. Use ThrottleStop to uncheck BD PROCHOT for testing."
+      },
+      {
+        "title": "Inspect AIO water cooling pump power",
+        "detail": "Verify the AIO pump 4-pin/SATA power cable is plugged in and spinning at 2000-4000 RPM in BIOS."
+      },
+      {
+        "title": "Reset Windows Power Plan to Balanced",
+        "detail": "Ensure minimum/maximum processor state in Power Options is set to 5% min and 100% max."
+      }
+    ],
+    "related_error_codes": [
+      29,
+      72,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "windows-search-indexing-lag",
+    "title": "Windows Search Indexer causing continuous CPU and disk lag",
+    "summary": "SearchIndexer.exe constantly runs in the background, churning storage and hogging CPU cycles trying to index damaged files or massive developer directories.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "SearchIndexer.exe consistently consumes 15-40% CPU in Task Manager",
+      "File Explorer freezes or shows a green loading bar across address bar",
+      "Fans spin up whenever PC is left idle"
+    ],
+    "fix_steps": [
+      {
+        "title": "Exclude large project folders from Windows Search",
+        "detail": "Go to Settings → Search → Searching Windows → Excluded Folders. Add large directories such as node_modules, git repos, virtual machines, and temp caches."
+      },
+      {
+        "title": "Run Windows Search Troubleshooter",
+        "detail": "Go to Settings → System → Troubleshoot → Other troubleshooters → Search and Indexing → run the automated fix."
+      },
+      {
+        "title": "Rebuild the search catalog index",
+        "detail": "Open Control Panel → Indexing Options → Advanced → click 'Rebuild'. This clears fragmented and corrupted search database files."
+      },
+      {
+        "title": "Restart the Windows Search service",
+        "detail": "In services.msc, restart 'Windows Search' to flush stuck file handles."
+      }
+    ],
+    "related_error_codes": [
+      5,
+      11,
+      16,
+      81
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bloatware-startup-apps-overload",
+    "title": "Excessive startup applications causing long boot times",
+    "summary": "Dozens of third-party helper apps, game launchers, and OEM utilities initialize on login, delaying usable desktop readiness by several minutes.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "PC takes 3-5 minutes before icons respond after signing in",
+      "System tray is overflowing with dozens of application icons",
+      "High memory and network consumption immediately on boot"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable high-impact startup items in Task Manager",
+        "detail": "Open Task Manager (Ctrl+Shift+Esc) → Startup apps. Sort by 'Startup impact'. Disable everything except critical audio or security components."
+      },
+      {
+        "title": "Inspect Startup folder shortcuts",
+        "detail": "Press Win+R, type 'shell:startup', and delete shortcuts to apps you do not need launching on every power-on."
+      },
+      {
+        "title": "Clean startup services using MSConfig",
+        "detail": "Open 'msconfig' → Services tab → check 'Hide all Microsoft services' → uncheck non-essential third-party background services."
+      },
+      {
+        "title": "Uninstall pre-installed OEM software",
+        "detail": "Remove bloatware utilities (antivirus trials, bundled browser bars, duplicate power managers) via Apps & Features."
+      }
+    ],
+    "related_error_codes": [
+      5,
+      67,
+      71
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "antivirus-dual-scanner-conflict",
+    "title": "Multiple antivirus suites running simultaneously",
+    "summary": "Two real-time antivirus scanners (e.g., Windows Defender alongside McAfee/Norton) lock the same file handles, causing severe system freezes.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Opening any executable causes a 5-10 second freeze",
+      "Both Antimalware Service Executable and third-party AV show high CPU",
+      "Files take excessively long to download or copy"
+    ],
+    "fix_steps": [
+      {
+        "title": "Uninstall redundant third-party antivirus suites",
+        "detail": "Having more than one real-time antivirus creates file lock contention. Use the vendor's dedicated removal tool (e.g., MCPR for McAfee, NRnR for Norton)."
+      },
+      {
+        "title": "Verify Windows Defender is in active or passive mode",
+        "detail": "Open Windows Security → Virus & threat protection. If using a third-party AV, Defender should automatically enter passive mode without real-time file hooks."
+      },
+      {
+        "title": "Add exclusions for trusted developer or gaming directories",
+        "detail": "In Windows Security → Virus & threat protection settings → Exclusions, add folders with thousands of read/writes to prevent scan loops."
+      },
+      {
+        "title": "Reboot to release locked kernel file filters",
+        "detail": "Restart the PC to ensure removed antivirus kernel drivers (.sys) are fully unloaded from memory."
+      }
+    ],
+    "related_error_codes": [
+      30,
+      31,
+      33
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "power-plan-stuck-power-saver",
+    "title": "Windows power plan stuck in Power Saver mode",
+    "summary": "The operating system caps the processor at 50% max frequency and spins down hard drives aggressively due to misconfigured power schemes.",
+    "severity": "info",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Games run at uncharacteristically low framerates",
+      "CPU clock speed refuses to boost even under 100% load",
+      "Screen dims and drives sleep after 1 minute of inactivity"
+    ],
+    "fix_steps": [
+      {
+        "title": "Switch to Balanced or High Performance plan",
+        "detail": "Open Control Panel → Power Options → select 'Balanced' (recommended for modern dynamic boosting) or 'High performance'."
+      },
+      {
+        "title": "Inspect Maximum Processor State",
+        "detail": "In Power Options → Change plan settings → Change advanced power settings → Processor power management → Maximum processor state → verify set to 100%."
+      },
+      {
+        "title": "Restore power plan defaults",
+        "detail": "Open administrative Command Prompt and run 'powercfg -restoredefaultschemes' to reset corrupted power plan registries."
+      },
+      {
+        "title": "Check OEM battery utility modes",
+        "detail": "On laptops (Dell Command, Lenovo Vantage, ASUS Armoury Crate), ensure profile is set to Performance or Standard rather than Quiet or Battery Saver."
+      }
+    ],
+    "related_error_codes": [
+      12,
+      13
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "fragmented-or-nearly-full-ssd",
+    "title": "Solid state drive is over 90% full",
+    "summary": "NAND flash drives without sufficient free blocks cannot perform SLC caching or wear-leveling, causing write speeds to drop by up to 90%.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "File transfers start fast then crash down to 5-10 MB/s",
+      "System hangs when saving downloads or capturing screenshots",
+      "Drive bar in File Explorer is bright red"
+    ],
+    "fix_steps": [
+      {
+        "title": "Maintain 15-20% free space on SSD",
+        "detail": "Delete unused games, run Disk Cleanup (cleanmgr.exe), and clean temporary files via Settings → System → Storage."
+      },
+      {
+        "title": "Run manual TRIM optimization",
+        "detail": "Press Start, type 'Defragment and Optimize Drives', select your SSD, and click 'Optimize' to run TRIM and reclaim stale flash blocks."
+      },
+      {
+        "title": "Clear Windows update download cache",
+        "detail": "Stop Windows Update service, delete contents inside 'C:\\Windows\\SoftwareDistribution\\Download', and restart service."
+      },
+      {
+        "title": "Check SSD health with manufacturer utility",
+        "detail": "Verify write endurance percentage and reserve block status using Samsung Magician, WD Dashboard, or CrystalDiskInfo."
+      }
+    ],
+    "related_error_codes": [
+      35,
+      80
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "malware-crypto-miner-background",
+    "title": "Background malware or crypto miner hijacking resources",
+    "summary": "Hidden malicious processes consume CPU/GPU power in the background, often hiding or throttling down whenever Task Manager is launched.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Fans spin at high speed when PC is untouched, then quiet down when mouse moves or Task Manager opens",
+      "GPU temperature stays at 70°C+ on the desktop with zero apps open",
+      "Browser redirects to unfamiliar search engines"
+    ],
+    "fix_steps": [
+      {
+        "title": "Run Microsoft Defender Offline scan",
+        "detail": "Go to Settings → Privacy & Security → Windows Security → Virus & threat protection → Scan options → select 'Microsoft Defender Antivirus (offline scan)'."
+      },
+      {
+        "title": "Run Malwarebytes anti-malware scan",
+        "detail": "Download free Malwarebytes, run a full scan with Rootkit detection enabled in settings, and quarantine detected miners."
+      },
+      {
+        "title": "Inspect scheduled tasks and autoruns",
+        "detail": "Download Sysinternals Autoruns. Look under 'Logon' and 'Scheduled Tasks' for suspicious random alphanumeric filenames running from %AppData% or %Temp%."
+      },
+      {
+        "title": "Review Task Manager processes without names",
+        "detail": "Enable 'Command line' column in Task Manager to see where background processes are executing from."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      14,
+      60
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "corrupted-windows-component-store",
+    "title": "Corrupted Windows Component Store (WinSxS)",
+    "summary": "Corrupted system manifest files prevent Windows updates from installing and cause File Explorer and core shell apps to crash.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Windows Updates fail with errors like 0x800f081f or 0x80070002",
+      "Settings app crashes when clicking update or storage tabs",
+      "Start menu and taskbar freeze frequently"
+    ],
+    "fix_steps": [
+      {
+        "title": "Run DISM Component Store cleanup",
+        "detail": "Open administrative PowerShell and run 'DISM /Online /Cleanup-Image /StartComponentCleanup' to remove superseded update components."
+      },
+      {
+        "title": "Restore Component Store health via Windows Update",
+        "detail": "Run 'DISM /Online /Cleanup-Image /RestoreHealth' in PowerShell to pull fresh system binaries directly from Microsoft servers."
+      },
+      {
+        "title": "Run SFC scannow",
+        "detail": "Following DISM, run 'sfc /scannow' to replace damaged files on disk with healthy copies from the restored component store."
+      },
+      {
+        "title": "Perform an in-place Windows repair upgrade",
+        "detail": "If DISM cannot find source files, download the Windows 11 Media Creation Tool, run Setup.exe, and choose 'Keep personal files and apps'."
+      }
+    ],
+    "related_error_codes": [
+      2,
+      3,
+      14,
+      21
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "pagefile-on-mechanical-hdd",
+    "title": "Virtual memory (Pagefile) placed on a slow secondary HDD",
+    "summary": "Windows is swapping RAM pages to a slow mechanical hard drive rather than the primary NVMe/SSD, causing massive system stutter whenever RAM fills.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Severe 5-second freezes when switching between open applications",
+      "Mechanical secondary hard drive makes loud clicking/seeking noises during window switching",
+      "Commit charge in Task Manager exceeds physical RAM"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check Virtual Memory allocation drive",
+        "detail": "Press Win+R, type 'sysdm.cpl' → Advanced tab → Performance Settings → Advanced tab → click 'Change' under Virtual Memory."
+      },
+      {
+        "title": "Move pagefile to high-speed NVMe/SSD",
+        "detail": "Uncheck 'Automatically manage paging file size'. Highlight mechanical drive letters (e.g., D:) and select 'No paging file' → Set. Select SSD (C:) and choose 'System managed size' → Set."
+      },
+      {
+        "title": "Reboot computer to apply new paging layout",
+        "detail": "Restart Windows to delete the legacy pagefile.sys from the mechanical hard drive and allocate it on fast flash storage."
+      },
+      {
+        "title": "Ensure adequate RAM capacity",
+        "detail": "If your workload regularly exceeds physical RAM, adding an additional 8GB or 16GB RAM stick permanently eliminates pagefile swapping lag."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      10,
+      18,
+      35
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "browser-hardware-acceleration-glitch",
+    "title": "Web browser stutter, video lag, and interface freeze",
+    "summary": "GPU hardware acceleration inside Chromium or Gecko browsers conflicts with graphics drivers, causing dropped video frames and tab crashes.",
+    "severity": "info",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "YouTube 4K/60fps video drops frames or desyncs audio",
+      "Scrolling web pages stutters heavily",
+      "Browser screen goes solid black or white for a few seconds"
+    ],
+    "fix_steps": [
+      {
+        "title": "Toggle hardware acceleration in browser settings",
+        "detail": "In Chrome/Edge settings, search for 'hardware acceleration' and toggle 'Use graphics acceleration when available' off or on to test difference."
+      },
+      {
+        "title": "Change Angle Graphics Backend flag in Chrome",
+        "detail": "Navigate to 'chrome://flags/#use-angle' in address bar. Change backend from Default to 'D3D11on12' or 'OpenGL' and relaunch browser."
+      },
+      {
+        "title": "Perform a clean graphics driver update",
+        "detail": "Outdated GPU video decode drivers fail hardware acceleration handshakes. Update to latest stable Nvidia/AMD/Intel drivers."
+      },
+      {
+        "title": "Disable conflicting browser extensions",
+        "detail": "Ad-blockers with large element-hiding rulesets or crypto wallet extensions can inject heavy DOM scripts causing browser frame drops."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "single-channel-ram-bottleneck",
+    "title": "RAM running in single-channel mode (memory bandwidth cut in half)",
+    "summary": "Memory modules installed in improper motherboard slots force single-channel operation, crippling integrated GPU and CPU gaming performance.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "CPU and GPU utilization stay low in games while framerates drop severely",
+      "HWiNFO or CPU-Z reports Channel: 1 x 64-bit instead of 2 x 64-bit (or 4 x 32-bit DDR5)",
+      "Only one RAM stick is installed, or two sticks placed in adjacent slots"
+    ],
+    "fix_steps": [
+      {
+        "title": "Install RAM sticks in slots 2 and 4 (A2 and B2)",
+        "detail": "When installing two sticks on a 4-slot motherboard, place them in the second and fourth slots from the CPU socket to engage dual-channel mode."
+      },
+      {
+        "title": "Verify matching memory pairs",
+        "detail": "Using two sticks with wildly mismatched capacity or speeds forces the motherboard into asynchronous flex mode with reduced throughput."
+      },
+      {
+        "title": "Enable XMP / EXPO / DOCP in BIOS",
+        "detail": "DDR4 and DDR5 run at baseline 2133-4800MHz JEDEC speeds out of the box. Enable the manufacturer profile in BIOS to run at rated speeds."
+      },
+      {
+        "title": "Upgrade single-stick prebuilt systems",
+        "detail": "If your prebuilt PC or laptop arrived with a single 8GB or 16GB stick, adding a matching second stick increases memory bandwidth by 80-100%."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      62
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "driver-dpc-audio-crackling",
+    "title": "Micro-stutter in games and popping/crackling audio (high DPC latency)",
+    "summary": "High Deferred Procedure Call (DPC) latency caused by poorly optimized drivers delays real-time audio and frame rendering pipelines.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Audio pops, crackles, or drops out when listening to music or gaming",
+      "Micro-stutters and sudden FPS hitching despite high average framerate",
+      "Occurs whenever moving mouse or during network file transfer"
+    ],
+    "fix_steps": [
+      {
+        "title": "Run LatencyMon to identify offending driver",
+        "detail": "Download LatencyMon, click green Play button, reproduce the audio glitch, and check Drivers tab. Usually nvlddmkm.sys, ndis.sys, or wdf01000.sys."
+      },
+      {
+        "title": "Enable MSI (Message Signaled-Based Interrupts) for GPU",
+        "detail": "Download 'MSI Utility v3', check the box for your graphics card, set interrupt priority to High, and click Apply."
+      },
+      {
+        "title": "Disable unused onboard audio controllers in BIOS",
+        "detail": "If using a dedicated USB DAC or headset, disable onboard Realtek audio and AMD/Nvidia High Definition Audio controllers in Device Manager."
+      },
+      {
+        "title": "Disable network power throttling and green ethernet",
+        "detail": "In network adapter advanced properties, turn off Energy Efficient Ethernet and Advanced EEE."
+      }
+    ],
+    "related_error_codes": [
+      43,
+      72,
+      85,
+      87
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "tiworker-trustedinstaller-high-cpu",
+    "title": "TiWorker.exe (Windows Modules Installer) causing 100% CPU usage",
+    "summary": "The Windows Update background servicing engine (TiWorker.exe and TrustedInstaller.exe) gets stuck in an infinite scan or compilation loop while processing update components.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Task Manager shows Windows Modules Installer Worker using 70-100% CPU",
+      "Fans spin up loudly while the computer is idle",
+      "Windows Update history shows pending or failed update installations"
+    ],
+    "fix_steps": [
+      {
+        "title": "Run the Windows Update Troubleshooter",
+        "detail": "Go to Settings > System > Troubleshoot > Other troubleshooters > Click 'Run' next to Windows Update to reset corrupted background service states."
+      },
+      {
+        "title": "Clear SoftwareDistribution download cache",
+        "detail": "Open Command Prompt as Admin and run: net stop wuauserv && net stop cryptSvc && net stop bits. Delete all files inside C:\\Windows\\SoftwareDistribution\\Download, then run: net start wuauserv."
+      },
+      {
+        "title": "Run DISM Component Store cleanup",
+        "detail": "Execute in Admin Command Prompt: DISM.exe /Online /Cleanup-image /StartComponentCleanup to prune superseding update packages that cause TiWorker to loop."
+      },
+      {
+        "title": "Install pending Windows cumulative updates manually",
+        "detail": "Check Windows Update and let pending updates finish installing. Once all updates and reboots complete, TiWorker automatically drops back to 0% CPU."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      14
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "sysmain-superfetch-high-disk-usage",
+    "title": "SysMain (Superfetch) causing constant 100% disk usage on HDD / SATA SSD",
+    "summary": "The Windows SysMain caching service continuously pre-reads application data into memory, overwhelming the I/O queue on mechanical hard drives and budget SATA SSDs.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Task Manager reports Disk Usage pinned at 100% with response times over 1000ms",
+      "PC takes 5-10 minutes to become usable after logging into Windows",
+      "Service 'SysMain' or 'Service Host: SysMain' is the top disk consumer"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable SysMain service via Services console",
+        "detail": "Press Win + R, type 'services.msc', scroll down to find 'SysMain', right-click and choose Properties, set Startup type to 'Disabled', click 'Stop', and click OK."
+      },
+      {
+        "title": "Disable SysMain using Command Prompt",
+        "detail": "Open Command Prompt as Administrator and run: sc stop SysMain followed by sc config SysMain start=disabled to immediately halt the disk thrashing."
+      },
+      {
+        "title": "Check drive health with CrystalDiskInfo",
+        "detail": "Download free CrystalDiskInfo to verify the disk SMART health status. Excessive 100% disk usage frequently masks failing sectors or reallocated sector counts."
+      },
+      {
+        "title": "Upgrade Windows boot drive to an NVMe SSD",
+        "detail": "Windows 10 and 11 are heavily engineered for solid-state storage. Cloning your boot installation from a mechanical HDD to a budget NVMe SSD eliminates I/O bottlenecks permanently."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      23
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "com-surrogate-dllhost-ram-leak",
+    "title": "COM Surrogate (dllhost.exe) memory leak and high CPU during video browsing",
+    "summary": "The Windows COM Surrogate process crashes or leaks gigabytes of RAM when attempting to generate thumbnails for corrupt video files, MKV codecs, or damaged image directories.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "dllhost.exe accumulates several gigabytes of RAM in Task Manager",
+      "File Explorer freezes when opening the Downloads or Videos folder",
+      "Video thumbnails show blank white icons or freeze the green loading bar"
+    ],
+    "fix_steps": [
+      {
+        "title": "Clear and rebuild the Windows thumbnail cache",
+        "detail": "Press Win + R, type 'cleanmgr', select drive C:, check only 'Thumbnails', and click OK to purge the corrupted thumbnail database."
+      },
+      {
+        "title": "Update or install the K-Lite Codec Pack",
+        "detail": "Corrupted MKV or MP4 thumbnail handlers leak memory in dllhost.exe. Installing the standard K-Lite Codec Pack or Icaros Thumbnailer replaces faulty shell extension decoders."
+      },
+      {
+        "title": "Toggle File Explorer to show icons instead of thumbnails",
+        "detail": "In File Explorer, click the 3 dots (...) > Options > View tab > Check 'Always show icons, never thumbnails' > Click Apply to isolate thumbnail extraction as the root cause."
+      },
+      {
+        "title": "Scan storage for corrupt media files",
+        "detail": "Locate newly downloaded video files in the affected directory and move them to an isolated folder to determine which specific corrupt file triggers the COM Surrogate crash."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      14
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "prochot-vrm-throttling-0-79ghz",
+    "title": "CPU locked at 0.79 GHz from motherboard VRM PROCHOT throttling",
+    "summary": "A malfunctioning motherboard temperature sensor or overheating voltage regulator module (VRM) signals an artificial BD PROCHOT alarm, forcing the processor multiplier down to 8x (0.79 GHz).",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Task Manager shows CPU Speed permanently pinned at 0.79 GHz or 0.39 GHz",
+      "Computer feels excruciatingly sluggish even when completely idle",
+      "CPU temperature in HWInfo is low (35C) but processor will not clock up under load"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect motherboard VRM temperatures in HWInfo64",
+        "detail": "Download HWInfo64 (Sensors mode) and check 'Motherboard / VRM' temperatures. If VRM exceeds 105C, improve chassis intake airflow across the CPU socket area."
+      },
+      {
+        "title": "Perform a full power drain to reset sensor latch",
+        "detail": "Shut down the PC, disconnect AC power, and hold the power button for 30 seconds. On laptops, disconnect the main battery and hold power for 30 seconds to clear stuck EC sensor flags."
+      },
+      {
+        "title": "Disable BD PROCHOT with ThrottleStop (diagnostic verification)",
+        "detail": "Download ThrottleStop, uncheck 'BD PROCHOT' (Bi-Directional Processor Hot), and click 'Save'. If CPU frequency immediately shoots back up to 4.0+ GHz, a faulty motherboard sensor is triggering false alarms."
+      },
+      {
+        "title": "Update motherboard BIOS or RMA defective motherboard",
+        "detail": "Flash the newest motherboard BIOS to patch EC sensor bugs. If throttling persists on a desktop with normal temperatures, the motherboard VRM sensor has suffered hardware failure."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "file-explorer-slow-loading-green-bar",
+    "title": "File Explorer extremely slow with 'Working on it' green loading bar",
+    "summary": "Windows File Explorer hangs for 15 to 45 seconds when opening directories due to disconnected network mapped drives, a bloated Quick Access cache, or corrupted shell extensions.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Green progress address bar crawls across the top of File Explorer window",
+      "'Working on it...' message displayed for 20-30 seconds",
+      "Right-clicking any file causes the cursor to spin indefinitely"
+    ],
+    "fix_steps": [
+      {
+        "title": "Clear File Explorer Quick Access history",
+        "detail": "Open File Explorer, click the 3 dots (...) > Options > In the General tab under Privacy, click 'Clear' next to Clear File Explorer history."
+      },
+      {
+        "title": "Change 'Open File Explorer to' This PC instead of Home",
+        "detail": "In the same Folder Options General tab, change the top dropdown 'Open File Explorer to:' from 'Home' to 'This PC', then click Apply."
+      },
+      {
+        "title": "Disconnect offline or inaccessible network mapped drives",
+        "detail": "Open This PC. If any network drives (Z:, Y:) display a red X because the remote NAS or server is turned off, right-click and select 'Disconnect'."
+      },
+      {
+        "title": "Disable third-party context menu shell extensions with ShellExView",
+        "detail": "Download NirSoft ShellExView, filter by non-Microsoft extensions, and disable newly installed context menu handlers (WinRAR, 7-Zip, cloud storage hooks) that stall right-clicks."
+      }
+    ],
+    "related_error_codes": [
+      37,
+      53
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "onedrive-sync-constant-cpu-disk-lockup",
+    "title": "OneDrive continuous file scanning and background CPU / disk lockup",
+    "summary": "Microsoft OneDrive encounters a sync conflict or permission loop across thousands of small files (like node_modules or game saves), keeping CPU and disk usage elevated at 50-80%.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "OneDrive.exe constantly uses 20-40% CPU in Task Manager",
+      "Taskbar OneDrive cloud icon shows 'Processing changes' indefinitely",
+      "Files in Documents or Desktop display permanent blue sync arrows"
+    ],
+    "fix_steps": [
+      {
+        "title": "Reset the Microsoft OneDrive sync client",
+        "detail": "Press Win + R and enter: %localappdata%\\Microsoft\\OneDrive\\onedrive.exe /reset. Wait 2 minutes for the icon to reappear (or manually restart OneDrive from the Start Menu)."
+      },
+      {
+        "title": "Pause syncing and verify system responsiveness",
+        "detail": "Click the OneDrive icon in the system tray > Settings gear > 'Pause syncing' > Select '2 hours'. If CPU and disk usage immediately normalize, a specific sync folder is looping."
+      },
+      {
+        "title": "Exclude developer folders and node_modules from backup",
+        "detail": "Move coding workspaces, virtual machine disks, and Git repositories outside of OneDrive-synced folders (e.g. store them in C:\\Dev\\ rather than C:\\Users\\Name\\Documents\\)."
+      },
+      {
+        "title": "Unlink and re-link your Microsoft Account",
+        "detail": "Open OneDrive Settings > Account tab > Click 'Unlink this PC'. Restart your computer and sign back in, choosing your existing OneDrive folder location."
+      }
+    ],
+    "related_error_codes": [
+      5,
+      30
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "antivirus-defender-msmpeng-high-cpu",
+    "title": "Windows Defender (MsMpEng.exe) high CPU usage scanning large folders",
+    "summary": "The Antimalware Service Executable continuously scans developer source code, virtual machine disks, or its own installation directory, consuming significant processor capacity.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Task Manager shows 'Antimalware Service Executable' using 15-50% CPU constantly",
+      "Code compiling (npm install, cargo build, Visual Studio) takes 3x longer than expected",
+      "System becomes unresponsive during file downloads or extractions"
+    ],
+    "fix_steps": [
+      {
+        "title": "Add process exclusion for MsMpEng.exe",
+        "detail": "Open Windows Security > Virus & threat protection > Manage settings > Scroll to Exclusions > Add an exclusion > Select 'Process' > Type: MsMpEng.exe > Click Add."
+      },
+      {
+        "title": "Exclude developer project folders from real-time scanning",
+        "detail": "Under the same Exclusions menu, select 'Folder' and add your main coding directories (such as C:\\Users\\Name\\Desktop\\projects or C:\\src\\)."
+      },
+      {
+        "title": "Adjust Windows Defender Scheduled Scan task triggers",
+        "detail": "Open Task Scheduler > Navigate to Microsoft > Windows > Windows Defender > Right-click 'Windows Defender Scheduled Scan' > Properties > Conditions tab > Check 'Start the task only if the computer is idle'."
+      },
+      {
+        "title": "Run an offline scan to check for active threats",
+        "detail": "In Windows Security, click 'Scan options' > select 'Microsoft Defender Antivirus (offline scan)' > click 'Scan now'. The PC will reboot into a clean offline environment to remove deeply hidden malware."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      30
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "out-of-virtual-memory-pagefile-exhaustion",
+    "title": "Out of Virtual Memory warning despite free physical RAM available",
+    "summary": "Windows exhausts commit charge because the virtual memory paging file (pagefile.sys) is manually disabled, set too small, or residing on a storage drive with zero free space.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Dialog box: 'Your computer is low on memory. Save your files and close these programs'",
+      "Games crash abruptly to desktop without any error message or crash log",
+      "Task Manager shows 'Committed' memory at 100% while 'In use' physical RAM is only 60%"
+    ],
+    "fix_steps": [
+      {
+        "title": "Enable 'Automatically manage paging file size' in Windows",
+        "detail": "Press Win + R, type 'sysdm.cpl', go to Advanced tab > Performance 'Settings' > Advanced tab > Virtual memory 'Change' > Check 'Automatically manage paging file size for all drives' > Click OK and reboot."
+      },
+      {
+        "title": "Free up at least 20GB of disk space on drive C:",
+        "detail": "The Windows paging file dynamically expands when heavy applications launch. If drive C: has less than 5GB free, the pagefile cannot grow, causing instant out-of-memory crashes."
+      },
+      {
+        "title": "Set custom initial and maximum paging file limits",
+        "detail": "If setting custom sizes manually on an NVMe SSD, configure 'Initial size' to 8192 MB (8GB) and 'Maximum size' to 24576 MB (24GB) to avoid commit limit truncation."
+      },
+      {
+        "title": "Identify memory-leaking background processes",
+        "detail": "Open Task Manager, go to Details tab, right-click column headers, click 'Select columns', check 'Commit size', and sort descending to identify programs consuming abnormal virtual allocation."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      35
+    ],
+    "source": "researched",
+    "verified": false
+  }
+]

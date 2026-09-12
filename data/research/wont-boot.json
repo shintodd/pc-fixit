@@ -1,0 +1,868 @@
+[
+  {
+    "slug": "no-power-led-off",
+    "title": "PC completely dead (no lights, no fan spin)",
+    "summary": "The system receives zero electrical power when pressing the power switch, leaving all LEDs dark and fans motionless.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "No response when pressing the power button",
+      "Motherboard standby LEDs do not illuminate",
+      "Power supply fan does not spin"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify wall outlet and power strip",
+        "detail": "Plug a lamp or phone charger into the exact wall outlet to confirm live mains voltage. If using a surge protector, toggle its rocker switch or test directly into the wall."
+      },
+      {
+        "title": "Inspect PSU rocker switch and AC cable",
+        "detail": "Verify the switch on the back of the power supply unit is flipped to the 'I' (On) position, and firmly push the C13 AC power cord into the power inlet."
+      },
+      {
+        "title": "Perform the paperclip PSU self-test",
+        "detail": "Disconnect all power cables from PC hardware. Jump the green wire (PS_ON) to any black ground wire on the 24-pin ATX connector with a paperclip. Switch on PSU; if the fan does not spin, the power supply has failed."
+      },
+      {
+        "title": "Test front-panel power switch header",
+        "detail": "Locate the front-panel header pins (PWR_SW) on the bottom right of the motherboard. Disconnect the case cable and briefly bridge the two pins with a flathead screwdriver to bypass a faulty chassis switch."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "fans-spin-briefly",
+    "title": "Fans spin for a second then immediately shut off",
+    "summary": "The power supply initiates boot but triggers internal short-circuit protection (SCP/OCP) almost instantly to prevent component damage.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Fans spin for half a second before halting",
+      "Power LED flashes once then turns off",
+      "System requires power cord pull to attempt turning on again"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check 8-pin CPU (EPS) power cable",
+        "detail": "Ensure the 8-pin CPU power cable near the top left of the motherboard is fully seated. Do not confuse 8-pin PCIe graphics cables with 8-pin EPS CPU cables."
+      },
+      {
+        "title": "Inspect for motherboard standoff shorts",
+        "detail": "Ensure only required motherboard standoffs are installed in the chassis. An extra standoff behind the motherboard can short power traces to the case chassis."
+      },
+      {
+        "title": "Strip down to bare minimum components",
+        "detail": "Disconnect all SATA drives, front USB headers, RGB hubs, and add-in cards. Boot with only CPU, one RAM stick, and motherboard to identify the shorted component."
+      },
+      {
+        "title": "Inspect PCIe auxiliary connectors on the GPU",
+        "detail": "Look for burnt pins or melted plastic on 12VHPWR or 8-pin PCIe headers, which trigger emergency PSU latch-off."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "no-post-cpu-led",
+    "title": "Motherboard powers on but hangs on CPU debug LED",
+    "summary": "Motherboard LEDs and fans operate, but the Power-On Self-Test fails at processor initialization, leaving a solid red or white CPU diagnostic LED.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "EZ Debug CPU LED stays illuminated continuously",
+      "Monitor stays in sleep mode with no video signal",
+      "Fans spin at high speed without throttling down"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check CPU compatibility and BIOS revision",
+        "detail": "Modern motherboards often require a BIOS update to support newer processor generations. Use the rear USB Flashback button to flash the latest BIOS without a supported CPU installed."
+      },
+      {
+        "title": "Reseat processor and inspect socket pins",
+        "detail": "Remove the CPU cooler and CPU. On Intel LGA or AMD AM5 sockets, inspect pins with bright light and magnifier for bends or socket debris. On AM4, verify no bent pins on the CPU underside."
+      },
+      {
+        "title": "Loosen uneven CPU cooler mounting pressure",
+        "detail": "Overtightened cooler screws can flex the motherboard substrate and cause pins to lose contact with the memory controller or power delivery contacts."
+      },
+      {
+        "title": "Clear CMOS battery",
+        "detail": "Unplug wall power, remove the CR2032 coin cell battery for 5 minutes, short the CLR_CMOS jumper, and reinstall to clear corrupted hardware states."
+      }
+    ],
+    "related_error_codes": [
+      72,
+      86
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "no-post-dram-led",
+    "title": "Motherboard hangs on DRAM debug LED (no display)",
+    "summary": "System fails POST during initial memory training, indicated by a yellow or amber DRAM indicator LED and no screen output.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "DRAM diagnostic LED stays solid amber or yellow",
+      "No video output to monitor",
+      "Continuous long beeps on motherboards with internal speaker"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify primary DIMM slot population (A2 / B2)",
+        "detail": "Dual-channel motherboards require memory in slots 2 and 4 (counted from CPU socket). Installing in slots 1 and 3 frequently prevents POST."
+      },
+      {
+        "title": "Isolate with a single RAM stick",
+        "detail": "Remove all memory modules except one placed in slot A2. Power on to test. Swap sticks to identify whether a module or slot is defective."
+      },
+      {
+        "title": "Allow time for DDR5 memory training",
+        "detail": "On DDR5 platforms (AM5 and LGA 1700), initial boot and BIOS resets require up to 3-5 minutes of silent memory training before video appears. Do not interrupt."
+      },
+      {
+        "title": "Clean gold RAM contacts with isopropyl alcohol",
+        "detail": "Wipe the gold edge contacts using 90%+ isopropyl alcohol or a clean pencil eraser to eliminate skin oils or oxidation, then seat firmly until both latches click."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9,
+      62
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "no-post-vga-led",
+    "title": "VGA debug LED lit or 1 long, 3 short beeps",
+    "summary": "The system passes CPU and memory checks but cannot initialize video output or detect a display adapter.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "VGA debug LED remains lit white or red",
+      "Speaker emits 1 long beep followed by 3 short beeps",
+      "Monitor reports 'No Signal' or enters power saving standby"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify cable connection to dedicated GPU, not motherboard",
+        "detail": "Ensure HDMI or DisplayPort cable is plugged directly into the graphics card outputs, not the rear motherboard I/O ports (which require integrated graphics)."
+      },
+      {
+        "title": "Reseat GPU into primary PCIe x16 slot",
+        "detail": "Unlatch the PCIe retention clip, pull the graphics card, clean dust from slot, and push firmly until the retention latch snaps closed."
+      },
+      {
+        "title": "Use separate PCIe power cables",
+        "detail": "Avoid daisy-chaining a single split cable for high-power cards. Run dedicated individual 8-pin PCIe cables directly from the PSU to each connector."
+      },
+      {
+        "title": "Test with an alternative display cable and port",
+        "detail": "Swap between DisplayPort and HDMI cables. High-resolution monitors can fail handshake if using an outdated or non-VESA certified cable."
+      }
+    ],
+    "related_error_codes": [
+      29,
+      43
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "no-post-boot-led",
+    "title": "System boots to BIOS or hangs on BOOT debug LED",
+    "summary": "Core hardware initializes successfully, but the motherboard firmware cannot locate an active operating system boot loader.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Motherboard BOOT LED stays green/yellow",
+      "PC boots straight into BIOS setup screen on every power up",
+      "Message: 'Reboot and Select proper Boot device'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Toggle CSM / UEFI boot mode in BIOS",
+        "detail": "If Windows was installed in legacy MBR mode, enabling UEFI only will hide the drive. In BIOS Settings, test toggling CSM (Compatibility Support Module) On or Off."
+      },
+      {
+        "title": "Verify NVMe/SATA drive detection in BIOS",
+        "detail": "Check the NVMe Configuration or Storage Information tab in BIOS. If the SSD is not listed, reseat the M.2 SSD or replace the SATA data cable."
+      },
+      {
+        "title": "Adjust Boot Priority list",
+        "detail": "Set 'Windows Boot Manager' on your primary OS drive as Boot Option #1 rather than generic drive names or USB storage devices."
+      },
+      {
+        "title": "Repair EFI bootloader with Windows installation media",
+        "detail": "Boot from a Windows USB installer, select Repair Your Computer → Command Prompt, and run 'bootrec /fixboot' and 'bcdboot C:\\Windows /s S: /f UEFI'."
+      }
+    ],
+    "related_error_codes": [
+      3,
+      10,
+      18
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "stuck-on-motherboard-logo",
+    "title": "PC freezes on motherboard splash screen (spinning dots freeze)",
+    "summary": "The system completes POST and displays the manufacturer logo, but halts indefinitely during early hardware enumeration.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Stuck on ASUS, MSI, Gigabyte, or ASRock logo",
+      "Windows spinning loading circle freezes solid",
+      "Keyboard Caps Lock LED does not respond to presses"
+    ],
+    "fix_steps": [
+      {
+        "title": "Unplug all external USB peripherals",
+        "detail": "Remove external hard drives, USB audio interfaces, webcams, and flash drives. Faulty USB controllers often block kernel hardware initialization."
+      },
+      {
+        "title": "Disconnect secondary storage drives",
+        "detail": "A failing secondary HDD or SSD with bad sectors will stall Windows storage enumeration during boot. Disconnect all drives except the primary OS drive."
+      },
+      {
+        "title": "Disable Fast Boot in BIOS",
+        "detail": "Enter BIOS setup and disable Fast Boot. This forces full hardware re-initialization on startup instead of loading cached hardware states."
+      },
+      {
+        "title": "Check for corrupted BIOS flash",
+        "detail": "Clear CMOS and restore BIOS defaults (F5 or F7) to discard unstable memory sub-timings or corrupted ACPI tables."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      25,
+      41
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "black-screen-after-windows-logo",
+    "title": "Display goes black after Windows loading dots",
+    "summary": "System finishes UEFI/BIOS handover and starts loading Windows, but cuts video signal the moment the display driver initializes.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Windows logo appears then monitor goes completely black",
+      "Monitor goes into standby or displays 'Out of Range'",
+      "Hard drive activity LED continues flickering in background"
+    ],
+    "fix_steps": [
+      {
+        "title": "Boot into Windows Safe Mode",
+        "detail": "Interrupt boot three times by holding the power button. In Recovery Mode, navigate to Troubleshoot → Advanced Options → Startup Settings → Restart → press 4 for Safe Mode."
+      },
+      {
+        "title": "Uninstall graphics driver via DDU",
+        "detail": "In Safe Mode, run Display Driver Uninstaller (DDU) to wipe Nvidia/AMD/Intel drivers completely, reboot normally, and install the clean WHQL release."
+      },
+      {
+        "title": "Reset video refresh rate and resolution",
+        "detail": "Press Windows Key + Ctrl + Shift + B to trigger a graphics driver restart chime, or connect to a secondary display or TV to lower refresh rate."
+      },
+      {
+        "title": "Check display adapter output port",
+        "detail": "Some multi-output GPUs prioritize DisplayPort 1 over HDMI. Connect to a different physical port on the graphics card."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "inaccessible-boot-device",
+    "title": "BSOD with INACCESSIBLE_BOOT_DEVICE at startup",
+    "summary": "Windows kernel loses access to the system partition during early startup due to changed storage controller modes or missing AHCI/NVMe drivers.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Blue screen with stop code INACCESSIBLE_BOOT_DEVICE",
+      "Immediate reboot after splash screen into automatic repair",
+      "Occurs after BIOS update or motherboard replacement"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify SATA / NVMe mode in BIOS (AHCI vs RAID / VMD)",
+        "detail": "Enter BIOS and locate SATA Operation or Intel VMD. If it was switched from AHCI to RAID/VMD (or vice versa) during a BIOS flash, switch it back."
+      },
+      {
+        "title": "Boot into Safe Mode once to reload storage drivers",
+        "detail": "Safe Mode loads generic Microsoft storage drivers. Booting into Safe Mode once often clears driver binding conflicts and allows normal boots thereafter."
+      },
+      {
+        "title": "Run CHKDSK from Windows Recovery Environment",
+        "detail": "Open Command Prompt from Advanced Startup and run 'chkdsk C: /f /r' to repair corrupted file system structures on the boot partition."
+      },
+      {
+        "title": "Check system file integrity with SFC",
+        "detail": "In Recovery Command Prompt, run 'sfc /scannow /offbootdir=C:\\ /offwindir=C:\\Windows' to replace corrupted kernel storage drivers."
+      }
+    ],
+    "related_error_codes": [
+      3,
+      10,
+      18,
+      25
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bootmgr-is-missing",
+    "title": "BOOTMGR is missing (Press Ctrl+Alt+Del to restart)",
+    "summary": "Legacy BIOS system cannot find the Windows Boot Manager file in the active partition volume boot record.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Black screen with white text: 'BOOTMGR is missing'",
+      "Pressing Ctrl+Alt+Del loops back to identical error",
+      "Occurs after partition resizing or secondary drive installation"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check boot device order in BIOS",
+        "detail": "Ensure BIOS is not trying to boot from a secondary storage HDD, external USB drive, or network PXE boot rather than the primary Windows drive."
+      },
+      {
+        "title": "Rebuild BCD store using Command Prompt",
+        "detail": "Boot from Windows USB, open Command Prompt, and execute: 'bootrec /fixmbr', 'bootrec /fixboot', and 'bootrec /rebuildbcd'."
+      },
+      {
+        "title": "Mark system partition as active using Diskpart",
+        "detail": "In Command Prompt, run diskpart → select disk 0 → select partition 1 → active → exit, ensuring BIOS directs to the correct bootable partition."
+      },
+      {
+        "title": "Inspect storage drive health",
+        "detail": "Corrupted BOOTMGR can indicate failing disk sectors. Connect drive to another PC and check CrystalDiskInfo SMART health."
+      }
+    ],
+    "related_error_codes": [
+      2,
+      3,
+      4,
+      18
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "automatic-repair-loop",
+    "title": "Stuck in 'Preparing Automatic Repair' loop",
+    "summary": "Windows repeatedly crashes during boot, triggering diagnostic repair which fails and restarts the loop.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Screen displays 'Preparing Automatic Repair' followed by 'Diagnosing your PC'",
+      "Error: 'Automatic Repair couldn't repair your PC' with SrtTrail.txt log",
+      "Selecting Restart loops back to the same repair screen"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Automatic Startup Repair loop",
+        "detail": "In Advanced Options → Command Prompt, run: 'bcdedit /set {default} recoveryenabled No' to see the underlying stop code causing crashes."
+      },
+      {
+        "title": "Restore corrupted registry hives",
+        "detail": "Navigate to 'C:\\Windows\\System32\\config' in Command Prompt. Check if RegBack contains valid registry backups or use System Restore."
+      },
+      {
+        "title": "Uninstall recent Windows quality or feature updates",
+        "detail": "In Recovery Options, select Troubleshoot → Advanced Options → Uninstall Updates → Uninstall latest quality update."
+      },
+      {
+        "title": "Run DISM and SFC offline repair",
+        "detail": "Execute 'dism /image:C:\\ /cleanup-image /revertpendingactions' to clear hung update installations."
+      }
+    ],
+    "related_error_codes": [
+      14,
+      21,
+      30
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "power-cycling-infinite-reboot",
+    "title": "PC power cycles infinitely every few seconds",
+    "summary": "System powers on, spins fans for 3 to 10 seconds, shuts down, and automatically turns back on in an endless loop before video output.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Endless loop of turning on and off automatically",
+      "No display or BIOS splash screen ever appears",
+      "Motherboard debug LEDs cycle through CPU → DRAM then shut off"
+    ],
+    "fix_steps": [
+      {
+        "title": "Clear CMOS and let memory train",
+        "detail": "Unplug PSU power, remove CMOS battery for 5 minutes, reseat. On next boot, leave PC untouched for 3 minutes while memory retrains."
+      },
+      {
+        "title": "Reseat RAM and test individual sticks",
+        "detail": "A failed memory stick or corrupted XMP/EXPO timing profile is the most frequent cause of POST power cycling."
+      },
+      {
+        "title": "Check for shorted front-panel USB ports",
+        "detail": "Inspect front USB ports with a flashlight. Bent internal pins touching the metal port chassis trigger immediate 5V rail shutdown."
+      },
+      {
+        "title": "Test with an alternative power supply",
+        "detail": "A failing Power Good (PG) signal from the PSU triggers the motherboard to issue a continuous hardware reset cycle."
+      }
+    ],
+    "related_error_codes": [
+      29,
+      71
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bios-cmos-checksum-error",
+    "title": "CMOS Checksum Error (resets settings on every boot)",
+    "summary": "Motherboard non-volatile memory loses stored configuration and date/time whenever AC wall power is removed.",
+    "severity": "warn",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Prompt: 'CMOS checksum error - Defaults loaded' on boot",
+      "System clock resets to year 2018 or 2020 every shutdown",
+      "Overclock and XMP profiles are forgotten every power cut"
+    ],
+    "fix_steps": [
+      {
+        "title": "Replace CR2032 3V coin cell battery",
+        "detail": "Standard motherboard CR2032 lithium batteries last 3-5 years. Replace with a fresh brand-name battery."
+      },
+      {
+        "title": "Check CMOS clear jumper position",
+        "detail": "Verify the CLR_CMOS jumper cap is not left in the 'Clear' position across pins 2-3 instead of normal pins 1-2."
+      },
+      {
+        "title": "Update to the latest stable BIOS revision",
+        "detail": "Corrupted EEPROM storage sectors can trigger checksum mismatches; flashing fresh firmware overwrites damaged sectors."
+      },
+      {
+        "title": "Save BIOS settings with F10 before exit",
+        "detail": "Ensure you explicitly save changes with F10 rather than exiting without saving."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      62
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bitlocker-recovery-screen-on-boot",
+    "title": "Stuck on BitLocker recovery key entry screen",
+    "summary": "Windows stops boot and requests the 48-digit BitLocker recovery key because hardware integrity or TPM state changed.",
+    "severity": "warn",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Blue screen titled 'BitLocker' requesting 48-digit numerical key",
+      "Key ID displayed with message: 'Enter the recovery key for this drive'",
+      "Occurred following BIOS flash, Secure Boot toggle, or GPU swap"
+    ],
+    "fix_steps": [
+      {
+        "title": "Retrieve recovery key from Microsoft Account",
+        "detail": "From a phone or other device, sign in to 'account.microsoft.com/devices/recoverykey' using the Microsoft account associated with the PC."
+      },
+      {
+        "title": "Restore previous BIOS settings (Secure Boot / TPM)",
+        "detail": "If the key prompt appeared after entering BIOS, ensure Secure Boot is Enabled and fTPM / PTT is Enabled in UEFI settings."
+      },
+      {
+        "title": "Revert hardware changes temporarily",
+        "detail": "If you changed your GPU, SSD slot, or CPU, put back the original part temporarily to boot into Windows and suspend BitLocker protection."
+      },
+      {
+        "title": "Suspend BitLocker before updating firmware in future",
+        "detail": "Once in Windows, run 'Suspend-BitLocker -MountPoint C: -RebootCount 1' before running firmware updates."
+      }
+    ],
+    "related_error_codes": [
+      6,
+      64,
+      294
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "no-boot-after-bios-update",
+    "title": "Black screen and no POST following a BIOS update",
+    "summary": "A failed, interrupted, or corrupt BIOS firmware flash leaves the motherboard unable to execute Power-On Self-Test.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "PC powers on but displays nothing after a BIOS flash",
+      "Fans run continuously with no keyboard or mouse LED activity",
+      "Power button does not respond to soft press"
+    ],
+    "fix_steps": [
+      {
+        "title": "Use Motherboard USB BIOS Flashback",
+        "detail": "Download manufacturer BIOS on another computer. Rename it according to vendor specifications (e.g., ASUS.CAP, MSI.ROM). Copy to a FAT32 USB drive, insert into dedicated Flashback port, and press button for 3 seconds."
+      },
+      {
+        "title": "Switch to Dual BIOS backup chip (if equipped)",
+        "detail": "If your motherboard has a physical BIOS switch on the board, toggle to BIOS_B to boot from the factory backup chip."
+      },
+      {
+        "title": "Perform extended hard CMOS discharge",
+        "detail": "Disconnect all power cords, remove the CR2032 battery, hold down chassis power button for 60 seconds, and leave disconnected for 30 minutes."
+      },
+      {
+        "title": "Contact manufacturer RMA if board lacks Flashback",
+        "detail": "If the board lacks hardware BIOS Flashback and the primary EEPROM chip is corrupted, the chip requires an external SPI programmer (CH341A) or board RMA."
+      }
+    ],
+    "related_error_codes": [
+      13,
+      85,
+      86
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "power-button-front-panel-fault",
+    "title": "Front panel power button broken or disconnected",
+    "summary": "The chassis momentary power switch is broken, internally shorted, or disconnected from the motherboard front panel pin block.",
+    "severity": "warn",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Pressing power button feels spongy or doesn't click",
+      "PC turns on when using motherboard onboard start button but not case button",
+      "System turns on only when holding button at a specific angle"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect front panel header cable alignment",
+        "detail": "Consult motherboard manual for front panel pinout (JFP1). Ensure the 2-pin POWER SW connector is firmly seated on pins 6 and 8."
+      },
+      {
+        "title": "Jump the power pins directly",
+        "detail": "Carefully touch a flathead metal screwdriver across the two PWR_SW pins. If the system turns on immediately, the case button or wiring is defective."
+      },
+      {
+        "title": "Swap with Reset Switch as temporary fix",
+        "detail": "Connect the case's 2-pin RESET SW connector to the PWR_SW header pins. Use the smaller reset button to turn the PC on and off."
+      },
+      {
+        "title": "Install external desktop power switch button",
+        "detail": "Purchase a standalone $5 desktop power switch cable that routes through a rear PCIe bracket to sit on your desk."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "cmos-battery-dead-date-reset",
+    "title": "CMOS battery dead (BIOS clock and settings reset on every boot)",
+    "summary": "The CR2032 motherboard coin cell battery is depleted, causing the BIOS to lose time, date, and custom memory XMP/EXPO settings whenever mains AC power is switched off.",
+    "severity": "warn",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Windows clock shows 00:00 or incorrect year after turning PC on",
+      "Motherboard prompts with 'CMOS Date/Time Not Set' or 'Press F1 to Run Setup'",
+      "XMP or EXPO RAM profiles keep disabling themselves",
+      "PC requires F1 or F2 keystroke every time power cord is reconnected"
+    ],
+    "fix_steps": [
+      {
+        "title": "Replace the CR2032 coin cell battery",
+        "detail": "Power off the PC and unplug the power supply. Locate the silver circular battery on the motherboard, gently push the metal retention clip to eject it, and insert a fresh 3V CR2032 lithium battery with the positive (+) side facing up."
+      },
+      {
+        "title": "Enter BIOS and restore correct system time",
+        "detail": "Boot into BIOS setup by tapping Del or F2. Navigate to System Information or Main, set current date and UTC time, and enable your RAM XMP or EXPO profile."
+      },
+      {
+        "title": "Verify CMOS clear jumper position",
+        "detail": "Check the CLRTC / CLR_CMOS header on the motherboard. Ensure no jumper cap is bridging the pins; keeping it shorted will continually wipe BIOS NVRAM on every boot."
+      },
+      {
+        "title": "Save settings and test cold boot",
+        "detail": "Press F10 to save and exit. Shut down Windows, switch off the power supply rocker switch for 60 seconds, turn it back on, and verify the PC boots straight into Windows without resetting."
+      }
+    ],
+    "related_error_codes": [
+      12
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "secure-boot-violation-invalid-signature",
+    "title": "Secure Boot Violation: Invalid signature detected",
+    "summary": "The UEFI firmware blocks the operating system bootloader because its digital signature has expired, been revoked in the Secure Boot DBX database, or belongs to an unauthenticated secondary OS.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Red or blue banner reading 'Secure Boot Violation: Invalid signature detected'",
+      "PC boots straight into BIOS setup instead of Windows",
+      "Occurs after installing a Windows update or swapping graphics cards"
+    ],
+    "fix_steps": [
+      {
+        "title": "Enter UEFI BIOS and inspect Secure Boot state",
+        "detail": "Restart and tap Del or F2. Navigate to the Security or Boot tab, open Secure Boot Configuration, and confirm whether OS Type is set to 'Windows UEFI mode' rather than 'Other OS'."
+      },
+      {
+        "title": "Restore factory Secure Boot keys",
+        "detail": "Select 'Key Management' in the Secure Boot menu and click 'Restore Factory Default Keys' or 'Install Default Secure Boot Keys'. This refreshes the PK, KEK, and DB databases."
+      },
+      {
+        "title": "Temporarily switch Secure Boot to Disabled",
+        "detail": "If boot continues to fail, change Secure Boot from Enabled to Disabled. Save and restart to verify Windows boots normally. Once in Windows, run Windows Update to download the latest signed bootloader."
+      },
+      {
+        "title": "Update motherboard BIOS firmware",
+        "detail": "Download the latest BIOS from your motherboard manufacturer website onto a FAT32 USB flash drive. Flash the update to receive updated Microsoft revocation lists and re-enable Secure Boot."
+      }
+    ],
+    "related_error_codes": [
+      193
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "nvme-ssd-missing-from-bios-boot-priority",
+    "title": "NVMe boot drive missing from BIOS priority list after sudden power cut",
+    "summary": "An abrupt power outage or hard reset causes the NVMe SSD controller to enter a lockup or low-power recovery state, making the drive temporarily vanish from the motherboard UEFI boot menu.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "PC boots straight into BIOS setup utility",
+      "M.2 slot shows 'Not Present' or 'Empty' in storage overview",
+      "Error: 'Reboot and Select proper Boot device' appears on screen"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform a full motherboard power drain (capacitive discharge)",
+        "detail": "Shut down the PC, unplug the AC power cord from the wall, and hold down the front chassis power button for 30 full seconds. Reconnect AC power and turn on the PC."
+      },
+      {
+        "title": "Reseat the M.2 NVMe SSD in its slot",
+        "detail": "Unscrew the M.2 thermal heatsink, remove the NVMe drive, inspect the gold edge contacts for dust, and firmly insert it at a 30-degree angle before fastening the retention standoff."
+      },
+      {
+        "title": "Check CSM / UEFI boot mode compatibility",
+        "detail": "In BIOS settings, navigate to Boot > CSM (Compatibility Support Module). If your Windows was installed in pure UEFI mode, ensure CSM is Disabled and Windows Boot Manager is selected as Priority 1."
+      },
+      {
+        "title": "Test NVMe in secondary M.2 slot",
+        "detail": "If the primary CPU-connected M.2 slot does not register the drive, move the SSD to a chipset-connected M.2 slot on the lower half of the motherboard to isolate a dead lane or controller fault."
+      }
+    ],
+    "related_error_codes": [
+      18,
+      19
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "power-supply-surge-protection-lockout",
+    "title": "Power supply surge lockout (clicks once and requires AC unplug to reset)",
+    "summary": "The power supply internal supervisor IC triggers Over-Current Protection (OCP) or Short-Circuit Protection (SCP) due to an electrical surge or transient spike, latching into a protective shutdown.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Audible 'click' sound from the PSU when pressing power button, then silence",
+      "Power button does nothing on second press until power cord is disconnected",
+      "Occurred following a wall socket surge or nearby lightning strike"
+    ],
+    "fix_steps": [
+      {
+        "title": "Discharge power supply internal capacitors",
+        "detail": "Unplug the AC power cord from the back of the PSU. Switch the rocker to 'I', hold the case power button for 20 seconds, plug directly into an isolated wall socket (bypassing old surge strips), and test."
+      },
+      {
+        "title": "Disconnect all internal power cables except 24-pin and 8-pin EPS",
+        "detail": "Unplug PCIe power cables from the graphics card and all SATA power cables from hard drives and RGB hubs. If the PC now powers on, one of the disconnected accessories has an electrical dead short."
+      },
+      {
+        "title": "Inspect USB ports for bent metal pins touching ground",
+        "detail": "Examine every front and rear USB Type-A port with a flashlight. If a metal shield pin is bent inward and touching the center plastic tab, it grounds the 5V rail and trips instant PSU latch-off."
+      },
+      {
+        "title": "Test with known-good power supply unit",
+        "detail": "If the PSU continues clicking off under zero load, the internal primary capacitor or MOSFET has suffered an electrical breakdown and the power supply must be replaced under warranty."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "usb-bios-flashback-black-screen-recovery",
+    "title": "Corrupted BIOS black screen recovery via USB Flashback",
+    "summary": "A failed BIOS update, interrupted flashing process, or incompatible firmware version has corrupted the motherboard SPI flash memory, leaving the computer unable to execute initial boot code.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Black screen with fans spinning indefinitely after flashing BIOS",
+      "No display signal, no keyboard capslock LED response",
+      "Motherboard debug LED stuck on CPU or BIOS code"
+    ],
+    "fix_steps": [
+      {
+        "title": "Format a USB flash drive as MBR FAT32",
+        "detail": "On a working computer, format a USB 2.0 or 3.0 flash drive (32GB or smaller) using FAT32 with Master Boot Record (MBR) partition scheme."
+      },
+      {
+        "title": "Download firmware and rename file with official renamer",
+        "detail": "Download the correct motherboard BIOS file from the official manufacturer support page. Run the included renamer tool (e.g. ASUS: 'creative.CAP', MSI: 'MSI.ROM', Gigabyte: 'GIGABYTE.bin') and copy the renamed file to the root of the USB drive."
+      },
+      {
+        "title": "Insert drive into designated BIOS Flashback USB port",
+        "detail": "Locate the specific rear I/O USB port bordered by a white or grey outline labeled 'BIOS Flashback' or 'Q-Flash Plus'. Insert the USB flash drive."
+      },
+      {
+        "title": "Hold Flashback button until LED starts blinking",
+        "detail": "With the PSU connected and switched on (PC powered off), hold the Flashback button for 3 seconds until the indicator LED starts flashing. Wait 5-8 minutes until the blinking stops completely before powering on."
+      }
+    ],
+    "related_error_codes": [
+      12
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "tpm-clear-configuration-change-boot-prompt",
+    "title": "TPM configuration change prompt loop at startup",
+    "summary": "The motherboard firmware detects a new CPU or clear CMOS state, triggering a mandatory security confirmation screen to reset the Trusted Platform Module (fTPM / dTPM).",
+    "severity": "warn",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Screen displays 'A configuration change was requested to clear this computer TPM'",
+      "Prompts 'Press Y to reset fTPM or Press N to keep previous records'",
+      "Keyboard keystroke does not register or screen loops on every reboot"
+    ],
+    "fix_steps": [
+      {
+        "title": "Ensure BitLocker recovery key is saved before pressing Y",
+        "detail": "If Windows BitLocker drive encryption is enabled, clearing TPM will require entering your 48-digit BitLocker recovery key from your Microsoft Account (account.microsoft.com/devices/recoverykey)."
+      },
+      {
+        "title": "Connect a basic wired USB keyboard directly to rear I/O",
+        "detail": "Wireless, Bluetooth, or front-panel USB keyboards frequently fail to initialize at this pre-boot prompt. Plug a standard wired USB keyboard into a top rear USB 2.0 port."
+      },
+      {
+        "title": "Press Y to confirm fTPM reset",
+        "detail": "Press 'Y' (or 'Z' on German QWERTZ keyboards) to confirm the TPM reset. The motherboard will reboot automatically and initialize the new CPU security state."
+      },
+      {
+        "title": "Update BIOS to resolve AMD fTPM stutter fix",
+        "detail": "If TPM prompts continue appearing after every reboot, update the motherboard BIOS to AGESA 1.2.0.7 or newer to eliminate the known AMD fTPM NVRAM retention bug."
+      }
+    ],
+    "related_error_codes": [
+      6
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "cpu-uneven-mounting-pressure-channel-loss",
+    "title": "Uneven CPU cooler mounting pressure causing memory channel loss",
+    "summary": "Overtightening or unevenly torquing CPU cooler screws bends the LGA socket substrate, causing pin contact loss on delicate DDR5/DDR4 memory controller traces and preventing POST.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "PC boots with 1 RAM stick in slot B2, but fails to POST with 2 sticks in A2/B2",
+      "Motherboard DRAM debug LED illuminates solid amber or red",
+      "Occurs immediately after installing a new CPU cooler, AIO pump, or contact frame"
+    ],
+    "fix_steps": [
+      {
+        "title": "Loosen cooler screws by half a turn",
+        "detail": "Turn each cooler mount screw counterclockwise by half a turn in a cross pattern (top-left, bottom-right, top-right, bottom-left) to relieve asymmetric PCB flexing."
+      },
+      {
+        "title": "Remove cooler and inspect CPU socket pins",
+        "detail": "Remove the cooler, lift the socket retention lever, and inspect the motherboard LGA socket (Intel LGA 1700 or AMD AM5) with bright light for any bent or flattened gold pins."
+      },
+      {
+        "title": "Clean CPU contact pads with isopropyl alcohol",
+        "detail": "Wipe the gold pads on the underside of the processor with 99% isopropyl alcohol and a lint-free wipe to remove thermal paste residue or finger oils."
+      },
+      {
+        "title": "Reinstall cooler using alternating diagonal torque",
+        "detail": "Place the cooler flat on the IHS and turn each screw only 2 turns at a time in an X-pattern until hand-tight stops naturally without forcing."
+      }
+    ],
+    "related_error_codes": [
+      8,
+      9
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "displayport-deep-sleep-no-signal-wake",
+    "title": "DisplayPort monitor deep sleep no signal on boot",
+    "summary": "Modern high-refresh gaming monitors fail to wake from DisplayPort deep sleep power states during PC boot, causing the graphics card to report a VGA error LED due to absent EDID handshake.",
+    "severity": "warn",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Motherboard white VGA debug LED stays on",
+      "Monitor reports 'No DisplayPort Signal' and enters sleep mode",
+      "Signal appears immediately if cable is unplugged and plugged back in"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Deep Sleep in monitor On-Screen Display (OSD)",
+        "detail": "Press the physical menu joystick on the back of your monitor, open System or Setup settings, locate 'DisplayPort Deep Sleep' or 'Auto Input Sensing', and toggle it to Disabled / Off."
+      },
+      {
+        "title": "Turn monitor on 5 seconds before powering on PC",
+        "detail": "Turn on the monitor so its internal scaler is active and broadcasting EDID timing information before the graphics card initializes PCIe video output."
+      },
+      {
+        "title": "Install NVIDIA DisplayPort 1.4 / 1.3 Firmware Update",
+        "detail": "If using a GeForce GTX 900, 1000, or RTX 2000 series GPU, download the official 'NVIDIA Graphics Firmware Update Tool for DisplayPort 1.3 and 1.4 Displays' to fix UEFI blank screen handshakes."
+      },
+      {
+        "title": "Replace budget cable with VESA-Certified DP 1.4 cable",
+        "detail": "Non-certified DisplayPort cables frequently have Pin 20 connected, sending back-power into the GPU 3.3V rail. Swap with a VESA-certified cable with Pin 20 disconnected."
+      }
+    ],
+    "related_error_codes": [
+      28
+    ],
+    "source": "researched",
+    "verified": false
+  }
+]

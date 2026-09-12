@@ -1,0 +1,851 @@
+[
+  {
+    "slug": "overheating",
+    "title": "Overheating, loud fans, and thermal throttling",
+    "summary": "The computer generates excessive heat, causes cooling fans to run at maximum speed continuously, or shuts down to protect components.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Case fans scream at maximum RPM even while sitting on the desktop",
+      "Laptop chassis or desktop case feels uncomfortably hot to the touch",
+      "Sudden frame drops and stuttering in games after 10-15 minutes of play"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check hardware temperatures with HWiNFO64",
+        "detail": "Download HWiNFO64 (Sensors only mode). Check CPU Tctl/Tdie, GPU Core, and GPU Hotspot temperatures. Temperatures exceeding 95°C on CPU or 105°C on GPU Hotspot indicate thermal throttling."
+      },
+      {
+        "title": "Clean dust out of intake filters and heatsink fins",
+        "detail": "Use compressed air or an electric duster to blow dust out of radiator fins, GPU heatsinks, and mesh case filters. Hold fan blades still so they don't overspin."
+      },
+      {
+        "title": "Repaste CPU and GPU with high-grade thermal paste",
+        "detail": "Wipe dried paste using isopropyl alcohol (90%+) and apply fresh compound (Noctua NT-H2, Arctic MX-6, or Thermal Grizzly) with even cross-pattern mounting pressure."
+      },
+      {
+        "title": "Adjust fan curves in BIOS",
+        "detail": "Enter BIOS setup → Q-Fan / Hardware Monitor. Verify fan headers are set to PWM mode (for 4-pin fans) and create a progressive curve hitting 100% fan speed at 85°C."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29,
+      72
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "cpu-thermal-shutdown-under-load",
+    "title": "CPU reaches 100°C+ and triggers emergency thermal shutdown",
+    "summary": "The central processor hits its maximum junction temperature (TjMax 100-105°C) and cuts power instantly to prevent silicon damage.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "PC abruptly shuts off with no blue screen during gaming or video rendering",
+      "System refuses to power back on for 2-3 minutes until the CPU cools down",
+      "BIOS warning on next boot: 'CPU Over Temperature Error!'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify CPU cooler fan and pump are running",
+        "detail": "Look inside the chassis when powering on. Ensure CPU cooler fans are spinning. If using an AIO liquid cooler, place two fingers on the pump block to feel for vibration."
+      },
+      {
+        "title": "Inspect cooler mounting pressure and bracket alignment",
+        "detail": "Remove the cooler. Ensure all four mounting standoffs are fully threaded and tension screws are tightened diagonally in an X-pattern until they bottom out."
+      },
+      {
+        "title": "Remove factory plastic protective peel sticker",
+        "detail": "Check the copper contact base of the heatsink. Leaving the transparent 'Warning: Remove before installation' film intact is the most common reason for 100°C temperatures on new builds."
+      },
+      {
+        "title": "Disable aggressive motherboard overclocking defaults",
+        "detail": "In BIOS, turn off 'Multi-Core Enhancement' (ASUS), 'Enhanced Turbo' (MSI), or set Intel baseline power limits (PL1=125W, PL2=253W) to prevent dangerous over-volting."
+      }
+    ],
+    "related_error_codes": [
+      29,
+      72
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "aio-liquid-cooler-pump-failure",
+    "title": "AIO liquid cooler pump failure (immediate 95°C at idle)",
+    "summary": "The mechanical pump impeller has seized or lost electrical power, causing zero coolant flow and thermal saturation within 60 seconds of turning on.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "CPU immediately spikes to 90-100°C inside BIOS within 60 seconds of powering on",
+      "One AIO tube is scalding hot while the other tube and radiator remain cold",
+      "BIOS reports CPU_FAN or AIO_PUMP RPM as 0 or 'N/A'"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check pump power connection (SATA and 4-pin header)",
+        "detail": "Verify the AIO pump connector is firmly plugged into the dedicated 'AIO_PUMP' or 'W_PUMP' motherboard header, and auxiliary SATA power cables from the PSU are latched."
+      },
+      {
+        "title": "Set pump header to 100% Full Speed in BIOS",
+        "detail": "Liquid cooling pumps require a constant 12V supply. In BIOS Fan Control, ensure the AIO_PUMP header is set to 100% constant speed, not fluctuating with CPU temperature."
+      },
+      {
+        "title": "Listen and feel for pump motor vibrations",
+        "detail": "Place a hand on the CPU block. If you feel no vibration and hear silence or a faint electrical clicking/rattling noise, the pump motor has burned out."
+      },
+      {
+        "title": "Dislodge air bubble airlock in pump chamber",
+        "detail": "Ensure the radiator is mounted higher than the pump block. If the pump is the highest point in the loop, air collects in the pump. Tip case 45 degrees while running to dislodge bubbles."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "peel-sticker-left-on-cooler",
+    "title": "Transparent warning sticker left on cooler copper plate",
+    "summary": "The factory protective plastic film was left adhering to the copper heatsink base, acting as a thermal insulator between the CPU and cooler.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Brand new PC build reaches 90°C on desktop with 3% CPU usage",
+      "Fans run at 100% maximum speed constantly from the very first boot",
+      "Cooler radiator or heatsink fins feel completely cold to the touch"
+    ],
+    "fix_steps": [
+      {
+        "title": "Dismount CPU cooler block",
+        "detail": "Unscrew the four mounting thumb-screws diagonally and carefully lift the cooler block off the CPU."
+      },
+      {
+        "title": "Peel off the transparent plastic film",
+        "detail": "Locate the clear plastic film on the copper coldplate with the text 'WARNING: PEEL OFF BEFORE INSTALLING' and peel it completely away."
+      },
+      {
+        "title": "Clean thermal paste residue with isopropyl alcohol",
+        "detail": "Wipe off all existing thermal paste from both the CPU heat spreader and cooler base using 90%+ isopropyl alcohol and lint-free wipes."
+      },
+      {
+        "title": "Apply fresh thermal compound and remount",
+        "detail": "Place a pea-sized dot or an X-pattern of fresh thermal paste on the center of the CPU and securely fasten the cooler screws evenly."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gpu-hotspot-delta-high",
+    "title": "High GPU hotspot delta (>30°C difference between core and hotspot)",
+    "summary": "Thermal paste pump-out or uneven mounting bracket pressure causes the GPU hotspot (junction) to hit 105°C+ while the core reports a deceptive 65°C.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "GPU fans suddenly ramp to 100% (jet engine sound) during gaming",
+      "HWiNFO shows GPU Temperature at 68°C but GPU Hot Spot at 105-110°C",
+      "Graphics card downclocks heavily and framerates stutter"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check GPU core-to-hotspot temperature delta",
+        "detail": "Open HWiNFO64. Under GPU sensors, subtract GPU Core from GPU Hot Spot. A delta above 20-25°C indicates paste degradation or uneven heatsink contact."
+      },
+      {
+        "title": "Repaste GPU with viscous paste or PTM7950 phase-change pad",
+        "detail": "Direct-die GPU silicon causes standard paste to pump out under thermal cycling. Use high-viscosity paste (Thermalright TFX, Kingpin KPx) or Honeywell PTM7950 phase-change pad."
+      },
+      {
+        "title": "Tighten GPU retention bracket spring screws",
+        "detail": "Tighten the 4 spring-loaded cross-bracket screws behind the GPU core in an X-pattern to ensure firm, balanced mounting pressure across the die."
+      },
+      {
+        "title": "Ensure thermal putty or pads on VRAM are correct thickness",
+        "detail": "If thermal pads on VRAM are even 0.5mm too thick, they will prevent the copper base from contacting the GPU die."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "dust-clogged-heatsink-fins",
+    "title": "Heatsink fin stacks and mesh filters choked with dust",
+    "summary": "Dense lint and dust blankets the spaces between radiator fins, blocking airflow and trapping convection heat inside the chassis.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Exhaust fans blow lukewarm or cold air despite high hardware temperatures",
+      "PC was quiet when bought 2 years ago, but now sounds like a hair dryer",
+      "Visible grey lint layer covering front intake mesh and fan blades"
+    ],
+    "fix_steps": [
+      {
+        "title": "Power down and clean dust filters",
+        "detail": "Remove magnetic or slide-out dust filters from the front, top, and bottom PSU intake of the case. Wash with warm water or vacuum thoroughly and dry completely."
+      },
+      {
+        "title": "Blow compressed air through heatsink fins from inside out",
+        "detail": "Use a can of compressed air or electric air duster. Blow air in the opposite direction of normal airflow to eject compacted lint mats out of the radiator."
+      },
+      {
+        "title": "Hold fan blades still while blowing air",
+        "detail": "Always hold the center fan hub with a finger or pencil. Allowing high-pressure air to free-spin fan blades generates reverse voltage (back-EMF) that can burn motherboard fan headers."
+      },
+      {
+        "title": "Clean fan blade leading edges with isopropyl alcohol",
+        "detail": "Wipe sticky dust crust off fan blades to reduce aerodynamic noise and restore factory cubic feet per minute (CFM) airflow."
+      }
+    ],
+    "related_error_codes": [
+      28,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "dry-cracked-thermal-paste",
+    "title": "Aged, dried, or cracked thermal interface material (TIM)",
+    "summary": "Thermal paste degrades and turns into dry chalk after 3-5 years of thermal expansion and contraction, creating microscopic air gaps that insulate heat.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Gradual temperature increase of 15-20°C over several years of use",
+      "Fans ramp to high speed within 5 seconds of opening any application",
+      "Cooler was never repasted since original assembly 4+ years ago"
+    ],
+    "fix_steps": [
+      {
+        "title": "Remove CPU cooler carefully (twist before pulling)",
+        "detail": "Warm up the CPU with a benchmark before shutdown. Unscrew cooler and gently twist back and forth. Never pull straight up on AMD AM4 CPUs, which can yank the CPU out of the locked socket."
+      },
+      {
+        "title": "Dissolve dried paste using 90%+ isopropyl alcohol",
+        "detail": "Apply isopropyl alcohol with a paper towel or microfiber cloth. Clean until both the CPU IHS and cooler copper base shine mirror-clean."
+      },
+      {
+        "title": "Apply fresh high-performance thermal paste",
+        "detail": "Place a pea-sized drop (or an X with 4 corner dots) in the center of the heat spreader. Do not use conductive liquid metal on bare aluminum."
+      },
+      {
+        "title": "Torque mounting screws progressively in cross pattern",
+        "detail": "Turn screw 1 two rotations, then diagonal screw 2 two rotations, then 3 and 4, repeating until all four spring-loaded screws bottom out firmly."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "negative-pressure-gpu-starvation",
+    "title": "Negative case pressure suffocating graphics card and pulling dust",
+    "summary": "Case fans are configured with more exhaust than intake (or all fans blowing out), starving the GPU of fresh cool air and sucking dust through unfiltered seams.",
+    "severity": "info",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Removing the case tempered glass side panel instantly drops GPU temp by 10-15°C",
+      "Dust collects rapidly around PCIe slots and rear panel crevices",
+      "GPU intake fans fight against internal case vacuum"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check fan flow orientation (Intake vs Exhaust)",
+        "detail": "Remember the PC rule: 'Air flows towards the cross bracket / sticker'. Ensure front and bottom fans face inward (intake), while rear and top fans blow outward (exhaust)."
+      },
+      {
+        "title": "Ensure positive or neutral air pressure balance",
+        "detail": "Configure intake fans to provide slightly higher CFM than exhaust fans (e.g., 3 front intake fans and 1 rear + 1 top exhaust fan)."
+      },
+      {
+        "title": "Remove decorative solid front glass/plastic panels",
+        "detail": "Cases with solid glass front panels restrict intake airflow to tiny side slits. Upgrade to a mesh front panel or remove front bezel to verify temperature impact."
+      },
+      {
+        "title": "Install bottom intake fans beneath GPU",
+        "detail": "If your case has bottom PSU shroud fan mounts, install intake fans blowing directly into the GPU cooling fans."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "aggressive-motherboard-multicore-enhancement",
+    "title": "Motherboard pushing excessive voltage (ASUS MCE / Gigabyte Enhanced)",
+    "summary": "Default motherboard firmware disables Intel/AMD factory power limits, pumping upwards of 1.45V into the CPU and generating over 300W of heat.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "CPU pulls 250W-320W in benchmarks and hits 100°C on a 360mm AIO cooler",
+      "CPU Vcore voltages spike above 1.40V in HWiNFO",
+      "System crashes in Cinebench or rendering after 30 seconds"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable ASUS MultiCore Enhancement / MSI Enhanced Turbo",
+        "detail": "In BIOS under Ai Tweaker / Overclocking, find 'ASUS MultiCore Enhancement' and change from 'Auto - Enforce All Limits' to 'Disabled - Enforce All Limits'."
+      },
+      {
+        "title": "Apply Intel Baseline / Default Power Profile",
+        "detail": "Update to the latest BIOS version containing the Intel Default Settings profile. Ensure PL1 (Long Duration) is set to 125W or 253W according to Intel specifications."
+      },
+      {
+        "title": "Apply negative voltage offset (Undervolt)",
+        "detail": "In BIOS, set CPU Core Voltage mode to 'Offset Mode', select '-', and enter a conservative offset of 0.050V (-50mV) to drop temperatures by 5-10°C with zero performance loss."
+      },
+      {
+        "title": "Configure AMD Precision Boost Overdrive Curve Optimizer",
+        "detail": "On Ryzen processors, enable PBO Curve Optimizer → All Cores → Negative → start with 15 or 20 for cooler operating temperatures."
+      }
+    ],
+    "related_error_codes": [
+      12,
+      29,
+      72
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "laptop-thermal-pad-gap",
+    "title": "Improper thermal pad thickness on laptop VRM and VRAM",
+    "summary": "After cleaning or repasting a gaming laptop, incorrect thermal pad thickness prevents the heatsink from making contact with the CPU/GPU silicon dies.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Laptop was running 75°C, but after user repasting immediately hits 100°C on desktop",
+      "Laptop shuts down 1 minute into booting any 3D game",
+      "Thermal paste on CPU shows zero spread when heatsink is reopened"
+    ],
+    "fix_steps": [
+      {
+        "title": "Replace solid pads with high-conformability Thermal Putty",
+        "detail": "Laptops use non-standard pad thicknesses (0.75mm, 1.25mm). Replace stiff silicone pads with moldable thermal putty (Upsiren U6 Pro, ZT-PY6, CX-H98) that compresses perfectly."
+      },
+      {
+        "title": "Check heatsink screw numbering sequence",
+        "detail": "Laptop vapor chambers have numbered screw brackets (1 through 8). Always tighten in sequential order 1, 2, 3... to prevent the vapor chamber from cocking at an angle."
+      },
+      {
+        "title": "Inspect copper heat pipes for vapor seal rupture",
+        "detail": "If a copper heat pipe gets bent or punctured, the internal vacuum and distilled water escape, turning the heat pipe into a useless hollow tube."
+      },
+      {
+        "title": "Elevate rear laptop feet by 1 inch",
+        "detail": "Propping up the back of the laptop with a book or laptop stand provides 30-40% more airflow intake through bottom vents."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "vrm-overheating-budget-motherboard",
+    "title": "Motherboard VRM (Voltage Regulator Module) overheating and throttling",
+    "summary": "An entry-level motherboard lacking VRM heatsinks throttles a high-wattage CPU down to 800MHz because power MOSFETs exceed 115°C.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "CPU temperatures are fine (60°C), but CPU clock speed suddenly drops to 800MHz during heavy load",
+      "HWiNFO reports 'VRM Temperature' or 'Motherboard Temperature 4' above 105°C",
+      "Plastic smell emanates from upper left corner of motherboard"
+    ],
+    "fix_steps": [
+      {
+        "title": "Direct an airflow fan onto the motherboard VRM area",
+        "detail": "AIO water coolers provide zero airflow over the socket. Position a small 80mm or 120mm fan blowing directly over the naked MOSFETs near the CPU socket."
+      },
+      {
+        "title": "Enforce strict TDP power limits in BIOS",
+        "detail": "In BIOS, manually set CPU Long Duration Power Limit (PL1) to 65W or 95W so the board's unheatsinked power phases are not overwhelmed."
+      },
+      {
+        "title": "Attach aftermarket adhesive mini heatsinks",
+        "detail": "Apply small aluminum or copper heatsinks with pre-applied thermal adhesive tape to the bare black square MOSFET chips."
+      },
+      {
+        "title": "Switch from liquid AIO to a top-down air cooler",
+        "detail": "Top-down air coolers (like Noctua NH-L12S or Thermalright AXP) blow direct exhaust air over the surrounding motherboard VRM capacitors and chokes."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29,
+      72
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "power-supply-fan-not-spinning",
+    "title": "Power supply fan failure or stuck in Eco mode",
+    "summary": "The cooling fan inside the power supply fails to spin under load, causing internal PSU capacitors to overheat and trip over-temperature protection (OTP).",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "PC shuts down instantly without warning during heavy gaming sessions",
+      "Top or bottom of the PC chassis above the PSU shroud is burning hot to the touch",
+      "Flashlight inspection reveals the PSU fan is completely still even during gaming"
+    ],
+    "fix_steps": [
+      {
+        "title": "Toggle the PSU Eco / Hybrid / Zero-RPM switch",
+        "detail": "Many high-end PSUs (EVGA, Seasonic, Corsair) feature a toggle switch on the back for 'Eco Mode' or 'Hybrid Fan'. Flip it OFF to force the fan to spin continuously."
+      },
+      {
+        "title": "Clean dust buildup inside PSU shroud",
+        "detail": "Use compressed air through the PSU fan grille. (WARNING: Never open a power supply casing; internal capacitors carry lethal electric charges even when unplugged)."
+      },
+      {
+        "title": "Verify PSU orientation (fan facing fresh air)",
+        "detail": "If the PC sits on a desk, ensure the PSU fan faces downward toward the case bottom dust filter (or upward if the case floor is completely solid)."
+      },
+      {
+        "title": "Replace the power supply unit",
+        "detail": "If the PSU fan does not spin when Eco mode is disabled and the unit trips off under load, the internal fan controller or bearing has failed; RMA or replace the PSU."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "fan-curve-set-to-dc-instead-of-pwm",
+    "title": "Case or CPU fans running at 100% full speed all the time (DC mode)",
+    "summary": "4-pin PWM fans are configured as 3-pin DC (voltage controlled) in BIOS, supplying a constant 12 volts and forcing unbearable fan noise at idle.",
+    "severity": "info",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Fans run at deafening maximum RPM from the second the PC powers on",
+      "Fan speed never drops, even when CPU temperature is 30°C",
+      "Software fan control tools (Fan Control, SpeedFan) have no effect"
+    ],
+    "fix_steps": [
+      {
+        "title": "Enter BIOS setup and open Hardware Monitor / Fan Control",
+        "detail": "Restart PC and press Del or F2. Navigate to 'Q-Fan Control' (ASUS), 'Hardware Monitor' (MSI), or 'Smart Fan' (Gigabyte)."
+      },
+      {
+        "title": "Switch Fan Control Mode from DC to PWM",
+        "detail": "Select each fan header (CPU_FAN, CHA_FAN1, etc.). Change the control mode from 'DC' (or Auto) to 'PWM'. 4-pin fans require PWM pulse signaling to modulate speed."
+      },
+      {
+        "title": "Run automatic fan tuning calibration",
+        "detail": "Click 'Fan Tuning' or 'Optimize All' in BIOS. The motherboard tests minimum starting voltages for each fan to prevent stalled fans at low RPM."
+      },
+      {
+        "title": "Use Fan Control (open-source software) in Windows",
+        "detail": "Download the lightweight, open-source 'Fan Control' utility to bind case fan curves to both CPU and GPU temperatures simultaneously."
+      }
+    ],
+    "related_error_codes": [
+      12,
+      13,
+      85
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "blocked-intake-filters-or-carpet",
+    "title": "Desktop placed on thick carpet suffocating power supply intake",
+    "summary": "Placing a computer case directly on thick carpet blocks the bottom-facing PSU air intake, trapping heat and burning out the power supply.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Case bottom is excessively hot",
+      "Power supply fan makes strained whirring sound",
+      "Random PC reboots under gaming load"
+    ],
+    "fix_steps": [
+      {
+        "title": "Elevate the PC off the carpet",
+        "detail": "Place a rigid wooden board, computer riser stand, or ceramic tile underneath the PC feet to provide at least 1-2 inches of clear clearance below the bottom intake."
+      },
+      {
+        "title": "Remove and wash bottom PSU dust filter",
+        "detail": "Pull out the sliding mesh filter at the bottom rear of the case and wash out carpet fibers and accumulated dust."
+      },
+      {
+        "title": "Flip PSU orientation if carpet placement is unavoidable",
+        "detail": "If you must place the PC on carpet and lack a stand, reinstall the PSU with its fan facing upward into the chassis to pull air from inside the case."
+      },
+      {
+        "title": "Inspect PSU bottom intake fan with a flashlight",
+        "detail": "Ensure carpet fibers have not wrapped around the fan motor axle."
+      }
+    ],
+    "related_error_codes": [
+      28,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "m2-nvme-ssd-thermal-throttling",
+    "title": "PCIe 4.0/5.0 NVMe SSD thermal throttling (transfer speed drops to zero)",
+    "summary": "High-speed NVMe solid state drive controller chips exceed 85°C during sustained file writes, cutting speeds by 90% to avoid burning flash memory.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Large 50GB+ file transfer starts at 5000 MB/s then plunges to 50 MB/s",
+      "Games stutter heavily when loading open-world assets",
+      "CrystalDiskInfo reports SSD Temperature in bright red warning at 80-90°C"
+    ],
+    "fix_steps": [
+      {
+        "title": "Install motherboard M.2 aluminum heatsink",
+        "detail": "PCIe Gen 4 and Gen 5 SSDs require active or passive heatsinks. Ensure the motherboard metal heatsink cover is screwed down firmly over the drive."
+      },
+      {
+        "title": "Peel plastic protective cover off SSD heatsink thermal pad",
+        "detail": "Motherboard heatsinks come with blue or pink thermal pads covered by clear plastic film. Peel off the film before screwing the heatsink down."
+      },
+      {
+        "title": "Move SSD away from graphics card exhaust",
+        "detail": "If your primary M.2 slot sits directly underneath the GPU PCIe slot where hot exhaust dumps, install the SSD in an alternate CPU-connected slot with a dedicated heatsink."
+      },
+      {
+        "title": "Ensure adequate front case intake airflow",
+        "detail": "Verify front intake case fans blow fresh ambient air directly across the lower motherboard surface."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      27,
+      35
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "cable-management-blocking-airflow",
+    "title": "Tangled loose cables obstructing front case fan airflow",
+    "summary": "A rat's nest of loose PSU cables and drives directly behind front intake fans obstructs laminar air paths to the CPU and graphics card.",
+    "severity": "info",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Front case fans make buzzing or whooshing noise against loose wires",
+      "No measurable air movement felt near GPU intake fans",
+      "Ambient internal case temperature is 10-15°C warmer than room temperature"
+    ],
+    "fix_steps": [
+      {
+        "title": "Route power cables through rear motherboard tray grommets",
+        "detail": "Unplug modular cables and tuck them behind the rear motherboard tray. Use zip-ties or velcro straps to bind them flat against chassis tie-down loops."
+      },
+      {
+        "title": "Tuck unused non-modular PSU cables into the bottom shroud",
+        "detail": "Stuff surplus cables into the empty drive cage space inside the bottom PSU tunnel away from the path of front intake fans."
+      },
+      {
+        "title": "Relocate 3.5\" mechanical drive bays",
+        "detail": "If you don't use 3.5\" hard drives, unbolt the modular drive cage situated in front of the bottom front fan to open an unrestricted air tunnel to the GPU."
+      },
+      {
+        "title": "Verify no cables touch spinning fan blades",
+        "detail": "Ensure slim PWM or RGB wires are tied down so they cannot migrate into spinning fan blades."
+      }
+    ],
+    "related_error_codes": [
+      27,
+      28,
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gpu-vram-memory-junction-thermal-throttle",
+    "title": "GDDR6X VRAM memory junction overheating (105C - 110C thermal throttle)",
+    "summary": "Micron GDDR6X memory modules on high-end graphics cards (RTX 3080/3090/4080/4090) reach critical junction limits due to deteriorated, oily, or poorly compressed factory thermal pads.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "HWInfo64 reports 'Memory Temperature' or 'GPU Memory Junction' pegged at 106C - 110C",
+      "Games stutter violently after 10 minutes as GPU core clocks down to protect memory",
+      "GPU core temp is cool (65C) but GPU fans spin at 100% emergency speed"
+    ],
+    "fix_steps": [
+      {
+        "title": "Monitor GPU Memory Junction Temperature in HWInfo64",
+        "detail": "Download HWInfo64, launch in Sensors-only mode, launch a demanding game, and observe 'GPU Memory Junction Temperature'. Maximum operating limit before thermal throttling is 105C."
+      },
+      {
+        "title": "Cap in-game framerates and lower memory intensive settings",
+        "detail": "Cap your framerate to your monitor refresh rate (e.g. 144 FPS) using NVIDIA Control Panel Max Frame Rate, and lower Ray Tracing and texture resolution to reduce VRAM bus utilization."
+      },
+      {
+        "title": "Add an intake fan blowing directly across GPU backplate",
+        "detail": "Position a 120mm bottom or side chassis fan pushing fresh cool air directly across the graphics card rear backplate to pull heat away from rear-mounted VRAM packages."
+      },
+      {
+        "title": "Replace factory VRAM thermal pads with high-performance pads",
+        "detail": "Disassemble the GPU heatsink and replace oily stock thermal pads with high-conductivity pads (like Gelid GP-Ultimate or Thermalright Odyssey) with the exact millimeter thickness specified for your GPU model."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "aio-cooler-pump-air-bubble-orientation",
+    "title": "AIO liquid cooler gurgling noise and high CPU temps from pump orientation",
+    "summary": "Air bubbles migrate into the AIO CPU water block pump impeller because the radiator is mounted with the pump at the highest physical point in the liquid loop.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Audible bubbling, clicking, or rattling noise originating from the CPU pump block",
+      "CPU idle temperatures jump from 40C up to 75C without running any software",
+      "Radiator tubes are mounted below the CPU block level"
+    ],
+    "fix_steps": [
+      {
+        "title": "Ensure top of radiator is higher than the CPU pump block",
+        "detail": "Inspect your case layout. The top of the radiator (or radiator tank) MUST sit physically higher than the CPU water block so air bubbles naturally pool in the top of the radiator away from the pump."
+      },
+      {
+        "title": "Tilt PC chassis while pump is running to dislodge air",
+        "detail": "Power on the PC, set pump speed to 100% in BIOS, and gently tilt the computer chassis backward and forward by 45 degrees to force trapped air bubbles up the tubing and into the radiator."
+      },
+      {
+        "title": "Remount radiator to the top chassis exhaust position",
+        "detail": "If the radiator is currently mounted at the bottom of the case, move it to the top roof panel as exhaust. Top mounting is the gold standard for zero air ingestion."
+      },
+      {
+        "title": "Set AIO pump header speed to constant 100% / Full Speed in BIOS",
+        "detail": "In BIOS hardware monitor, select the pump header (AIO_PUMP or W_PUMP) and set it to a constant 100% DC/PWM duty cycle. Liquid pumps are engineered to run at constant RPM, not variable fan curves."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gaming-laptop-suffocating-soft-surface",
+    "title": "Gaming laptop thermal throttling on bed, couch, or soft blanket",
+    "summary": "Soft fabrics compress against bottom chassis intake grilles, completely choking fan airflow and causing the CPU and GPU to thermal throttle down to minimum frequencies.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Laptop chassis feels burning hot to touch above the keyboard deck",
+      "Massive FPS drops and stuttering when gaming from bed or sofa",
+      "Fans scream at maximum RPM but exhaust vents push out minimal airflow"
+    ],
+    "fix_steps": [
+      {
+        "title": "Place laptop on a hard, flat, rigid surface",
+        "detail": "Always operate gaming laptops on a desk, wooden lap desk, or hard tray. Soft bedding compresses under the rubber feet and blocks the bottom intake vents completely."
+      },
+      {
+        "title": "Elevate the rear laptop feet by 1-2 inches",
+        "detail": "Prop the rear rubber feet of the laptop up by one inch using small rubber stands, bottle caps, or an angled stand. This lowers CPU and GPU temperatures by 5C to 8C by doubling intake air volume."
+      },
+      {
+        "title": "Clean lint and pet hair from internal heatsink fins",
+        "detail": "Laptops used on beds ingest high volumes of blanket fibers and dust. Remove the bottom chassis cover and use compressed air to blast lint out through the copper exhaust fins."
+      },
+      {
+        "title": "Invest in a pressurized laptop cooling pad (IETS / Llano)",
+        "detail": "High-performance sealed-foam cooling pads force filtered air into the laptop chassis under positive pressure, dramatically reducing temperatures in thin chassis."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "motherboard-fan-speed-stuck-100-percent",
+    "title": "Motherboard case fans stuck at 100% speed (jet engine noise)",
+    "summary": "PWM 4-pin fans are configured in legacy DC Voltage mode in the BIOS, feeding a constant 12V rail that forces the fan motors to run at maximum RPM non-stop.",
+    "severity": "info",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Case fans scream at maximum RPM immediately upon booting into Windows",
+      "Adjusting fan curves in Windows software has zero effect on fan noise",
+      "Fan noise is deafening even when CPU temperature is at cool 30C idle"
+    ],
+    "fix_steps": [
+      {
+        "title": "Switch fan header mode from DC to PWM in BIOS",
+        "detail": "Restart PC and tap Del to enter BIOS. Open Q-Fan / Smart Fan / Hardware Monitor. Locate each fan header (CHA_FAN, SYS_FAN) and change control mode from 'DC' to 'PWM'."
+      },
+      {
+        "title": "Verify 4-pin PWM fan header connection",
+        "detail": "Check the fan cable header on the motherboard. Ensure 4-pin PWM fans are plugged into all 4 pins and not misaligned across 3 pins on the connector."
+      },
+      {
+        "title": "Install Fan Control open-source software",
+        "detail": "Download free open-source 'Fan Control' by Rem0o. Run the setup wizard to detect all motherboard and GPU sensors and create quiet custom stepped fan curves."
+      },
+      {
+        "title": "Check CPU temperature sensor readout in BIOS",
+        "detail": "If BIOS reads CPU temp as 99C while the heatsink is cold, the temperature probe is uncalibrated or disconnected, forcing safety failsafe 100% fan speed."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "damaged-heatpipe-loss-of-vacuum",
+    "title": "Damaged CPU heatsink heatpipe loss of vacuum causing instant 100C spike",
+    "summary": "A punctured, cracked, or severely bent sintered copper heatpipe loses its internal partial vacuum, terminating the liquid phase-change cycle and dropping thermal conductivity to near zero.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "CPU spikes to 100C within 3 seconds of launching any game or benchmark",
+      "CPU cooler aluminum fins remain cold to the touch while CPU core is thermal throttling",
+      "Heatsink was dropped, bent, or damaged during shipping or moving"
+    ],
+    "fix_steps": [
+      {
+        "title": "Perform touch test on cooler heatpipes and fin stack",
+        "detail": "When the CPU reports 95C-100C under load, touch the top of the aluminum cooling fins. If the heatpipes and fins feel room temperature while the CPU throttles, heat is not transferring through the pipes."
+      },
+      {
+        "title": "Inspect copper heatpipe tips for cracks or punctures",
+        "detail": "Examine the sealed ends of the copper heatpipes at the top of the cooler tower. If a seal is crimped open or punctured, the internal distilled water vapor has escaped."
+      },
+      {
+        "title": "Verify thermal paste footprint and mounting pressure first",
+        "detail": "Remove the cooler and verify the thermal paste was evenly squished into a paper-thin layer. Rule out a missed plastic peel sticker before condemning the heatsink."
+      },
+      {
+        "title": "Replace the damaged CPU cooler tower",
+        "detail": "A heatpipe with loss of vacuum cannot be repaired or refilled. Replace the cooler with a budget modern dual-tower air cooler (like Thermalright Peerless Assassin 120)."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "psu-eco-mode-shroud-overheating",
+    "title": "Power supply hybrid eco mode overheating inside enclosed PSU shroud",
+    "summary": "The power supply zero-RPM fan mode keeps the internal fan motionless until 50% power load, allowing heat to soak into internal capacitors inside cases with solid unventilated PSU shrouds.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Case basement / PSU shroud feels extremely hot to the touch during gaming",
+      "PC shuts down abruptly without blue screen after 30-45 minutes of heavy load",
+      "Power supply fan only spins for 10 seconds right before the emergency thermal trip"
+    ],
+    "fix_steps": [
+      {
+        "title": "Toggle off the ECO / Semi-Passive / Hybrid switch on the PSU",
+        "detail": "Locate the small push-button or rocker switch on the back of the PSU labeled 'Eco Mode', 'Hybrid', or 'Smart Fan'. Switch it to OFF so the cooling fan runs continuously at quiet low RPM."
+      },
+      {
+        "title": "Verify PSU fan intake orientation (pointing downward)",
+        "detail": "Check the power supply installation orientation. The large fan grille should face DOWNWARD toward the bottom case dust filter to draw fresh ambient air from under the chassis."
+      },
+      {
+        "title": "Clean bottom chassis power supply dust filter",
+        "detail": "Slide out the mesh dust filter from under the rear bottom of your PC case. Wash out accumulated carpet lint and dust with warm water, dry thoroughly, and reinsert."
+      },
+      {
+        "title": "Never place PC tower directly on plush carpet",
+        "detail": "Plush carpets sink under case feet, completely sealing off the bottom power supply air intake. Place a flat wooden board, acrylic sheet, or PC stand under the tower."
+      }
+    ],
+    "related_error_codes": [
+      29
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "pcie-gen4-gen5-ssd-thermal-throttle",
+    "title": "PCIe 4.0 / 5.0 NVMe SSD thermal throttling without motherboard heatsink",
+    "summary": "High-speed PCIe Gen 4 and Gen 5 NVMe SSD controllers draw up to 8-11W under continuous write operations, overheating to 85C and throttling read/write speeds from 7,000 MB/s down to 250 MB/s.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Steam or Epic Games download freezes and disk usage drops to 0 MB/s periodically",
+      "HWInfo64 or CrystalDiskInfo shows Drive Temperature 2 (Controller) exceeding 85C - 90C",
+      "Large file transfers start at 5 GB/s and drop to a crawl within 15 seconds"
+    ],
+    "fix_steps": [
+      {
+        "title": "Install motherboard metal M.2 thermal armor heatsink",
+        "detail": "Never run high-speed PCIe Gen 4/5 SSDs bare. Install the thick aluminum heatsink shield that came with your motherboard, ensuring the blue protective plastic film is peeled from the thermal pad."
+      },
+      {
+        "title": "Monitor Drive Temperature 2 (ASIC Controller) in HWInfo64",
+        "detail": "Drive Temp 1 reports NAND flash memory (which likes running warm around 40-60C), while Drive Temp 2 reports the controller. The controller must stay below 80C to prevent thermal throttling."
+      },
+      {
+        "title": "Add third-party M.2 copper fin heatsink",
+        "detail": "If your motherboard lacks integrated M.2 heatsinks, install an aftermarket $10 copper fin heatsink (like Thermalright HR-09 or be quiet! MC1) with dual-sided thermal pads."
+      },
+      {
+        "title": "Move M.2 SSD away from directly under hot GPU exhaust",
+        "detail": "If using secondary slots, avoid placing bare M.2 drives directly underneath a 300W graphics card exhaust port where heat soak drives SSD temperatures past safety thresholds."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "laptop-thermal-paste-pump-out-direct-die",
+    "title": "Laptop thermal paste pump-out degradation (degraded cooling after 2 months)",
+    "summary": "Traditional silicone-based thermal paste on bare-die laptop processors squishes out from thermal expansion and contraction cycles (the pump-out effect), leading to dry-out and thermal throttling.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Laptop temperatures were great right after repasting, but spiked back to 95C+ within 8-12 weeks",
+      "Core-to-core temperature deltas exceed 15C-20C under load",
+      "Disassembly reveals thermal paste pushed out around die edges with bare center silicon"
+    ],
+    "fix_steps": [
+      {
+        "title": "Replace standard paste with Honeywell PTM7950 phase-change pad",
+        "detail": "Standard paste (MX-4, Kryonaut) pumps out quickly on bare silicon dies. Order genuine Honeywell PTM7950 phase-change pad; it is solid at room temperature and melts under heat, completely eliminating pump-out."
+      },
+      {
+        "title": "Pre-chill PTM7950 in refrigerator before cutting",
+        "detail": "Place the PTM7950 sheet in the fridge for 10 minutes to make it stiff. Cut exactly to the size of the CPU and GPU dies, peel the plastic liner, apply to the die, and screw down the heatsink."
+      },
+      {
+        "title": "Use high-viscosity viscous paste if PTM is unavailable",
+        "detail": "If you must use paste, use high-viscosity thick compounds designed for direct-die applications (like Thermalright TFX, Gelid GC-Extreme, or K5 Pro on memory modules)."
+      },
+      {
+        "title": "Tighten laptop heatsink screws in numbered sequence",
+        "detail": "Laptop copper vapor chambers have numbered screw posts (1, 2, 3, 4, 5, 6). Always tighten them strictly in ascending sequence to prevent tilting the contact plate and pinching paste to one side."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  }
+]

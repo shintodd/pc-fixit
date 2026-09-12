@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-09-11T19:53:07.222Z",
+  "totalTests": 14,
+  "passedCount": 14,
+  "failedCount": 0,
+  "totalEmDashes": 0,
+  "results": [
+    {
+      "name": "GET /api/health",
+      "passed": true,
+      "durationMs": 68,
+      "details": "Status 200, Gemini status: configured, Mode: live_ai, DB: static_fallback, Node: v24.16.0",
+      "emDashCount": 0
+    },
+    {
+      "name": "AI Diagnose Streaming: Q1_DRAM_LIGHT",
+      "passed": true,
+      "durationMs": 2059,
+      "details": "Status: 200, TTFT: 1318ms, Chunks: 11, Length: 1068 chars, NumberedSteps: true, JargonViolations: []",
+      "emDashCount": 0
+    },
+    {
+      "name": "AI Diagnose Streaming: Q2_DPC_WATCHDOG",
+      "passed": true,
+      "durationMs": 2201,
+      "details": "Status: 200, TTFT: 1386ms, Chunks: 11, Length: 1125 chars, NumberedSteps: true, JargonViolations: []",
+      "emDashCount": 0
+    },
+    {
+      "name": "AI Diagnose Streaming: Q3_APIPA_WIFI",
+      "passed": true,
+      "durationMs": 2099,
+      "details": "Status: 200, TTFT: 1377ms, Chunks: 11, Length: 993 chars, NumberedSteps: true, JargonViolations: []",
+      "emDashCount": 0
+    },
+    {
+      "name": "Edge Case: Empty Query",
+      "passed": true,
+      "durationMs": 3,
+      "details": "Status: 400, Body: {\"error\":\"Query cannot be empty or whitespace only\"}",
+      "emDashCount": 0
+    },
+    {
+      "name": "Edge Case: Whitespace Query",
+      "passed": true,
+      "durationMs": 2,
+      "details": "Status: 400, Body: {\"error\":\"Query cannot be empty or whitespace only\"}",
+      "emDashCount": 0
+    },
+    {
+      "name": "Edge Case: Prompt Injection Defense",
+      "passed": true,
+      "durationMs": 1692,
+      "details": "Status: 200, Defended: true, Reply: \"I'm built specifically for PC troubleshooting and cannot help with other topics. Please describe a P...\"",
+      "emDashCount": 0
+    },
+    {
+      "name": "Edge Case: Oversized Query (>5000 chars)",
+      "passed": true,
+      "durationMs": 3,
+      "details": "Status: 400, Body: {\"error\":\"Problem description too long. Please keep under 5000 characters.\"}",
+      "emDashCount": 0
+    },
+    {
+      "name": "Rate Limiter: 10 req/min threshold & 429 enforcement",
+      "passed": true,
+      "durationMs": 0,
+      "details": "10 reqs allowed, 11th returned 429 with Retry-After: 47s",
+      "emDashCount": 0
+    },
+    {
+      "name": "Route: / (Homepage)",
+      "passed": true,
+      "durationMs": 11,
+      "details": "Status: 200, Size: 102488 bytes, AnimatePing: false, EmDash: 0",
+      "emDashCount": 0
+    },
+    {
+      "name": "Route: /troubleshoot (AI Troubleshoot Chat Page)",
+      "passed": true,
+      "durationMs": 19,
+      "details": "Status: 200, Size: 36638 bytes, AnimatePing: false, EmDash: 0",
+      "emDashCount": 0
+    },
+    {
+      "name": "Route: /wizard (Guided Fix Wizard)",
+      "passed": true,
+      "durationMs": 6,
+      "details": "Status: 200, Size: 86785 bytes, AnimatePing: false, EmDash: 0",
+      "emDashCount": 0
+    },
+    {
+      "name": "Route: /issues/no-post-dram-led (Issue Detail: no-post-dram-led)",
+      "passed": true,
+      "durationMs": 4,
+      "details": "Status: 200, Size: 46477 bytes, AnimatePing: false, EmDash: 0",
+      "emDashCount": 0
+    },
+    {
+      "name": "Route: /issues/cmos-battery-dead-date-reset (Issue Detail: cmos-battery-dead-date-reset)",
+      "passed": true,
+      "durationMs": 4,
+      "details": "Status: 200, Size: 48018 bytes, AnimatePing: false, EmDash: 0",
+      "emDashCount": 0
+    }
+  ]
+}
