@@ -229,17 +229,17 @@ export default function Chat({
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-3 border-b border-line/70 dark:border-dark-line/70">
             <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">
-              {language === "ms" ? "Enjin Diagnostik" : "Diagnostic Engine"}
+              {language === "ms" ? "Kaunter Technician PC" : "PC Technician Desk"}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              {language === "ms" ? "Aktif" : "Active"}
+              {language === "ms" ? "Sedia Bantu" : "Ready to Help"}
             </span>
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
             {language === "ms"
-              ? "Semak tanda kerosakan dengan rekod kerosakan sebenar, kod error Windows, dan langkah baiki."
-              : "Cross-referencing hardware failure patterns, Windows error codes, and step-by-step resolution paths."}
+              ? "Tanya je apa-apa masalah komputer anda. Technician kami sedia bantu semak punca kerosakan dan ajar cara baiki langkah demi langkah."
+              : "Ask anything about your PC or laptop. Your friendly technician is on standby to diagnose the fault and guide you through the fix."}
           </p>
           <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex items-center justify-between text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
             <span>{t("nav_knowledge_base")}</span>
@@ -252,7 +252,7 @@ export default function Chat({
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
-              {language === "ms" ? "Senario Masalah Cepat" : "Quick Failure Scenarios"}
+              {language === "ms" ? "Soalan Popular Kepada Tech" : "Popular Tech Questions"}
             </span>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -276,7 +276,7 @@ export default function Chat({
         <div className="rounded-2xl border border-line/80 dark:border-dark-line/80 bg-subtle/60 dark:bg-dark-subtle/60 p-4 text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed space-y-1.5">
           <div className="flex items-center gap-1.5 font-semibold text-ink dark:text-dark-ink">
             <ShieldCheck className="h-3.5 w-3.5 text-accent dark:text-dark-accent" />
-            <span>{language === "ms" ? "Peringatan Keselamatan" : "Technician Safety"}</span>
+            <span>{language === "ms" ? "Pesanan Keselamatan Technician" : "Technician Safety Tip"}</span>
           </div>
           <p>
             {language === "ms"
@@ -564,7 +564,7 @@ function Bubble({
         <div className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/10">
           <Wrench className="h-2.5 w-2.5 text-accent" aria-hidden="true" />
         </div>
-        <span>PC Fixit</span>
+        <span>{language === "ms" ? "Technician PC Fixit" : "PC Fixit Tech"}</span>
       </div>
 
       <div className="relative max-w-[90%] sm:max-w-[85%] rounded-[20px] rounded-bl-[5px] border border-line dark:border-dark-line bg-white dark:bg-dark-card px-5 py-4 text-[15px] leading-[1.65] text-ink dark:text-dark-ink shadow-card dark:shadow-card-dark select-text space-y-2.5 break-words [overflow-wrap:anywhere]">

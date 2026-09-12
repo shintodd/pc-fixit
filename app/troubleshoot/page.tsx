@@ -3,16 +3,16 @@ import Chat from "@/components/Chat";
 import { ISSUES } from "@/lib/mock-data";
 
 export const metadata: Metadata = {
-  title: "AI Diagnostician | PC Fixit",
+  title: "AI Technician | PC Fixit",
   description:
-    "Describe your computer problem in plain words and receive real-time streaming AI diagnostic steps.",
+    "Chat directly with your friendly AI PC repair technician to troubleshoot hardware, Windows, or network problems.",
   alternates: {
     canonical: "/troubleshoot",
   },
   openGraph: {
-    title: "AI Diagnostician | PC Fixit",
+    title: "AI Technician | PC Fixit",
     description:
-      "Describe your computer problem in plain words and receive real-time streaming AI diagnostic steps.",
+      "Chat directly with your friendly AI PC repair technician to troubleshoot hardware, Windows, or network problems.",
     type: "website",
     url: "/troubleshoot",
     siteName: "PC Fixit",

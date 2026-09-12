@@ -248,8 +248,8 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                   </div>
                   <div className="text-[13px] text-ink-secondary dark:text-dark-ink-secondary mt-0.5">
                     {language === "ms"
-                      ? "PC dah okay ke belum? Kalau masih ada masalah, boleh terus tanya AI Diagnostik kat bawah."
-                      : "Did this fix your PC? If you need personalized assistance, our AI Diagnostician is standing by below."}
+                      ? "PC dah okay ke belum? Kalau masih ada masalah, boleh terus tanya Technician AI kat bawah."
+                      : "Did this fix your PC? If you need personalized assistance, your AI Technician is standing by below."}
                   </div>
                 </div>
               </motion.div>
@@ -269,8 +269,8 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
             </h3>
             <p className="mt-1.5 text-[14px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
               {language === "ms"
-                ? "Ceritakan apa yang berlaku pada AI Diagnostik kami. AI akan bagi langkah khusus ikut komponen dan model komputer anda."
-                : "Describe the exact behavior to our AI Diagnostician. It will tailor steps to your hardware specifications."}
+                ? "Ceritakan apa yang berlaku pada Technician AI kami. Tech akan bagi langkah khusus ikut komponen dan model komputer anda."
+                : "Describe what's happening to your AI Technician. We'll tailor the fix to your exact hardware setup."}
             </p>
 
             <div className="mt-5">
@@ -283,7 +283,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                 className="inline-flex items-center gap-2 rounded-pill bg-accent hover:bg-accent-hover dark:bg-accent dark:hover:bg-accent-hover px-5 py-2.5 text-[14px] font-medium text-white transition-all active:scale-95 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <MessageSquare className="h-4 w-4" aria-hidden="true" />
-                <span>{language === "ms" ? "Tanya AI Diagnostik" : "Ask AI Diagnostician"}</span>
+                <span>{language === "ms" ? "Tanya Technician AI" : "Ask AI Technician"}</span>
               </Link>
             </div>
           </div>
