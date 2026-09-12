@@ -13,6 +13,7 @@ import HeroScan from "@/components/HeroScan";
 import CategoryGrid from "@/components/CategoryGrid";
 import HeroInput from "@/components/HeroInput";
 import QuickTriageDeck from "@/components/QuickTriageDeck";
+import QuickToolsBar from "@/components/QuickToolsBar";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function HomePage() {
@@ -71,6 +72,11 @@ export default function HomePage() {
 
       {/* Instant Symptom Triage Deck */}
       <QuickTriageDeck />
+
+      {/* Interactive Diagnostic Usability Tools */}
+      <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16 pt-6 pb-2">
+        <QuickToolsBar />
+      </div>
 
       {/* Category Browse Section */}
       <section className="mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16 py-14 sm:py-20 border-t border-line/60 dark:border-dark-line/60">

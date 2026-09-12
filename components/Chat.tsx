@@ -16,11 +16,21 @@ import {
   AlertCircle,
   ChevronRight,
   ShieldCheck,
+  Monitor,
+  Volume2,
+  Smartphone,
+  Terminal,
+  Calculator,
 } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
 import { diagnoseProblem as mockDiagnose, type ChatMessage } from "@/lib/diagnose-client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import PortLocatorModal from "@/components/PortLocatorModal";
+import BeepLedDecoderModal from "@/components/BeepLedDecoderModal";
+import PhoneQrModal from "@/components/PhoneQrModal";
+import CommandExplainerModal from "@/components/CommandExplainerModal";
+import RepairFeasibilityModal from "@/components/RepairFeasibilityModal";
 
 export default function Chat({
   initialQuery,
@@ -67,9 +77,48 @@ export default function Chat({
   });
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(!!initialQuery);
+  const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const hasRun = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const diagnosticTools = [
+    {
+      id: "port",
+      icon: Monitor,
+      label: t("tool_port_locator"),
+      sub: language === "ms" ? "GPU vs Motherboard" : "GPU vs Motherboard",
+      color: "text-blue-500 bg-blue-500/10",
+    },
+    {
+      id: "beep",
+      icon: Volume2,
+      label: t("tool_beep_led"),
+      sub: language === "ms" ? "Kod beep & 4 lampu LED" : "Beep codes & 4-LEDs",
+      color: "text-amber-500 bg-amber-500/10",
+    },
+    {
+      id: "phone",
+      icon: Smartphone,
+      label: t("tool_phone_qr"),
+      sub: language === "ms" ? "QR hantar ke phone" : "QR code to phone",
+      color: "text-purple-500 bg-purple-500/10",
+    },
+    {
+      id: "cmd",
+      icon: Terminal,
+      label: t("tool_commands"),
+      sub: language === "ms" ? "SFC, DISM, DNS fixes" : "SFC, DISM, DNS fixes",
+      color: "text-emerald-500 bg-emerald-500/10",
+    },
+    {
+      id: "calc",
+      icon: Calculator,
+      label: t("tool_feasibility"),
+      sub: language === "ms" ? "Kira kos vs ganti baru" : "Cost vs replacement",
+      color: "text-rose-500 bg-rose-500/10",
+    },
+  ];
 
   // Update initial intro message if user switches language before asking anything
   useEffect(() => {
@@ -273,6 +322,43 @@ export default function Chat({
           </div>
         </div>
 
+        <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary flex items-center gap-1.5">
+              <Wrench className="h-3.5 w-3.5 text-accent" />
+              {language === "ms" ? "Alatan Diagnostik Pantas" : "Interactive Diagnostic Helpers"}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {diagnosticTools.map((tool) => {
+              const Icon = tool.icon;
+              return (
+                <button
+                  key={tool.id}
+                  type="button"
+                  onClick={() => setActiveModal(tool.id as any)}
+                  className="group flex items-center justify-between rounded-xl px-2.5 py-2 text-left hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className={`p-1.5 rounded-lg ${tool.color} shrink-0`}>
+                      <Icon className="h-3.5 w-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[12px] font-semibold text-ink dark:text-dark-ink truncate group-hover:text-accent transition-colors">
+                        {tool.label}
+                      </div>
+                      <div className="text-[10px] text-ink-tertiary dark:text-dark-ink-tertiary truncate">
+                        {tool.sub}
+                      </div>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-3.5 w-3.5 text-ink-tertiary dark:text-dark-ink-tertiary transition-transform group-hover:translate-x-0.5 shrink-0" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="rounded-2xl border border-line/80 dark:border-dark-line/80 bg-subtle/60 dark:bg-dark-subtle/60 p-4 text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed space-y-1.5">
           <div className="flex items-center gap-1.5 font-semibold text-ink dark:text-dark-ink">
             <ShieldCheck className="h-3.5 w-3.5 text-accent dark:text-dark-accent" />
@@ -366,6 +452,36 @@ export default function Chat({
                   </motion.button>
                 ))}
               </div>
+
+              {/* Diagnostic Quick Helpers */}
+              <div className="mt-5 pt-4 border-t border-line/60 dark:border-dark-line/60">
+                <div className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary mb-2.5 flex items-center gap-1.5">
+                  <Wrench className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                  <span>
+                    {language === "ms"
+                      ? "Alatan interaktif technician:"
+                      : "Interactive technician helpers:"}
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {diagnosticTools.map((tool) => {
+                    const Icon = tool.icon;
+                    return (
+                      <button
+                        key={tool.id}
+                        type="button"
+                        onClick={() => setActiveModal(tool.id as any)}
+                        className="inline-flex items-center gap-2 rounded-xl border border-line dark:border-dark-line bg-white dark:bg-dark-card px-3 py-2 text-left text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary shadow-xs hover:border-accent/40 hover:bg-subtle hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      >
+                        <div className={`p-1 rounded-lg ${tool.color}`}>
+                          <Icon className="h-3.5 w-3.5" />
+                        </div>
+                        <span>{tool.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </motion.div>
           )}
 
@@ -423,6 +539,13 @@ export default function Chat({
           </motion.button>
         </form>
       </div>
+
+      {/* Interactive Helper Modals */}
+      <PortLocatorModal isOpen={activeModal === "port"} onClose={() => setActiveModal(null)} />
+      <BeepLedDecoderModal isOpen={activeModal === "beep"} onClose={() => setActiveModal(null)} />
+      <PhoneQrModal isOpen={activeModal === "phone"} onClose={() => setActiveModal(null)} />
+      <CommandExplainerModal isOpen={activeModal === "cmd"} onClose={() => setActiveModal(null)} />
+      <RepairFeasibilityModal isOpen={activeModal === "calc"} onClose={() => setActiveModal(null)} />
     </div>
   );
 }

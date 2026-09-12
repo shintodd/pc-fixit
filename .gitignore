@@ -36,3 +36,5 @@ build-out.txt
 /bin
 
 .vercel
+
+pcfixit-test-report.json

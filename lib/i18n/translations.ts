@@ -137,6 +137,24 @@ export const translations = {
     issue_researched_badge: "Documentation Researched",
     issue_all_steps_done: "All steps completed!",
 
+    // Usability Suite Tools
+    tool_port_locator: "Port & Cable Guide",
+    tool_beep_led: "Beeps & LED Lights",
+    tool_phone_qr: "Send to Phone",
+    tool_commands: "Windows Commands",
+    tool_feasibility: "Repair Cost Estimator",
+    safety_banner_title: "Don't Panic: Safe & Shock-Free",
+    safety_banner_desc: "Internal desktop parts run on harmless 12V DC voltage and cannot shock you. Simply unplug the wall power cable first, then touch the unpainted metal case frame to ground static electricity.",
+    btn_it_worked: "It worked! Problem solved",
+    btn_still_broken: "Still not working: Next step",
+    voice_read_step: "Read step aloud",
+    voice_stop: "Stop voice",
+    print_cheat_sheet: "Print 1-Page Cheat Sheet",
+    tools_required_none: "No tools needed (hands only)",
+    tools_required_screwdriver: "Phillips #2 screwdriver",
+    time_estimate_default: "5 mins",
+    risk_level_zero: "Zero Risk (Non-destructive)",
+
     // Footer
     footer_status: "AI Technician Online & Ready",
     footer_disclaimer:
@@ -280,6 +298,24 @@ export const translations = {
     issue_verified_badge: "Solusi Dah Diuji",
     issue_researched_badge: "Panduan Disemak",
     issue_all_steps_done: "Semua langkah dah siap!",
+
+    // Usability Suite Tools
+    tool_port_locator: "Panduan Port & Wayar",
+    tool_beep_led: "Bunyi Beep & Lampu LED",
+    tool_phone_qr: "Buka di Telefon",
+    tool_commands: "Arahan Windows",
+    tool_feasibility: "Kalkulator Kelayakan Baiki",
+    safety_banner_title: "Bertenang: Selamat & Tiada Renjatan",
+    safety_banner_desc: "Bahagian dalam PC guna voltan rendah 12V DC dan tidak merenjat elektrik. Cabut wayar soket dinding dahulu, lepas tu sentuh besi casing untuk buang cas statik.",
+    btn_it_worked: "Berjaya! Dah elok",
+    btn_still_broken: "Masih tak elok: Langkah seterusnya",
+    voice_read_step: "Baca langkah ini",
+    voice_stop: "Hentikan suara",
+    print_cheat_sheet: "Cetak 1 Halaman Ringkas",
+    tools_required_none: "Tiada alatan (tangan sahaja)",
+    tools_required_screwdriver: "Pemutar skru Phillips #2",
+    time_estimate_default: "5 min",
+    risk_level_zero: "Sifar Risiko (Boleh undur)",
 
     // Footer
     footer_status: "Technician AI Sedia Membantu",

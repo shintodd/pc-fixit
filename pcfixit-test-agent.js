@@ -293,6 +293,11 @@ async function testWizard(page, baseUrl, results, maxSteps = 6) {
 
   const path_ = [];
   for (let step = 1; step <= maxSteps; step++) {
+    if (!page.url().includes('/wizard')) {
+      log(`  Wizard finished: navigated to ${page.url()}`);
+      break;
+    }
+
     const option = await findWizardOption(page);
     if (!option) {
       results.notes.push(`Wizard stopped at step ${step}: no clickable option found`);
@@ -308,6 +313,11 @@ async function testWizard(page, baseUrl, results, maxSteps = 6) {
 
     path_.push({ step, clicked: label, resultPreview: response.slice(0, 200) });
     log(`  Step ${step}: clicked "${label}"`);
+
+    if (!page.url().includes('/wizard')) {
+      log(`  Wizard completed: resolved and navigated to ${page.url()}`);
+      break;
+    }
 
     if (!response || response.length < 3) {
       results.notes.push(`Wizard step ${step} produced no visible change after clicking "${label}"`);
