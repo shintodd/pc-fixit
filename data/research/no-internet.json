@@ -17,7 +17,7 @@
       },
       {
         "title": "Run Windows Network Reset",
-        "detail": "Go to Settings → Network & Internet → Advanced network settings → Network reset → Reset now. This reinstalls adapters and restores default network stacks."
+        "detail": "Go to Settings \u2192 Network & Internet \u2192 Advanced network settings \u2192 Network reset \u2192 Reset now. This reinstalls adapters and restores default network stacks."
       },
       {
         "title": "Flush DNS and release IP configuration",
@@ -52,7 +52,7 @@
     "fix_steps": [
       {
         "title": "Forget and reconnect to the Wi-Fi network",
-        "detail": "Go to Settings → Network & Internet → Wi-Fi → Manage known networks → select your SSID → click 'Forget'. Reconnect and re-enter the WPA password."
+        "detail": "Go to Settings \u2192 Network & Internet \u2192 Wi-Fi \u2192 Manage known networks \u2192 select your SSID \u2192 click 'Forget'. Reconnect and re-enter the WPA password."
       },
       {
         "title": "Reset TCP/IP stack and Winsock catalog",
@@ -60,11 +60,11 @@
       },
       {
         "title": "Check for invalid static IP configuration",
-        "detail": "Open 'ncpa.cpl' → right click Wi-Fi → Properties → Internet Protocol Version 4 (TCP/IPv4) → ensure 'Obtain an IP address automatically' and 'Obtain DNS server address automatically' are selected."
+        "detail": "Open 'ncpa.cpl' \u2192 right click Wi-Fi \u2192 Properties \u2192 Internet Protocol Version 4 (TCP/IPv4) \u2192 ensure 'Obtain an IP address automatically' and 'Obtain DNS server address automatically' are selected."
       },
       {
         "title": "Turn off Random Hardware MAC addresses",
-        "detail": "In Settings → Wi-Fi, disable 'Random hardware addresses'. Some routers reject DHCP leases from rotating MAC addresses."
+        "detail": "In Settings \u2192 Wi-Fi, disable 'Random hardware addresses'. Some routers reject DHCP leases from rotating MAC addresses."
       }
     ],
     "related_error_codes": [
@@ -98,7 +98,7 @@
       },
       {
         "title": "Reinstall Wi-Fi adapter drivers in Device Manager",
-        "detail": "Open Device Manager → Network adapters → right-click wireless adapter → Uninstall device (leave 'attempt to remove driver' unchecked) → Action → Scan for hardware changes."
+        "detail": "Open Device Manager \u2192 Network adapters \u2192 right-click wireless adapter \u2192 Uninstall device (leave 'attempt to remove driver' unchecked) \u2192 Action \u2192 Scan for hardware changes."
       },
       {
         "title": "Check physical Wi-Fi switch or antenna",
@@ -166,7 +166,7 @@
     "fix_steps": [
       {
         "title": "Switch to public secure DNS servers",
-        "detail": "Open Settings → Network & Internet → select your adapter → DNS server assignment → Edit → Manual → IPv4 On. Preferred DNS: 1.1.1.1, Alternate DNS: 1.0.0.1 (Cloudflare) or 8.8.8.8 (Google)."
+        "detail": "Open Settings \u2192 Network & Internet \u2192 select your adapter \u2192 DNS server assignment \u2192 Edit \u2192 Manual \u2192 IPv4 On. Preferred DNS: 1.1.1.1, Alternate DNS: 1.0.0.1 (Cloudflare) or 8.8.8.8 (Google)."
       },
       {
         "title": "Clear the local Windows DNS cache",
@@ -241,7 +241,7 @@
     "fix_steps": [
       {
         "title": "Disable adapter power saving in Device Manager",
-        "detail": "Open Device Manager → Network adapters → right-click Wi-Fi adapter → Properties → Power Management tab → UNCHECK 'Allow the computer to turn off this device to save power'."
+        "detail": "Open Device Manager \u2192 Network adapters \u2192 right-click Wi-Fi adapter \u2192 Properties \u2192 Power Management tab \u2192 UNCHECK 'Allow the computer to turn off this device to save power'."
       },
       {
         "title": "Separate 2.4 GHz and 5 GHz Wi-Fi SSID bands on router",
@@ -249,7 +249,7 @@
       },
       {
         "title": "Set Roaming Aggressiveness to Lowest",
-        "detail": "In Device Manager → Wi-Fi adapter → Advanced tab → find 'Roaming Aggressiveness' → set value to '1. Lowest'. This stops the card from constantly scanning and dropping packets."
+        "detail": "In Device Manager \u2192 Wi-Fi adapter \u2192 Advanced tab \u2192 find 'Roaming Aggressiveness' \u2192 set value to '1. Lowest'. This stops the card from constantly scanning and dropping packets."
       },
       {
         "title": "Set 802.11 Channel Width to 20MHz only for 2.4GHz",
@@ -278,7 +278,7 @@
     "fix_steps": [
       {
         "title": "Launch VPN and disable Kill Switch setting",
-        "detail": "Reopen your VPN client (NordVPN, ExpressVPN, Proton, etc.), navigate to Settings → Kill Switch → toggle Off, then disconnect cleanly."
+        "detail": "Reopen your VPN client (NordVPN, ExpressVPN, Proton, etc.), navigate to Settings \u2192 Kill Switch \u2192 toggle Off, then disconnect cleanly."
       },
       {
         "title": "Disable virtual TAP network adapters in ncpa.cpl",
@@ -354,7 +354,7 @@
     "fix_steps": [
       {
         "title": "Turn off manual and automatic proxy in Windows Settings",
-        "detail": "Go to Settings → Network & Internet → Proxy. Under 'Automatic proxy setup', turn OFF 'Automatically detect settings'. Under 'Manual proxy setup', turn OFF 'Use a proxy server'."
+        "detail": "Go to Settings \u2192 Network & Internet \u2192 Proxy. Under 'Automatic proxy setup', turn OFF 'Automatically detect settings'. Under 'Manual proxy setup', turn OFF 'Use a proxy server'."
       },
       {
         "title": "Inspect WinHTTP system proxy via CMD",
@@ -399,7 +399,7 @@
       },
       {
         "title": "Inspect Speed & Duplex setting in Device Manager",
-        "detail": "Open Device Manager → Network adapters → Ethernet adapter → Properties → Advanced tab → Speed & Duplex. Ensure it is set to 'Auto Negotiation' or '1.0 Gbps Full Duplex'."
+        "detail": "Open Device Manager \u2192 Network adapters \u2192 Ethernet adapter \u2192 Properties \u2192 Advanced tab \u2192 Speed & Duplex. Ensure it is set to 'Auto Negotiation' or '1.0 Gbps Full Duplex'."
       },
       {
         "title": "Clean dust out of RJ45 motherboard jack",
@@ -428,7 +428,7 @@
     "fix_steps": [
       {
         "title": "Reduce Roaming Aggressiveness to Lowest",
-        "detail": "Device Manager → Network adapters → Intel/Realtek Wi-Fi → Properties → Advanced tab → Roaming Aggressiveness → change to 'Lowest'."
+        "detail": "Device Manager \u2192 Network adapters \u2192 Intel/Realtek Wi-Fi \u2192 Properties \u2192 Advanced tab \u2192 Roaming Aggressiveness \u2192 change to 'Lowest'."
       },
       {
         "title": "Set Preferred Band to 5GHz or 6GHz",
@@ -465,11 +465,11 @@
     "fix_steps": [
       {
         "title": "Roll back network driver in Device Manager",
-        "detail": "Open Device Manager → Network adapters → right-click adapter → Properties → Driver tab → click 'Roll Back Driver'."
+        "detail": "Open Device Manager \u2192 Network adapters \u2192 right-click adapter \u2192 Properties \u2192 Driver tab \u2192 click 'Roll Back Driver'."
       },
       {
         "title": "Uninstall the latest Windows Quality Update",
-        "detail": "Go to Settings → Windows Update → Update history → Uninstall updates → find the update installed immediately prior to the failure and click 'Uninstall'."
+        "detail": "Go to Settings \u2192 Windows Update \u2192 Update history \u2192 Uninstall updates \u2192 find the update installed immediately prior to the failure and click 'Uninstall'."
       },
       {
         "title": "Use manufacturer standalone offline installer",
@@ -477,7 +477,7 @@
       },
       {
         "title": "Prevent Windows Update from replacing hardware drivers",
-        "detail": "Open 'sysdm.cpl' → Hardware tab → Device Installation Settings → select 'No (your device might not work as expected)'."
+        "detail": "Open 'sysdm.cpl' \u2192 Hardware tab \u2192 Device Installation Settings \u2192 select 'No (your device might not work as expected)'."
       }
     ],
     "related_error_codes": [
@@ -502,15 +502,15 @@
     "fix_steps": [
       {
         "title": "Disable Metered Connection toggle",
-        "detail": "Go to Settings → Network & Internet → select Wi-Fi (or Ethernet) → click your network name → toggle 'Metered connection' to OFF."
+        "detail": "Go to Settings \u2192 Network & Internet \u2192 select Wi-Fi (or Ethernet) \u2192 click your network name \u2192 toggle 'Metered connection' to OFF."
       },
       {
         "title": "Allow downloads over metered networks",
-        "detail": "In Settings → Windows Update → Advanced options → toggle ON 'Download updates over metered connections'."
+        "detail": "In Settings \u2192 Windows Update \u2192 Advanced options \u2192 toggle ON 'Download updates over metered connections'."
       },
       {
         "title": "Reset network data usage limit",
-        "detail": "Go to Settings → Network & Internet → Data usage → remove any configured monthly megabyte limits."
+        "detail": "Go to Settings \u2192 Network & Internet \u2192 Data usage \u2192 remove any configured monthly megabyte limits."
       },
       {
         "title": "Restart background sync applications",
@@ -546,7 +546,7 @@
       },
       {
         "title": "Ensure PC is set to automatic DHCP",
-        "detail": "Open 'ncpa.cpl' → adapter properties → IPv4 → verify 'Obtain an IP address automatically' is selected instead of a hardcoded static IP."
+        "detail": "Open 'ncpa.cpl' \u2192 adapter properties \u2192 IPv4 \u2192 verify 'Obtain an IP address automatically' is selected instead of a hardcoded static IP."
       },
       {
         "title": "Assign an out-of-range static IP if necessary",
@@ -575,7 +575,7 @@
     "fix_steps": [
       {
         "title": "Disable Internet Protocol Version 6 (TCP/IPv6) on the adapter",
-        "detail": "Press Win+R, type 'ncpa.cpl'. Right-click your active network adapter → Properties → UNCHECK 'Internet Protocol Version 6 (TCP/IPv6)' → click OK."
+        "detail": "Press Win+R, type 'ncpa.cpl'. Right-click your active network adapter \u2192 Properties \u2192 UNCHECK 'Internet Protocol Version 6 (TCP/IPv6)' \u2192 click OK."
       },
       {
         "title": "Configure IPv4 preference over IPv6 via registry",
@@ -816,7 +816,7 @@
   {
     "slug": "captive-portal-hotel-wifi-login-not-opening",
     "title": "Captive portal hotel / airport Wi-Fi login splash page not loading",
-    "summary": "The browser fails to open the hotel, café, or airport authentication redirect page because third-party DNS-over-HTTPS (DoH), VPNs, or HSTS security headers block cleartext HTTP interception.",
+    "summary": "The browser fails to open the hotel, caf\u00e9, or airport authentication redirect page because third-party DNS-over-HTTPS (DoH), VPNs, or HSTS security headers block cleartext HTTP interception.",
     "severity": "warn",
     "category_slug": "no-internet",
     "symptoms": [
@@ -884,5 +884,226 @@
     ],
     "source": "researched",
     "verified": false
+  },
+  {
+    "id": "net-ethernet-capped-100mbps",
+    "slug": "ethernet-cable-capped-100mbps-gigabit",
+    "title": "Ethernet speed capped at 100 Mbps instead of 1 Gbps (1000 Mbps)",
+    "summary": "Paying for 300Mbps to 1Gbps internet but Windows Ethernet link speed shows capped at 100/100 Mbps.",
+    "severity": "medium",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Windows Network Properties shows 'Link speed (Receive/Transmit): 100/100 (Mbps)'",
+      "Speed test never exceeds 94-95 Mbps on a 500Mbps+ fiber plan",
+      "Ethernet port LED shows amber/orange instead of green"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Inspect and replace damaged Cat5/Cat5e Ethernet cable",
+        "instruction": "Gigabit Ethernet (1000 Mbps) requires all 8 copper pins to negotiate properly. If even one pin is bent or severed, Windows falls back to 4-pin Fast Ethernet (100 Mbps). Swap cable for a certified Cat6 patch cable.",
+        "caution": "Avoid flat or ultra-thin ribbon Ethernet cables over long runs due to crosstalk."
+      },
+      {
+        "order": 2,
+        "title": "Disable Energy Efficient Ethernet and Green Ethernet",
+        "instruction": "Open Device Manager -> Network adapters -> right-click your Intel/Realtek Ethernet controller -> Properties -> Advanced tab. Set 'Energy Efficient Ethernet', 'Green Ethernet', and 'Gigabit Lite' to 'Disabled'.",
+        "caution": "Power saving features cause Realtek NICs to downshift link speed."
+      },
+      {
+        "order": 3,
+        "title": "Force Speed & Duplex to 1.0 Gbps Full Duplex",
+        "instruction": "In the same Advanced tab, find 'Speed & Duplex'. If set to 'Auto Negotiation' and negotiating 100 Mbps, test setting it explicitly to '1.0 Gbps Full Duplex'. Click OK.",
+        "caution": "If the link completely drops when forced to 1.0 Gbps, the physical cable or wall port jack is physically damaged."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "net-vpn-disconnect-no-internet",
+    "slug": "no-internet-after-vpn-disconnects-killswitch",
+    "title": "Internet completely dies whenever VPN is disconnected or uninstalled",
+    "summary": "Browser cannot open any websites after disconnecting from NordVPN, ExpressVPN, or ProtonVPN.",
+    "severity": "high",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Internet works while connected to VPN, but immediately dies when VPN is turned off",
+      "Browser reports 'DNS_PROBE_FINISHED_NO_INTERNET'",
+      "VPN Kill-Switch remained engaged in Windows network stack"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Reopen VPN client and turn off 'Kill Switch'",
+        "instruction": "Launch your VPN app (NordVPN, Proton, Express, Mullvad). Go to Settings -> Connection / Security -> toggle OFF 'Kill Switch' and 'Block non-VPN traffic'. Disconnect properly from within the app.",
+        "caution": "Force-closing a VPN via Task Manager leaves its Windows firewall filter rules active."
+      },
+      {
+        "order": 2,
+        "title": "Reset Windows Firewall and TAP adapters",
+        "instruction": "Open Windows Defender Firewall -> click 'Restore defaults' on the left sidebar. Then open Device Manager -> Network adapters -> right-click any virtual 'TAP-Windows Adapter' or 'Wintun Userspace Tunnel' -> Uninstall device.",
+        "caution": "Windows will cleanly regenerate standard network routes on reboot."
+      },
+      {
+        "order": 3,
+        "title": "Flush DNS and reset TCP/IP and Winsock catalog",
+        "instruction": "Open Command Prompt as Administrator. Run: 'netsh winsock reset', 'netsh int ip reset', 'ipconfig /release', 'ipconfig /flushdns', 'ipconfig /renew'. Reboot PC.",
+        "caution": "Reboot is required for the Winsock reset to take effect."
+      }
+    ],
+    "related_error_codes": [
+      "DNS_PROBE_FINISHED_NO_INTERNET"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "net-wifi-ping-spikes-60-seconds",
+    "slug": "wifi-ping-spikes-every-minute-gaming-lag",
+    "title": "Wi-Fi ping spikes to 300ms+ every 60 seconds during online gaming",
+    "summary": "Gaming has steady 20ms ping that spikes to 300ms-1000ms every 60 seconds due to Windows background Wi-Fi scanning.",
+    "severity": "medium",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Ping spikes in Valorant, CS2, Fortnite, or Rocket League exactly every 60 seconds",
+      "Command Prompt 'ping 1.1.1.1 -t' shows 15ms with periodic 400ms jumps",
+      "Windows WLAN AutoConfig background roaming scan active"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Disable background Wi-Fi network scanning with WLAN Optimizer or netsh",
+        "instruction": "Windows scans for nearby Wi-Fi networks every 60 seconds, which freezes game packets. Open Command Prompt (Admin) and run: 'netsh wlan set autoconfig enabled=no interface=\"Wi-Fi\"'.",
+        "caution": "To search for new Wi-Fi networks in the future, re-enable with: 'netsh wlan set autoconfig enabled=yes interface=\"Wi-Fi\"'."
+      },
+      {
+        "order": 2,
+        "title": "Switch Wi-Fi adapter to 5 GHz band exclusively",
+        "instruction": "In Device Manager -> Network adapters -> Wi-Fi card -> Properties -> Advanced. Set 'Preferred Band' to 'Prefer 5GHz Band' and 'Channel Width for 5GHz' to 'Auto'.",
+        "caution": "2.4 GHz is crowded with microwave ovens and Bluetooth interference."
+      },
+      {
+        "order": 3,
+        "title": "Disable Roaming Aggressiveness",
+        "instruction": "In the same Advanced tab, set 'Roaming Aggressiveness' to '1. Lowest'. This stops your PC from constantly hunting for other mesh router nodes.",
+        "caution": "Keep at lowest if PC is stationary at a desk."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "net-dns-failure-cloudflare-google",
+    "slug": "dns-server-not-responding-cloudflare-fix",
+    "title": "DNS server not responding: switching to Cloudflare (1.1.1.1) and Google (8.8.8.8)",
+    "summary": "Websites fail to load with 'Server IP address could not be found' while ping to 8.8.8.8 works fine.",
+    "severity": "medium",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Browser reports 'DNS_PROBE_FINISHED_BAD_CONFIG' or 'DNS_PROBE_FINISHED_NXDOMAIN'",
+      "Discord or Steam works, but Chrome and Edge cannot open any web pages",
+      "ISP default DNS server timing out or intercepting queries"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Set manual IPv4 DNS to Cloudflare and Google",
+        "instruction": "Press Win+R, type 'ncpa.cpl' and press Enter. Right-click your active network connection -> Properties. Select 'Internet Protocol Version 4 (TCP/IPv4)' -> click Properties. Check 'Use the following DNS server addresses': Preferred DNS: 1.1.1.1, Alternate DNS: 8.8.8.8. Click OK.",
+        "caution": "Do not alter the IP address settings above DNS."
+      },
+      {
+        "order": 2,
+        "title": "Configure Encrypted DNS (DNS over HTTPS) in Windows 11",
+        "instruction": "Open Windows Settings -> Network & internet -> Wi-Fi or Ethernet -> Hardware properties. Under DNS server assignment, click 'Edit' -> choose 'Manual' -> toggle IPv4 ON -> set Preferred DNS to 1.1.1.1 and DNS encryption to 'Encrypted only (DNS over HTTPS)'.",
+        "caution": "Encrypts all domain lookups to prevent ISP spying and DNS hijacking."
+      },
+      {
+        "order": 3,
+        "title": "Flush Windows DNS resolver cache",
+        "instruction": "Open Command Prompt as Administrator and run: 'ipconfig /flushdns'. Verify output confirms 'Successfully flushed the DNS Resolver Cache.'",
+        "caution": "Restart your browser to clear internal browser DNS sockets."
+      }
+    ],
+    "related_error_codes": [
+      "DNS_PROBE_FINISHED_NXDOMAIN",
+      "DNS_PROBE_FINISHED_BAD_CONFIG"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "net-wifi-5ghz-missing-region",
+    "slug": "wifi-5ghz-network-not-showing-windows",
+    "title": "5GHz Wi-Fi network not showing up in Windows while phone connects fine",
+    "summary": "Dual-band router broadcasts 5GHz Wi-Fi, but PC only sees 2.4GHz network or cannot find SSID.",
+    "severity": "medium",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Phone and tablet see the 5GHz network, but PC only lists the slow 2.4GHz network",
+      "Wi-Fi card supports 802.11ac / 802.11ax but fails to detect 5GHz channels",
+      "Router configured with DFS channels (Channels 52-144) unsupported by PC card"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Change router 5GHz channel from DFS to standard channel 36 or 149",
+        "instruction": "Log in to your Wi-Fi router admin page (e.g. 192.168.1.1). Navigate to Wireless 5GHz settings. Change Channel from 'Auto' to Channel 36, 40, 44, or 149. Avoid DFS channels (52 to 144) which many PC Wi-Fi cards ignore.",
+        "caution": "DFS channels require radar checking and cause disconnects near airports."
+      },
+      {
+        "order": 2,
+        "title": "Set Wireless Mode to 802.11a/n/ac in Device Manager",
+        "instruction": "Open Device Manager -> Network adapters -> right-click Wi-Fi adapter -> Properties -> Advanced. Set 'Wireless Mode' to '802.11a/b/g/n/ac/ax' (dual-band mode) instead of '2.4GHz only'.",
+        "caution": "Ensure 802.11d (regulatory domain) is set to 'Enabled'."
+      },
+      {
+        "order": 3,
+        "title": "Separate 2.4GHz and 5GHz SSIDs in router",
+        "instruction": "If your router uses 'Smart Connect' / band steering (single SSID for both bands), turn it off. Name them separately: 'MyHome_2.4G' and 'MyHome_5G'. Manually connect PC to 'MyHome_5G'.",
+        "caution": "Band steering frequently drops PCs to 2.4GHz when signal drops slightly."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "net-steam-slow-download-disk-bottleneck",
+    "slug": "steam-download-slow-disk-allocation-bottleneck",
+    "title": "Steam download speeds crawling or dropping to 0 KB/s on fast fiber internet",
+    "summary": "Steam downloads fluctuate wildly or stop completely while Task Manager shows 100% disk usage.",
+    "severity": "low",
+    "category_slug": "no-internet",
+    "symptoms": [
+      "Steam download graph shows green disk line dropping to 0 MB/s",
+      "Download fluctuates between 50 MB/s and 0 KB/s repeatedly",
+      "Speedtest shows 500Mbps, but Steam takes 3 hours for a 20GB game"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Clear Steam download cache",
+        "instruction": "In Steam, click Steam (top left) -> Settings -> Downloads. Click 'Clear Download Cache' -> Confirm. Steam will restart and prompt you to log back in.",
+        "caution": "Wipes stuck fragmented chunk files without touching installed games."
+      },
+      {
+        "order": 2,
+        "title": "Switch Steam Download Region to nearby high-capacity server",
+        "instruction": "In Steam Settings -> Downloads -> 'Download Region'. If set to an overloaded local server, switch to a neighboring major hub (e.g. Singapore, Frankfurt, or Chicago).",
+        "caution": "Steam does not lock matchmaking to download region; you can change this freely."
+      },
+      {
+        "order": 3,
+        "title": "Exclude Steam library folder from Windows Defender real-time scanning",
+        "instruction": "Open Windows Security -> Virus & threat protection -> Manage settings -> Exclusions (Add an exclusion) -> Folder. Select your 'steamapps' folder. Windows Defender scans every compressed block as Steam unpacks it, maxing out your CPU.",
+        "caution": "Only exclude official Steam library folders where verified games reside."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
   }
 ]

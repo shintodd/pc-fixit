@@ -17,7 +17,7 @@
       },
       {
         "title": "Perform a clean driver reinstall",
-        "detail": "Right-click the problematic device → Uninstall device → check 'Attempt to remove the driver for this device' → click Uninstall. Reboot and install the latest WHQL driver from the vendor website."
+        "detail": "Right-click the problematic device \u2192 Uninstall device \u2192 check 'Attempt to remove the driver for this device' \u2192 click Uninstall. Reboot and install the latest WHQL driver from the vendor website."
       },
       {
         "title": "Install motherboard chipset drivers",
@@ -25,7 +25,7 @@
       },
       {
         "title": "Roll back recently updated drivers",
-        "detail": "If the issue started after an automatic update, right-click the device in Device Manager → Properties → Driver tab → click 'Roll Back Driver'."
+        "detail": "If the issue started after an automatic update, right-click the device in Device Manager \u2192 Properties \u2192 Driver tab \u2192 click 'Roll Back Driver'."
       }
     ],
     "related_error_codes": [
@@ -53,7 +53,7 @@
     "fix_steps": [
       {
         "title": "Perform clean DDU driver wipe in Safe Mode",
-        "detail": "Download Display Driver Uninstaller (DDU). Boot into Safe Mode, run DDU, select GPU (Nvidia/AMD/Intel) → 'Clean and restart'. Install the latest stable WHQL driver on normal boot."
+        "detail": "Download Display Driver Uninstaller (DDU). Boot into Safe Mode, run DDU, select GPU (Nvidia/AMD/Intel) \u2192 'Clean and restart'. Install the latest stable WHQL driver on normal boot."
       },
       {
         "title": "Increase TDR delay in Windows Registry",
@@ -65,7 +65,7 @@
       },
       {
         "title": "Disable Windows Hardware-Accelerated GPU Scheduling (HAGS)",
-        "detail": "In Settings → System → Display → Graphics → Change default graphics settings → toggle 'Hardware-accelerated GPU scheduling' OFF and reboot."
+        "detail": "In Settings \u2192 System \u2192 Display \u2192 Graphics \u2192 Change default graphics settings \u2192 toggle 'Hardware-accelerated GPU scheduling' OFF and reboot."
       }
     ],
     "related_error_codes": [
@@ -90,7 +90,7 @@
     "fix_steps": [
       {
         "title": "Disable automatic driver downloads in System Properties",
-        "detail": "Press Win+R, type 'sysdm.cpl' → Hardware tab → Device Installation Settings → select 'No (your device might not work as expected)' and save."
+        "detail": "Press Win+R, type 'sysdm.cpl' \u2192 Hardware tab \u2192 Device Installation Settings \u2192 select 'No (your device might not work as expected)' and save."
       },
       {
         "title": "Use Microsoft 'Show or Hide Updates' troubleshooter (wushowhide)",
@@ -98,7 +98,7 @@
       },
       {
         "title": "Configure Group Policy to block driver updates",
-        "detail": "In gpedit.msc (Pro/Enterprise editions), go to Computer Configuration → Administrative Templates → Windows Components → Windows Update → Manage updates offered from Windows Update → Enable 'Do not include drivers with Windows Updates'."
+        "detail": "In gpedit.msc (Pro/Enterprise editions), go to Computer Configuration \u2192 Administrative Templates \u2192 Windows Components \u2192 Windows Update \u2192 Manage updates offered from Windows Update \u2192 Enable 'Do not include drivers with Windows Updates'."
       },
       {
         "title": "Reinstall latest vendor driver package",
@@ -130,11 +130,11 @@
       },
       {
         "title": "Switch to generic Microsoft 'High Definition Audio Device' driver",
-        "detail": "In Device Manager → Sound, video and game controllers → right-click Realtek Audio → Update driver → Browse my computer → Let me pick from a list → select 'High Definition Audio Device' (generic Microsoft driver) → reboot."
+        "detail": "In Device Manager \u2192 Sound, video and game controllers \u2192 right-click Realtek Audio \u2192 Update driver \u2192 Browse my computer \u2192 Let me pick from a list \u2192 select 'High Definition Audio Device' (generic Microsoft driver) \u2192 reboot."
       },
       {
         "title": "Disable audio enhancements in sound properties",
-        "detail": "Press Win+R, type 'mmsys.cpl' → select your playback device → Properties → Enhancements (or Advanced) tab → check 'Disable all enhancements'."
+        "detail": "Press Win+R, type 'mmsys.cpl' \u2192 select your playback device \u2192 Properties \u2192 Enhancements (or Advanced) tab \u2192 check 'Disable all enhancements'."
       },
       {
         "title": "Set Default Format to 24-bit, 48000 Hz (Studio Quality)",
@@ -167,11 +167,11 @@
       },
       {
         "title": "Disable USB Selective Suspend in Power Options",
-        "detail": "Open Control Panel → Power Options → Change plan settings → Change advanced power settings → expand 'USB settings' → USB selective suspend setting → set to 'Disabled'."
+        "detail": "Open Control Panel \u2192 Power Options \u2192 Change plan settings \u2192 Change advanced power settings \u2192 expand 'USB settings' \u2192 USB selective suspend setting \u2192 set to 'Disabled'."
       },
       {
         "title": "Uninstall USB Root Hubs in Device Manager",
-        "detail": "In Device Manager, expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' → Uninstall device. Restart PC to let Windows reinstall controllers automatically."
+        "detail": "In Device Manager, expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' \u2192 Uninstall device. Restart PC to let Windows reinstall controllers automatically."
       },
       {
         "title": "Test on rear motherboard ports directly",
@@ -195,7 +195,7 @@
     "severity": "warn",
     "category_slug": "driver-issues",
     "symptoms": [
-      "No Bluetooth toggle under Settings → Bluetooth & devices",
+      "No Bluetooth toggle under Settings \u2192 Bluetooth & devices",
       "Action Center Bluetooth quick tile is gone",
       "Wireless mice, keyboards, and headphones cannot connect"
     ],
@@ -206,11 +206,11 @@
       },
       {
         "title": "Restart Bluetooth Support Service",
-        "detail": "Open 'services.msc', locate 'Bluetooth Support Service', right-click → Properties → set Startup type to 'Automatic' and click 'Start'."
+        "detail": "Open 'services.msc', locate 'Bluetooth Support Service', right-click \u2192 Properties \u2192 set Startup type to 'Automatic' and click 'Start'."
       },
       {
         "title": "Show Hidden Devices in Device Manager",
-        "detail": "In Device Manager, click View menu → check 'Show hidden devices'. If Bluetooth appears greyed out, right-click and select 'Update driver' or 'Uninstall device' and reboot."
+        "detail": "In Device Manager, click View menu \u2192 check 'Show hidden devices'. If Bluetooth appears greyed out, right-click and select 'Update driver' or 'Uninstall device' and reboot."
       },
       {
         "title": "Install official Intel / Realtek Wireless Bluetooth driver",
@@ -234,7 +234,7 @@
     "category_slug": "driver-issues",
     "symptoms": [
       "Primary monitor works fine, but second display stays black with 'No Signal'",
-      "Settings → Display → Multiple displays → 'Detect other display' reports 'Didn't detect another display'",
+      "Settings \u2192 Display \u2192 Multiple displays \u2192 'Detect other display' reports 'Didn't detect another display'",
       "Windows Project menu (Win+P) is set to 'Duplicate' or 'Extend' but nothing appears"
     ],
     "fix_steps": [
@@ -270,7 +270,7 @@
     "category_slug": "driver-issues",
     "symptoms": [
       "Basic pointer movement works, but two-finger scrolling and tap-to-click fail",
-      "Settings → Bluetooth & devices → Touchpad lacks gesture configuration sliders",
+      "Settings \u2192 Bluetooth & devices \u2192 Touchpad lacks gesture configuration sliders",
       "Device Manager lists 'PS/2 Compatible Mouse' instead of 'I2C HID Device'"
     ],
     "fix_steps": [
@@ -280,11 +280,11 @@
       },
       {
         "title": "Update Synaptics / ELAN touchpad driver",
-        "detail": "In Device Manager → Human Interface Devices (HID) or Mice → right-click the touchpad device → Update driver → Search automatically for drivers."
+        "detail": "In Device Manager \u2192 Human Interface Devices (HID) or Mice \u2192 right-click the touchpad device \u2192 Update driver \u2192 Search automatically for drivers."
       },
       {
         "title": "Reset touchpad settings to default",
-        "detail": "Go to Settings → Bluetooth & devices → Touchpad → expand 'Touchpad' card → click the 'Reset' button."
+        "detail": "Go to Settings \u2192 Bluetooth & devices \u2192 Touchpad \u2192 expand 'Touchpad' card \u2192 click the 'Reset' button."
       },
       {
         "title": "Verify physical Fn lock switch",
@@ -312,7 +312,7 @@
     "fix_steps": [
       {
         "title": "Remove printer and delete existing driver package",
-        "detail": "Go to Settings → Bluetooth & devices → Printers & scanners → select printer → Remove. Next, press Win+R, type 'printui.exe /s', go to Drivers tab, and remove the printer driver package."
+        "detail": "Go to Settings \u2192 Bluetooth & devices \u2192 Printers & scanners \u2192 select printer \u2192 Remove. Next, press Win+R, type 'printui.exe /s', go to Drivers tab, and remove the printer driver package."
       },
       {
         "title": "Restart the Print Spooler service",
@@ -354,7 +354,7 @@
       },
       {
         "title": "Configure Steam Controller Settings",
-        "detail": "In Steam → Settings → Controller → enable 'Enable Steam Input for Xbox/PlayStation controllers' to emulate standard XInput across non-Steam games."
+        "detail": "In Steam \u2192 Settings \u2192 Controller \u2192 enable 'Enable Steam Input for Xbox/PlayStation controllers' to emulate standard XInput across non-Steam games."
       },
       {
         "title": "Test inputs in Windows Game Controllers utility",
@@ -362,7 +362,7 @@
       },
       {
         "title": "Remove and re-pair Bluetooth device",
-        "detail": "In Settings → Bluetooth & devices, remove the controller. Hold the pairing button until the LED flashes rapidly, and pair again."
+        "detail": "In Settings \u2192 Bluetooth & devices, remove the controller. Hold the pairing button until the LED flashes rapidly, and pair again."
       }
     ],
     "related_error_codes": [
@@ -391,7 +391,7 @@
       },
       {
         "title": "Enable Camera Privacy permissions in Windows Settings",
-        "detail": "Go to Settings → Privacy & security → Camera. Ensure 'Camera access' is turned ON, and 'Let apps access your camera' is enabled for your target apps."
+        "detail": "Go to Settings \u2192 Privacy & security \u2192 Camera. Ensure 'Camera access' is turned ON, and 'Let apps access your camera' is enabled for your target apps."
       },
       {
         "title": "Disable third-party antivirus webcam protection",
@@ -399,7 +399,7 @@
       },
       {
         "title": "Roll back or reinstall USB Video Device driver",
-        "detail": "In Device Manager → Cameras, right-click the webcam → Uninstall device → restart PC to reload the clean Microsoft UVC driver."
+        "detail": "In Device Manager \u2192 Cameras, right-click the webcam \u2192 Uninstall device \u2192 restart PC to reload the clean Microsoft UVC driver."
       }
     ],
     "related_error_codes": [
@@ -467,7 +467,7 @@
       },
       {
         "title": "Reboot into Windows Safe Mode",
-        "detail": "Hold Shift while clicking 'Restart' in Start Menu → Troubleshoot → Advanced options → Startup Settings → Restart → press 4 for Safe Mode."
+        "detail": "Hold Shift while clicking 'Restart' in Start Menu \u2192 Troubleshoot \u2192 Advanced options \u2192 Startup Settings \u2192 Restart \u2192 press 4 for Safe Mode."
       },
       {
         "title": "Run DDU for the previous GPU brand first",
@@ -500,7 +500,7 @@
     "fix_steps": [
       {
         "title": "Temporarily disable Driver Signature Enforcement",
-        "detail": "Hold Shift while clicking Restart → Troubleshoot → Advanced options → Startup Settings → Restart → press '7' or 'F7' to 'Disable driver signature enforcement'."
+        "detail": "Hold Shift while clicking Restart \u2192 Troubleshoot \u2192 Advanced options \u2192 Startup Settings \u2192 Restart \u2192 press '7' or 'F7' to 'Disable driver signature enforcement'."
       },
       {
         "title": "Install the required driver while enforcement is disabled",
@@ -588,7 +588,7 @@
       },
       {
         "title": "Disable PCIe Link State Power Management",
-        "detail": "In Control Panel Power Options → Change advanced power settings → PCI Express → Link State Power Management → set to 'Off'."
+        "detail": "In Control Panel Power Options \u2192 Change advanced power settings \u2192 PCI Express \u2192 Link State Power Management \u2192 set to 'Off'."
       }
     ],
     "related_error_codes": [
@@ -880,5 +880,226 @@
     ],
     "source": "researched",
     "verified": false
+  },
+  {
+    "id": "driver-audio-mic-discord-crosstalk",
+    "slug": "audio-mic-discord-game-sound-leak",
+    "title": "Microphone picking up PC game audio and desktop sounds in Discord",
+    "summary": "Friends hear your game, YouTube, or music through your mic even when wearing headphones.",
+    "severity": "medium",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Discord friends hear themselves or your game audio",
+      "Microphone input volume bar moves when watching YouTube with headset on",
+      "Stereo Mix or Realtek Audio crosstalk"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Disable Stereo Mix in Windows Sound Control Panel",
+        "instruction": "Press Win+R, type 'mmsys.cpl' and hit Enter. Go to the 'Recording' tab. If you see 'Stereo Mix' or 'Wave Out', right-click and select 'Disable'.",
+        "caution": "Do not disable your primary physical microphone device."
+      },
+      {
+        "order": 2,
+        "title": "Check 3.5mm combo jack splitter crosstalk",
+        "instruction": "If using a single 4-pole 3.5mm headset plugged into separate mic/audio PC ports, cheap splitters leak electrical audio signals between channels. Test with a dedicated USB audio dongle or Apple 3.5mm-to-USB-C DAC.",
+        "caution": "Ensure the 3.5mm jack is pushed completely into the socket until it clicks."
+      },
+      {
+        "order": 3,
+        "title": "Enable Discord Noise Suppression and Echo Cancellation",
+        "instruction": "In Discord Settings -> Voice & Video, set Noise Suppression to 'Krisp'. Turn on 'Echo Cancellation' and disable 'Listen to this Device' in Windows recording device properties.",
+        "caution": "Krisp requires slight CPU overhead; on very old 4-core CPUs use 'Standard' instead."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "driver-monitor-stuck-60hz",
+    "slug": "monitor-stuck-60hz-high-refresh-rate",
+    "title": "144Hz or 240Hz gaming monitor stuck running at 60Hz",
+    "summary": "High refresh rate monitor is displaying only 60Hz in Windows display settings or feels choppy.",
+    "severity": "medium",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "144Hz, 165Hz or 240Hz monitor capped at 60Hz",
+      "Windows Advanced Display settings only shows 59.94Hz or 60Hz dropdown",
+      "Mouse cursor movement feels sluggish on gaming monitor"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Replace HDMI cable with DisplayPort cable",
+        "instruction": "Older HDMI 1.4 cables or budget motherboard/monitor HDMI ports cap output to 1080p 60Hz. Connect your GPU directly to the monitor using a DisplayPort 1.4 cable.",
+        "caution": "Connect cable to your dedicated graphics card ports (horizontal), NEVER to the motherboard ports (vertical)."
+      },
+      {
+        "order": 2,
+        "title": "Change refresh rate in Windows Advanced Display",
+        "instruction": "Right-click desktop -> Display settings -> Advanced display. Click the 'Choose a refresh rate' dropdown and select your monitor's native max Hz (144Hz / 165Hz / 240Hz).",
+        "caution": "If the screen goes black for 15 seconds, do not panic; Windows will automatically revert if unsupported."
+      },
+      {
+        "order": 3,
+        "title": "Configure Nvidia Control Panel / AMD Adrenalin resolution list",
+        "instruction": "In Nvidia Control Panel under 'Change resolution', scroll down past 'Ultra HD, HD, SD' to the 'PC' section. Select your resolution under 'PC' to unlock higher refresh rates.",
+        "caution": "Resolutions under 'TV' often restrict refresh rates to 60Hz."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "driver-bluetooth-missing-windows-11",
+    "slug": "bluetooth-toggle-missing-disappeared-windows",
+    "title": "Bluetooth toggle completely missing from Windows 11 Action Center",
+    "summary": "Bluetooth switch disappeared from settings and Device Manager shows yellow triangle or code 43 on Intel Bluetooth.",
+    "severity": "medium",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "No Bluetooth toggle in Windows Settings or Action Center",
+      "Device Manager shows 'Unknown USB Device (Device Descriptor Request Failed)'",
+      "Intel Wireless Bluetooth device shows yellow exclamation mark"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Perform a complete motherboard capacitor drain (Cold Boot)",
+        "instruction": "Shut down PC. Turn off power supply switch and unplug power cord from wall. Hold PC power button down for 30 seconds to drain motherboard capacitors. Plug back in and boot up.",
+        "caution": "Most Intel/MediaTek Wi-Fi+BT cards share a PCIe USB bus that hangs and requires complete power cut to reset."
+      },
+      {
+        "order": 2,
+        "title": "Restart Bluetooth Support Service",
+        "instruction": "Press Win+R, type 'services.msc', find 'Bluetooth Support Service'. Right-click -> Properties -> set Startup type to 'Automatic'. Click 'Start', then click OK.",
+        "caution": "Also restart 'Bluetooth Audio Gateway Service' if using wireless headsets."
+      },
+      {
+        "order": 3,
+        "title": "Reinstall clean vendor Bluetooth driver",
+        "instruction": "Download latest Bluetooth driver from motherboard manufacturer site (or Intel Driver & Support Assistant). Uninstall current driver from Device Manager and install the downloaded package.",
+        "caution": "Do not use third-party automated driver finder apps."
+      }
+    ],
+    "related_error_codes": [
+      "0x0000002B"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "driver-usb-disconnect-sound-loop",
+    "slug": "usb-disconnect-reconnect-sound-loop",
+    "title": "Windows plays USB disconnect and connect chime sound repeatedly in a loop",
+    "summary": "Constant Windows hardware disconnect and connect chimes playing every few seconds or minutes.",
+    "severity": "low",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Windows plays USB disconnect sound every 5-30 seconds",
+      "Device Manager constantly refreshes / blinks",
+      "Mouse or keyboard randomly freezes for half a second"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Identify offending device using USBDeview",
+        "instruction": "Download free NirSoft USBDeview. Sort by 'Last Plug/Unplug Date'. Look at the top entry when the sound plays to identify the exact USB peripheral or internal hub disconnecting.",
+        "caution": "Run USBDeview as Administrator to see internal motherboard USB headers."
+      },
+      {
+        "order": 2,
+        "title": "Disable USB Selective Suspend in Power Options",
+        "instruction": "Press Win+R, type 'powercfg.cpl', click 'Change plan settings' -> 'Change advanced power settings'. Expand 'USB settings' -> 'USB selective suspend setting' -> set to 'Disabled'.",
+        "caution": "This prevents Windows from putting idle USB controllers into sleep mode."
+      },
+      {
+        "order": 3,
+        "title": "Uncheck 'Allow computer to turn off this device' in Device Manager",
+        "instruction": "Open Device Manager -> expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' -> Properties -> Power Management -> uncheck 'Allow the computer to turn off this device to save power'.",
+        "caution": "Repeat for USB Input Devices under 'Human Interface Devices' if mouse or keyboard disconnects."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "driver-audio-crackling-dpc-latency",
+    "slug": "audio-crackling-popping-dpc-latency",
+    "title": "Audio crackling, popping, and micro-stuttering in games and videos",
+    "summary": "Sound pops, stutters, and glitches whenever moving the mouse, launching games, or watching videos.",
+    "severity": "medium",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Audio pops or crackles during gaming or YouTube playback",
+      "Micro-stutters coinciding with audio drops",
+      "LatencyMon reports high DPC routine latency in ndis.sys or nvlddmkm.sys"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Run LatencyMon to identify the faulty driver",
+        "instruction": "Download and run LatencyMon. Click the green Play button and reproduce audio pops for 3 minutes. Check the 'Drivers' tab to see which driver has the highest execution time (e.g. Wi-Fi, GPU, or Audio).",
+        "caution": "ndis.sys points to Wi-Fi/Ethernet drivers; nvlddmkm.sys points to Nvidia GPU driver."
+      },
+      {
+        "order": 2,
+        "title": "Change Power Management mode in GPU control panel",
+        "instruction": "In Nvidia Control Panel -> Manage 3D Settings -> set 'Power management mode' to 'Prefer consistent performance' (or 'Prefer maximum performance'). Rapid GPU power state switching causes audio pops.",
+        "caution": "Increases idle GPU power draw by ~5 to 10 watts."
+      },
+      {
+        "order": 3,
+        "title": "Disable Wi-Fi Roaming Aggressiveness and Energy Efficient Ethernet",
+        "instruction": "In Device Manager -> Network adapters -> right-click your network card -> Properties -> Advanced. Set 'Energy Efficient Ethernet' to 'Disabled' and 'Roaming Aggressiveness' to 'Lowest'.",
+        "caution": "Network card power-saving interrupts are the #1 cause of DPC audio spikes."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "driver-gpu-ddu-clean-install",
+    "slug": "ddu-clean-reinstall-graphics-drivers",
+    "title": "Clean GPU driver reinstall using Display Driver Uninstaller (DDU)",
+    "summary": "Purge corrupted graphics driver fragments and registry keys causing crashes, black screens, and stuttering.",
+    "severity": "high",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Games crashing immediately on startup after driver update",
+      "Display flickering or black screening when opening 3D applications",
+      "Nvidia GeForce Experience or AMD Adrenalin installer fails with error"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Download DDU and standalone GPU driver installer",
+        "instruction": "Download latest DDU from Wagnardsoft. Download the official standalone driver installer for your GPU model from nvidia.com or amd.com. Disconnect internet (unplug ethernet or turn off Wi-Fi).",
+        "caution": "Disconnecting internet prevents Windows Update from automatically installing a generic driver during the process."
+      },
+      {
+        "order": 2,
+        "title": "Boot into Windows Safe Mode",
+        "instruction": "Hold Shift while clicking 'Restart' in the Windows Start menu. Go to Troubleshoot -> Advanced options -> Startup Settings -> click Restart -> press 4 or F4 for Safe Mode.",
+        "caution": "Always run DDU in Safe Mode to ensure no driver files are locked in memory."
+      },
+      {
+        "order": 3,
+        "title": "Run DDU and click 'Clean and restart'",
+        "instruction": "Open DDU in Safe Mode. Select device type 'GPU', select your vendor (Nvidia, AMD, Intel). Click 'Clean and restart'. Once booted back into normal Windows, run your downloaded driver installer.",
+        "caution": "Reconnect internet only after your new driver installation finishes."
+      }
+    ],
+    "related_error_codes": [
+      "0x00000116",
+      "0x00000119"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
   }
 ]

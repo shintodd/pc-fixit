@@ -13,7 +13,7 @@
     "fix_steps": [
       {
         "title": "Note the exact stop code",
-        "detail": "Disable automatic restart (System Properties → Advanced → Startup and Recovery) so the code stays on screen, or check Event Viewer → Windows Logs → System after a crash."
+        "detail": "Disable automatic restart (System Properties \u2192 Advanced \u2192 Startup and Recovery) so the code stays on screen, or check Event Viewer \u2192 Windows Logs \u2192 System after a crash."
       },
       {
         "title": "Check for the obvious cause first",
@@ -96,7 +96,7 @@
       },
       {
         "title": "Recreate the Windows Pagefile",
-        "detail": "Go to System Properties → Advanced → Performance Settings → Advanced → Change Virtual Memory. Set to 'No paging file', reboot, and reset to 'System managed size' to discard corrupted pagefile blocks."
+        "detail": "Go to System Properties \u2192 Advanced \u2192 Performance Settings \u2192 Advanced \u2192 Change Virtual Memory. Set to 'No paging file', reboot, and reset to 'System managed size' to discard corrupted pagefile blocks."
       },
       {
         "title": "Disable third-party antivirus suites",
@@ -243,7 +243,7 @@
       },
       {
         "title": "Boot into Safe Mode and roll back driver",
-        "detail": "Boot into Windows Safe Mode, open Device Manager, right-click the corresponding hardware device, select Properties → Driver tab → Roll Back Driver."
+        "detail": "Boot into Windows Safe Mode, open Device Manager, right-click the corresponding hardware device, select Properties \u2192 Driver tab \u2192 Roll Back Driver."
       },
       {
         "title": "Reinstall latest chipset and BIOS firmware",
@@ -276,7 +276,7 @@
     "fix_steps": [
       {
         "title": "Change SATA AHCI Controller driver in Device Manager",
-        "detail": "Open Device Manager → expand 'IDE ATA/ATAPI controllers'. If 'Standard SATA AHCI Controller' is listed, right-click → Update driver → Browse my computer → Let me pick → choose vendor driver or verify driver compatibility."
+        "detail": "Open Device Manager \u2192 expand 'IDE ATA/ATAPI controllers'. If 'Standard SATA AHCI Controller' is listed, right-click \u2192 Update driver \u2192 Browse my computer \u2192 Let me pick \u2192 choose vendor driver or verify driver compatibility."
       },
       {
         "title": "Update SSD firmware",
@@ -312,7 +312,7 @@
     "fix_steps": [
       {
         "title": "Disable Fast Startup in Windows",
-        "detail": "Go to Control Panel → Power Options → Choose what the power buttons do → click 'Change settings that are currently unavailable' → uncheck 'Turn on fast startup'."
+        "detail": "Go to Control Panel \u2192 Power Options \u2192 Choose what the power buttons do \u2192 click 'Change settings that are currently unavailable' \u2192 uncheck 'Turn on fast startup'."
       },
       {
         "title": "Update Intel Management Engine (ME) or AMD Chipset drivers",
@@ -320,7 +320,7 @@
       },
       {
         "title": "Set PCIe Link State Power Management to Off",
-        "detail": "In Control Panel → Power Options → Edit Plan Settings → Change advanced power settings → expand 'PCI Express' → Link State Power Management → set to 'Off'."
+        "detail": "In Control Panel \u2192 Power Options \u2192 Edit Plan Settings \u2192 Change advanced power settings \u2192 expand 'PCI Express' \u2192 Link State Power Management \u2192 set to 'Off'."
       },
       {
         "title": "Update GPU and USB controller drivers",
@@ -352,7 +352,7 @@
       },
       {
         "title": "Monitor CPU and VRM temperatures",
-        "detail": "Use HWInfo64 to ensure CPU temperature is below 90°C and motherboard VRMs are not thermal throttling under load."
+        "detail": "Use HWInfo64 to ensure CPU temperature is below 90\u00b0C and motherboard VRMs are not thermal throttling under load."
       },
       {
         "title": "Update motherboard BIOS for microcode patches",
@@ -468,7 +468,7 @@
       },
       {
         "title": "Check CPU operating temperature and mounting pressure",
-        "detail": "Extreme core temperatures (>100°C) or uneven cooler bracket mounting pressure can cause CPU cores to hang."
+        "detail": "Extreme core temperatures (>100\u00b0C) or uneven cooler bracket mounting pressure can cause CPU cores to hang."
       },
       {
         "title": "Run Intel Processor Diagnostic Tool or Prime95",
@@ -575,7 +575,7 @@
       },
       {
         "title": "Roll back to previous stable driver in Device Manager",
-        "detail": "If the crash started after a recent driver update, open Device Manager → right-click device → Properties → Driver → Roll Back Driver."
+        "detail": "If the crash started after a recent driver update, open Device Manager \u2192 right-click device \u2192 Properties \u2192 Driver \u2192 Roll Back Driver."
       },
       {
         "title": "Run System File Checker",
@@ -583,7 +583,7 @@
       },
       {
         "title": "Disable network adapter energy efficient features",
-        "detail": "In Device Manager → Network adapters → right-click your adapter → Advanced → disable 'Energy Efficient Ethernet' and 'Green Ethernet'."
+        "detail": "In Device Manager \u2192 Network adapters \u2192 right-click your adapter \u2192 Advanced \u2192 disable 'Energy Efficient Ethernet' and 'Green Ethernet'."
       }
     ],
     "related_error_codes": [
@@ -879,5 +879,233 @@
     ],
     "source": "researched",
     "verified": false
+  },
+  {
+    "id": "bsod-whea-uncorrectable-error-0x124",
+    "slug": "whea-uncorrectable-error-0x00000124-cpu-hardware-crash",
+    "title": "WHEA_UNCORRECTABLE_ERROR (0x00000124) hardware CPU or PCIe crash",
+    "summary": "Hardware error detected by Windows Hardware Error Architecture (WHEA) caused by unstable CPU voltage, bad undervolt, or PCIe fault.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Blue screen stop code: WHEA_UNCORRECTABLE_ERROR",
+      "Bugcheck parameter 1 = 0x00000000 (Machine Check Exception)",
+      "Crashes under gaming load or when idle after overclocking or undervolting"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Reset all CPU Curve Optimizer and undervolts to stock in BIOS",
+        "instruction": "Enter BIOS and reset CPU voltage settings to factory stock. If using AMD Curve Optimizer or Intel Voltage Offset, set to 0. A negative curve that is unstable at light loads causes immediate WHEA crashes.",
+        "caution": "Negative core offsets that pass 100% stress tests often crash when cores drop to low idle frequencies."
+      },
+      {
+        "order": 2,
+        "title": "Inspect WHEA record in Event Viewer (Event ID 18/19)",
+        "instruction": "Open Windows Event Viewer -> Windows Logs -> System. Filter by Event Source 'WHEA-Logger'. Look for Event ID 18 (Machine Check Exception) and note the 'APIC ID' to determine which specific CPU core failed.",
+        "caution": "APIC ID 0/1 = Core 0; APIC ID 2/3 = Core 1."
+      },
+      {
+        "order": 3,
+        "title": "Update motherboard BIOS for CPU microcode stability",
+        "instruction": "Ensure motherboard BIOS is updated. Both Intel 13th/14th Gen (0x129 microcode) and AMD Ryzen 7000/9000 series rely on critical AGESA BIOS microcode updates to prevent voltage degradation crashes.",
+        "caution": "Never interrupt power during a BIOS flash."
+      }
+    ],
+    "related_error_codes": [
+      "0x00000124"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "bsod-kernel-security-check-failure-0x139",
+    "slug": "kernel-security-check-failure-0x00000139-driver-anticheat",
+    "title": "KERNEL_SECURITY_CHECK_FAILURE (0x00000139) anti-cheat or memory crash",
+    "summary": "Windows kernel integrity check failed, typically caused by kernel-level anti-cheat drivers (Vanguard, BattlEye, EAC) or faulty RAM.",
+    "severity": "high",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code KERNEL_SECURITY_CHECK_FAILURE",
+      "Crashes while playing Valorant, Rainbow Six Siege, or Easy Anti-Cheat games",
+      "Crash dump references vgk.sys, bedaisy.sys, or easyanticheat.sys"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Reinstall clean Anti-Cheat service",
+        "instruction": "Uninstall the offending anti-cheat (e.g. Riot Vanguard) from Windows Apps & Features. Delete its leftover program directory in 'C:\\Program Files\\Riot Vanguard'. Reboot PC, then launch game client to reinstall fresh service.",
+        "caution": "Ensure Windows Virtualization-Based Security (VBS) and Core Isolation are supported in Windows Security settings."
+      },
+      {
+        "order": 2,
+        "title": "Test memory integrity with Windows Memory Diagnostic",
+        "instruction": "Press Win+R, type 'mdsched.exe' and choose 'Restart now and check for problems'. If memory errors are reported, run MemTest86 on a bootable USB to pinpoint failing RAM modules.",
+        "caution": "Even 1 single memory error will corrupt kernel security checksums."
+      },
+      {
+        "order": 3,
+        "title": "Run DISM and SFC scans to verify kernel integrity",
+        "instruction": "Open Terminal as Administrator. Run 'DISM.exe /Online /Cleanup-image /Restorehealth' followed by 'sfc /scannow' to repair damaged system DLL files.",
+        "caution": "Reboot PC once repairs are reported."
+      }
+    ],
+    "related_error_codes": [
+      "0x00000139"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "bsod-critical-process-died-0xef",
+    "slug": "critical-process-died-0x000000ef-nvme-ssd-failure",
+    "title": "CRITICAL_PROCESS_DIED (0x000000EF) NVMe SSD dropping or Windows system crash",
+    "summary": "Essential Windows background process terminated abruptly, often caused by an M.2 NVMe SSD suddenly dropping off the PCIe bus.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Blue screen stop code: CRITICAL_PROCESS_DIED",
+      "BSOD dump creation gets stuck at 0% and fails to write minidump",
+      "After rebooting, PC enters BIOS directly because SSD is not detected until power cycle"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Reseat NVMe M.2 SSD in motherboard slot",
+        "instruction": "Shut down PC and unplug power cord. Unscrew M.2 heatsink, remove M.2 SSD, clean gold contacts gently with a dry lint-free cloth, and reinsert firmly into M.2 slot at a 30-degree angle. Screw down securely.",
+        "caution": "Thermal expansion and contraction can cause slight contact oxidation in M.2 slots over time."
+      },
+      {
+        "order": 2,
+        "title": "Update NVMe SSD firmware via vendor utility",
+        "instruction": "Download vendor SSD management software (Samsung Magician, WD Dashboard, Crucial Storage Executive, Kingston SSD Manager). Check for and apply SSD firmware updates.",
+        "caution": "Samsung 980/990 Pro and WD SN850X had known firmware bugs causing SSDs to lock into read-only mode or disconnect under PCIe 4.0 sleep states."
+      },
+      {
+        "order": 3,
+        "title": "Disable PCI Express Link State Power Management",
+        "instruction": "Open 'powercfg.cpl' -> Change plan settings -> Change advanced power settings. Expand 'PCI Express' -> 'Link State Power Management' -> set to 'Off'.",
+        "caution": "Prevents Windows from putting NVMe controller into ultra-low-power states that fail to wake up in time."
+      }
+    ],
+    "related_error_codes": [
+      "0x000000EF"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "bsod-system-thread-exception-0x7e",
+    "slug": "system-thread-exception-not-handled-0x0000007e-driver-crash",
+    "title": "SYSTEM_THREAD_EXCEPTION_NOT_HANDLED (0x0000007E) driver crash on boot",
+    "summary": "System thread generated an unhandled exception, pointing directly to a specific third-party .sys driver file on the blue screen.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Stop code: SYSTEM_THREAD_EXCEPTION_NOT_HANDLED",
+      "Blue screen mentions filename: nvlddmkm.sys, atikmdag.sys, rtpx64.sys, or netwtw10.sys",
+      "Occurs in a boot loop or immediately when opening 3D programs"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Note the exact .sys filename displayed on the BSOD screen",
+        "instruction": "The filename identifies the faulty component: nvlddmkm.sys (Nvidia GPU), atikmdag.sys (AMD GPU), rtpx64.sys (Realtek Audio), netwtw10.sys (Intel Wi-Fi).",
+        "caution": "If no filename is listed, check C:\\Windows\\Minidump with BlueScreenView."
+      },
+      {
+        "order": 2,
+        "title": "Boot into Safe Mode and roll back or uninstall the driver",
+        "instruction": "Hold Shift while clicking Restart -> Troubleshoot -> Advanced options -> Startup Settings -> Restart -> press 4 for Safe Mode. Open Device Manager -> locate the device matching the driver -> right-click Properties -> Driver tab -> 'Roll Back Driver' (or Uninstall Device).",
+        "caution": "Safe Mode loads basic generic drivers, allowing you to bypass the crash."
+      },
+      {
+        "order": 3,
+        "title": "Disable Fast Startup in Windows Power Options",
+        "instruction": "Press Win+R, type 'powercfg.cpl' -> click 'Choose what the power buttons do' -> click 'Change settings that are currently unavailable' -> uncheck 'Turn on fast startup'. Click Save changes.",
+        "caution": "Fast Startup saves corrupted driver kernel state to disk on shutdown, causing repeated boot loops."
+      }
+    ],
+    "related_error_codes": [
+      "0x0000007E"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "bsod-page-fault-in-nonpaged-area-0x50",
+    "slug": "page-fault-in-nonpaged-area-0x00000050-ram-corruption",
+    "title": "PAGE_FAULT_IN_NONPAGED_AREA (0x00000050) invalid memory address crash",
+    "summary": "Invalid system memory referenced, usually caused by defective RAM hardware, bad memory timings, or corrupted NTFS volume.",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "Blue screen stop code: PAGE_FAULT_IN_NONPAGED_AREA",
+      "Random crashes happening at different times and in different applications",
+      "Google Chrome tabs crashing frequently with 'STATUS_ACCESS_VIOLATION' or 'Out of Memory'"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Test RAM with 1 stick at a time to find the defective module",
+        "instruction": "Turn off PC and unplug power. Remove all RAM sticks except 1 stick in slot 2 (A2). Use PC. If stable, swap in the second stick. A single bad memory chip on a RAM stick will trigger random page fault crashes.",
+        "caution": "Handle RAM sticks by the plastic edges, never touch gold contact pins directly."
+      },
+      {
+        "order": 2,
+        "title": "Disable aggressive RAM XMP / EXPO overclock in BIOS",
+        "instruction": "Reboot into BIOS setup (tap Del/F2). Disable XMP or set DRAM Frequency to JEDEC base spec (2133MHz or 4800MHz). If the blue screens stop, your memory controller requires slightly higher SoC voltage or updated BIOS microcode.",
+        "caution": "High-speed RAM (DDR5-6400+) requires manual voltage tuning on 4-stick configurations."
+      },
+      {
+        "order": 3,
+        "title": "Run check disk with bad sector recovery",
+        "instruction": "Open Command Prompt as Administrator. Type: 'chkdsk C: /f /r' and press Enter. Type 'Y' to schedule disk check on next restart. Reboot PC.",
+        "caution": "Scans pagefile.sys filesystem sectors and repairs bad NTFS index records."
+      }
+    ],
+    "related_error_codes": [
+      "0x00000050"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "bsod-driver-verifier-detected-violation-0xc4",
+    "slug": "driver-verifier-detected-violation-0x000000c4-boot-loop",
+    "title": "DRIVER_VERIFIER_DETECTED_VIOLATION (0x000000C4) Windows Driver Verifier boot loop",
+    "summary": "PC is stuck in an infinite blue screen restart loop after running Windows Driver Verifier tool (verifier.exe).",
+    "severity": "critical",
+    "category_slug": "blue-screen",
+    "symptoms": [
+      "PC crashes with DRIVER_VERIFIER_DETECTED_VIOLATION within 5 seconds of Windows loading",
+      "User ran 'verifier.exe' following bad online forum advice and is now locked out",
+      "Infinite automatic repair boot loop"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Enter Safe Mode to disable Driver Verifier flags",
+        "instruction": "Force power off PC twice during Windows logo boot until 'Automatic Repair' appears. Click Advanced options -> Troubleshoot -> Advanced options -> Startup Settings -> Restart -> press 4 for Safe Mode.",
+        "caution": "Driver Verifier will not enforce memory checks in Safe Mode."
+      },
+      {
+        "order": 2,
+        "title": "Reset and disable Driver Verifier completely",
+        "instruction": "Once in Safe Mode, press Win+X -> Command Prompt (Admin). Type: 'verifier /reset' and hit Enter. Verify output says 'No settings were changed' or 'Settings were reset'.",
+        "caution": "Never use Driver Verifier unless you are an experienced software kernel developer debugging code."
+      },
+      {
+        "order": 3,
+        "title": "Delete verifier registry keys if reset command fails",
+        "instruction": "In Admin Command Prompt, run: 'reg delete \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\" /v VerifyDrivers /f' and 'reg delete \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\" /v VerifyDriverLevel /f'. Reboot PC.",
+        "caution": "PC will now boot straight to normal Windows desktop."
+      }
+    ],
+    "related_error_codes": [
+      "0x000000C4"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
   }
 ]

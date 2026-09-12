@@ -34,3 +34,5 @@ build-out.txt
 
 # local binaries (e.g. cloudflared executable)
 /bin
+
+.vercel

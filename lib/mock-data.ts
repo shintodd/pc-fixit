@@ -39,7 +39,7 @@ const allResearchedIssues: IssueDetail[] = [
 ].map((item: any) => {
   const steps: FixStep[] = (item.fix_steps || []).map((s: any) => ({
     title: s.title,
-    detail: s.detail,
+    detail: s.detail || s.instruction || "",
   }));
   return {
     slug: item.slug,

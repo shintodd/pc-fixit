@@ -204,7 +204,7 @@
       },
       {
         "title": "Repair EFI bootloader with Windows installation media",
-        "detail": "Boot from a Windows USB installer, select Repair Your Computer → Command Prompt, and run 'bootrec /fixboot' and 'bcdboot C:\\Windows /s S: /f UEFI'."
+        "detail": "Boot from a Windows USB installer, select Repair Your Computer \u2192 Command Prompt, and run 'bootrec /fixboot' and 'bcdboot C:\\Windows /s S: /f UEFI'."
       }
     ],
     "related_error_codes": [
@@ -266,7 +266,7 @@
     "fix_steps": [
       {
         "title": "Boot into Windows Safe Mode",
-        "detail": "Interrupt boot three times by holding the power button. In Recovery Mode, navigate to Troubleshoot → Advanced Options → Startup Settings → Restart → press 4 for Safe Mode."
+        "detail": "Interrupt boot three times by holding the power button. In Recovery Mode, navigate to Troubleshoot \u2192 Advanced Options \u2192 Startup Settings \u2192 Restart \u2192 press 4 for Safe Mode."
       },
       {
         "title": "Uninstall graphics driver via DDU",
@@ -348,7 +348,7 @@
       },
       {
         "title": "Mark system partition as active using Diskpart",
-        "detail": "In Command Prompt, run diskpart → select disk 0 → select partition 1 → active → exit, ensuring BIOS directs to the correct bootable partition."
+        "detail": "In Command Prompt, run diskpart \u2192 select disk 0 \u2192 select partition 1 \u2192 active \u2192 exit, ensuring BIOS directs to the correct bootable partition."
       },
       {
         "title": "Inspect storage drive health",
@@ -378,7 +378,7 @@
     "fix_steps": [
       {
         "title": "Disable Automatic Startup Repair loop",
-        "detail": "In Advanced Options → Command Prompt, run: 'bcdedit /set {default} recoveryenabled No' to see the underlying stop code causing crashes."
+        "detail": "In Advanced Options \u2192 Command Prompt, run: 'bcdedit /set {default} recoveryenabled No' to see the underlying stop code causing crashes."
       },
       {
         "title": "Restore corrupted registry hives",
@@ -386,7 +386,7 @@
       },
       {
         "title": "Uninstall recent Windows quality or feature updates",
-        "detail": "In Recovery Options, select Troubleshoot → Advanced Options → Uninstall Updates → Uninstall latest quality update."
+        "detail": "In Recovery Options, select Troubleshoot \u2192 Advanced Options \u2192 Uninstall Updates \u2192 Uninstall latest quality update."
       },
       {
         "title": "Run DISM and SFC offline repair",
@@ -410,7 +410,7 @@
     "symptoms": [
       "Endless loop of turning on and off automatically",
       "No display or BIOS splash screen ever appears",
-      "Motherboard debug LEDs cycle through CPU → DRAM then shut off"
+      "Motherboard debug LEDs cycle through CPU \u2192 DRAM then shut off"
     ],
     "fix_steps": [
       {
@@ -864,5 +864,223 @@
     ],
     "source": "researched",
     "verified": false
+  },
+  {
+    "id": "boot-psu-transient-spike-shutdown",
+    "slug": "pc-reboots-gaming-no-bluescreen-psu-shutdown",
+    "title": "PC randomly restarts or shuts down during heavy gaming with NO blue screen",
+    "summary": "Computer instantly goes black and powers off or restarts under heavy graphics load without creating a BSOD minidump.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "PC instantly turns off as if power plug was pulled during heavy games",
+      "No blue screen, no dump file in C:\\Windows\\Minidump",
+      "Event Viewer shows Event ID 41 Kernel-Power (unexpected power loss)"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Use separate PCIe power cables instead of daisy-chained pigtail cables",
+        "instruction": "Check GPU power connectors. High-power graphics cards (RTX 3080/4080, RX 6800/7900) draw up to 350W+. Never use a single split 'pigtail' cable for two 8-pin ports. Run two or three separate individual cables directly from PSU.",
+        "caution": "A single PCIe cable is rated for 150W; pulling 300W over one cable trips PSU Over-Current Protection (OCP)."
+      },
+      {
+        "order": 2,
+        "title": "Test GPU power target or undervolt to tame transient spikes",
+        "instruction": "In MSI Afterburner, reduce 'Power Limit' slider to 85% or apply a gentle undervolt. If the PC stops crashing during benchmarks, your PSU is failing to handle microsecond GPU power spikes.",
+        "caution": "Temporary diagnostic workaround until a higher quality Tier-A/B power supply is installed."
+      },
+      {
+        "order": 3,
+        "title": "Verify PSU wattage and 12V rail health",
+        "instruction": "Check your PSU rated wattage against total system draw. Modern GPUs have transient spikes up to 2x TDP lasting 10 milliseconds. Older PSUs shut down immediately to protect components.",
+        "caution": "Avoid budget unrated power supplies; refer to the Cultists Network PSU Tier List."
+      }
+    ],
+    "related_error_codes": [
+      "Event ID 41"
+    ],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "boot-bitlocker-recovery-loop",
+    "slug": "bitlocker-recovery-key-prompt-after-update",
+    "title": "BitLocker blue screen asking for 48-digit recovery key on startup",
+    "summary": "Computer boots directly to blue BitLocker Recovery screen asking for 48-digit numerical key after BIOS update or hardware change.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Blue screen on boot: 'BitLocker - Enter the recovery key for this drive'",
+      "Triggered after motherboard BIOS update, TPM toggle, or SSD swap",
+      "Windows will not boot to desktop without entering 48-digit key"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Retrieve recovery key from your Microsoft Account portal",
+        "instruction": "On your phone or another device, go to 'account.microsoft.com/devices/recoverykey'. Sign in with every Microsoft account ever logged into the PC (including school/work accounts). Locate the matching Key ID.",
+        "caution": "Check the 'Key ID' displayed on the PC screen to ensure you match the correct recovery key."
+      },
+      {
+        "order": 2,
+        "title": "Revert BIOS TPM / Security settings if key is missing",
+        "instruction": "If you cannot find the key and this started immediately after a BIOS update: enter BIOS settings. Ensure 'fTPM' / 'Intel PTT' is enabled and 'Secure Boot' mode is set to 'Standard'. Do not clear TPM keys.",
+        "caution": "Never select 'Clear TPM' in BIOS unless you have your 48-digit key or intend to wipe the drive."
+      },
+      {
+        "order": 3,
+        "title": "Suspend BitLocker before performing future BIOS updates",
+        "instruction": "Once back in Windows, open Command Prompt (Admin) and run: 'manage-bde -protectors -disable C:'. Run your update, then run 'manage-bde -protectors -enable C:'.",
+        "caution": "Always back up your 48-digit key to a USB drive or printout."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "boot-blackscreen-after-secureboot",
+    "slug": "black-screen-after-enabling-secure-boot",
+    "title": "Black screen with no display signal after enabling Secure Boot in BIOS",
+    "summary": "Motherboard fails to output display signal or POST after toggling Secure Boot for Valorant / Windows 11.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "No display signal immediately after enabling Secure Boot or changing PK keys in BIOS",
+      "PC turns on, fans spin, but monitor says 'No Signal'",
+      "GPU UEFI GOP driver incompatible with CSM disabled"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Clear CMOS to force motherboard back to default CSM settings",
+        "instruction": "Turn off power supply and unplug PC power cord. Locate the round silver CR2032 battery on motherboard. Use a flathead screwdriver or fingernail to pop battery out. Wait 5 minutes. Reinsert battery and turn PC on.",
+        "caution": "This resets all BIOS settings back to factory defaults with display output restored."
+      },
+      {
+        "order": 2,
+        "title": "Update GPU UEFI Firmware / GOP driver",
+        "instruction": "Older GPUs (Nvidia GTX 900/1000 series) lack modern UEFI GOP firmware and black-screen when CSM is disabled. Download the official 'NVIDIA Graphics Firmware Update Tool for DisplayPort 1.3 and 1.4 Displays' in Windows.",
+        "caution": "Run the firmware updater before attempting to enable Secure Boot again."
+      },
+      {
+        "order": 3,
+        "title": "Convert MBR drive to GPT before disabling CSM",
+        "instruction": "If your Windows drive is formatted as legacy MBR, disabling CSM makes the drive unbootable. In Windows Command Prompt (Admin), run 'mbr2gpt /validate /allowFullOS' then 'mbr2gpt /convert /allowFullOS'.",
+        "caution": "Do not convert if you are dual-booting with 32-bit legacy operating systems."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "boot-new-ssd-not-showing-windows",
+    "slug": "new-ssd-hard-drive-not-showing-file-explorer",
+    "title": "New NVMe M.2 SSD or SATA hard drive not showing up in File Explorer",
+    "summary": "Installed a new solid-state drive or hard drive but it does not appear in 'This PC' or File Explorer.",
+    "severity": "medium",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "New SSD installed but missing in File Explorer / 'This PC'",
+      "BIOS detects the SSD model name but Windows does not show the drive",
+      "Drive is unallocated or missing drive letter"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Initialize and format disk in Disk Management (diskmgmt.msc)",
+        "instruction": "Press Win+X, select 'Disk Management' (or press Win+R and type 'diskmgmt.msc'). Look at the bottom list for a disk marked 'Unknown / Not Initialized' or 'Unallocated'.",
+        "caution": "Make sure you select the brand new unallocated disk, not your existing OS drive."
+      },
+      {
+        "order": 2,
+        "title": "Initialize disk as GPT partition style",
+        "instruction": "Right-click the disk number (e.g. 'Disk 1') -> select 'Initialize Disk'. Choose 'GPT (GUID Partition Table)' -> click OK.",
+        "caution": "Always choose GPT for modern drives and NVMe SSDs; MBR is legacy only."
+      },
+      {
+        "order": 3,
+        "title": "Create Simple Volume and assign drive letter",
+        "instruction": "Right-click the black 'Unallocated' space -> select 'New Simple Volume'. Follow the wizard: assign maximum size, choose a drive letter (e.g. D: or E:), format as NTFS with 'Perform a quick format'. Click Finish.",
+        "caution": "Your new SSD will now immediately appear in File Explorer ready for use."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "boot-laptop-furnace-sleep-modern-standby",
+    "slug": "laptop-hot-battery-drain-closed-bag-modern-standby",
+    "title": "Laptop burning hot and battery drains while closed inside backpack (Modern Standby)",
+    "summary": "Laptop wakes up inside laptop sleeve or backpack, fans scream at 100%, and battery is completely drained.",
+    "severity": "high",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Laptop burning hot to the touch when pulled out of bag",
+      "Battery drained from 100% to 0% while lid was closed",
+      "Windows 11 Modern Standby (S0 low power idle) staying active"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Switch Windows lid close action to 'Hibernate' instead of 'Sleep'",
+        "instruction": "Press Win+R, type 'powercfg.cpl' and press Enter. Click 'Choose what closing the lid does' on the left sidebar. Set 'When I close the lid:' to 'Hibernate' for both On Battery and Plugged In.",
+        "caution": "Hibernate saves complete RAM state to disk and powers off the motherboard 100% with zero heat and zero battery drain."
+      },
+      {
+        "order": 2,
+        "title": "Disable Network Connectivity in Standby",
+        "instruction": "Open Windows Settings -> System -> Power & battery. Under 'Network connectivity in standby', set to 'Never' (or run in Admin terminal: 'powercfg /setdcvalueindex scheme_current sub_none F15ADD7D-0D7D-4863-A7D0-84E73B719971 0').",
+        "caution": "Prevents Windows from waking up in your bag to download telemetry or email updates."
+      },
+      {
+        "order": 3,
+        "title": "Check sleep study logs for wake culprits",
+        "instruction": "Open Command Prompt as Administrator and run: 'powercfg /sleepstudy'. Open the generated HTML file in your browser to inspect which USB device, Bluetooth radio, or background app triggered the wake event.",
+        "caution": "Look for entries with 'Low Power State Time' below 90%."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
+  },
+  {
+    "id": "boot-breadboarding-bench-test",
+    "slug": "breadboarding-pc-outside-case-bench-test",
+    "title": "Breadboarding a PC: Testing core components outside the case on cardboard",
+    "summary": "Isolate persistent short circuits, motherboard stand-off shorts, and non-POST issues by assembling bare minimum components outside case.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "PC fails to turn on or clicks off immediately inside case",
+      "Motherboard suspected of shorting against metal chassis or standoff",
+      "Fans twitch for 1 millisecond and shut down"
+    ],
+    "fix_steps": [
+      {
+        "order": 1,
+        "title": "Disassemble motherboard and place on non-conductive cardboard box",
+        "instruction": "Remove motherboard from PC case. Place it on the flat cardboard motherboard box. CRITICAL: Never place it on an anti-static bag (the outer surface of anti-static bags is electrically conductive).",
+        "caution": "CRITICAL: Anti-static bags are conductive on the outside; only use plain dry cardboard or wood."
+      },
+      {
+        "order": 2,
+        "title": "Install only the absolute bare minimum components",
+        "instruction": "Install ONLY: CPU + CPU cooler, 1 stick of RAM in slot 2, 24-pin ATX power cable, and 8-pin EPS CPU power cable. Disconnect all SATA cables, front panel wires, case fans, and RGB headers.",
+        "caution": "If CPU lacks integrated graphics, install your GPU and connect its PCIe power cables."
+      },
+      {
+        "order": 3,
+        "title": "Bridge the two Power Switch pins with a flathead screwdriver",
+        "instruction": "Locate the front panel header (JFP1 / PANEL). Momentarily touch the tip of a metal screwdriver across the two 'PWR_SW' (Power Switch) pins for 1 second to turn on the board.",
+        "caution": "If the system POSTs cleanly on cardboard, your PC case has an extra standoff shorting the back of the motherboard."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "reddit_techsupport",
+    "verified": true
   }
 ]
