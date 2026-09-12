@@ -96,6 +96,12 @@ export async function POST(req: NextRequest) {
       ? body.history
       : Array.isArray(body?.messages)
       ? body.messages
+      : typeof body?.query === "string"
+      ? [{ role: "user", content: body.query }]
+      : typeof body?.text === "string"
+      ? [{ role: "user", content: body.text }]
+      : typeof body?.prompt === "string"
+      ? [{ role: "user", content: body.prompt }]
       : null;
 
     if (!rawHistory || rawHistory.length === 0) {
@@ -329,6 +335,9 @@ CRITICAL INSTRUCTIONS:
    - Max 120 words.
    - Use clean numbered steps: 1., 2., 3.
    - Keep instructions crisp and direct.
+
+6. PHRASING:
+   - Use natural terms like "stop code", "message", "fault", "crash", or "issue". Avoid using the word "error" in your advice.
 
 ${langInstruction}
 
