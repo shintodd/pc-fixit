@@ -284,13 +284,14 @@ export async function POST(req: NextRequest) {
 
     const langInstruction =
       lang === "ms"
-        ? `5. BAHASA / LANGUAGE REQUIREMENT:
-   - ANDA WAJIB MENJAWAB SEPENUHNYA DALAM BAHASA MELAYU YANG TEPAT, NATURAL, DAN MUDAH DIFAHAMI OLEH PENGGUNA PC DI MALAYSIA.
-   - Gunakan istilah perkakasan yang biasa difahami (cth: 'skrin gelap', 'wayar kuasa', 'butang suis', 'papan induk' atau 'motherboard', 'kad grafik', 'kipas menderu').
-   - Istilah standard seperti RAM, GPU, CPU, USB, HDMI, BIOS, Windows, SSD dikekalkan seperti biasa.
-   - Kekalkan jawapan padat (bawah 200 patah perkataan) dengan langkah bernombor (1., 2., 3.).
-   - Akhiri dengan soalan mesra: "Beritahu saya apa yang berlaku selepas anda semak langkah ini, dan kita akan teruskan dari situ!"
-   - Jika pengguna bertanya topik luar selain masalah PC, tolak dengan sopan dalam Bahasa Melayu: "Saya dibina khusus untuk penyelesaian masalah PC dan tidak dapat membantu dengan topik lain. Sila terangkan masalah komputer anda, dan saya berbesar hati untuk membantu!"`
+        ? `5. GAYA BAHASA & NADA (BAHASA MELAYU SANTAI TEKNIKAL MALAYSIA):
+   - ANDA MESTI MENJAWAB DALAM BAHASA MELAYU SANTAI DAN MESRA SEPERTI SEORANG JURUTEKNIK / ABANG KEDAI KOMPUTER MALAYSIA YANG BERPENGALAMAN.
+   - JANGAN guna gaya bahasa buku teks rasmi atau istilah Indonesia yang kaku (ELAKKAN: 'papan induk', 'wayar kuasa', 'bicu', 'persimpangan termal', 'peranti penyesuai', 'menderu').
+   - Guna istilah yang biasa orang Malaysia guna: 'motherboard', 'kabel power', 'cucuk kabel', 'cabut', 'screen hitam', 'tak keluar display', 'restart PC', 'kipas pusing', 'bateri CMOS', 'sangkut / hang / lag', 'grafik kad / GPU', 'casing'.
+   - Istilah standard PC kekalkan dalam BI seperti biasa: RAM, GPU, CPU, USB, HDMI, DisplayPort, BIOS, Windows, Safe Mode, SSD, Task Manager.
+   - Berikan penerangan ringkas dan padat (bawah 200 patah perkataan) dengan langkah bernombor yang jelas (1., 2., 3.).
+   - Akhiri jawapan dengan soalan mesra: "Cuba test langkah ni dulu. Kalau ada apa-apa jadi atau masih sangkut, bagitahu saya ya!"
+   - Jika pengguna tanya soalan di luar skop masalah PC/laptop, tolak dengan santai & sopan: "Saya khusus untuk tolong selesaikan masalah PC dan laptop saja. Boleh cerita apa isu komputer anda, nanti saya tolong tengokkan!"`
         : `5. LANGUAGE & TONE:
    - Respond in friendly, concise, easy-to-read English (under 200 words).
    - Use clean numbered steps: 1., 2., 3.
@@ -341,7 +342,7 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Langkah Pembaikan:\n${stepsText}\n\n*(Nota: Berjalan dalam mod setempat; diambil daripada panduan disahkan tempatan.)*`
+            ? `Ini langkah penyelesaian yang dah disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Cara Baiki:\n${stepsText}\n\n*(Nota: Berjalan dalam mod offline; panduan diambil terus daripada database setempat.)*`
             : `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Running in local offline mode; retrieved from local verified guides.)*`;
 
         return NextResponse.json(
@@ -364,7 +365,7 @@ ${referenceSection}`;
         {
           reply:
             lang === "ms"
-              ? "Pembantu PC Fixit sedang berjalan dalam mod setempat. Sila konfigurasikan GEMINI_API_KEY dalam fail .env anda untuk mengaktifkan diagnosis AI secara langsung."
+              ? "PC Fixit sedang berjalan dalam mod offline. Sila masukkan GEMINI_API_KEY dalam fail .env untuk aktifkan diagnosis AI secara langsung."
               : "PC Fixit assistant is running in local mode. Please configure GEMINI_API_KEY in your .env file to enable live AI diagnoses.",
           path: pathUsed,
           matchedKbEntries: totalMatches,
@@ -517,7 +518,7 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Langkah Pembaikan:\n${stepsText}\n\n*(Nota: AI Awan sedang mencapai had kuota; diagnosis ini diambil daripada panduan disahkan tempatan.)*`
+            ? `Ini langkah penyelesaian yang dah disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Cara Baiki:\n${stepsText}\n\n*(Nota: AI sedang sibuk/penuh kuota, jadi sistem bagi panduan yang dah diuji daripada database setempat dulu.)*`
             : `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Cloud AI is currently at quota capacity; this diagnosis was retrieved from local verified guides.)*`;
 
         const encoder = new TextEncoder();
@@ -543,10 +544,10 @@ ${referenceSection}`;
         {
           error: isRateLimited
             ? (lang === "ms"
-                ? "Perkhidmatan AI PC Fixit mengalami had kuota sementara kerana permintaan tinggi (kuota Gemini 429 penuh). Sila tunggu sebentar dan tekan Cuba semula."
+                ? "Sistem AI tengah sibuk sangat sekarang (kuota Gemini penuh). Sila tunggu sekejap lepas tu tekan 'Cuba tanya lagi'."
                 : "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry.")
             : (lang === "ms"
-                ? "Tidak dapat menyambung ke perkhidmatan diagnosis AI secara langsung. Sila tekan Cuba semula."
+                ? "Tak dapat nak hubungi perkhidmatan diagnosis AI secara langsung. Sila tekan 'Cuba tanya lagi'."
                 : "Unable to establish live AI diagnosis connection. Please tap Retry."),
           code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
         },
@@ -617,17 +618,17 @@ ${referenceSection}`;
 
         responseText =
           lang === "ms"
-            ? `Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Langkah Pembaikan:\n${stepsText}\n\n*(Nota: AI Awan sedang mencapai had kuota; diagnosis ini diambil daripada panduan disahkan tempatan.)*`
+            ? `Ini langkah penyelesaian yang dah disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Cadangan Cara Baiki:\n${stepsText}\n\n*(Nota: AI sedang sibuk/penuh kuota, jadi sistem bagi panduan yang dah diuji daripada database setempat dulu.)*`
             : `Here are the verified troubleshooting steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Cloud AI is currently at quota capacity; this diagnosis was retrieved from local verified guides.)*`;
       } else {
         return NextResponse.json(
           {
             error: isRateLimited
               ? (lang === "ms"
-                  ? "Perkhidmatan AI PC Fixit mengalami had kuota sementara kerana permintaan tinggi (kuota Gemini 429 penuh). Sila tunggu sebentar dan tekan Cuba semula."
+                  ? "Sistem AI tengah sibuk sangat sekarang (kuota Gemini penuh). Sila tunggu sekejap lepas tu tekan 'Cuba tanya lagi'."
                   : "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry.")
               : (lang === "ms"
-                  ? "Tidak dapat mengambil diagnosis pada masa ini. Sila tekan Cuba semula."
+                  ? "Tak dapat nak ambil maklumat diagnosis sekarang. Sila tekan 'Cuba tanya lagi'."
                   : "Unable to retrieve diagnosis right now. Please tap Retry."),
             code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
           },

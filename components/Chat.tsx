@@ -44,12 +44,12 @@ export default function Chat({
 
   const QUICK_SCENARIOS = language === "ms"
     ? [
-        { label: "Mati: Tiada Lampu atau Kipas", query: "PC saya langsung tak boleh hidup, tiada lampu, tiada kipas berpusing" },
-        { label: "Kipas Berpusing, Skrin Gelap", query: "Kipas berpusing, skrin kekal gelap, lampu LED DRAM menyala pada motherboard" },
-        { label: "Kod Ralat Skrin Biru", query: "Dapat kod ralat blue screen semasa main game" },
-        { label: "Penggunaan Cakera 100%", query: "Komputer tersekat-sekat dan disk usage 100%" },
-        { label: "Wi-Fi Tiada Internet", query: "Wi-Fi bersambung tapi tiada internet, dapat IP 169.254" },
-        { label: "Panas Melampau & Throttling", query: "Suhu GPU cecah 90C dan lag teruk bila main game" },
+        { label: "Mati Terus: Tak Ada Lampu / Kipas", query: "PC saya langsung tak boleh on, lampu tak ada, kipas tak pusing" },
+        { label: "Kipas Pusing, Screen Hitam", query: "Kipas pusing elok tapi screen hitam, ada lampu DRAM menyala kat motherboard" },
+        { label: "Keluar Kod Blue Screen", query: "Dapat kod error blue screen masa main game" },
+        { label: "Disk Sangkut 100%", query: "PC hang dan disk usage sangkut 100%" },
+        { label: "Wi-Fi Tiada Internet", query: "Wi-Fi connected tapi tiada internet, dapat IP 169.254" },
+        { label: "Panas Melampau & Lag", query: "GPU cecah 90C dan game jadi lag sangat" },
       ]
     : [
         { label: "Dead: No Lights or Fans", query: "My PC won't turn on at all, no lights, no fans" },
@@ -238,7 +238,7 @@ export default function Chat({
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
             {language === "ms"
-              ? "Membandingkan corak kerosakan perkakasan, kod ralat Windows, dan langkah penyelesaian sah."
+              ? "Semak tanda kerosakan dengan rekod kerosakan sebenar, kod error Windows, dan langkah baiki."
               : "Cross-referencing hardware failure patterns, Windows error codes, and step-by-step resolution paths."}
           </p>
           <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex items-center justify-between text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
@@ -252,7 +252,7 @@ export default function Chat({
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
-              {language === "ms" ? "Senario Masalah Pantas" : "Quick Failure Scenarios"}
+              {language === "ms" ? "Senario Masalah Cepat" : "Quick Failure Scenarios"}
             </span>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -276,11 +276,11 @@ export default function Chat({
         <div className="rounded-2xl border border-line/80 dark:border-dark-line/80 bg-subtle/60 dark:bg-dark-subtle/60 p-4 text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed space-y-1.5">
           <div className="flex items-center gap-1.5 font-semibold text-ink dark:text-dark-ink">
             <ShieldCheck className="h-3.5 w-3.5 text-accent dark:text-dark-accent" />
-            <span>{language === "ms" ? "Keselamatan Juruteknik" : "Technician Safety"}</span>
+            <span>{language === "ms" ? "Peringatan Keselamatan" : "Technician Safety"}</span>
           </div>
           <p>
             {language === "ms"
-              ? "Sentiasa cabut wayar kuasa AC dan sentuh bahagian logam casing yang tidak dicat untuk membuang cas statik sebelum memegang bahagian dalaman."
+              ? "Pastikan cabut plug dinding dulu dan sentuh bahagian besi casing untuk buang elektrik statik sebelum sentuh part dalam PC."
               : "Always unplug the AC power cord and touch unpainted metal on the case to discharge static before handling internal parts."}
           </p>
         </div>

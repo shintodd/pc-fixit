@@ -45,7 +45,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
       case "warn":
         return language === "ms" ? "Masalah Biasa" : "Common Problem";
       case "info":
-        return language === "ms" ? "Glit Ringan" : "Minor Glitch";
+        return language === "ms" ? "Isu Ringan" : "Minor Glitch";
       default:
         return severity;
     }
@@ -243,12 +243,12 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                 <div>
                   <div className="font-semibold text-ink dark:text-dark-ink text-[15px]">
                     {language === "ms"
-                      ? "Anda telah melengkapkan semua langkah penyelesaian!"
+                      ? "Semua langkah dah siap dicuba!"
                       : "You\u2019ve completed all troubleshooting steps!"}
                   </div>
                   <div className="text-[13px] text-ink-secondary dark:text-dark-ink-secondary mt-0.5">
                     {language === "ms"
-                      ? "Adakah ini membaiki PC anda? Jika anda perlukan bantuan lanjut, Diagnostik AI kami sedia membantu di bawah."
+                      ? "PC dah okay ke belum? Kalau masih ada masalah, boleh terus tanya AI Diagnostik kat bawah."
                       : "Did this fix your PC? If you need personalized assistance, our AI Diagnostician is standing by below."}
                   </div>
                 </div>
@@ -261,15 +261,15 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
             <div className="flex items-center gap-2 text-accent dark:text-dark-accent">
               <Sparkles className="h-4 w-4" aria-hidden="true" />
               <span className="text-[12px] font-semibold uppercase tracking-wider">
-                {language === "ms" ? "Perlukan Bantuan Langsung?" : "Need Live Assistance?"}
+                {language === "ms" ? "Perlukan Bantuan Tambahan?" : "Need Live Assistance?"}
               </span>
             </div>
             <h3 className="mt-2 text-xl font-semibold text-ink dark:text-dark-ink">
-              {language === "ms" ? "Masih menghadapi masalah dengan PC anda?" : "Still having trouble with your PC?"}
+              {language === "ms" ? "PC masih tak elok lagi?" : "Still having trouble with your PC?"}
             </h3>
             <p className="mt-1.5 text-[14px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
               {language === "ms"
-                ? "Terangkan masalah sebenar kepada Diagnostik AI kami. Ia akan menyesuaikan langkah mengikut spesifikasi komputer anda."
+                ? "Ceritakan apa yang berlaku pada AI Diagnostik kami. AI akan bagi langkah khusus ikut komponen dan model komputer anda."
                 : "Describe the exact behavior to our AI Diagnostician. It will tailor steps to your hardware specifications."}
             </p>
 
@@ -277,13 +277,13 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <Link
                 href={`/troubleshoot?q=${encodeURIComponent(
                   language === "ms"
-                    ? `Saya telah cuba panduan "${issue.title}", tetapi masalah masih berterusan.`
+                    ? `Saya dah cuba panduan "${issue.title}", tapi masalah masih tak selesai.`
                     : `I followed the guide for "${issue.title}", but it's still not working.`
                 )}`}
                 className="inline-flex items-center gap-2 rounded-pill bg-accent hover:bg-accent-hover dark:bg-accent dark:hover:bg-accent-hover px-5 py-2.5 text-[14px] font-medium text-white transition-all active:scale-95 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
                 <MessageSquare className="h-4 w-4" aria-hidden="true" />
-                <span>{language === "ms" ? "Tanya Diagnostik AI" : "Ask AI Diagnostician"}</span>
+                <span>{language === "ms" ? "Tanya AI Diagnostik" : "Ask AI Diagnostician"}</span>
               </Link>
             </div>
           </div>
@@ -294,7 +294,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
           <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-6 shadow-card dark:shadow-card-dark backdrop-blur-md">
             <div className="flex items-center justify-between pb-3 border-b border-line dark:border-dark-line">
               <span className="text-[12px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
-                {language === "ms" ? "Ringkasan Diagnostik" : "Diagnostic Brief"}
+                {language === "ms" ? "Ringkasan Masalah" : "Diagnostic Brief"}
               </span>
               <span
                 className={`rounded-pill border px-2.5 py-0.5 text-[11px] font-semibold ${
@@ -308,7 +308,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
             <div className="mt-4 space-y-3 text-[13px]">
               <div className="flex items-center justify-between">
                 <span className="text-ink-secondary dark:text-dark-ink-secondary">
-                  {language === "ms" ? "Kemajuan Senarai Semak" : "Checklist Progress"}
+                  {language === "ms" ? "Status Langkah Baiki" : "Checklist Progress"}
                 </span>
                 <span className="font-semibold text-accent dark:text-dark-accent">
                   {completedSteps.length} / {issue.steps.length}
@@ -347,7 +347,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
           {issue.related_error_codes && issue.related_error_codes.length > 0 && (
             <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
               <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary block mb-3">
-                {language === "ms" ? "Kod Ralat Windows Berkaitan" : "Related Windows Error Codes"}
+                {language === "ms" ? "Kod Error Windows Berkaitan" : "Related Windows Error Codes"}
               </span>
               <div className="flex flex-wrap gap-2">
                 {issue.related_error_codes.map((code) => (
@@ -369,7 +369,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
             </div>
             <p>
               {language === "ms"
-                ? "Jangan sekali-kali mencabut atau memasang semula komponen perkakasan (RAM, GPU, CPU) semasa bekalan kuasa masih bersambung ke soket AC."
+                ? "Jangan sesekali cabut atau pasang komponen (RAM, GPU, CPU) semasa plug elektrik masih terpasang kat suis dinding. Pastikan switch off dan cabut kabel power dulu!"
                 : "Never disconnect or re-seat hardware components (RAM, GPU, CPU) while the power supply is connected to AC power."}
             </p>
           </div>
