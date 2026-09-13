@@ -73,7 +73,7 @@ export default function HeroInput() {
           placeholder={t("hero_input_placeholder")}
           aria-label={t("hero_input_placeholder")}
           autoComplete="off"
-          className="flex-1 bg-transparent text-[15px] sm:text-[16px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+          className="flex-1 bg-transparent text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
         />
 
         <AnimatePresence>
@@ -85,7 +85,7 @@ export default function HeroInput() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.15 }}
               onClick={() => setValue("")}
-              className="p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[36px] min-w-[36px] items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Clear input"
             >
               <X className="h-4 w-4" aria-hidden="true" />
@@ -97,7 +97,7 @@ export default function HeroInput() {
           type="submit"
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.96 }}
-          className="flex h-10 items-center gap-2 rounded-xl bg-accent dark:bg-accent px-4 text-[13.5px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="flex h-11 items-center gap-2 rounded-xl bg-accent dark:bg-accent px-4 text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           aria-label={t("hero_btn_diagnose")}
         >
           <span>{t("hero_btn_diagnose")}</span>
@@ -105,38 +105,40 @@ export default function HeroInput() {
         </motion.button>
       </LiquidGlassCard>
 
-      {/* Interactive Quick-Prompt Chips */}
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-        <span className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary mr-1">
+      {/* Interactive Quick-Prompt Chips (Mobile swipe rail, desktop wrap) */}
+      <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-center gap-2">
+        <span className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary px-1 sm:px-0 sm:mr-1 shrink-0">
           {t("hero_try_asking")}
         </span>
-        {POPULAR_QUERIES.map((q, idx) => {
-          const Icon = q.icon;
-          return (
-            <motion.button
-              key={q.label}
-              type="button"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 + idx * 0.04, duration: 0.2 }}
-              whileHover={{ y: -2, scale: 1.02 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => handleQuickPrompt(q.label)}
-              aria-label={`Diagnose: ${q.label}`}
-              className="flex min-h-[30px] items-center gap-1.5 rounded-lg border border-line dark:border-dark-line bg-white/70 dark:bg-dark-card/70 px-3 py-1 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary backdrop-blur-sm transition-all duration-150 hover:border-accent/40 hover:bg-accent/10 dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-            >
-              <Icon className={`h-3.5 w-3.5 ${q.color}`} aria-hidden="true" />
-              <span>{q.label}</span>
-            </motion.button>
-          );
-        })}
+        <div className="flex w-full sm:w-auto items-center gap-2 overflow-x-auto no-scrollbar touch-scroll scroll-smooth py-1 -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
+          {POPULAR_QUERIES.map((q, idx) => {
+            const Icon = q.icon;
+            return (
+              <motion.button
+                key={q.label}
+                type="button"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + idx * 0.04, duration: 0.2 }}
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => handleQuickPrompt(q.label)}
+                aria-label={`Diagnose: ${q.label}`}
+                className="flex min-h-[38px] shrink-0 items-center gap-2 rounded-xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3.5 py-1.5 text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary backdrop-blur-sm transition-all duration-150 hover:border-accent/40 hover:bg-accent/10 dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <Icon className={`h-4 w-4 ${q.color}`} aria-hidden="true" />
+                <span className="whitespace-nowrap">{q.label}</span>
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Dual CTA Actions */}
       <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
         <Link
           href="/troubleshoot"
-          className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-ink dark:bg-white px-5 py-2.5 text-[14px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-ink dark:bg-white px-5 py-3 text-[14.5px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           <Sparkles className="h-4 w-4 text-accent dark:text-accent" aria-hidden="true" />
           <span>{t("hero_action_launch_ai")}</span>
@@ -144,7 +146,7 @@ export default function HeroInput() {
 
         <Link
           href="/wizard"
-          className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-line-strong dark:border-dark-line-strong bg-white/80 dark:bg-dark-card/80 px-5 py-2.5 text-[14px] font-semibold text-ink dark:text-dark-ink backdrop-blur-sm transition-all duration-150 hover:bg-subtle dark:hover:bg-dark-subtle active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-line-strong dark:border-dark-line-strong bg-white/80 dark:bg-dark-card/80 px-5 py-3 text-[14.5px] font-semibold text-ink dark:text-dark-ink backdrop-blur-sm transition-all duration-150 hover:bg-subtle dark:hover:bg-dark-subtle active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           <Wrench className="h-4 w-4 text-ink-secondary dark:text-dark-ink-secondary" aria-hidden="true" />
           <span>{t("hero_action_wizard")}</span>

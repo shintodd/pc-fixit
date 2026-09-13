@@ -105,8 +105,20 @@ export default function Header() {
     setOpen(false);
   }, [pathname]);
 
+  // Prevent body scrolling when mobile navigation is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-line bg-surface/85 backdrop-blur-xl transition-colors duration-200 dark:border-dark-line dark:bg-dark-surface/85">
+    <header className={`sticky top-0 z-50 w-full border-b border-line transition-colors duration-200 dark:border-dark-line ${open ? "bg-white dark:bg-[#161b22]" : "bg-surface/85 backdrop-blur-xl dark:bg-dark-surface/85"}`}>
       {/* Under Development Notice Banner */}
       <aside
         aria-label="Development preview announcement"
@@ -177,11 +189,10 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2 sm:hidden">
-          <LanguageToggle />
           <ThemeToggle />
           <button
             type="button"
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-ink dark:text-dark-ink transition-colors hover:bg-subtle dark:hover:bg-dark-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-ink dark:text-dark-ink transition-colors hover:bg-subtle dark:hover:bg-dark-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
@@ -194,42 +205,64 @@ export default function Header() {
 
       <AnimatePresence>
         {open && (
-          <motion.nav
-            id="mobile-nav"
-            aria-label="Mobile navigation"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden border-t border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-5 py-3 sm:hidden"
-          >
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`rounded-xl px-3.5 py-2.5 text-[15px] font-medium transition-colors ${
-                    pathname === link.href
-                      ? "bg-subtle dark:bg-dark-subtle text-ink dark:text-dark-ink"
-                      : "text-ink-secondary dark:text-dark-ink-secondary hover:bg-subtle/60 dark:hover:bg-dark-subtle/60 hover:text-ink dark:hover:text-dark-ink"
-                  }`}
-                  onClick={() => setOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <div className="pt-2">
-                <Link
-                  href="/troubleshoot"
-                  className="flex items-center justify-center gap-2 rounded-xl bg-accent py-2.5 text-[14px] font-medium text-white shadow-sm shadow-accent/20"
-                  onClick={() => setOpen(false)}
-                >
-                  <Sparkles className="h-4 w-4 opacity-80" aria-hidden="true" />
-                  <span>{t("nav_start_diagnosis")}</span>
-                </Link>
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 top-0 z-40 bg-black/50 backdrop-blur-xs sm:hidden"
+              aria-hidden="true"
+            />
+            {/* Mobile Sheet */}
+            <motion.nav
+              id="mobile-nav"
+              aria-label="Mobile navigation"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute left-0 right-0 top-full z-50 border-b border-line dark:border-dark-line bg-white dark:bg-[#161b22] px-5 py-4 shadow-2xl sm:hidden"
+            >
+              <div className="flex flex-col gap-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`rounded-xl px-3.5 py-3 text-[15px] font-medium transition-colors ${
+                      pathname === link.href
+                        ? "bg-subtle dark:bg-dark-subtle text-ink dark:text-dark-ink font-semibold"
+                        : "text-ink-secondary dark:text-dark-ink-secondary hover:bg-subtle/60 dark:hover:bg-dark-subtle/60 hover:text-ink dark:hover:text-dark-ink"
+                    }`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+
+                {/* Mobile Drawer Settings (Language & Quick CTA) */}
+                <div className="mt-2 pt-3 border-t border-line/70 dark:border-dark-line/70 flex items-center justify-between px-1">
+                  <span className="text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary">
+                    {language === "ms" ? "Pilihan Bahasa" : "Language"}
+                  </span>
+                  <LanguageToggle />
+                </div>
+
+                <div className="pt-3">
+                  <Link
+                    href="/troubleshoot"
+                    className="flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-accent py-3 text-[14px] font-semibold text-white shadow-sm shadow-accent/20 active:scale-98"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Sparkles className="h-4 w-4 opacity-80" aria-hidden="true" />
+                    <span>{t("nav_start_diagnosis")}</span>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </motion.nav>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
     </header>

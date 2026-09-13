@@ -958,7 +958,7 @@ export default function Chat({
         </div>
 
         {/* Sticky Input Bar with Image Attachment */}
-        <div className="sticky bottom-4 mt-2 flex flex-col gap-1.5 z-10 pointer-events-none">
+        <div className="sticky bottom-2 sm:bottom-4 mt-2 flex flex-col gap-1.5 z-20 pointer-events-none pb-safe">
           {/* Floating Scroll to Bottom Button (ChatGPT / Claude style) */}
           <AnimatePresence>
             {showScrollBottom && (
@@ -972,7 +972,7 @@ export default function Chat({
                 <button
                   type="button"
                   onClick={scrollToBottomSmooth}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card hover:border-accent/40 text-ink-secondary dark:text-dark-ink-secondary hover:text-accent backdrop-blur-md text-[11px] font-medium transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex min-h-[36px] items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card hover:border-accent/40 text-ink-secondary dark:text-dark-ink-secondary hover:text-accent backdrop-blur-md text-[12px] font-medium transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label={language === "ms" ? "Ke mesej terkini" : "Scroll to bottom"}
                   title={language === "ms" ? "Ke mesej terkini" : "Scroll to bottom"}
                 >
@@ -1054,7 +1054,7 @@ export default function Chat({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={loading || isProcessingImage}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-tertiary dark:text-dark-ink-tertiary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-accent dark:hover:text-dark-accent transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[40px] min-w-[40px] shrink-0 items-center justify-center rounded-full text-ink-tertiary dark:text-dark-ink-tertiary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-accent dark:hover:text-dark-accent transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               title={t("chat_upload_image")}
               aria-label={t("chat_upload_image")}
             >
@@ -1075,7 +1075,7 @@ export default function Chat({
               }
               aria-label={t("chat_input_placeholder")}
               autoComplete="off"
-              className="flex-1 bg-transparent py-1.5 text-[15px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+              className="flex-1 bg-transparent py-2 text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
             />
 
             {/* Clear button */}
@@ -1088,7 +1088,7 @@ export default function Chat({
                   exit={{ opacity: 0, scale: 0.7 }}
                   transition={{ duration: 0.12 }}
                   onClick={() => { setInput(""); inputRef.current?.focus(); }}
-                  className="p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex min-h-[36px] min-w-[36px] items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label="Clear input"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
@@ -1098,12 +1098,12 @@ export default function Chat({
 
             <motion.button
               type="submit"
-              disabled={loading || (!input.trim() && !pendingImage)}
-              whileHover={{ scale: 1.06 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 450, damping: 20 }}
-              className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-150 hover:bg-accent-hover active:scale-95 disabled:opacity-25 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              disabled={(!input.trim() && !pendingImage) || loading}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.93 }}
+              className="flex min-h-[40px] min-w-[40px] shrink-0 items-center justify-center rounded-full bg-accent dark:bg-accent text-white shadow-sm transition-all hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               aria-label={loading ? t("chat_thinking") : t("chat_send_btn")}
+              title={t("chat_send_btn")}
             >
               <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
             </motion.button>

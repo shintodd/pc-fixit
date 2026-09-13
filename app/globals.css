@@ -7,6 +7,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  a, button, [role="button"], input, select, textarea {
+    touch-action: manipulation;
   }
 
   html {
@@ -232,6 +237,22 @@
   }
   .dark .bubble-user {
     background: linear-gradient(160deg, #1d6fe6 0%, #1557b0 100%);
+  }
+
+  /* Safe Area and Mobile Touch Utilities */
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  }
+  .pt-safe {
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+  }
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+  .min-touch-target {
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 

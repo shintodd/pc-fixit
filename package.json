@@ -15,6 +15,7 @@
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "test": "tsx scripts/run-qa-suite.ts",
+    "test:mobile": "tsx scripts/test-mobile-ux.ts",
     "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {

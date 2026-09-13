@@ -60,10 +60,24 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
     );
   }
 
-  function handleShare() {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  async function handleShare() {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: issue.title,
+          text: issue.summary,
+          url: window.location.href,
+        });
+        return;
+      } catch {
+        // Fallback to clipboard if user cancels or share fails
+      }
+    }
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   }
 
   function handlePrint() {
@@ -161,7 +175,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <button
                 type="button"
                 onClick={() => setShowQrModal(true)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
                 title={t("tool_phone_qr")}
               >
                 <Smartphone className="h-3.5 w-3.5 text-accent" />
@@ -171,7 +185,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <button
                 type="button"
                 onClick={() => setShowPortModal(true)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium whitespace-nowrap text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
                 title={t("tool_port_locator")}
               >
                 <Monitor className="h-3.5 w-3.5 text-blue-500" />
@@ -181,18 +195,18 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
                 title={t("print_cheat_sheet")}
               >
                 <Printer className="h-3.5 w-3.5 text-ink-tertiary" />
-                <span className="hidden sm:inline">{t("print_cheat_sheet")}</span>
+                <span>{t("print_cheat_sheet")}</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleShare}
                 aria-label={copied ? t("issue_copied_link") : t("issue_share")}
-                className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3.5 py-1.5 text-[12px] font-medium whitespace-nowrap text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs active:scale-95"
               >
                 {copied ? (
                   <>

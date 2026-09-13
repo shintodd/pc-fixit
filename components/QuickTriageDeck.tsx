@@ -440,8 +440,8 @@ export default function QuickTriageDeck() {
         </Link>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-3 scrollbar-none">
+      {/* Filter Tabs (Edge-to-edge touch rail on mobile) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 -mx-4 px-4 sm:mx-0 sm:px-0 touch-scroll no-scrollbar scroll-smooth">
         {TRIAGE_TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -450,7 +450,7 @@ export default function QuickTriageDeck() {
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 rounded-xl border px-4 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+              className={`flex min-h-[44px] shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-[13px] font-semibold whitespace-nowrap transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                 isActive
                   ? `${tab.activeBg} shadow-xs`
                   : "border-line dark:border-dark-line bg-white/70 dark:bg-dark-card/70 text-ink-secondary dark:text-dark-ink-secondary hover:border-line-strong dark:hover:border-dark-line-strong hover:text-ink dark:hover:text-dark-ink"
