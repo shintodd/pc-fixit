@@ -49,7 +49,7 @@ import BeepLedDecoderModal from "@/components/BeepLedDecoderModal";
 import PhoneQrModal from "@/components/PhoneQrModal";
 import CommandExplainerModal from "@/components/CommandExplainerModal";
 import RepairFeasibilityModal from "@/components/RepairFeasibilityModal";
-import { LiquidGlassCard, LiquidGlassPill } from "@/components/LiquidGlassCard";
+import { LiquidGlassPill } from "@/components/LiquidGlassCard";
 
 export default function Chat({
   initialQuery,
@@ -440,13 +440,7 @@ export default function Chat({
       {/* Desktop Sidebar: Diagnostics Console, Recent Sessions & Fast Starters */}
       <aside className="hidden lg:flex flex-col w-80 shrink-0 gap-5">
         {/* Recent Diagnoses Client History */}
-        <LiquidGlassCard
-          material="regular"
-          borderRadius={20}
-          bezelWidth={24}
-          refractionStrength={20}
-          className="p-4 shadow-card dark:shadow-card-dark"
-        >
+        <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-4 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-line/70 dark:border-dark-line/70">
             <span className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
               <History className="h-3.5 w-3.5 text-accent" />
@@ -496,16 +490,10 @@ export default function Chat({
               })}
             </div>
           )}
-        </LiquidGlassCard>
+        </div>
 
         {/* PC Technician Desk Status */}
-        <LiquidGlassCard
-          material="thin"
-          borderRadius={20}
-          bezelWidth={22}
-          refractionStrength={18}
-          className="p-5 shadow-card dark:shadow-card-dark"
-        >
+        <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-3 border-b border-line/70 dark:border-dark-line/70">
             <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">
               {language === "ms" ? "Kaunter Technician PC" : "PC Technician Desk"}
@@ -526,15 +514,9 @@ export default function Chat({
               {t("cat_guides_count", { count: 180 })}
             </span>
           </div>
-        </LiquidGlassCard>
+        </div>
 
-        <LiquidGlassCard
-          material="thin"
-          borderRadius={20}
-          bezelWidth={22}
-          refractionStrength={18}
-          className="p-5 shadow-card dark:shadow-card-dark"
-        >
+        <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
               {language === "ms" ? "Soalan Popular Kepada Tech" : "Popular Tech Questions"}
@@ -556,15 +538,9 @@ export default function Chat({
               </button>
             ))}
           </div>
-        </LiquidGlassCard>
+        </div>
 
-        <LiquidGlassCard
-          material="thin"
-          borderRadius={20}
-          bezelWidth={22}
-          refractionStrength={18}
-          className="p-5 shadow-card dark:shadow-card-dark"
-        >
+        <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary flex items-center gap-1.5">
               <Wrench className="h-3.5 w-3.5 text-accent" />
@@ -599,15 +575,9 @@ export default function Chat({
               );
             })}
           </div>
-        </LiquidGlassCard>
+        </div>
 
-        <LiquidGlassCard
-          material="ultra"
-          borderRadius={20}
-          bezelWidth={20}
-          refractionStrength={16}
-          className="p-4 text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed space-y-1.5"
-        >
+        <div className="rounded-2xl border border-line/80 dark:border-dark-line/80 bg-subtle/60 dark:bg-dark-subtle/60 p-4 text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed space-y-1.5">
           <div className="flex items-center gap-1.5 font-semibold text-ink dark:text-dark-ink">
             <ShieldCheck className="h-3.5 w-3.5 text-accent dark:text-dark-accent" />
             <span>{language === "ms" ? "Pesanan Keselamatan Technician" : "Technician Safety Tip"}</span>
@@ -617,7 +587,7 @@ export default function Chat({
               ? "Pastikan cabut plug dinding dulu dan sentuh bahagian besi casing untuk buang elektrik statik sebelum sentuh part dalam PC."
               : "Always unplug the AC power cord and touch unpainted metal on the case to discharge static before handling internal parts."}
           </p>
-        </LiquidGlassCard>
+        </div>
       </aside>
 
       {/* Main Chat Workspace */}
@@ -865,11 +835,6 @@ export default function Chat({
             aria-label="Diagnostic chat input"
             onSubmit={handleSubmit}
             onPaste={handlePaste}
-            material="regular"
-            refractionStrength={22}
-            bezelWidth={22}
-            thickness={18}
-            dynamicLighting={true}
             className="flex items-center gap-2 py-1.5 pl-3 pr-1.5 shadow-card dark:shadow-card-dark focus-within:ring-2 focus-within:ring-accent transition-all"
           >
             {/* Hidden File Input for Image Upload */}

@@ -9,7 +9,6 @@ import { useTheme } from "next-themes";
 import Logo from "@/components/Logo";
 import LanguageToggle from "@/components/LanguageToggle";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
-import { LiquidGlassPill } from "@/components/LiquidGlassCard";
 
 function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -147,21 +146,13 @@ export default function Header() {
 
           <ThemeToggle />
 
-          <LiquidGlassPill
-            material="thin"
-            refractionStrength={18}
-            bezelWidth={18}
-            liquidPress={{ scale: 0.96, squish: 0.02 }}
-            className="ml-2 overflow-hidden shadow-xs"
+          <Link
+            href="/troubleshoot"
+            className="ml-2 group inline-flex items-center gap-1.5 rounded-pill bg-accent px-4 py-1.5 text-[13px] font-medium text-white transition-all duration-200 hover:bg-accent-hover active:scale-95 shadow-sm shadow-accent/20"
           >
-            <Link
-              href="/troubleshoot"
-              className="group inline-flex items-center gap-1.5 rounded-pill bg-accent px-3.5 py-1.5 text-[13px] font-medium text-white transition-all duration-200 hover:bg-accent-hover"
-            >
-              <Sparkles className="h-3.5 w-3.5 opacity-80 transition-transform duration-200 group-hover:rotate-12" aria-hidden="true" />
-              <span>{t("nav_start_diagnosis")}</span>
-            </Link>
-          </LiquidGlassPill>
+            <Sparkles className="h-3.5 w-3.5 opacity-80 transition-transform duration-200 group-hover:rotate-12" aria-hidden="true" />
+            <span>{t("nav_start_diagnosis")}</span>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2 sm:hidden">

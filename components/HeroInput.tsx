@@ -56,13 +56,8 @@ export default function HeroInput() {
         role="search"
         aria-label="Search diagnostic guides"
         onSubmit={handleSubmit}
-        material="regular"
         borderRadius={24}
-        chromaticAberration={0.22}
-        refractionStrength={22}
-        bezelWidth={30}
-        dynamicLighting={true}
-        className="glass-adaptive group relative flex items-center gap-3 p-2.5 pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
+        className="group relative flex items-center gap-3 p-2.5 pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
       >
         <Search
           className="h-5 w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"

@@ -1,75 +1,59 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { LiquidGlass } from "quick-liquid/react";
-import { useTheme } from "next-themes";
+import React, { ElementType } from "react";
+import { motion, HTMLMotionProps } from "framer-motion";
 
 export interface LiquidGlassCardProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
-  material?: "clear" | "thin" | "regular" | "thick" | "ultra" | "adaptive";
   borderRadius?: number;
-  chromaticAberration?: number;
-  refractionStrength?: number;
-  bezelWidth?: number;
-  thickness?: number;
-  dynamicLighting?: boolean;
   liquidPress?: boolean | { scale?: number; squish?: number };
-  animateIn?: boolean | number;
   className?: string;
-  as?: keyof React.JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements | any;
   type?: "button" | "submit" | "reset" | string;
   disabled?: boolean;
+  role?: string;
   [key: string]: any;
 }
 
 /**
- * Genuine Apple-style liquid glass component powered by quick-liquid.
- * Features physical SVG backdrop refraction (Snell's law), chromatic dispersion,
- * dynamic rim highlights, and liquid press squish physics.
+ * Genuine Apple-style liquid glass component.
+ * Features high-transmittance optical frosted glass, dual-lobe specular rim lighting,
+ * subtle bottom refractive lip, deep ambient drop shadow, and tactile liquid squish physics.
  */
 export function LiquidGlassCard({
   children,
-  material = "regular",
   borderRadius = 24,
-  chromaticAberration = 0.22,
-  refractionStrength = 24,
-  bezelWidth = 32,
-  thickness = 22,
-  dynamicLighting = true,
   liquidPress = false,
-  animateIn = false,
   className = "",
   as = "div",
   style,
   ...props
 }: LiquidGlassCardProps) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const Component = as as ElementType;
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isDark = resolvedTheme === "dark";
+  if (liquidPress && (as === "button" || as === "div")) {
+    const scaleFactor = typeof liquidPress === "object" && liquidPress.scale ? liquidPress.scale : 0.97;
+    return (
+      <motion.button
+        type={props.type as any || "button"}
+        whileHover={{ y: -2, scale: 1.01 }}
+        whileTap={{ scale: scaleFactor }}
+        transition={{ type: "spring", stiffness: 450, damping: 24 }}
+        className={`apple-liquid-glass ${className}`}
+        style={{
+          borderRadius: `${borderRadius}px`,
+          ...style,
+        }}
+        {...(props as any)}
+      >
+        {children}
+      </motion.button>
+    );
+  }
 
   return (
-    <LiquidGlass
-      as={as}
-      active={mounted}
-      config={{
-        material,
-        borderRadius,
-        chromaticAberration,
-        refractionStrength,
-        bezelWidth,
-        thickness,
-        dynamicLighting,
-        appearance: isDark ? "dark" : "light",
-        quality: "high",
-      }}
-      liquidPress={liquidPress}
-      animateIn={animateIn}
-      className={`glass-element ${className}`}
+    <Component
+      className={`apple-liquid-glass ${className}`}
       style={{
         borderRadius: `${borderRadius}px`,
         ...style,
@@ -77,30 +61,22 @@ export function LiquidGlassCard({
       {...props}
     >
       {children}
-    </LiquidGlass>
+    </Component>
   );
 }
 
 /**
- * Pill-shaped liquid glass capsule for navigation bars, action buttons, and control badges.
+ * Pill-shaped liquid glass capsule for command bars, action pills, and floating inputs.
  */
 export function LiquidGlassPill({
   children,
   borderRadius = 9999,
-  material = "thin",
-  refractionStrength = 18,
-  bezelWidth = 20,
-  thickness = 16,
   className = "",
   ...props
 }: LiquidGlassCardProps) {
   return (
     <LiquidGlassCard
       borderRadius={borderRadius}
-      material={material}
-      refractionStrength={refractionStrength}
-      bezelWidth={bezelWidth}
-      thickness={thickness}
       className={className}
       {...props}
     >
@@ -110,3 +86,4 @@ export function LiquidGlassPill({
 }
 
 export default LiquidGlassCard;
+

@@ -79,12 +79,8 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
                 as="button"
                 type="button"
                 onClick={() => setActiveModal(item.id as any)}
-                material="thin"
                 borderRadius={18}
-                refractionStrength={16}
-                bezelWidth={22}
-                chromaticAberration={0.16}
-                liquidPress={{ scale: 0.96, squish: 0.02 }}
+                liquidPress
                 className="group flex flex-col items-start p-3 sm:p-3.5 shadow-xs hover:border-accent/40 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer"
               >
                 <div className={`p-2 rounded-xl ${item.color} mb-2.5 transition-transform duration-200 group-hover:scale-105`}>
