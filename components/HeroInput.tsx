@@ -51,59 +51,67 @@ export default function HeroInput() {
       className="mx-auto mt-8 w-full max-w-2xl lg:max-w-3xl 2xl:max-w-4xl"
     >
       {/* Modern Command Search Bar with Apple Liquid Glass */}
-      <LiquidGlassCard
-        as="form"
-        role="search"
-        aria-label="Search diagnostic guides"
-        onSubmit={handleSubmit}
-        borderRadius={24}
-        className="group relative flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2.5 pl-3.5 sm:pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
-      >
-        <Search
-          className="h-4.5 w-4.5 sm:h-5 sm:w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"
+      <div className="relative group">
+        {/* Luminous refraction halo that shines through the liquid frosted glass */}
+        <div
           aria-hidden="true"
+          className="pointer-events-none absolute -inset-1.5 -z-10 rounded-[30px] bg-gradient-to-r from-blue-500/28 via-cyan-400/32 to-indigo-500/28 blur-xl opacity-80 dark:opacity-65 transition-all duration-300 group-focus-within:opacity-100 group-focus-within:scale-[1.02]"
         />
 
-        <input
-          id="hero-search-input"
-          name="q"
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={t("hero_input_placeholder")}
-          aria-label={t("hero_input_placeholder")}
-          autoComplete="off"
-          className="min-w-0 flex-1 bg-transparent text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
-        />
-
-        <AnimatePresence>
-          {value && (
-            <motion.button
-              type="button"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.15 }}
-              onClick={() => setValue("")}
-              className="flex min-h-[36px] min-w-[36px] shrink-0 items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-              aria-label="Clear input"
-            >
-              <X className="h-4 w-4" aria-hidden="true" />
-            </motion.button>
-          )}
-        </AnimatePresence>
-
-        <motion.button
-          type="submit"
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.96 }}
-          className="flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-xl bg-accent dark:bg-accent px-3 sm:px-4 text-[13px] sm:text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-          aria-label={t("hero_btn_diagnose")}
+        <LiquidGlassCard
+          as="form"
+          role="search"
+          aria-label="Search diagnostic guides"
+          onSubmit={handleSubmit}
+          borderRadius={24}
+          className="relative flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2.5 pl-3.5 sm:pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
         >
-          <span>{t("hero_btn_diagnose")}</span>
-          <CornerDownLeft className="h-3.5 w-3.5 opacity-80" aria-hidden="true" />
-        </motion.button>
-      </LiquidGlassCard>
+          <Search
+            className="h-4.5 w-4.5 sm:h-5 sm:w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"
+            aria-hidden="true"
+          />
+
+          <input
+            id="hero-search-input"
+            name="q"
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={t("hero_input_placeholder")}
+            aria-label={t("hero_input_placeholder")}
+            autoComplete="off"
+            className="min-w-0 flex-1 bg-transparent text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+          />
+
+          <AnimatePresence>
+            {value && (
+              <motion.button
+                type="button"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.15 }}
+                onClick={() => setValue("")}
+                className="flex min-h-[36px] min-w-[36px] shrink-0 items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                aria-label="Clear input"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.96 }}
+            className="flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-xl bg-accent dark:bg-accent px-3 sm:px-4 text-[13px] sm:text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            aria-label={t("hero_btn_diagnose")}
+          >
+            <span>{t("hero_btn_diagnose")}</span>
+            <CornerDownLeft className="h-3.5 w-3.5 opacity-80" aria-hidden="true" />
+          </motion.button>
+        </LiquidGlassCard>
+      </div>
 
       {/* Interactive Quick-Prompt Chips (Mobile swipe rail, desktop wrap) */}
       <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center sm:justify-center gap-2">

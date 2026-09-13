@@ -49,7 +49,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24">
+      <section className="relative isolate overflow-hidden pt-12 pb-16 sm:pt-20 sm:pb-24">
         <HeroScan />
         <div className="relative mx-auto w-full max-w-5xl 2xl:max-w-6xl px-4 text-center sm:px-8 lg:px-12">
           {/* Main Headline */}

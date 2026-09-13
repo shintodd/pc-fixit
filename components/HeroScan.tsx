@@ -28,36 +28,54 @@ export default function HeroScan() {
       <motion.div
         animate={{
           scale: [1, 1.1, 0.96, 1],
-          opacity: [0.15, 0.25, 0.18, 0.15],
+          opacity: [0.35, 0.5, 0.4, 0.35],
         }}
         transition={{
           duration: 14,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute left-1/2 top-[-260px] h-[720px] w-[1100px] -translate-x-1/2 rounded-full blur-3xl opacity-20 dark:opacity-60"
+        className="absolute left-1/2 top-[-180px] h-[640px] w-[1000px] -translate-x-1/2 rounded-full blur-3xl opacity-40 dark:opacity-65"
         style={{
           background:
-            "radial-gradient(circle, rgba(37,99,235,0.18) 0%, rgba(14,165,233,0.06) 50%, transparent 75%)",
+            "radial-gradient(circle, rgba(37,99,235,0.28) 0%, rgba(14,165,233,0.16) 45%, transparent 75%)",
         }}
       />
 
       {/* Secondary violet/indigo accent orb */}
       <motion.div
         animate={{
-          x: [-30, 30, -30],
-          y: [-15, 20, -15],
-          opacity: [0.1, 0.2, 0.1],
+          x: [-24, 24, -24],
+          y: [-12, 16, -12],
+          opacity: [0.25, 0.4, 0.25],
         }}
         transition={{
           duration: 18,
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute left-1/2 top-[-140px] h-[450px] w-[700px] -translate-x-1/2 rounded-full blur-3xl opacity-15 dark:opacity-40"
+        className="absolute left-1/2 top-[-90px] h-[480px] w-[750px] -translate-x-1/2 rounded-full blur-3xl opacity-35 dark:opacity-50"
         style={{
           background:
-            "radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(139,92,246,0.24) 0%, rgba(236,72,153,0.12) 50%, transparent 75%)",
+        }}
+      />
+
+      {/* Central chromatic aurora wash directly illuminating the hero search liquid glass */}
+      <motion.div
+        animate={{
+          scale: [1, 1.08, 0.96, 1],
+          opacity: [0.5, 0.7, 0.55, 0.5],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="absolute left-1/2 top-[180px] h-[420px] w-[900px] max-w-[96vw] -translate-x-1/2 rounded-full blur-[72px] opacity-60 dark:opacity-55"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(14,165,233,0.45) 0%, rgba(99,102,241,0.38) 40%, rgba(236,72,153,0.24) 75%, transparent 100%)",
         }}
       />
     </div>

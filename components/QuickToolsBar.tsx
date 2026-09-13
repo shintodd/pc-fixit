@@ -70,31 +70,38 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
           </span>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
-          {tools.map((item) => {
-            const Icon = item.icon;
-            return (
-              <LiquidGlassCard
-                key={item.id}
-                as="button"
-                type="button"
-                onClick={() => setActiveModal(item.id as any)}
-                borderRadius={18}
-                liquidPress
-                className="group flex flex-col items-start p-3 sm:p-3.5 shadow-xs hover:border-accent/40 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer"
-              >
-                <div className={`p-2 rounded-xl ${item.color} mb-2.5 transition-transform duration-200 group-hover:scale-105`}>
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="font-bold text-[13px] text-ink dark:text-dark-ink group-hover:text-accent transition-colors">
-                  {item.label}
-                </div>
-                <div className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary truncate w-full mt-0.5">
-                  {item.sub}
-                </div>
-              </LiquidGlassCard>
-            );
-          })}
+        <div className="relative">
+          {/* Ambient color bloom for tools bar */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-2 -z-10 rounded-2xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 blur-xl opacity-60 dark:opacity-40"
+          />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+            {tools.map((item) => {
+              const Icon = item.icon;
+              return (
+                <LiquidGlassCard
+                  key={item.id}
+                  as="button"
+                  type="button"
+                  onClick={() => setActiveModal(item.id as any)}
+                  borderRadius={18}
+                  liquidPress
+                  className="group flex flex-col items-start p-3 sm:p-3.5 shadow-xs hover:border-accent/40 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer"
+                >
+                  <div className={`p-2 rounded-xl ${item.color} mb-2.5 transition-transform duration-200 group-hover:scale-105`}>
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div className="font-bold text-[13px] text-ink dark:text-dark-ink group-hover:text-accent transition-colors">
+                    {item.label}
+                  </div>
+                  <div className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary truncate w-full mt-0.5">
+                    {item.sub}
+                  </div>
+                </LiquidGlassCard>
+              );
+            })}
+          </div>
         </div>
       </section>
 
