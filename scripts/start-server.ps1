@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    PC Fixit production server launcher with standalone asset synchronization,
+    pcfix production server launcher with standalone asset synchronization,
     process lifecycle tracking, health probe verification, and Cloudflare tunnel ergonomics.
 .PARAMETER Port
     Application port (default: 3000)
@@ -19,11 +19,11 @@ param(
     [switch]$ForceKillPort
 )
 
-$Host.UI.RawUI.WindowTitle = "PC Fixit Server"
+$Host.UI.RawUI.WindowTitle = "pcfix Server"
 $ErrorActionPreference = "Stop"
 
 Write-Host "==========================================" -ForegroundColor Cyan
-Write-Host " PC Fixit - Production Server Launcher" -ForegroundColor Cyan
+Write-Host " pcfix - Production Server Launcher" -ForegroundColor Cyan
 Write-Host "==========================================" -ForegroundColor Cyan
 
 # ------------------------------------------------------------------------------
@@ -156,7 +156,7 @@ try {
         }
     }
 } finally {
-    Write-Host "`nShutting down PC Fixit processes..." -ForegroundColor Yellow
+    Write-Host "`nShutting down pcfix processes..." -ForegroundColor Yellow
     if ($serverProcess -and !$serverProcess.HasExited) {
         Write-Host "Stopping server process (PID: $($serverProcess.Id))..." -ForegroundColor DarkGray
         Stop-Process -Id $serverProcess.Id -Force -ErrorAction SilentlyContinue

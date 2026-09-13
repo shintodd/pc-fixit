@@ -802,7 +802,7 @@ async function runPostgresAndPrismaIntegritySuite() {
 
 async function main() {
   console.log(`======================================================`);
-  console.log(`PC FIXIT - AUTOMATED QA TEST SUITE`);
+  console.log(`pcfix - AUTOMATED QA TEST SUITE`);
   console.log(`======================================================`);
 
   const startTime = Date.now();

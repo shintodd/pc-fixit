@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * PC Fixit - Functional + AI Test Agent
+ * pcfix - Functional + AI Test Agent
  * ---------------------------------------------------------------------------
  * Two ways to use this:
  *

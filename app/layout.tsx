@@ -24,8 +24,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: {
-    default: "PC Fixit: Diagnose and fix your PC problems",
-    template: "%s | PC Fixit",
+    default: "pcfix: Diagnose and fix your PC problems",
+    template: "%s | pcfix",
   },
   description:
     "Describe what's wrong with your PC and get a real diagnosis: guided troubleshooting, plain-language fixes, no fluff.",
@@ -37,23 +37,23 @@ export const metadata: Metadata = {
     "hardware repair",
     "PC won't boot",
   ],
-  authors: [{ name: "PC Fixit" }],
-  creator: "PC Fixit",
+  authors: [{ name: "pcfix" }],
+  creator: "pcfix",
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "PC Fixit: Diagnose and fix your PC problems",
+    title: "pcfix: Diagnose and fix your PC problems",
     description:
       "Describe what's wrong with your PC and get a real diagnosis: guided troubleshooting, plain-language fixes, no fluff.",
     type: "website",
     locale: "en_US",
-    siteName: "PC Fixit",
+    siteName: "pcfix",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PC Fixit: Diagnose and fix your PC problems",
+    title: "pcfix: Diagnose and fix your PC problems",
     description:
       "Describe what's wrong with your PC and get a real diagnosis: guided troubleshooting, plain-language fixes, no fluff.",
   },

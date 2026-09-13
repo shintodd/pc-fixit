@@ -20,11 +20,11 @@ export async function generateMetadata({
   const issue = Object.prototype.hasOwnProperty.call(ISSUES, params.slug)
     ? ISSUES[params.slug]
     : undefined;
-  let title = "Troubleshooting Guide | PC Fixit";
+  let title = "Troubleshooting Guide";
   let description = "Step-by-step PC hardware and system troubleshooting instructions.";
 
   if (issue) {
-    title = `${issue.title} | PC Fixit`;
+    title = issue.title;
     description = issue.summary;
   } else if (await isDatabaseAvailable()) {
     try {
@@ -32,7 +32,7 @@ export async function generateMetadata({
         where: { slug: params.slug },
       });
       if (dbIssue) {
-        title = `${dbIssue.title} | PC Fixit`;
+        title = dbIssue.title;
         description = dbIssue.summary;
       }
     } catch {
@@ -51,7 +51,7 @@ export async function generateMetadata({
       description,
       type: "article",
       url: `/issues/${params.slug}`,
-      siteName: "PC Fixit",
+      siteName: "pcfix",
     },
     twitter: {
       card: "summary_large_image",

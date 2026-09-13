@@ -1,4 +1,4 @@
-# PC Fixit - Frontend
+# pcfix - Frontend
 
 Next.js 14 (App Router) + TypeScript + Tailwind. Clean, minimal, Apple-inspired
 aesthetic: white surfaces, near-black ink, one confident blue accent, system

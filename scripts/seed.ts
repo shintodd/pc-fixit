@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Starting PC Fixit database seed...");
+  console.log("🌱 Starting pcfix database seed...");
 
   // 1. Seed Error Codes from Markdown
   const candidateMdPaths = [

@@ -1619,7 +1619,7 @@ function appendIssues(fileName: string, newIssues: any[]) {
   }
 }
 
-console.log("=== EXPANDING PC FIXIT RESEARCH KNOWLEDGE BASE ===");
+console.log("=== EXPANDING pcfix RESEARCH KNOWLEDGE BASE ===");
 appendIssues("wont-boot.json", NEW_WONT_BOOT);
 appendIssues("blue-screen.json", NEW_BLUE_SCREEN);
 appendIssues("running-slow.json", NEW_RUNNING_SLOW);

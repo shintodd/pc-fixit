@@ -166,7 +166,7 @@ export const translations = {
     // Footer
     footer_status: "AI Technician Online & Ready",
     footer_disclaimer:
-      "Compiled from vendor documentation and Windows error-code references. Not affiliated with any commercial hardware manufacturer.",
+      "pcfix is under active development. Compiled from vendor documentation and Windows error-code references. Not affiliated with any commercial hardware manufacturer.",
     footer_nav_diagnose: "Diagnose",
     footer_nav_guided_fix: "Guided Fix",
     footer_nav_kb: "Knowledge Base",
@@ -336,7 +336,7 @@ export const translations = {
     // Footer
     footer_status: "Technician AI Sedia Membantu",
     footer_disclaimer:
-      "Rujukan dihimpun daripada dokumentasi pengeluar dan kod error Windows. Tiada kaitan dengan mana-mana jenama perkakasan komersial.",
+      "pcfix sedang dalam pembangunan aktif. Rujukan dihimpun daripada dokumentasi pengeluar dan kod error Windows. Tiada kaitan dengan mana-mana jenama perkakasan komersial.",
     footer_nav_diagnose: "Diagnos",
     footer_nav_guided_fix: "Panduan Baiki",
     footer_nav_kb: "Koleksi Panduan",

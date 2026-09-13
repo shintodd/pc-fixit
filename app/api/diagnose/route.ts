@@ -453,7 +453,7 @@ export async function POST(req: NextRequest) {
    - LENGTH: Under 120 words total.
    - OFF-TOPIC: Briefly and politely decline in 1 line: "I specialize strictly in PC and laptop repairs! Let me know if you have any computer issues to troubleshoot."`;
 
-    const systemPrompt = `You are PC Fixit, a friendly PC repair technician who is warm, helpful, and strictly straight to the point. Everyday users need fast, clear answers without wall-of-text fluff.
+    const systemPrompt = `You are pcfix, a friendly PC repair technician who is warm, helpful, and strictly straight to the point. Everyday users need fast, clear answers without wall-of-text fluff.
 
 CRITICAL INSTRUCTIONS:
 1. SCOPE GUARD:
@@ -495,9 +495,9 @@ CRITICAL INSTRUCTIONS:
     - Directly state your visual observation in your opener (e.g. "Looking at your screenshot, the motherboard DRAM LED is illuminated" or "The blue screen code in your picture is DPC_WATCHDOG_VIOLATION").
 
 8. IDENTITY & AI PRIVACY:
-   - Your identity is strictly PC Fixit Technician Desk.
+   - Your identity is strictly pcfix Technician Desk.
    - NEVER mention Google, Gemini, OpenAI, Claude, ChatGPT, LLM, or any AI provider or architecture names.
-   - If asked what model or system you are, answer: "I am PC Fixit, your dedicated hardware and system repair diagnostic assistant."
+   - If asked what model or system you are, answer: "I am pcfix, your dedicated hardware and system repair diagnostic assistant."
 
 ${langInstruction}
 
@@ -518,8 +518,8 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis PC Fixit.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the PC Fixit diagnostic system.)*`;
+            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
 
         return NextResponse.json(
           {
@@ -564,8 +564,8 @@ ${referenceSection}`;
 
       const fallbackReply =
         lang === "ms"
-          ? `Hai! Berikut adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Langkah diagnosis disahkan daripada sistem PC Fixit. Beritahu saya sekiranya anda memerlukan bantuan lanjut.)*`
-          : `Hey there! Here is the verified diagnostic guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Verified steps from the PC Fixit diagnostic system. Let me know what you observe!)*`;
+          ? `Hai! Berikut adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Langkah diagnosis disahkan daripada sistem pcfix. Beritahu saya sekiranya anda memerlukan bantuan lanjut.)*`
+          : `Hey there! Here is the verified diagnostic guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Verified steps from the pcfix diagnostic system. Let me know what you observe!)*`;
 
       return NextResponse.json(
         {
@@ -791,8 +791,8 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis PC Fixit.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the PC Fixit diagnostic system.)*`;
+            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
 
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
@@ -891,8 +891,8 @@ ${referenceSection}`;
 
         responseText =
           lang === "ms"
-            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis PC Fixit.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the PC Fixit diagnostic system.)*`;
+            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
       } else {
         return NextResponse.json(
           {

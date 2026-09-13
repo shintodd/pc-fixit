@@ -4,19 +4,19 @@ import { WIZARD_TREE, type WizardResolvedIssue } from "@/lib/wizard-data";
 import { ISSUES } from "@/lib/mock-data";
 
 export const metadata: Metadata = {
-  title: "Guided Fix | PC Fixit",
+  title: "Guided Fix",
   description:
     "Step-by-step interactive decision tree to pinpoint and fix your PC issues without technical jargon.",
   alternates: {
     canonical: "/wizard",
   },
   openGraph: {
-    title: "Guided Fix | PC Fixit",
+    title: "Guided Fix | pcfix",
     description:
       "Step-by-step interactive decision tree to pinpoint and fix your PC issues without technical jargon.",
     type: "website",
     url: "/wizard",
-    siteName: "PC Fixit",
+    siteName: "pcfix",
   },
 };
 

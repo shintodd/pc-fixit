@@ -1286,7 +1286,7 @@ function Bubble({
         <div className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/10">
           <Wrench className="h-2.5 w-2.5 text-accent" aria-hidden="true" />
         </div>
-        <span>{language === "ms" ? "Technician PC Fixit" : "PC Fixit Tech"}</span>
+        <span>{language === "ms" ? "Juruteknik pcfix" : "pcfix Tech"}</span>
       </div>
 
       <div className="relative max-w-[90%] sm:max-w-[85%] rounded-[20px] rounded-bl-[5px] border border-line dark:border-dark-line bg-white dark:bg-dark-card px-5 py-4 text-[15px] leading-[1.65] text-ink dark:text-dark-ink shadow-card dark:shadow-card-dark select-text space-y-2.5 break-words [overflow-wrap:anywhere]">
@@ -1405,7 +1405,7 @@ function TypingBubble() {
         <div className="flex h-4 w-4 items-center justify-center rounded-full bg-accent/10">
           <Wrench className="h-2.5 w-2.5 text-accent" />
         </div>
-        <span>PC Fixit</span>
+        <span>pcfix</span>
       </div>
 
       <div className="flex items-center gap-[5px] rounded-[20px] rounded-bl-[5px] border border-line dark:border-dark-line bg-white dark:bg-dark-card px-5 py-4 shadow-card dark:shadow-card-dark">
