@@ -915,7 +915,7 @@ export default function Chat({
                     whileTap={{ scale: 0.96 }}
                     onClick={() => sendMessage(starter.label)}
                     aria-label={`Start with: ${starter.label}`}
-                    className="flex items-center gap-2 rounded-xl border border-line dark:border-dark-line bg-white dark:bg-dark-card px-4 py-2.5 text-left text-[13px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs transition-colors hover:border-accent/40 hover:bg-accent-soft dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    className="flex items-center gap-2 rounded-pill border border-line dark:border-dark-line bg-white dark:bg-dark-card px-4 py-2 text-left text-[13px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs transition-colors hover:border-accent/40 hover:bg-accent-soft dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     <span className={`h-1.5 w-1.5 rounded-full ${starter.color}`} aria-hidden="true" />
                     <span>{starter.label}</span>
