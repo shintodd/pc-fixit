@@ -36,7 +36,7 @@ function ThemeToggle() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.92 }}
-      className="relative flex h-8 w-14 shrink-0 items-center rounded-full border border-line bg-subtle transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 dark:border-dark-line dark:bg-dark-subtle dark:focus-visible:ring-dark-accent dark:focus-visible:ring-offset-dark-surface"
+      className="relative flex h-8 w-14 shrink-0 items-center rounded-full border border-line bg-subtle transition-colors duration-200 before:absolute before:-inset-1.5 before:content-[''] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 dark:border-dark-line dark:bg-dark-subtle dark:focus-visible:ring-dark-accent dark:focus-visible:ring-offset-dark-surface"
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >

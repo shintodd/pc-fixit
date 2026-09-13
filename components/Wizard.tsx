@@ -188,7 +188,7 @@ export default function Wizard({
               <button
                 type="button"
                 onClick={goBack}
-                className="flex items-center gap-1.5 text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md px-1"
+                className="relative inline-flex min-h-[44px] items-center gap-1.5 text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md px-2 py-1.5"
               >
                 <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>{t("wizard_back_btn")}</span>
@@ -198,7 +198,7 @@ export default function Wizard({
               <button
                 type="button"
                 onClick={reset}
-                className="flex items-center gap-1 text-[13px] font-medium text-accent dark:text-dark-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md px-1"
+                className="relative inline-flex min-h-[44px] items-center gap-1 text-[13px] font-medium text-accent dark:text-dark-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md px-2 py-1.5"
               >
                 <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>{t("wizard_restart_btn")}</span>

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { ISSUES } from "@/lib/mock-data";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://pc-fixit.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://pcfix-tech.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const issueUrls: MetadataRoute.Sitemap = Object.keys(ISSUES).map((slug) => ({

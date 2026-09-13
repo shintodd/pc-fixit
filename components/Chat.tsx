@@ -421,6 +421,29 @@ export default function Chat({
     }
   }
 
+  // Global window paste handler: paste screenshots from clipboard from anywhere on page
+  useEffect(() => {
+    function handleGlobalPaste(e: ClipboardEvent) {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.startsWith("image/")) {
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file) {
+            processAndAttachImage(file);
+            inputRef.current?.focus();
+          }
+          break;
+        }
+      }
+    }
+
+    window.addEventListener("paste", handleGlobalPaste);
+    return () => window.removeEventListener("paste", handleGlobalPaste);
+  }, []);
+
   async function sendMessage(
     text: string,
     baseMessages?: ChatMessage[],
