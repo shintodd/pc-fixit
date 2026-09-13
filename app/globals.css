@@ -13,14 +13,14 @@
     scroll-behavior: smooth;
     background-color: #f6f8fa;
     overflow-x: hidden;
-    scrollbar-color: rgba(17, 19, 24, 0.15) transparent;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   .dark html {
     background-color: #0d0f12;
-    scrollbar-color: rgba(230, 237, 243, 0.15) transparent;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   body {
@@ -29,6 +29,8 @@
     transition: background-color 0.2s ease, color 0.2s ease;
     overflow-x: hidden;
     width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   /* ── Dark mode body ── */
@@ -66,20 +68,18 @@
     text-wrap: pretty;
   }
 
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(17, 19, 24, 0.12);
-    border-radius: 8px;
+  /* ── Completely hide scrollbars across all browsers while retaining full scrollability ── */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(17, 19, 24, 0.22);
-  }
-  .dark ::-webkit-scrollbar-thumb {
-    background: rgba(230, 237, 243, 0.12);
-  }
-  .dark ::-webkit-scrollbar-thumb:hover {
-    background: rgba(230, 237, 243, 0.2);
+
+  *::-webkit-scrollbar,
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none !important;
+    width: 0px !important;
+    height: 0px !important;
   }
 }
 
