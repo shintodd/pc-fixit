@@ -492,13 +492,18 @@ CRITICAL INSTRUCTIONS:
      * Physical cable connectors and ports (HDMI vs DisplayPort, GPU bottom ports vs motherboard top ports).
      * Windows Device Manager yellow triangle alert icons and error codes.
      * BIOS / UEFI configuration screens and date/time displays.
-   - Directly state your visual observation in your opener (e.g. "Looking at your screenshot, the motherboard DRAM LED is illuminated" or "The blue screen code in your picture is DPC_WATCHDOG_VIOLATION").
+    - Directly state your visual observation in your opener (e.g. "Looking at your screenshot, the motherboard DRAM LED is illuminated" or "The blue screen code in your picture is DPC_WATCHDOG_VIOLATION").
+
+8. IDENTITY & AI PRIVACY:
+   - Your identity is strictly PC Fixit Technician Desk.
+   - NEVER mention Google, Gemini, OpenAI, Claude, ChatGPT, LLM, or any AI provider or architecture names.
+   - If asked what model or system you are, answer: "I am PC Fixit, your dedicated hardware and system repair diagnostic assistant."
 
 ${langInstruction}
 
 ${referenceSection}`;
 
-    // 6. Call Gemini API
+    // 6. Call AI API
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       if (issueMatches.length > 0) {
@@ -513,8 +518,8 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Hai! Technician dah semak dan sediakan langkah yang dah diuji untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Nota: Berjalan dalam mod offline; panduan diambil terus daripada database technician.)*`
-            : `Hey there! Your technician pulled the verified resolution guide for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Running in local offline mode; retrieved from local verified technician guides.)*`;
+            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis PC Fixit.)*`
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the PC Fixit diagnostic system.)*`;
 
         return NextResponse.json(
           {
@@ -559,8 +564,8 @@ ${referenceSection}`;
 
       const fallbackReply =
         lang === "ms"
-          ? `Hai! Meja technician PC Fixit bersedia membantu dalam mod offline. Berikut adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Nota: Berjalan dalam mod offline technician. Untuk sembang AI secara langsung di Vercel, sila masukkan GEMINI_API_KEY dalam Vercel Project Settings > Environment Variables.)*`
-          : `Hey there! The PC Fixit technician desk pulled the verified guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Note: Running in local technician mode. To enable live conversational AI chat on Vercel, configure GEMINI_API_KEY in your Vercel Project Settings > Environment Variables.)*`;
+          ? `Hai! Berikut adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Langkah diagnosis disahkan daripada sistem PC Fixit. Beritahu saya sekiranya anda memerlukan bantuan lanjut.)*`
+          : `Hey there! Here is the verified diagnostic guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Verified steps from the PC Fixit diagnostic system. Let me know what you observe!)*`;
 
       return NextResponse.json(
         {
@@ -751,14 +756,9 @@ ${referenceSection}`;
                 }
               } catch (streamErr: any) {
                 console.warn("Error during stream piping:", streamErr);
-                const isStreamQuota =
-                  streamErr?.message?.includes("429") ||
-                  streamErr?.message?.includes("RESOURCE_EXHAUSTED") ||
-                  streamErr?.message?.includes("quota");
-                const errorNotice = isStreamQuota
-                  ? "\n\n⚠️ *Service notice: Gemini AI rate limit (429) encountered during transmission. Please tap Retry to continue.*"
-                  : "\n\n⚠️ *Connection interrupted during diagnosis. Please tap Retry.*";
-                controller.enqueue(encoder.encode(errorNotice));
+                controller.enqueue(
+                  encoder.encode("\n\n⚠️ *Connection interrupted during diagnosis. Please tap Retry to continue.*")
+                );
               } finally {
                 controller.close();
               }
@@ -791,8 +791,8 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Hai! Disebabkan sambungan AI sedang sibuk, technician sediakan terus panduan yang dah diuji untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Nota: Panduan diambil daripada pangkalan data technician setempat.)*`
-            : `Hey there! Since the live connection is currently busy, your technician pulled the verified steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Retrieved directly from verified local technician guides.)*`;
+            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis PC Fixit.)*`
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the PC Fixit diagnostic system.)*`;
 
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
@@ -812,16 +812,16 @@ ${referenceSection}`;
         });
       }
 
-      // If no local match and live AI failed due to 429 quota exhaustion:
+      // If no local match and live AI failed due to high traffic:
       return NextResponse.json(
         {
           error: isRateLimited
             ? (lang === "ms"
-                ? "Sistem AI tengah sibuk sangat sekarang (kuota Gemini penuh). Sila tunggu sekejap lepas tu tekan 'Cuba tanya lagi'."
-                : "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry.")
+                ? "Sistem diagnosis kami sedang sibuk dengan trafik tinggi. Sila tunggu sebentar dan tekan 'Cuba tanya lagi'."
+                : "The diagnostic system is experiencing high traffic right now. Please wait a moment and tap Retry.")
             : (lang === "ms"
-                ? "Tak dapat nak hubungi perkhidmatan diagnosis AI secara langsung. Sila tekan 'Cuba tanya lagi'."
-                : "Unable to establish live AI diagnosis connection. Please tap Retry."),
+                ? "Tidak dapat menyambung ke sistem diagnosis buat masa ini. Sila tekan 'Cuba tanya lagi'."
+                : "Unable to reach the diagnostic service right now. Please tap Retry."),
           code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
         },
         { status: isRateLimited ? 429 : 503 }
@@ -891,18 +891,18 @@ ${referenceSection}`;
 
         responseText =
           lang === "ms"
-            ? `Hai! Disebabkan sambungan AI sedang sibuk, technician sediakan terus panduan yang dah diuji untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Nota: Panduan diambil daripada pangkalan data technician setempat.)*`
-            : `Hey there! Since the live connection is currently busy, your technician pulled the verified steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Note: Retrieved directly from verified local technician guides.)*`;
+            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis PC Fixit.)*`
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the PC Fixit diagnostic system.)*`;
       } else {
         return NextResponse.json(
           {
             error: isRateLimited
               ? (lang === "ms"
-                  ? "Sistem AI tengah sibuk sangat sekarang (kuota Gemini penuh). Sila tunggu sekejap lepas tu tekan 'Cuba tanya lagi'."
-                  : "PC Fixit AI service is temporarily rate-limited due to high demand (Gemini 429 quota exhausted). Please wait a moment and tap Retry.")
+                  ? "Sistem diagnosis kami sedang sibuk dengan trafik tinggi. Sila tunggu sebentar dan tekan 'Cuba tanya lagi'."
+                  : "The diagnostic system is experiencing high traffic right now. Please wait a moment and tap Retry.")
               : (lang === "ms"
-                  ? "Tak dapat nak ambil maklumat diagnosis sekarang. Sila tekan 'Cuba tanya lagi'."
-                  : "Unable to retrieve diagnosis right now. Please tap Retry."),
+                  ? "Tidak dapat menyambung ke sistem diagnosis buat masa ini. Sila tekan 'Cuba tanya lagi'."
+                  : "Unable to reach the diagnostic service right now. Please tap Retry."),
             code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
           },
           { status: isRateLimited ? 429 : 503 }
