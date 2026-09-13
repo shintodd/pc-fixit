@@ -104,7 +104,7 @@ export default function Chat({
   const [showHistoryMobile, setShowHistoryMobile] = useState(false);
   const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | null>(null);
 
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
   const hasRun = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -208,9 +208,36 @@ export default function Chat({
     });
   }, [language, t]);
 
+  // Smoothly scroll to the last chat when conversation is opened or updated, avoiding overscroll to bottom
   useEffect(() => {
+    // If empty or initial greeting only, stay at top of page (zero scroll)
+    if (messages.length <= 1) {
+      if (typeof window !== "undefined" && window.scrollY > 0) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      return;
+    }
+
     const frameId = requestAnimationFrame(() => {
-      bottomRef.current?.scrollIntoView({ behavior: loading ? "auto" : "smooth" });
+      if (lastMessageRef.current) {
+        lastMessageRef.current.scrollIntoView({
+          behavior: loading ? "auto" : "smooth",
+          block: "start",
+        });
+      }
+    });
+    return () => cancelAnimationFrame(frameId);
+  }, [messages.length, currentSessionId]);
+
+  // Keep streaming response within view without sliding all the way to page bottom
+  useEffect(() => {
+    if (!loading || messages.length <= 1) return;
+
+    const frameId = requestAnimationFrame(() => {
+      lastMessageRef.current?.scrollIntoView({
+        behavior: "auto",
+        block: "nearest",
+      });
     });
     return () => cancelAnimationFrame(frameId);
   }, [messages, loading]);
@@ -694,16 +721,24 @@ export default function Chat({
           className="flex-1 space-y-5 py-4 pb-20"
         >
           <AnimatePresence initial={false}>
-            {messages.map((m, i) => (
-              <Bubble
-                key={i}
-                message={m}
-                isLast={i === messages.length - 1}
-                isStreaming={loading && i === messages.length - 1 && m.role === "assistant" && m.content.trim().length > 0}
-                onRetry={handleRetry}
-                onViewImage={(img) => setPreviewImage(img)}
-              />
-            ))}
+            {messages.map((m, i) => {
+              const isLast = i === messages.length - 1;
+              return (
+                <div
+                  key={i}
+                  ref={isLast ? lastMessageRef : undefined}
+                  className="scroll-mt-24"
+                >
+                  <Bubble
+                    message={m}
+                    isLast={isLast}
+                    isStreaming={loading && isLast && m.role === "assistant" && m.content.trim().length > 0}
+                    onRetry={handleRetry}
+                    onViewImage={(img) => setPreviewImage(img)}
+                  />
+                </div>
+              );
+            })}
           </AnimatePresence>
 
           {/* Apple-style typing indicator */}
@@ -776,7 +811,6 @@ export default function Chat({
             </motion.div>
           )}
 
-          <div ref={bottomRef} />
         </div>
 
         {/* Sticky Input Bar with Image Attachment */}
