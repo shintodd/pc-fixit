@@ -1075,7 +1075,7 @@ export default function Chat({
               }
               aria-label={t("chat_input_placeholder")}
               autoComplete="off"
-              className="flex-1 bg-transparent py-2 text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+              className="min-w-0 flex-1 bg-transparent py-2 text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
             />
 
             {/* Clear button */}

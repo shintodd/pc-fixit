@@ -57,10 +57,10 @@ export default function HeroInput() {
         aria-label="Search diagnostic guides"
         onSubmit={handleSubmit}
         borderRadius={24}
-        className="group relative flex items-center gap-3 p-2.5 pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
+        className="group relative flex items-center gap-2 sm:gap-3 p-1.5 sm:p-2.5 pl-3.5 sm:pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
       >
         <Search
-          className="h-5 w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"
+          className="h-4.5 w-4.5 sm:h-5 sm:w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"
           aria-hidden="true"
         />
 
@@ -73,7 +73,7 @@ export default function HeroInput() {
           placeholder={t("hero_input_placeholder")}
           aria-label={t("hero_input_placeholder")}
           autoComplete="off"
-          className="flex-1 bg-transparent text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+          className="min-w-0 flex-1 bg-transparent text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
         />
 
         <AnimatePresence>
@@ -85,7 +85,7 @@ export default function HeroInput() {
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.15 }}
               onClick={() => setValue("")}
-              className="flex min-h-[36px] min-w-[36px] items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[36px] min-w-[36px] shrink-0 items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Clear input"
             >
               <X className="h-4 w-4" aria-hidden="true" />
@@ -97,7 +97,7 @@ export default function HeroInput() {
           type="submit"
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.96 }}
-          className="flex h-11 items-center gap-2 rounded-xl bg-accent dark:bg-accent px-4 text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          className="flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-xl bg-accent dark:bg-accent px-3 sm:px-4 text-[13px] sm:text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           aria-label={t("hero_btn_diagnose")}
         >
           <span>{t("hero_btn_diagnose")}</span>
