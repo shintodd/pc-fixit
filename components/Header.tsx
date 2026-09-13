@@ -112,15 +112,18 @@ export default function Header() {
         aria-label="Development preview announcement"
         className="w-full border-b border-amber-500/30 bg-amber-500/[0.14] dark:border-amber-400/25 dark:bg-amber-950/50 px-3 sm:px-4 py-1.5 text-center text-[12px] font-medium text-amber-900 dark:text-amber-200 transition-colors"
       >
-        <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] items-center justify-center gap-2">
-          <span className="inline-flex items-center justify-center rounded-full bg-amber-500/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-900 dark:bg-amber-400/20 dark:text-amber-200">
-            {language === "ms" ? "Pembangunan" : "Preview"}
-          </span>
-          <span className="leading-snug">
+        <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] items-center justify-center gap-1.5 flex-wrap leading-snug">
+          <span>
             {language === "ms"
-              ? "Laman web pcfix ini sedang dalam peringkat pembangunan aktif. Ciri-ciri dan panduan sentiasa dikemas kini."
-              : "pcfix is currently under active development. Diagnostic tools and guides are continuously updated."}
+              ? "Laman web pcfix ini sedang dalam pembangunan aktif. Ada sebarang masalah atau cadangan?"
+              : "pcfix is currently under active development. Have an issue or suggestion?"}
           </span>
+          <a
+            href="mailto:pcfixtechsupport@gmail.com"
+            className="font-semibold underline underline-offset-2 hover:text-amber-700 dark:hover:text-white transition-colors"
+          >
+            pcfixtechsupport@gmail.com
+          </a>
         </div>
       </aside>
 

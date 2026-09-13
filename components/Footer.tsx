@@ -23,7 +23,13 @@ export default function Footer() {
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[13px] text-ink-secondary dark:text-dark-ink-secondary border-t border-line/60 dark:border-dark-line/60 pt-6">
           <p>
-            {t("footer_disclaimer")}
+            {t("footer_disclaimer")}{" "}
+            <a
+              href="mailto:pcfixtechsupport@gmail.com"
+              className="font-medium underline underline-offset-2 hover:text-ink dark:hover:text-dark-ink transition-colors"
+            >
+              pcfixtechsupport@gmail.com
+            </a>
           </p>
 
           <nav aria-label="Footer navigation" className="flex items-center gap-6">
