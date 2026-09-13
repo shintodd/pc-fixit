@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 
 export default function HeroInput() {
   const [value, setValue] = useState("");
@@ -49,12 +50,19 @@ export default function HeroInput() {
       transition={{ duration: 0.45, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
       className="mx-auto mt-8 w-full max-w-2xl lg:max-w-3xl 2xl:max-w-4xl"
     >
-      {/* Modern Command Search Bar */}
-      <form
+      {/* Modern Command Search Bar with Apple Liquid Glass */}
+      <LiquidGlassCard
+        as="form"
         role="search"
         aria-label="Search diagnostic guides"
         onSubmit={handleSubmit}
-        className="glass-element glass-adaptive group relative flex items-center gap-3 p-2.5 pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
+        material="regular"
+        borderRadius={24}
+        chromaticAberration={0.22}
+        refractionStrength={22}
+        bezelWidth={30}
+        dynamicLighting={true}
+        className="glass-adaptive group relative flex items-center gap-3 p-2.5 pl-5 transition-all duration-200 focus-within:border-accent dark:focus-within:border-dark-accent focus-within:ring-4 focus-within:ring-accent/15 focus-within:shadow-xl"
       >
         <Search
           className="h-5 w-5 shrink-0 text-ink-tertiary dark:text-dark-ink-tertiary transition-colors group-focus-within:text-accent dark:group-focus-within:text-dark-accent"
@@ -100,7 +108,7 @@ export default function HeroInput() {
           <span>{t("hero_btn_diagnose")}</span>
           <CornerDownLeft className="h-3.5 w-3.5 opacity-80" aria-hidden="true" />
         </motion.button>
-      </form>
+      </LiquidGlassCard>
 
       {/* Interactive Quick-Prompt Chips */}
       <div className="mt-4 flex flex-wrap items-center justify-center gap-2">

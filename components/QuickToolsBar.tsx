@@ -8,6 +8,7 @@ import PhoneQrModal from "@/components/PhoneQrModal";
 import CommandExplainerModal from "@/components/CommandExplainerModal";
 import RepairFeasibilityModal from "@/components/RepairFeasibilityModal";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 
 export default function QuickToolsBar({ className = "" }: { className?: string }) {
   const { t, language } = useLanguage();
@@ -73,11 +74,18 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
           {tools.map((item) => {
             const Icon = item.icon;
             return (
-              <button
+              <LiquidGlassCard
                 key={item.id}
+                as="button"
                 type="button"
                 onClick={() => setActiveModal(item.id as any)}
-                className="group flex flex-col items-start p-3 sm:p-3.5 rounded-2xl border border-line dark:border-dark-line bg-white/90 dark:bg-dark-card/90 shadow-xs hover:shadow-card-hover dark:hover:shadow-card-hover-dark hover:border-accent/40 transition-all text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                material="thin"
+                borderRadius={18}
+                refractionStrength={16}
+                bezelWidth={22}
+                chromaticAberration={0.16}
+                liquidPress={{ scale: 0.96, squish: 0.02 }}
+                className="group flex flex-col items-start p-3 sm:p-3.5 shadow-xs hover:border-accent/40 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent cursor-pointer"
               >
                 <div className={`p-2 rounded-xl ${item.color} mb-2.5 transition-transform duration-200 group-hover:scale-105`}>
                   <Icon className="h-4 w-4" />
@@ -88,7 +96,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
                 <div className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary truncate w-full mt-0.5">
                   {item.sub}
                 </div>
-              </button>
+              </LiquidGlassCard>
             );
           })}
         </div>
