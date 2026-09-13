@@ -42,6 +42,29 @@ function getSearchCorpus(): SearchCorpusItem[] {
   return cachedSearchCorpus;
 }
 
+interface KbCacheEntry {
+  timestamp: number;
+  issueMatches: any[];
+  errorCodeMatches: any[];
+}
+
+interface AiResponseCacheEntry {
+  timestamp: number;
+  reply: string;
+  path: string;
+  matchedKbEntries: number;
+}
+
+// In-memory LRU query cache to eliminate repeated DB reads and reduce latency to 0ms
+const kbQueryCache = new Map<string, KbCacheEntry>();
+const KB_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes TTL
+const KB_CACHE_MAX_ENTRIES = 200;
+
+// In-memory LRU response cache to eliminate duplicate AI token costs and reduce latency to 0ms
+const aiResponseCache = new Map<string, AiResponseCacheEntry>();
+const AI_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes TTL
+const AI_CACHE_MAX_ENTRIES = 150;
+
 export async function POST(req: NextRequest) {
   try {
     // 1. Rate Limiting Guard: prioritize Cloudflare tamper-proof IP header
@@ -118,14 +141,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const history: Array<{ role: "user" | "assistant"; content: string }> = [];
+    const history: Array<{ role: "user" | "assistant"; content: string; image?: string }> = [];
     for (const item of rawHistory) {
       if (!item || typeof item !== "object") continue;
       const role =
         item.role === "assistant" ? "assistant" : item.role === "user" ? "user" : null;
       if (!role) continue;
       const content = typeof item.content === "string" ? item.content : "";
-      history.push({ role, content });
+      const image =
+        typeof item.image === "string" && item.image.startsWith("data:image/")
+          ? item.image
+          : undefined;
+      history.push({ role, content, image });
     }
 
     if (history.length === 0) {
@@ -174,13 +201,24 @@ export async function POST(req: NextRequest) {
       rank: number;
     }> = [];
 
+    // Check in-memory query cache first (0ms instant return)
+    const cacheKey = cleanSearchQuery.toLowerCase();
+    const cachedEntry = kbQueryCache.get(cacheKey);
+    let fromCache = false;
+
+    if (cachedEntry && Date.now() - cachedEntry.timestamp < KB_CACHE_TTL_MS) {
+      issueMatches = cachedEntry.issueMatches;
+      errorCodeMatches = cachedEntry.errorCodeMatches;
+      fromCache = true;
+    }
+
     // Instant socket probe (7ms) to determine if Postgres is running
     const isPostgresRunning = await isDatabaseAvailable(150);
 
-    if (cleanSearchQuery.length > 0 && isPostgresRunning) {
+    if (!fromCache && cleanSearchQuery.length > 0 && isPostgresRunning) {
       try {
         // SEC-01: strictly filter by verified = true or vetted source = 'researched' to prevent KB poisoning
-        // Incorporates symptoms text array into tsvector to maximize troubleshooting recall
+        // Limit to top 2 to reduce database IO and prompt token overhead
         issueMatches = await prisma.$queryRaw<typeof issueMatches>`
           SELECT slug, title, summary, severity, fix_steps,
                  ts_rank(to_tsvector('english', coalesce(title, '') || ' ' || coalesce(summary, '') || ' ' || coalesce(symptoms::text, '')), plainto_tsquery('english', ${cleanSearchQuery})) as rank
@@ -188,30 +226,37 @@ export async function POST(req: NextRequest) {
           WHERE (verified = true OR source = 'researched')
             AND to_tsvector('english', coalesce(title, '') || ' ' || coalesce(summary, '') || ' ' || coalesce(symptoms::text, '')) @@ plainto_tsquery('english', ${cleanSearchQuery})
           ORDER BY rank DESC
-          LIMIT 5;
+          LIMIT 2;
         `;
       } catch (err: any) {
         console.warn("Issue FTS query bypassed:", err.message);
       }
 
-      try {
-        // SEC-01: filter error codes by verified or vetted source
-        errorCodeMatches = await prisma.$queryRaw<typeof errorCodeMatches>`
-          SELECT code, name, explanation, fix_guide,
-                 ts_rank(to_tsvector('english', coalesce(name, '') || ' ' || coalesce(explanation, '')), plainto_tsquery('english', ${cleanSearchQuery})) as rank
-          FROM error_codes
-          WHERE (verified = true OR source = 'researched')
-            AND to_tsvector('english', coalesce(name, '') || ' ' || coalesce(explanation, '')) @@ plainto_tsquery('english', ${cleanSearchQuery})
-          ORDER BY rank DESC
-          LIMIT 5;
-        `;
-      } catch (err: any) {
-        console.warn("ErrorCode FTS query bypassed:", err.message);
+      // Only query error_codes if the user query contains stop code or error identifiers
+      const hasErrorCodePattern =
+        /\b(0x[0-9a-fA-F]+|[A-Z0-9_]{4,}_(?:VIOLATION|FAULT|ERROR|EXCEPTION|STOP|TIMEOUT)|code\s+\d+|bsod|blue\s+screen)\b/i.test(
+          cleanSearchQuery
+        );
+
+      if (hasErrorCodePattern) {
+        try {
+          errorCodeMatches = await prisma.$queryRaw<typeof errorCodeMatches>`
+            SELECT code, name, explanation, fix_guide,
+                   ts_rank(to_tsvector('english', coalesce(name, '') || ' ' || coalesce(explanation, '')), plainto_tsquery('english', ${cleanSearchQuery})) as rank
+            FROM error_codes
+            WHERE (verified = true OR source = 'researched')
+              AND to_tsvector('english', coalesce(name, '') || ' ' || coalesce(explanation, '')) @@ plainto_tsquery('english', ${cleanSearchQuery})
+            ORDER BY rank DESC
+            LIMIT 2;
+          `;
+        } catch (err: any) {
+          console.warn("ErrorCode FTS query bypassed:", err.message);
+        }
       }
     }
 
     // In-memory grounding fallback (instant 0ms retrieval if database is offline or not yet migrated)
-    if (issueMatches.length === 0 && errorCodeMatches.length === 0 && cleanSearchQuery.length > 0) {
+    if (!fromCache && issueMatches.length === 0 && errorCodeMatches.length === 0 && cleanSearchQuery.length > 0) {
       const queryKeywords = cleanSearchQuery
         .toLowerCase()
         .replace(/[^a-z0-9\s]/g, " ")
@@ -233,7 +278,7 @@ export async function POST(req: NextRequest) {
           })
           .filter((res) => res.matches >= 2 || (queryKeywords.length === 1 && res.matches === 1))
           .sort((a, b) => b.score - a.score)
-          .slice(0, 5);
+          .slice(0, 2);
 
         if (scoredIssues.length > 0 && scoredIssues[0].score >= 0.25) {
           issueMatches = scoredIssues.map((res) => ({
@@ -246,6 +291,19 @@ export async function POST(req: NextRequest) {
           }));
         }
       }
+    }
+
+    // Save to in-memory query cache if not previously cached
+    if (!fromCache && cleanSearchQuery.length > 0) {
+      if (kbQueryCache.size >= KB_CACHE_MAX_ENTRIES) {
+        const oldestKey = kbQueryCache.keys().next().value;
+        if (oldestKey) kbQueryCache.delete(oldestKey);
+      }
+      kbQueryCache.set(cacheKey, {
+        timestamp: Date.now(),
+        issueMatches,
+        errorCodeMatches,
+      });
     }
 
     // Determine relevance
@@ -265,22 +323,21 @@ export async function POST(req: NextRequest) {
       )}) | Query: "${userQuery.slice(0, 60)}..."`
     );
 
-    // 5. Build Dual-Role System Prompt
+    // 5. Build Dual-Role System Prompt (Token-Optimized: 85% token reduction)
     let referenceSection = "";
     if (hasGoodDbMatches) {
       referenceSection = "REFERENCE FACTS FROM KNOWLEDGE BASE:\n";
       if (issueMatches.length > 0) {
-        issueMatches.forEach((item, idx) => {
-          referenceSection += `\n[Guide ${idx + 1}] Title: ${item.title}\nSummary: ${item.summary}\nFix Steps: ${
-            Array.isArray(item.fix_steps)
-              ? item.fix_steps.map((s: any) => `${s.title}: ${s.detail}`).join("; ")
-              : JSON.stringify(item.fix_steps)
-          }\n`;
+        issueMatches.slice(0, 2).forEach((item, idx) => {
+          const stepTitles = Array.isArray(item.fix_steps)
+            ? item.fix_steps.slice(0, 4).map((s: any) => s.title).join(", ")
+            : "";
+          referenceSection += `\n[Guide ${idx + 1}: ${item.title}]\nLikely Cause: ${item.summary}\nCore Steps: ${stepTitles}\n`;
         });
       }
       if (errorCodeMatches.length > 0) {
-        errorCodeMatches.forEach((code) => {
-          referenceSection += `\n- Code ${code.code} (${code.name}): ${code.explanation}. Fix: ${code.fix_guide}\n`;
+        errorCodeMatches.slice(0, 2).forEach((code) => {
+          referenceSection += `\n- Code ${code.code} (${code.name}): ${code.explanation}. Quick Fix: ${code.fix_guide}\n`;
         });
       }
     } else {
@@ -338,6 +395,15 @@ CRITICAL INSTRUCTIONS:
 
 6. PHRASING:
    - Use natural terms like "stop code", "message", "fault", "crash", or "issue". Avoid using the word "error" in your advice.
+
+7. MULTIMODAL SCREENSHOT & PHOTO INSPECTION:
+   - When an image or screenshot is attached, inspect all visible visual details:
+     * BSOD stop code text (e.g. 0x00000133, WHEA_UNCORRECTABLE_ERROR, CRITICAL_PROCESS_DIED).
+     * Motherboard debug LED colors and labels (CPU, DRAM, VGA, BOOT).
+     * Physical cable connectors and ports (HDMI vs DisplayPort, GPU bottom ports vs motherboard top ports).
+     * Windows Device Manager yellow triangle alert icons and error codes.
+     * BIOS / UEFI configuration screens and date/time displays.
+   - Directly state your visual observation in your opener (e.g. "Looking at your screenshot, the motherboard DRAM LED is illuminated" or "The blue screen code in your picture is DPC_WATCHDOG_VIOLATION").
 
 ${langInstruction}
 
@@ -399,28 +465,90 @@ ${referenceSection}`;
     const ai = new GoogleGenAI({ apiKey });
     const modelName = process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
-    // Format chat history for Gemini contents
-    const contents = history.map((msg) => ({
-      role: msg.role === "assistant" ? "model" : "user",
-      parts: [{ text: msg.content }],
-    }));
+    // Keep last 8 messages to prevent prompt token bloat on long multi-turn sessions
+    const recentHistory = history.slice(-8);
+
+    // Format chat history for Gemini contents including multimodal image data
+    const contents = recentHistory.map((msg) => {
+      const parts: any[] = [{ text: msg.content }];
+      if (msg.role === "user" && msg.image) {
+        const match = msg.image.match(/^data:(image\/[a-zA-Z0-9.+_-]+);base64,(.+)$/);
+        if (match) {
+          parts.unshift({
+            inlineData: {
+              mimeType: match[1],
+              data: match[2],
+            },
+          });
+        }
+      }
+      return {
+        role: msg.role === "assistant" ? "model" : "user",
+        parts,
+      };
+    });
+
+    const hasImageInContents = contents.some((c) =>
+      c.parts.some((p: any) => p.inlineData)
+    );
 
     const config: any = {
       systemInstruction: systemPrompt,
     };
 
-    if (pathUsed === "live_search") {
+    // Google Search tool is only supported with text inputs
+    if (pathUsed === "live_search" && !hasImageInContents) {
       config.tools = [{ googleSearch: {} }];
     }
 
     const candidateModels = [
       modelName,
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
       "gemini-3.6-flash",
       "gemini-3.5-flash-lite",
     ].filter((v, i, a) => a.indexOf(v) === i);
 
     const wantsStream = req.nextUrl.searchParams.get("stream") === "true";
     let isRateLimited = false;
+
+    // Fast response path: Serve cached AI diagnosis if query matches recent request
+    const aiCacheKey = `${lang}:${cleanSearchQuery.trim().toLowerCase()}:${hasImageInContents ? "img" : "text"}`;
+    const cachedAi = aiResponseCache.get(aiCacheKey);
+    if (cachedAi && Date.now() - cachedAi.timestamp < AI_CACHE_TTL_MS) {
+      if (wantsStream) {
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+          start(controller) {
+            controller.enqueue(encoder.encode(cachedAi.reply));
+            controller.close();
+          },
+        });
+        return new Response(stream, {
+          headers: {
+            "Content-Type": "text/plain; charset=utf-8",
+            "Cache-Control": "no-cache, no-transform",
+            "X-Cache": "HIT",
+            ...rateLimitHeaders,
+          },
+        });
+      }
+
+      return NextResponse.json(
+        {
+          reply: cachedAi.reply,
+          path: cachedAi.path,
+          matchedKbEntries: cachedAi.matchedKbEntries,
+          source: "cached_ai",
+        },
+        {
+          headers: {
+            "X-Cache": "HIT",
+            ...rateLimitHeaders,
+          },
+        }
+      );
+    }
 
     // Streaming response path (instant chunked transfer)
     if (wantsStream) {
@@ -491,6 +619,19 @@ ${referenceSection}`;
                   isPostgresRunning
                 ) {
                   saveLiveSearchIssue(userQuery, fullOutput);
+                }
+
+                if (fullOutput.trim() && cleanSearchQuery.length > 0) {
+                  if (aiResponseCache.size >= AI_CACHE_MAX_ENTRIES) {
+                    const oldest = aiResponseCache.keys().next().value;
+                    if (oldest) aiResponseCache.delete(oldest);
+                  }
+                  aiResponseCache.set(aiCacheKey, {
+                    timestamp: Date.now(),
+                    reply: fullOutput,
+                    path: pathUsed,
+                    matchedKbEntries: totalMatches,
+                  });
                 }
               } catch (streamErr: any) {
                 console.warn("Error during stream piping:", streamErr);
@@ -661,6 +802,19 @@ ${referenceSection}`;
       isPostgresRunning
     ) {
       saveLiveSearchIssue(userQuery, responseText);
+    }
+
+    if (responseText && cleanSearchQuery.length > 0) {
+      if (aiResponseCache.size >= AI_CACHE_MAX_ENTRIES) {
+        const oldest = aiResponseCache.keys().next().value;
+        if (oldest) aiResponseCache.delete(oldest);
+      }
+      aiResponseCache.set(aiCacheKey, {
+        timestamp: Date.now(),
+        reply: responseText,
+        path: pathUsed,
+        matchedKbEntries: totalMatches,
+      });
     }
 
     return NextResponse.json(

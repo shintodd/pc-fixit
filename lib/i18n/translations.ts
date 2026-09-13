@@ -107,6 +107,14 @@ export const translations = {
     chat_retry_btn: "Ask tech again",
     chat_copy_btn: "Copy diagnosis",
     chat_copied_btn: "Copied!",
+    chat_recent_title: "Recent Diagnoses",
+    chat_new_session: "New Diagnosis",
+    chat_upload_image: "Attach Screenshot",
+    chat_paste_hint: "Paste screenshot or describe your PC symptom...",
+    chat_clear_history: "Clear History",
+    chat_no_recent: "No recent diagnoses yet",
+    chat_attached_image: "Attached screenshot",
+    chat_remove_image: "Remove screenshot",
 
     // Wizard Page
     wizard_header_title: "Guided Hardware Fix",
@@ -268,7 +276,15 @@ export const translations = {
       "Panduan baiki terus ke punca berpandukan dokumentasi perkakasan rasmi dan diagnostik Windows.",
     chat_retry_btn: "Tanya technician lagi",
     chat_copy_btn: "Salin",
-    chat_copied_btn: "Dah salin!",
+    chat_copied_btn: "Disalin!",
+    chat_recent_title: "Diagnostik Lepas",
+    chat_new_session: "Diagnostik Baharu",
+    chat_upload_image: "Lampirkan Screenshot",
+    chat_paste_hint: "Tampal screenshot atau taip simptom PC...",
+    chat_clear_history: "Padam Semua",
+    chat_no_recent: "Tiada rekod sembang lagi",
+    chat_attached_image: "Screenshot dilampirkan",
+    chat_remove_image: "Buang screenshot",
 
     // Wizard Page
     wizard_header_title: "Panduan Baiki Langkah Demi Langkah",

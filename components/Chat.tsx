@@ -21,9 +21,27 @@ import {
   Smartphone,
   Terminal,
   Calculator,
+  Image as ImageIcon,
+  History,
+  Trash2,
+  Plus,
+  Maximize2,
+  Loader2,
 } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
-import { diagnoseProblem as mockDiagnose, type ChatMessage } from "@/lib/diagnose-client";
+import {
+  diagnoseProblem as mockDiagnose,
+  compressImage,
+  type ChatMessage,
+} from "@/lib/diagnose-client";
+import {
+  loadSessions,
+  saveSession,
+  deleteSession,
+  createNewSession,
+  generateSessionTitle,
+  type ChatSession,
+} from "@/lib/chat-storage";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import PortLocatorModal from "@/components/PortLocatorModal";
@@ -70,6 +88,8 @@ export default function Chat({
         { label: "Overheating & Throttle", query: "GPU reaches 90C and thermal throttles under load" },
       ];
 
+  const [sessions, setSessions] = useState<ChatSession[]>([]);
+  const [currentSessionId, setCurrentSessionId] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const seed: ChatMessage[] = [{ role: "assistant", content: t("chat_intro") }];
     if (initialQuery) seed.push({ role: "user", content: initialQuery });
@@ -77,10 +97,16 @@ export default function Chat({
   });
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(!!initialQuery);
+  const [pendingImage, setPendingImage] = useState<string | null>(null);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [showHistoryMobile, setShowHistoryMobile] = useState(false);
   const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | null>(null);
+
   const bottomRef = useRef<HTMLDivElement>(null);
   const hasRun = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const diagnosticTools = [
     {
@@ -120,6 +146,57 @@ export default function Chat({
     },
   ];
 
+  // Helper: Persist current session to client-only localStorage
+  function persistSession(updatedMessages: ChatMessage[], targetSessionId?: string) {
+    const sessId = targetSessionId || currentSessionId;
+    if (!sessId) return;
+
+    const current = sessions.find((s) => s.id === sessId);
+    const title =
+      current?.title && current.title !== "New Diagnosis" && current.title !== "Diagnostik Baharu"
+        ? current.title
+        : generateSessionTitle(updatedMessages, language === "ms" ? "Diagnostik Baharu" : "New Diagnosis");
+
+    const sessionToSave: ChatSession = {
+      id: sessId,
+      title,
+      createdAt: current?.createdAt || Date.now(),
+      updatedAt: Date.now(),
+      messages: updatedMessages,
+      topic: topic || current?.topic,
+    };
+
+    saveSession(sessionToSave);
+    setSessions(loadSessions());
+  }
+
+  // Initialize client sessions on mount
+  useEffect(() => {
+    const stored = loadSessions();
+    setSessions(stored);
+
+    if (initialQuery) {
+      const newSess = createNewSession(t("chat_intro"), topic);
+      newSess.title = initialQuery.length > 42 ? initialQuery.slice(0, 42) + "..." : initialQuery;
+      newSess.messages = [
+        { role: "assistant", content: t("chat_intro") },
+        { role: "user", content: initialQuery },
+      ];
+      saveSession(newSess);
+      setCurrentSessionId(newSess.id);
+      setSessions(loadSessions());
+    } else if (stored.length > 0) {
+      const latest = stored[0];
+      setCurrentSessionId(latest.id);
+      setMessages(latest.messages);
+    } else {
+      const newSess = createNewSession(t("chat_intro"), topic);
+      saveSession(newSess);
+      setCurrentSessionId(newSess.id);
+      setSessions([newSess]);
+    }
+  }, []);
+
   // Update initial intro message if user switches language before asking anything
   useEffect(() => {
     setMessages((prev) => {
@@ -155,26 +232,31 @@ export default function Chat({
       }, language)
         .then((finalText) => {
           if (!isMounted) return;
+          const reply =
+            finalText ||
+            streamed ||
+            `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`;
+
           setMessages((m) => {
             const updated = [...m];
             updated[updated.length - 1] = {
               role: "assistant",
-              content:
-                finalText ||
-                streamed ||
-                `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`,
+              content: reply,
             };
+            persistSession(updated);
             return updated;
           });
         })
         .catch((err: any) => {
           if (!isMounted) return;
+          const errMsg = `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke perkhidmatan diagnostik. Sila tekan Cuba semula." : "Could not connect to diagnosis service. Please tap Retry.")}`;
           setMessages((m) => {
             const updated = [...m];
             updated[updated.length - 1] = {
               role: "assistant",
-              content: `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke perkhidmatan diagnostik. Sila tekan Cuba semula." : "Could not connect to diagnosis service. Please tap Retry.")}`,
+              content: errMsg,
             };
+            persistSession(updated);
             return updated;
           });
         })
@@ -188,19 +270,67 @@ export default function Chat({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function sendMessage(text: string, baseMessages?: ChatMessage[]) {
-    if (!text.trim() || loading) return;
+  async function processAndAttachImage(file: File | Blob) {
+    try {
+      setIsProcessingImage(true);
+      const compressed = await compressImage(file, 1024, 0.75);
+      setPendingImage(compressed);
+    } catch (err) {
+      console.error("Image compression error:", err);
+    } finally {
+      setIsProcessingImage(false);
+    }
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      processAndAttachImage(file);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  }
+
+  function handlePaste(e: React.ClipboardEvent) {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith("image/")) {
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (file) {
+          processAndAttachImage(file);
+        }
+        break;
+      }
+    }
+  }
+
+  async function sendMessage(
+    text: string,
+    baseMessages?: ChatMessage[],
+    attachedImage?: string | null
+  ) {
+    const imgToSend = attachedImage !== undefined ? attachedImage : pendingImage;
+    if ((!text.trim() && !imgToSend) || loading) return;
 
     const currentList = baseMessages || messages;
-    const lastIsUser =
-      currentList[currentList.length - 1]?.role === "user" &&
-      currentList[currentList.length - 1]?.content === text.trim();
-    const next: ChatMessage[] = lastIsUser
-      ? currentList
-      : [...currentList, { role: "user", content: text.trim() }];
+    const trimmed = text.trim();
+    const fallbackText = language === "ms" ? "[Screenshot dilampirkan]" : "[Attached screenshot]";
+
+    const userMessage: ChatMessage = {
+      role: "user",
+      content: trimmed || fallbackText,
+      image: imgToSend || undefined,
+    };
+
+    const next: ChatMessage[] = [...currentList, userMessage];
 
     setMessages(next);
     setInput("");
+    setPendingImage(null);
     setLoading(true);
 
     let streamed = "";
@@ -216,26 +346,19 @@ export default function Chat({
         });
       }, language);
 
-      setMessages((m) => {
-        const updated = [...m];
-        updated[updated.length - 1] = {
-          role: "assistant",
-          content:
-            reply ||
-            streamed ||
-            `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`,
-        };
-        return updated;
-      });
+      const finalReply =
+        reply ||
+        streamed ||
+        `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`;
+
+      const finalMessages = [...next, { role: "assistant" as const, content: finalReply }];
+      setMessages(finalMessages);
+      persistSession(finalMessages);
     } catch (err: any) {
-      setMessages((m) => {
-        const updated = [...m];
-        updated[updated.length - 1] = {
-          role: "assistant",
-          content: `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke pelayan diagnostik. Sila tekan Cuba semula." : "Unable to reach the diagnosis server. Please tap Retry.")}`,
-        };
-        return updated;
-      });
+      const errorMsg = `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke pelayan diagnostik. Sila tekan Cuba semula." : "Unable to reach the diagnosis server. Please tap Retry.")}`;
+      const finalMessages = [...next, { role: "assistant" as const, content: errorMsg }];
+      setMessages(finalMessages);
+      persistSession(finalMessages);
     } finally {
       setLoading(false);
     }
@@ -258,12 +381,52 @@ export default function Chat({
     });
 
     setMessages(pruned);
-    sendMessage(lastUser.content, pruned);
+    sendMessage(lastUser.content, pruned.slice(0, -1), lastUser.image);
   }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     sendMessage(input);
+  }
+
+  function handleNewSession() {
+    if (loading) return;
+    const fresh = createNewSession(t("chat_intro"), topic);
+    saveSession(fresh);
+    setCurrentSessionId(fresh.id);
+    setMessages(fresh.messages);
+    setPendingImage(null);
+    setInput("");
+    setSessions(loadSessions());
+    setShowHistoryMobile(false);
+  }
+
+  function handleSelectSession(sess: ChatSession) {
+    if (loading || sess.id === currentSessionId) return;
+    setCurrentSessionId(sess.id);
+    setMessages(sess.messages);
+    setPendingImage(null);
+    setInput("");
+    setShowHistoryMobile(false);
+  }
+
+  function handleDeleteSession(e: React.MouseEvent, id: string) {
+    e.stopPropagation();
+    deleteSession(id);
+    const updated = loadSessions();
+    setSessions(updated);
+    if (id === currentSessionId) {
+      if (updated.length > 0) {
+        setCurrentSessionId(updated[0].id);
+        setMessages(updated[0].messages);
+      } else {
+        const fresh = createNewSession(t("chat_intro"), topic);
+        saveSession(fresh);
+        setCurrentSessionId(fresh.id);
+        setMessages(fresh.messages);
+        setSessions([fresh]);
+      }
+    }
   }
 
   const isInitialOnly = messages.length === 1;
@@ -273,8 +436,62 @@ export default function Chat({
 
   return (
     <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] flex-1 flex-col lg:flex-row gap-8 px-4 sm:px-8 lg:px-12 2xl:px-16 py-6">
-      {/* Desktop Sidebar: Diagnostics Console & Fast Starters */}
+      {/* Desktop Sidebar: Diagnostics Console, Recent Sessions & Fast Starters */}
       <aside className="hidden lg:flex flex-col w-80 shrink-0 gap-5">
+        {/* Recent Diagnoses Client History */}
+        <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-4 shadow-card dark:shadow-card-dark backdrop-blur-md">
+          <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-line/70 dark:border-dark-line/70">
+            <span className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
+              <History className="h-3.5 w-3.5 text-accent" />
+              {t("chat_recent_title")}
+            </span>
+            <button
+              type="button"
+              onClick={handleNewSession}
+              className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold text-accent hover:bg-accent-soft dark:hover:bg-dark-accent/15 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              title={t("chat_new_session")}
+            >
+              <Plus className="h-3 w-3" />
+              <span>{t("chat_new_session")}</span>
+            </button>
+          </div>
+
+          {sessions.length === 0 ? (
+            <div className="py-3 text-center text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
+              {t("chat_no_recent")}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-1 max-h-52 overflow-y-auto pr-1">
+              {sessions.map((sess) => {
+                const isActive = sess.id === currentSessionId;
+                return (
+                  <div
+                    key={sess.id}
+                    onClick={() => handleSelectSession(sess)}
+                    className={`group flex items-center justify-between rounded-xl px-2.5 py-2 text-[12px] cursor-pointer transition-colors ${
+                      isActive
+                        ? "bg-accent/10 dark:bg-accent/15 text-accent font-semibold"
+                        : "text-ink-secondary dark:text-dark-ink-secondary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-ink dark:hover:text-dark-ink"
+                    }`}
+                  >
+                    <span className="truncate pr-2">{sess.title}</span>
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteSession(e, sess.id)}
+                      className="opacity-0 group-hover:opacity-100 p-1 text-ink-tertiary hover:text-critical transition-opacity"
+                      title={language === "ms" ? "Padam sembang ini" : "Delete diagnosis"}
+                      aria-label={language === "ms" ? "Padam sembang ini" : "Delete diagnosis"}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* PC Technician Desk Status */}
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-3 border-b border-line/70 dark:border-dark-line/70">
             <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">
@@ -287,8 +504,8 @@ export default function Chat({
           </div>
           <p className="mt-3 text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
             {language === "ms"
-              ? "Tanya apa-apa masalah komputer anda. Technician sedia bantu terus ke punca kerosakan dan langkah baiki."
-              : "Describe your PC problem. Your technician pinpoints the fault and gives you direct fix steps."}
+              ? "Tanya apa-apa masalah komputer atau tampal screenshot skrin error. Technician sedia bantu terus ke punca kerosakan."
+              : "Describe your PC problem or paste an error screenshot. Your technician pinpoints the fault with direct fix steps."}
           </p>
           <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex items-center justify-between text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
             <span>{t("nav_knowledge_base")}</span>
@@ -374,6 +591,78 @@ export default function Chat({
 
       {/* Main Chat Workspace */}
       <div className="flex-1 min-w-0 flex flex-col">
+        {/* Mobile History & Action Bar */}
+        <div className="flex lg:hidden items-center justify-between gap-2 mb-3 pb-2 border-b border-line/50 dark:border-dark-line/50">
+          <button
+            type="button"
+            onClick={() => setShowHistoryMobile((v) => !v)}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary shadow-xs"
+          >
+            <History className="h-3.5 w-3.5 text-accent" />
+            <span>{t("chat_recent_title")}</span>
+            <span className="ml-1 rounded-full bg-accent/10 px-1.5 py-0.2 text-[10px] font-bold text-accent">
+              {sessions.length}
+            </span>
+          </button>
+          <button
+            type="button"
+            onClick={handleNewSession}
+            className="inline-flex items-center gap-1 rounded-xl bg-accent px-3 py-1.5 text-[12px] font-semibold text-white shadow-xs"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>{t("chat_new_session")}</span>
+          </button>
+        </div>
+
+        {/* Mobile History Dropdown Accordion */}
+        <AnimatePresence>
+          {showHistoryMobile && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="lg:hidden mb-4 overflow-hidden rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-3 shadow-card dark:shadow-card-dark"
+            >
+              <div className="flex items-center justify-between pb-2 border-b border-line/60 dark:border-dark-line/60 mb-2">
+                <span className="text-[12px] font-bold text-ink dark:text-dark-ink">
+                  {t("chat_recent_title")}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowHistoryMobile(false)}
+                  className="p-1 text-ink-tertiary hover:text-ink"
+                  aria-label="Close history"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+                {sessions.map((sess) => (
+                  <div
+                    key={sess.id}
+                    onClick={() => handleSelectSession(sess)}
+                    className={`flex items-center justify-between rounded-xl px-2.5 py-2 text-[12px] cursor-pointer ${
+                      sess.id === currentSessionId
+                        ? "bg-accent/10 text-accent font-semibold"
+                        : "text-ink-secondary hover:bg-subtle"
+                    }`}
+                  >
+                    <span className="truncate pr-2">{sess.title}</span>
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteSession(e, sess.id)}
+                      className="p-1 text-ink-tertiary hover:text-critical"
+                      aria-label="Delete session"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {category && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
@@ -411,6 +700,7 @@ export default function Chat({
                 isLast={i === messages.length - 1}
                 isStreaming={loading && i === messages.length - 1 && m.role === "assistant" && m.content.trim().length > 0}
                 onRetry={handleRetry}
+                onViewImage={(img) => setPreviewImage(img)}
               />
             ))}
           </AnimatePresence>
@@ -488,57 +778,165 @@ export default function Chat({
           <div ref={bottomRef} />
         </div>
 
-        {/* Sticky Input Bar */}
-        <form
-          aria-label="Diagnostic chat input"
-          onSubmit={handleSubmit}
-          className="sticky bottom-4 mt-2 flex items-center gap-2 rounded-pill border border-line dark:border-dark-line bg-white/96 dark:bg-dark-surface/96 py-1.5 pl-5 pr-1.5 shadow-card dark:shadow-card-dark backdrop-blur-2xl transition-all focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10"
-        >
-          <input
-            ref={inputRef}
-            id="chat-input"
-            name="message"
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={t("chat_input_placeholder")}
-            aria-label={t("chat_input_placeholder")}
-            autoComplete="off"
-            disabled={loading}
-            className="flex-1 bg-transparent py-1.5 text-[15px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none disabled:opacity-50"
-          />
-
-          {/* Clear button */}
+        {/* Sticky Input Bar with Image Attachment */}
+        <div className="sticky bottom-4 mt-2 flex flex-col gap-1.5 z-10">
+          {/* Pending Attached Image Chip */}
           <AnimatePresence>
-            {input && (
-              <motion.button
-                type="button"
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.7 }}
-                transition={{ duration: 0.12 }}
-                onClick={() => { setInput(""); inputRef.current?.focus(); }}
-                className="p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                aria-label="Clear input"
+            {pendingImage && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                className="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card dark:shadow-card-dark backdrop-blur-md w-fit"
               >
-                <X className="h-4 w-4" aria-hidden="true" />
-              </motion.button>
+                <img
+                  src={pendingImage}
+                  alt="Pending screenshot"
+                  onClick={() => setPreviewImage(pendingImage)}
+                  className="h-10 w-10 rounded-lg object-cover border border-line dark:border-dark-line cursor-pointer hover:opacity-80 transition-opacity"
+                />
+                <div className="flex flex-col">
+                  <span className="text-[12px] font-semibold text-ink dark:text-dark-ink">
+                    {t("chat_attached_image")}
+                  </span>
+                  <span className="text-[10px] text-ink-tertiary dark:text-dark-ink-tertiary">
+                    {language === "ms" ? "Akan dihantar bersama pertanyaan" : "Will be analyzed with your question"}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPendingImage(null)}
+                  className="ml-2 p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-critical transition-colors rounded-full"
+                  title={t("chat_remove_image")}
+                  aria-label={t("chat_remove_image")}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </motion.div>
+            )}
+
+            {isProcessingImage && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary w-fit"
+              >
+                <Loader2 className="h-4 w-4 animate-spin text-accent" />
+                <span>{language === "ms" ? "Memproses screenshot..." : "Compressing screenshot..."}</span>
+              </motion.div>
             )}
           </AnimatePresence>
 
-          <motion.button
-            type="submit"
-            disabled={loading || !input.trim()}
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 450, damping: 20 }}
-            className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-150 hover:bg-accent-hover active:scale-95 disabled:opacity-25 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
-            aria-label={loading ? t("chat_thinking") : t("chat_send_btn")}
+          {/* Form */}
+          <form
+            aria-label="Diagnostic chat input"
+            onSubmit={handleSubmit}
+            onPaste={handlePaste}
+            className="flex items-center gap-2 rounded-pill border border-line dark:border-dark-line bg-white/96 dark:bg-dark-surface/96 py-1.5 pl-3 pr-1.5 shadow-card dark:shadow-card-dark backdrop-blur-2xl transition-all focus-within:border-accent focus-within:ring-4 focus-within:ring-accent/10"
           >
-            <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-          </motion.button>
-        </form>
+            {/* Hidden File Input for Image Upload */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            {/* Image Attachment Trigger Button */}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={loading || isProcessingImage}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-tertiary dark:text-dark-ink-tertiary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-accent dark:hover:text-dark-accent transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              title={t("chat_upload_image")}
+              aria-label={t("chat_upload_image")}
+            >
+              <ImageIcon className="h-4 w-4" />
+            </button>
+
+            <input
+              ref={inputRef}
+              id="chat-input"
+              name="message"
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={
+                pendingImage
+                  ? (language === "ms" ? "Tambah nota jika ada, atau tekan Hantar..." : "Add details or press Send...")
+                  : t("chat_input_placeholder")
+              }
+              aria-label={t("chat_input_placeholder")}
+              autoComplete="off"
+              className="flex-1 bg-transparent py-1.5 text-[15px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+            />
+
+            {/* Clear button */}
+            <AnimatePresence>
+              {input && (
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.7 }}
+                  transition={{ duration: 0.12 }}
+                  onClick={() => { setInput(""); inputRef.current?.focus(); }}
+                  className="p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-label="Clear input"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            <motion.button
+              type="submit"
+              disabled={loading || (!input.trim() && !pendingImage)}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 450, damping: 20 }}
+              className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors duration-150 hover:bg-accent-hover active:scale-95 disabled:opacity-25 shadow-sm shadow-accent/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              aria-label={loading ? t("chat_thinking") : t("chat_send_btn")}
+            >
+              <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+            </motion.button>
+          </form>
+        </div>
       </div>
+
+      {/* Enlarged Screenshot Modal (Lightbox) */}
+      <AnimatePresence>
+        {previewImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+            onClick={() => setPreviewImage(null)}
+          >
+            <div
+              className="relative max-w-5xl max-h-[90vh] flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setPreviewImage(null)}
+                className="absolute -top-10 right-0 p-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+                aria-label="Close image preview"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              <img
+                src={previewImage}
+                alt="Enlarged screenshot"
+                className="max-h-[82vh] max-w-full rounded-2xl object-contain shadow-2xl border border-white/15"
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Interactive Helper Modals */}
       <PortLocatorModal isOpen={activeModal === "port"} onClose={() => setActiveModal(null)} />
@@ -579,18 +977,20 @@ function Bubble({
   isLast,
   isStreaming,
   onRetry,
+  onViewImage,
 }: {
   message: ChatMessage;
   isLast: boolean;
   isStreaming?: boolean;
   onRetry?: () => void;
+  onViewImage?: (src: string) => void;
 }) {
   const { t, language } = useLanguage();
   const [copied, setCopied] = useState(false);
   const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const isUser = message.role === "user";
 
-  if (!message.content.trim()) return null;
+  if (!message.content.trim() && !message.image) return null;
 
   if (message.content.startsWith("[DIAGNOSTIC_ERROR]:")) {
     const errorText = message.content.replace("[DIAGNOSTIC_ERROR]:", "").trim();
@@ -665,8 +1065,24 @@ function Bubble({
         initial={{ opacity: 0, y: 12, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        className="flex justify-end"
+        className="flex flex-col items-end gap-2"
       >
+        {message.image && (
+          <div
+            onClick={() => onViewImage?.(message.image!)}
+            className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/20 dark:border-dark-line shadow-md hover:opacity-95 transition-all max-w-[280px] sm:max-w-xs"
+          >
+            <img
+              src={message.image}
+              alt="Uploaded screenshot"
+              className="max-h-52 w-auto rounded-2xl object-cover"
+            />
+            <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[12px] font-medium gap-1">
+              <Maximize2 className="h-3.5 w-3.5" />
+              <span>{language === "ms" ? "Besarkan" : "Expand"}</span>
+            </div>
+          </div>
+        )}
         <div className="max-w-[78%] whitespace-pre-wrap rounded-[20px] rounded-br-[5px] px-4 py-2.5 text-[15px] leading-relaxed text-white shadow-md shadow-accent/20 bubble-user select-text break-words [overflow-wrap:anywhere]">
           {message.content}
         </div>
