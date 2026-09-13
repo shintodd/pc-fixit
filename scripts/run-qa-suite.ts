@@ -325,6 +325,29 @@ async function runDiagnoseEndpointSuite() {
         "Diagnosis correctly labels response source as offline_fallback"
       );
     }
+
+    // Offline Wi-Fi starter query test (regression protection)
+    {
+      const req = makeReq({
+        history: [
+          {
+            role: "user",
+            content: "Wi-Fi icon disappeared",
+          },
+        ],
+      });
+      const res = await diagnoseHandler(req);
+      const data = await res.json();
+      assert(res.status === 200, "Wi-Fi starter query succeeds with HTTP 200 in offline mode", `got ${res.status}`);
+      assert(
+        typeof data.reply === "string" && (data.reply.includes("Wi-Fi") || data.reply.includes("Network")),
+        "Wi-Fi starter query returns verified Wi-Fi/Network guide in offline mode"
+      );
+      assert(
+        data.source === "offline_fallback",
+        "Wi-Fi starter query uses offline_fallback source without demanding GEMINI_API_KEY"
+      );
+    }
   } finally {
     // Restore original API key
     if (savedApiKey) {

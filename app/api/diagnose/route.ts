@@ -13,14 +13,83 @@ const STOP_WORDS = new Set([
   "which", "who", "whom", "will", "would", "should", "could", "about",
   "above", "after", "again", "all", "any", "both", "each", "few", "more",
   "most", "other", "such", "than", "too", "very", "just", "now", "help",
-  "please", "error", "issue", "problem", "triggers", "triggering"
+  "please", "error", "issue", "problem", "triggers", "triggering",
+  "computer", "turns", "turn", "turning", "stays", "stay", "staying",
+  "make", "makes", "making", "take", "takes", "taking", "does", "did",
+  "done", "tried", "trying", "look", "looks", "looking", "shows", "showing"
 ]);
+
+const HIGH_VALUE_TECH_TOKENS = new Set([
+  "dram", "vga", "cpu", "ram", "gpu", "bios", "uefi", "cmos", "nvme", "ssd", "hdd",
+  "bsod", "wifi", "wlan", "ethernet", "bluetooth", "hdmi", "displayport", "psu",
+  "post", "motherboard", "overheating", "artifact", "beeps"
+]);
+
+function extractKeywords(query: string): string[] {
+  const normalized = query
+    .toLowerCase()
+    .replace(/\bwi[- ]?fi\b/g, "wifi")
+    .replace(/\bblue[- ]?screen\b/g, "bluescreen")
+    .replace(/\bno[- ]?boot\b/g, "wontboot")
+    .replace(/\bno[- ]?display\b/g, "nodisplay")
+    .replace(/\bshut[- ]?down\b/g, "shutdown")
+    .replace(/\bturn(ing)?\s+on\b/g, "boot")
+    .replace(/\bnot\s+turning\s+on\b/g, "wontboot")
+    .replace(/[^a-z0-9\s]/g, " ");
+
+  const rawTokens = normalized.split(/\s+/).filter(Boolean);
+  const keywords: Set<string> = new Set();
+  const VALID_SHORT_TERMS = new Set(["pc", "ip", "os", "ai", "ui", "io", "hd"]);
+
+  for (const token of rawTokens) {
+    if (STOP_WORDS.has(token)) continue;
+    if (token.length > 2 || VALID_SHORT_TERMS.has(token)) {
+      keywords.add(token);
+      if (token.endsWith("ies") && token.length > 4) keywords.add(token.slice(0, -3) + "y");
+      else if (token.endsWith("ing") && token.length > 5) keywords.add(token.slice(0, -3));
+      else if (token.endsWith("ed") && token.length > 4) keywords.add(token.slice(0, -2));
+      else if (token.endsWith("es") && token.length > 4) keywords.add(token.slice(0, -2));
+      else if (token.endsWith("s") && !token.endsWith("ss") && token.length > 3) keywords.add(token.slice(0, -1));
+
+      if (token === "wifi" || token === "wireless" || token === "wlan") {
+        keywords.add("wifi");
+        keywords.add("wireless");
+        keywords.add("adapter");
+        keywords.add("network");
+      } else if (token.startsWith("disappear") || token === "missing" || token === "gone" || token === "lost" || token === "vanished") {
+        keywords.add("disappear");
+        keywords.add("disappears");
+        keywords.add("disappeared");
+        keywords.add("missing");
+      } else if (token === "internet" || token === "ethernet" || token === "connection") {
+        keywords.add("internet");
+        keywords.add("network");
+      } else if (token === "screen" || token === "display" || token === "monitor") {
+        keywords.add("screen");
+        keywords.add("display");
+        keywords.add("monitor");
+      } else if (token === "crash" || token === "freeze" || token === "restart" || token === "bsod" || token === "bluescreen") {
+        keywords.add("crash");
+        keywords.add("bsod");
+      } else if (token === "slow" || token === "sluggish" || token === "lag") {
+        keywords.add("slow");
+        keywords.add("sluggish");
+      } else if (token === "audio" || token === "sound" || token === "speaker" || token === "headphones") {
+        keywords.add("audio");
+        keywords.add("sound");
+      }
+    }
+  }
+
+  return Array.from(keywords);
+}
 
 interface SearchCorpusItem {
   slug: string;
   title: string;
   summary: string;
   severity: string;
+  category_slug?: string;
   steps: any;
   haystack: string;
 }
@@ -30,14 +99,26 @@ let cachedSearchCorpus: SearchCorpusItem[] | null = null;
 function getSearchCorpus(): SearchCorpusItem[] {
   if (!cachedSearchCorpus) {
     const { ISSUES } = require("@/lib/mock-data");
-    cachedSearchCorpus = Object.values(ISSUES).map((issue: any) => ({
-      slug: issue.slug,
-      title: issue.title,
-      summary: issue.summary,
-      severity: issue.severity,
-      steps: issue.steps,
-      haystack: `${issue.title} ${issue.summary} ${issue.symptoms.join(" ")}`.toLowerCase(),
-    }));
+    cachedSearchCorpus = Object.values(ISSUES).map((issue: any) => {
+      const normalizedTitle = issue.title.toLowerCase().replace(/\bwi[- ]?fi\b/g, "wifi");
+      const normalizedSummary = issue.summary.toLowerCase().replace(/\bwi[- ]?fi\b/g, "wifi");
+      const normalizedSymptoms = (issue.symptoms || [])
+        .join(" ")
+        .toLowerCase()
+        .replace(/\bwi[- ]?fi\b/g, "wifi");
+      const slugText = (issue.slug || "").replace(/-/g, " ");
+      const categoryText = (issue.category_slug || "").replace(/-/g, " ");
+
+      return {
+        slug: issue.slug,
+        title: issue.title,
+        summary: issue.summary,
+        severity: issue.severity,
+        category_slug: issue.category_slug,
+        steps: issue.steps,
+        haystack: `${normalizedTitle} ${normalizedSummary} ${normalizedSymptoms} ${slugText} ${categoryText}`,
+      };
+    });
   }
   return cachedSearchCorpus;
 }
@@ -257,30 +338,38 @@ export async function POST(req: NextRequest) {
 
     // In-memory grounding fallback (instant 0ms retrieval if database is offline or not yet migrated)
     if (!fromCache && issueMatches.length === 0 && errorCodeMatches.length === 0 && cleanSearchQuery.length > 0) {
-      const queryKeywords = cleanSearchQuery
-        .toLowerCase()
-        .replace(/[^a-z0-9\s]/g, " ")
-        .split(/\s+/)
-        .filter((w) => w.length > 2 && !STOP_WORDS.has(w));
+      const queryKeywords = extractKeywords(cleanSearchQuery);
 
       if (queryKeywords.length > 0) {
         const corpus = getSearchCorpus();
         const scoredIssues = corpus
           .map((item) => {
-            let matches = 0;
-            for (let i = 0; i < queryKeywords.length; i++) {
-              if (item.haystack.includes(queryKeywords[i])) {
-                matches++;
+            let score = 0;
+            let directMatches = 0;
+            const lowerTitle = item.title.toLowerCase().replace(/\bwi[- ]?fi\b/g, "wifi");
+
+            for (const kw of queryKeywords) {
+              const isHighValue = HIGH_VALUE_TECH_TOKENS.has(kw);
+              const titleWeight = isHighValue ? 8 : 3;
+              const haystackWeight = isHighValue ? 4 : 1;
+
+              if (lowerTitle.includes(kw)) {
+                score += titleWeight;
+                directMatches++;
+              } else if (item.haystack.includes(kw)) {
+                score += haystackWeight;
+                directMatches++;
               }
             }
-            const score = matches / queryKeywords.length;
-            return { item, matches, score };
+
+            const normalizedScore = score / Math.max(1, queryKeywords.length * 3);
+            return { item, directMatches, score: normalizedScore };
           })
-          .filter((res) => res.matches >= 2 || (queryKeywords.length === 1 && res.matches === 1))
+          .filter((res) => res.directMatches >= 1 && res.score >= 0.08)
           .sort((a, b) => b.score - a.score)
           .slice(0, 2);
 
-        if (scoredIssues.length > 0 && scoredIssues[0].score >= 0.25) {
+        if (scoredIssues.length > 0) {
           issueMatches = scoredIssues.map((res) => ({
             slug: res.item.slug,
             title: res.item.title,
@@ -443,15 +532,42 @@ ${referenceSection}`;
         );
       }
 
+      // Category or universal triage guide when specific issue match is 0
+      const lowerQ = cleanSearchQuery.toLowerCase();
+      let triageCategoryTitle = "";
+      let triageStepsText = "";
+
+      if (lowerQ.includes("wifi") || lowerQ.includes("wi-fi") || lowerQ.includes("internet") || lowerQ.includes("network") || lowerQ.includes("ethernet") || lowerQ.includes("ip")) {
+        triageCategoryTitle = "Network & Internet Connection Troubleshooting";
+        triageStepsText =
+          lang === "ms"
+            ? `1. **Nyahcas Kuasa & Mulakan Semula (Power Cycle)**: Matikan modem dan router selama 30 saat, kemudian hidupkan semula.\n\n2. **Semak Device Manager**: Buka Device Manager (Win+X), periksa Network adapters. Jika ada tanda seru kuning, klik kanan dan pilih 'Update driver' atau 'Enable device'.\n\n3. **Tetapkan Semula Rangkaian (Network Reset)**: Buka Windows Settings > Network & internet > Advanced network settings > Network reset > Reset now.\n\n4. **Reset TCP/IP & Flush DNS**: Buka Command Prompt sebagai Administrator, taip:\n   \`ipconfig /flushdns\`\n   \`netsh int ip reset\`\n   \`netsh winsock reset\`\n   dan restart PC.`
+            : `1. **Cold Power Cycle**: Unplug your modem and router for 30 seconds, then reconnect and let lights stabilize.\n\n2. **Inspect Device Manager**: Press Win+X, open Device Manager, and expand Network adapters. If you see a yellow warning icon or disabled adapter, right-click and choose 'Enable device' or 'Update driver'.\n\n3. **Windows Network Reset**: Go to Settings > Network & internet > Advanced network settings > Network reset > click 'Reset now'.\n\n4. **Flush DNS & Reset Stack**: In Administrator Command Prompt, execute:\n   \`ipconfig /flushdns\`\n   \`netsh int ip reset\`\n   \`netsh winsock reset\`\n   then reboot your PC.`;
+      } else if (lowerQ.includes("boot") || lowerQ.includes("turn on") || lowerQ.includes("power") || lowerQ.includes("display") || lowerQ.includes("black")) {
+        triageCategoryTitle = "System Power & Boot Diagnostics";
+        triageStepsText =
+          lang === "ms"
+            ? `1. **Buang Cas Kapasitor (EC Reset)**: Cabut kabel power dari belakang PC (atau cabut charger laptop), tahan butang power selama 30 saat, pasang semula dan hidupkan.\n\n2. **Semak Sambungan Monitor**: Pastikan kabel HDMI/DisplayPort dipasang pada port kad grafik (GPU) di bahagian bawah casing, bukan port motherboard di atas.\n\n3. **Pasang Semula RAM (Reseat RAM)**: Buka casing dengan bekalan elektrik diputuskan, tanggalkan kepingan RAM, bersihkan pin emas perlahan-lahan, dan tekan masuk kembali sehingga klip berbunyi 'klik'.\n\n4. **Semak Lampu Debug Motherboard**: Lihat sama ada lampu LED CPU, DRAM, VGA, atau BOOT menyala berterusan.`
+            : `1. **Capacitor Discharge (EC Reset)**: Unplug power from the PC (or disconnect laptop charger), hold the power button for 30 seconds to drain static, reconnect and power on.\n\n2. **Check Display Cable Port**: Ensure your monitor HDMI/DisplayPort cable is plugged into the dedicated graphics card (GPU) ports near the bottom of the case, not the motherboard ports at the top.\n\n3. **Reseat RAM Sticks**: Turn off power, pop open the side panel, unclip each RAM stick, gently wipe contacts, and firmly reinsert into slot 2 and 4 until both clips latch.\n\n4. **Inspect Debug LEDs**: Check if any motherboard diagnostic LEDs (CPU, DRAM, VGA, BOOT) remain lit.`;
+      } else {
+        triageCategoryTitle = "General Diagnostic Triage";
+        triageStepsText =
+          lang === "ms"
+            ? `1. **Mulakan Semula PC (Hard Reset)**: Tutup PC sepenuhnya, cabut kabel elektrik 1 minit, pasang semula dan hidupkan.\n\n2. **Periksa Device Manager**: Tekan Win+X > Device Manager untuk memeriksa sebarang kerosakan pemacu (driver) bertanda seru kuning.\n\n3. **Imbas Integriti Windows**: Buka Command Prompt (Administrator) dan jalankan \`sfc /scannow\`.\n\n4. **Uji Melalui Safe Mode**: Mulakan Windows dalam mod selamat untuk mengasingkan konflik perisian pihak ketiga.`
+            : `1. **Hard Reset**: Shut down your computer completely, unplug the power cable for 1 minute, reconnect and turn on.\n\n2. **Check Device Manager**: Press Win+X > Device Manager to inspect for any device faults or missing drivers marked with yellow alerts.\n\n3. **System File Integrity**: Open Command Prompt as Administrator and run \`sfc /scannow\` to repair corrupted OS components.\n\n4. **Test in Safe Mode**: Boot into Windows Safe Mode to test if third-party background software is conflicting.`;
+      }
+
+      const fallbackReply =
+        lang === "ms"
+          ? `Hai! Meja technician PC Fixit bersedia membantu dalam mod offline. Berikut adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Nota: Berjalan dalam mod offline technician. Untuk sembang AI secara langsung di Vercel, sila masukkan GEMINI_API_KEY dalam Vercel Project Settings > Environment Variables.)*`
+          : `Hey there! The PC Fixit technician desk pulled the verified guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Note: Running in local technician mode. To enable live conversational AI chat on Vercel, configure GEMINI_API_KEY in your Vercel Project Settings > Environment Variables.)*`;
+
       return NextResponse.json(
         {
-          reply:
-            lang === "ms"
-              ? "Hai! Meja technician PC Fixit sedang berjalan dalam mod offline. Sila masukkan GEMINI_API_KEY dalam fail .env untuk bersembang secara langsung dengan AI."
-              : "Hey there! The PC Fixit technician desk is running in local offline mode. Please configure GEMINI_API_KEY in your .env file to enable live technician chat.",
+          reply: fallbackReply,
           path: pathUsed,
           matchedKbEntries: totalMatches,
-          source: "offline_local",
+          source: "offline_fallback",
         },
         {
           headers: {
