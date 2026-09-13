@@ -110,7 +110,7 @@ export default function Header() {
       {/* Under Development Notice Banner */}
       <aside
         aria-label="Development preview announcement"
-        className="w-full border-b border-amber-500/30 bg-amber-500/[0.14] dark:border-amber-400/25 dark:bg-amber-950/50 px-3 sm:px-4 py-1.5 text-center text-[12px] font-medium text-amber-900 dark:text-amber-200 transition-colors"
+        className="w-full border-b border-amber-500/30 bg-amber-500/[0.14] dark:border-amber-400/25 dark:bg-amber-950/50 px-4 py-2 sm:py-2.5 text-center text-[13px] sm:text-[14px] font-medium text-amber-900 dark:text-amber-200 transition-colors"
       >
         <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] items-center justify-center gap-1.5 flex-wrap leading-snug">
           <span>
