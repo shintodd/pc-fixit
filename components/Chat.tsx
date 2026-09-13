@@ -27,6 +27,7 @@ import {
   Plus,
   Maximize2,
   Loader2,
+  ChevronDown,
 } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
 import {
@@ -40,6 +41,7 @@ import {
   deleteSession,
   createNewSession,
   generateSessionTitle,
+  updateSessionScroll,
   type ChatSession,
 } from "@/lib/chat-storage";
 import { motion, AnimatePresence } from "framer-motion";
@@ -102,9 +104,12 @@ export default function Chat({
   const [isProcessingImage, setIsProcessingImage] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [showHistoryMobile, setShowHistoryMobile] = useState(false);
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
   const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | null>(null);
 
-  const lastMessageRef = useRef<HTMLDivElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement | null>(null);
+  const lastUserMessageRef = useRef<HTMLDivElement | null>(null);
+  const isSelectingSessionRef = useRef(false);
   const hasRun = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -165,10 +170,19 @@ export default function Chat({
       updatedAt: Date.now(),
       messages: updatedMessages,
       topic: topic || current?.topic,
+      scrollY: current?.scrollY,
     };
 
     saveSession(sessionToSave);
     setSessions(loadSessions());
+  }
+
+  function scrollToBottomSmooth() {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+    }
   }
 
   // Initialize client sessions on mount
@@ -190,6 +204,11 @@ export default function Chat({
       const latest = stored[0];
       setCurrentSessionId(latest.id);
       setMessages(latest.messages);
+      if (latest.scrollY && latest.scrollY > 0) {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: latest.scrollY, behavior: "auto" });
+        });
+      }
     } else {
       const newSess = createNewSession(t("chat_intro"), topic);
       saveSession(newSess);
@@ -208,9 +227,44 @@ export default function Chat({
     });
   }, [language, t]);
 
-  // Smoothly scroll to the last chat when conversation is opened or updated, avoiding overscroll to bottom
+  // Track scroll position: debounced save per session, and toggle floating bottom button
   useEffect(() => {
-    // If empty or initial greeting only, stay at top of page (zero scroll)
+    let scrollTimeout: NodeJS.Timeout;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      const distanceFromBottom = docHeight - (scrollY + windowHeight);
+
+      // Show floating button when client has scrolled up and latest message extends below viewport
+      let isScrolledUp = false;
+      if (lastMessageRef.current) {
+        const rect = lastMessageRef.current.getBoundingClientRect();
+        isScrolledUp = rect.bottom > window.innerHeight + 100 && messages.length > 1;
+      }
+      setShowScrollBottom(isScrolledUp);
+
+      // Save scroll position for active session in localStorage
+      if (currentSessionId && scrollY >= 0 && !isSelectingSessionRef.current) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          updateSessionScroll(currentSessionId, window.scrollY);
+        }, 150);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      clearTimeout(scrollTimeout);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [currentSessionId, messages.length]);
+
+  // Scroll management: restore saved session position, or align to last user prompt (or top if greeting only)
+  useEffect(() => {
     if (messages.length <= 1) {
       if (typeof window !== "undefined" && window.scrollY > 0) {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -219,15 +273,46 @@ export default function Chat({
     }
 
     const frameId = requestAnimationFrame(() => {
-      if (lastMessageRef.current) {
+      const stored = loadSessions();
+      const current = stored.find((s) => s.id === currentSessionId);
+
+      if (current?.scrollY && current.scrollY > 0 && !loading) {
+        window.scrollTo({
+          top: current.scrollY,
+          behavior: "smooth",
+        });
+      } else if (lastUserMessageRef.current) {
+        // Normal AI chat experience: focus on client's question so question and answer are both visible
+        lastUserMessageRef.current.scrollIntoView({
+          behavior: loading ? "auto" : "smooth",
+          block: "start",
+        });
+      } else if (lastMessageRef.current) {
         lastMessageRef.current.scrollIntoView({
           behavior: loading ? "auto" : "smooth",
           block: "start",
         });
       }
     });
+
     return () => cancelAnimationFrame(frameId);
-  }, [messages.length, currentSessionId]);
+  }, [currentSessionId]);
+
+  // When a new message is submitted, scroll to the client prompt
+  useEffect(() => {
+    if (messages.length <= 1) return;
+
+    const frameId = requestAnimationFrame(() => {
+      if (loading && lastUserMessageRef.current) {
+        lastUserMessageRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    });
+
+    return () => cancelAnimationFrame(frameId);
+  }, [messages.length, loading]);
 
   // Keep streaming response within view without sliding all the way to page bottom
   useEffect(() => {
@@ -419,6 +504,9 @@ export default function Chat({
 
   function handleNewSession() {
     if (loading) return;
+    if (currentSessionId && typeof window !== "undefined") {
+      updateSessionScroll(currentSessionId, window.scrollY);
+    }
     const fresh = createNewSession(t("chat_intro"), topic);
     saveSession(fresh);
     setCurrentSessionId(fresh.id);
@@ -427,15 +515,41 @@ export default function Chat({
     setInput("");
     setSessions(loadSessions());
     setShowHistoryMobile(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function handleSelectSession(sess: ChatSession) {
     if (loading || sess.id === currentSessionId) return;
+
+    if (currentSessionId && typeof window !== "undefined") {
+      updateSessionScroll(currentSessionId, window.scrollY);
+    }
+
+    isSelectingSessionRef.current = true;
     setCurrentSessionId(sess.id);
     setMessages(sess.messages);
     setPendingImage(null);
     setInput("");
     setShowHistoryMobile(false);
+
+    requestAnimationFrame(() => {
+      const freshStored = loadSessions();
+      const target = freshStored.find((s) => s.id === sess.id) || sess;
+
+      if (target.scrollY && target.scrollY > 0) {
+        window.scrollTo({ top: target.scrollY, behavior: "smooth" });
+      } else if (target.messages.length <= 1) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else if (lastUserMessageRef.current) {
+        lastUserMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (lastMessageRef.current) {
+        lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      setTimeout(() => {
+        isSelectingSessionRef.current = false;
+      }, 350);
+    });
   }
 
   function handleDeleteSession(e: React.MouseEvent, id: string) {
@@ -721,24 +835,31 @@ export default function Chat({
           className="flex-1 space-y-5 py-4 pb-20"
         >
           <AnimatePresence initial={false}>
-            {messages.map((m, i) => {
-              const isLast = i === messages.length - 1;
-              return (
-                <div
-                  key={i}
-                  ref={isLast ? lastMessageRef : undefined}
-                  className="scroll-mt-24"
-                >
-                  <Bubble
-                    message={m}
-                    isLast={isLast}
-                    isStreaming={loading && isLast && m.role === "assistant" && m.content.trim().length > 0}
-                    onRetry={handleRetry}
-                    onViewImage={(img) => setPreviewImage(img)}
-                  />
-                </div>
-              );
-            })}
+            {(() => {
+              const lastUserIdx = messages.map((m) => m.role).lastIndexOf("user");
+              return messages.map((m, i) => {
+                const isLast = i === messages.length - 1;
+                const isLastUser = i === lastUserIdx;
+                return (
+                  <div
+                    key={i}
+                    ref={(el) => {
+                      if (isLastUser) lastUserMessageRef.current = el;
+                      if (isLast) lastMessageRef.current = el;
+                    }}
+                    className="scroll-mt-24"
+                  >
+                    <Bubble
+                      message={m}
+                      isLast={isLast}
+                      isStreaming={loading && isLast && m.role === "assistant" && m.content.trim().length > 0}
+                      onRetry={handleRetry}
+                      onViewImage={(img) => setPreviewImage(img)}
+                    />
+                  </div>
+                );
+              });
+            })()}
           </AnimatePresence>
 
           {/* Apple-style typing indicator */}
@@ -814,9 +935,34 @@ export default function Chat({
         </div>
 
         {/* Sticky Input Bar with Image Attachment */}
-        <div className="sticky bottom-4 mt-2 flex flex-col gap-1.5 z-10">
-          {/* Pending Attached Image Chip */}
+        <div className="sticky bottom-4 mt-2 flex flex-col gap-1.5 z-10 pointer-events-none">
+          {/* Floating Scroll to Bottom Button (ChatGPT / Claude style) */}
           <AnimatePresence>
+            {showScrollBottom && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.85, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.85, y: 8 }}
+                transition={{ duration: 0.15 }}
+                className="self-center mb-1 pointer-events-auto"
+              >
+                <button
+                  type="button"
+                  onClick={scrollToBottomSmooth}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card hover:border-accent/40 text-ink-secondary dark:text-dark-ink-secondary hover:text-accent backdrop-blur-md text-[11px] font-medium transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  aria-label={language === "ms" ? "Ke mesej terkini" : "Scroll to bottom"}
+                  title={language === "ms" ? "Ke mesej terkini" : "Scroll to bottom"}
+                >
+                  <ChevronDown className="h-3.5 w-3.5" />
+                  <span>{language === "ms" ? "Mesej Terkini" : "Latest Message"}</span>
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div className="pointer-events-auto flex flex-col gap-1.5">
+            {/* Pending Attached Image Chip */}
+            <AnimatePresence>
             {pendingImage && (
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
@@ -939,6 +1085,7 @@ export default function Chat({
               <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
             </motion.button>
           </LiquidGlassPill>
+          </div>
         </div>
       </div>
 

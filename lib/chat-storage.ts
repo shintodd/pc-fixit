@@ -7,6 +7,7 @@ export interface ChatSession {
   updatedAt: number;
   messages: ChatMessage[];
   topic?: string;
+  scrollY?: number;
 }
 
 const STORAGE_KEY = "pcfixit_recent_chats_v1";
@@ -118,5 +119,24 @@ export function createNewSession(initialIntro: string, topic?: string): ChatSess
     updatedAt: Date.now(),
     messages: [{ role: "assistant", content: initialIntro }],
     topic,
+    scrollY: 0,
   };
+}
+
+/**
+ * Update the scroll position for a session without changing updatedAt or sort order.
+ */
+export function updateSessionScroll(id: string, scrollY: number): void {
+  if (!isClient() || !id) return;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const sessions = JSON.parse(raw);
+    if (!Array.isArray(sessions)) return;
+    const existing = sessions.find((s: ChatSession) => s.id === id);
+    if (existing) {
+      existing.scrollY = Math.max(0, Math.round(scrollY));
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+    }
+  } catch (_) {}
 }
