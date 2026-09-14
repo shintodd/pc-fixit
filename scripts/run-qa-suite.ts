@@ -18,6 +18,17 @@ import {
 } from "../lib/rate-limiter";
 import { ISSUES } from "../lib/mock-data";
 import { WIZARD_TREE } from "../lib/wizard-data";
+import {
+  saveSession,
+  loadSessions,
+  deleteSession,
+  clearAllSessions,
+  getActiveSessionId,
+  setActiveSessionId,
+  createNewSession,
+  generateSessionTitle,
+  updateSessionScroll,
+} from "../lib/chat-storage";
 import fs from "fs";
 import path from "path";
 
@@ -1320,6 +1331,91 @@ async function runDataSchemaAndIntegritySuite() {
   );
 }
 
+async function runChatStoragePersistenceSuite() {
+  suite("9. Chat Session Storage Persistence");
+
+  // Setup mock localStorage on global window
+  const storageMap = new Map<string, string>();
+  const mockLocalStorage = {
+    getItem: (key: string) => storageMap.get(key) || null,
+    setItem: (key: string, val: string) => {
+      storageMap.set(key, String(val));
+    },
+    removeItem: (key: string) => {
+      storageMap.delete(key);
+    },
+    clear: () => {
+      storageMap.clear();
+    },
+  };
+
+  (globalThis as any).window = {
+    localStorage: mockLocalStorage,
+  };
+
+  clearAllSessions();
+  assert(loadSessions().length === 0, "loadSessions returns empty array when storage is empty");
+  assert(getActiveSessionId() === null, "getActiveSessionId returns null initially");
+
+  // 1. Attempt to save empty greeting session with 0 user messages
+  const emptySess = createNewSession("Hello, how can I help?");
+  saveSession(emptySess);
+  assert(loadSessions().length === 0, "Empty session with 0 user messages is NOT persisted to storage");
+  assert(getActiveSessionId() === null, "Active session ID remains null after empty session attempt");
+
+  // 2. Save session with user message
+  const sess1 = createNewSession("Hello!");
+  sess1.messages.push({ role: "user", content: "PC fans spin 100% and screen black" });
+  sess1.title = generateSessionTitle(sess1.messages);
+  saveSession(sess1);
+
+  const afterSess1 = loadSessions();
+  assert(afterSess1.length === 1, "Session with user message persists to storage");
+  assert(afterSess1[0].id === sess1.id, "Stored session ID matches saved session");
+  assert(afterSess1[0].title === "PC fans spin 100% and screen black", "Title correctly generated from user prompt");
+  assert(getActiveSessionId() === sess1.id, "getActiveSessionId correctly reflects newly saved session");
+
+  // 3. Save second session
+  const sess2 = createNewSession("Hello!");
+  sess2.messages.push({ role: "user", content: "Blue screen stop code 0x133" });
+  sess2.title = generateSessionTitle(sess2.messages);
+  saveSession(sess2);
+
+  const afterSess2 = loadSessions();
+  assert(afterSess2.length === 2, "Both user sessions persist cleanly");
+  assert(afterSess2[0].id === sess2.id, "Most recent session appears at index 0");
+  assert(getActiveSessionId() === sess2.id, "Active session ID switched to session 2");
+
+  // 4. Update session 1 with assistant response
+  sess1.messages.push({ role: "assistant", content: "Check your GPU power cables." });
+  saveSession(sess1);
+
+  const afterUpdate = loadSessions();
+  assert(afterUpdate.length === 2, "Session count remains 2 after update");
+  assert(afterUpdate[0].id === sess1.id, "Updated session 1 is moved back to index 0");
+  assert(afterUpdate[0].messages.length === 3, "Updated session messages preserved in storage");
+  assert(getActiveSessionId() === sess1.id, "Active session ID points to session 1");
+
+  // 5. Scroll update
+  updateSessionScroll(sess1.id, 450);
+  const afterScroll = loadSessions();
+  assert(afterScroll[0].scrollY === 450, "Scroll position stored correctly");
+
+  // 6. Delete session
+  deleteSession(sess1.id);
+  const afterDelete = loadSessions();
+  assert(afterDelete.length === 1, "Session removed from storage on deleteSession");
+  assert(afterDelete[0].id === sess2.id, "Remaining session preserved");
+  assert(getActiveSessionId() === sess2.id, "Active session ID falls back to remaining session");
+
+  // 7. Clear all sessions
+  clearAllSessions();
+  assert(loadSessions().length === 0, "clearAllSessions empties session list");
+  assert(getActiveSessionId() === null, "clearAllSessions removes active session key");
+
+  delete (globalThis as any).window;
+}
+
 async function main() {
   console.log(`======================================================`);
   console.log(`pcfix - AUTOMATED QA TEST SUITE`);
@@ -1336,6 +1432,7 @@ async function main() {
     await runErrorBoundariesAndNegativeConstraintsSuite();
     await runPostgresAndPrismaIntegritySuite();
     await runDataSchemaAndIntegritySuite();
+    await runChatStoragePersistenceSuite();
     await runLiveServerSuiteIfAvailable();
   } catch (err: any) {
     console.error("Fatal exception during QA suite execution:", err);

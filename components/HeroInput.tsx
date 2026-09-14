@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,15 +14,25 @@ import {
   Zap,
   MonitorX,
   WifiOff,
+  History,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
+import { loadSessions, type ChatSession } from "@/lib/chat-storage";
 
 export default function HeroInput() {
   const [value, setValue] = useState("");
+  const [recentSession, setRecentSession] = useState<ChatSession | null>(null);
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+
+  useEffect(() => {
+    const stored = loadSessions();
+    if (stored.length > 0) {
+      setRecentSession(stored[0]);
+    }
+  }, []);
 
   const POPULAR_QUERIES = [
     { label: t("hero_pill_no_display"), icon: MonitorX, color: "text-rose-500" },
@@ -144,8 +154,27 @@ export default function HeroInput() {
         </div>
       </div>
 
+      {/* Resume Recent Chat if session exists */}
+      {recentSession && (
+        <div className="mt-4 flex justify-center">
+          <Link
+            href="/troubleshoot"
+            className="group inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/5 dark:bg-accent/10 hover:bg-accent/10 dark:hover:bg-accent/15 px-3.5 py-1.5 text-[12px] font-medium text-accent dark:text-dark-accent transition-all duration-150 backdrop-blur-sm shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <History className="h-3.5 w-3.5 shrink-0 text-accent transition-transform group-hover:rotate-[-20deg]" aria-hidden="true" />
+            <span className="text-ink-secondary dark:text-dark-ink-secondary">
+              {language === "ms" ? "Sambung diagnostik:" : "Resume diagnosis:"}
+            </span>
+            <span className="font-semibold text-accent max-w-[200px] sm:max-w-[280px] truncate">
+              {recentSession.title}
+            </span>
+            <ArrowRight className="h-3 w-3 text-accent transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+          </Link>
+        </div>
+      )}
+
       {/* Dual CTA Actions */}
-      <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
+      <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
         <Link
           href="/troubleshoot"
           className="flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-pill bg-ink dark:bg-white px-6 py-3 text-[14.5px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"

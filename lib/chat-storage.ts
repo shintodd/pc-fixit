@@ -11,6 +11,7 @@ export interface ChatSession {
 }
 
 const STORAGE_KEY = "pcfixit_recent_chats_v1";
+const ACTIVE_SESSION_KEY = "pcfixit_active_session_id_v1";
 const MAX_SESSIONS = 25;
 const MAX_MESSAGES_PER_SESSION = 30;
 
@@ -19,7 +20,33 @@ function isClient(): boolean {
 }
 
 /**
- * Generate a short, readable title from the first user query.
+ * Get currently active session ID from localStorage.
+ */
+export function getActiveSessionId(): string | null {
+  if (!isClient()) return null;
+  try {
+    return window.localStorage.getItem(ACTIVE_SESSION_KEY);
+  } catch (_) {
+    return null;
+  }
+}
+
+/**
+ * Persist currently active session ID to localStorage.
+ */
+export function setActiveSessionId(id: string | null): void {
+  if (!isClient()) return;
+  try {
+    if (id) {
+      window.localStorage.setItem(ACTIVE_SESSION_KEY, id);
+    } else {
+      window.localStorage.removeItem(ACTIVE_SESSION_KEY);
+    }
+  } catch (_) {}
+}
+
+/**
+ * Generate a short, readable title from first user query.
  */
 export function generateSessionTitle(messages: ChatMessage[], defaultTitle = "New Diagnosis"): string {
   const firstUser = messages.find((m) => m.role === "user");
@@ -30,6 +57,7 @@ export function generateSessionTitle(messages: ChatMessage[], defaultTitle = "Ne
 
 /**
  * Load all stored chat sessions, sorted by most recent first.
+ * Only returns sessions with at least one user query.
  */
 export function loadSessions(): ChatSession[] {
   if (!isClient()) return [];
@@ -38,7 +66,9 @@ export function loadSessions(): ChatSession[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return parsed.sort((a, b) => b.updatedAt - a.updatedAt);
+    return parsed
+      .filter((s: ChatSession) => Array.isArray(s.messages) && s.messages.some((m) => m.role === "user"))
+      .sort((a, b) => b.updatedAt - a.updatedAt);
   } catch (err) {
     console.warn("Failed to load chat sessions from localStorage:", err);
     return [];
@@ -46,10 +76,16 @@ export function loadSessions(): ChatSession[] {
 }
 
 /**
- * Save or update an existing chat session.
+ * Save or update existing chat session.
+ * Sessions without any user messages are never saved to localStorage.
  */
 export function saveSession(session: ChatSession): void {
   if (!isClient()) return;
+
+  // Guard: Never persist blank greeting sessions with zero user messages
+  const hasUserMessage = Array.isArray(session.messages) && session.messages.some((m) => m.role === "user");
+  if (!hasUserMessage) return;
+
   try {
     const sessions = loadSessions();
     const existingIndex = sessions.findIndex((s) => s.id === session.id);
@@ -62,14 +98,16 @@ export function saveSession(session: ChatSession): void {
     };
 
     if (existingIndex >= 0) {
-      sessions[existingIndex] = trimmedSession;
+      sessions.splice(existingIndex, 1);
+      sessions.unshift(trimmedSession);
     } else {
       sessions.unshift(trimmedSession);
     }
 
-    // Keep only the most recent sessions
+    // Keep only most recent sessions
     const pruned = sessions.slice(0, MAX_SESSIONS);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(pruned));
+    setActiveSessionId(session.id);
   } catch (err) {
     console.warn("Failed to save chat session to localStorage:", err);
     // If quota exceeded, remove oldest 5 sessions and try once more
@@ -91,6 +129,9 @@ export function deleteSession(id: string): void {
   try {
     const sessions = loadSessions().filter((s) => s.id !== id);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+    if (getActiveSessionId() === id) {
+      setActiveSessionId(sessions[0]?.id || null);
+    }
   } catch (err) {
     console.warn("Failed to delete chat session from localStorage:", err);
   }
@@ -103,6 +144,7 @@ export function clearAllSessions(): void {
   if (!isClient()) return;
   try {
     window.localStorage.removeItem(STORAGE_KEY);
+    window.localStorage.removeItem(ACTIVE_SESSION_KEY);
   } catch (err) {
     console.warn("Failed to clear chat sessions from localStorage:", err);
   }
@@ -124,7 +166,7 @@ export function createNewSession(initialIntro: string, topic?: string): ChatSess
 }
 
 /**
- * Update the scroll position for a session without changing updatedAt or sort order.
+ * Update scroll position for a session without changing updatedAt or sort order.
  */
 export function updateSessionScroll(id: string, scrollY: number): void {
   if (!isClient() || !id) return;

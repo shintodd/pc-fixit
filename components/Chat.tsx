@@ -42,6 +42,8 @@ import {
   createNewSession,
   generateSessionTitle,
   updateSessionScroll,
+  getActiveSessionId,
+  setActiveSessionId,
   type ChatSession,
 } from "@/lib/chat-storage";
 import { motion, AnimatePresence } from "framer-motion";
@@ -93,6 +95,7 @@ export default function Chat({
 
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string>("");
+  const currentSessionIdRef = useRef<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     const seed: ChatMessage[] = [{ role: "assistant", content: t("chat_intro") }];
     if (initialQuery) seed.push({ role: "user", content: initialQuery });
@@ -165,10 +168,11 @@ export default function Chat({
 
   // Helper: Persist current session to client-only localStorage
   function persistSession(updatedMessages: ChatMessage[], targetSessionId?: string) {
-    const sessId = targetSessionId || currentSessionId;
+    const sessId = targetSessionId || currentSessionIdRef.current || currentSessionId;
     if (!sessId) return;
 
-    const current = sessions.find((s) => s.id === sessId);
+    const currentSessions = loadSessions();
+    const current = currentSessions.find((s) => s.id === sessId);
     const title =
       current?.title && current.title !== "New Diagnosis" && current.title !== "Diagnostik Baharu"
         ? current.title
@@ -185,6 +189,7 @@ export default function Chat({
     };
 
     saveSession(sessionToSave);
+    setActiveSessionId(sessId);
     setSessions(loadSessions());
   }
 
@@ -213,21 +218,28 @@ export default function Chat({
       ];
       saveSession(newSess);
       setCurrentSessionId(newSess.id);
+      currentSessionIdRef.current = newSess.id;
+      setActiveSessionId(newSess.id);
       setSessions(loadSessions());
     } else if (stored.length > 0) {
-      const latest = stored[0];
-      setCurrentSessionId(latest.id);
-      setMessages(latest.messages);
-      if (latest.scrollY && latest.scrollY > 0) {
+      const activeId = getActiveSessionId();
+      const targetSession = (activeId && stored.find((s) => s.id === activeId)) || stored[0];
+      setCurrentSessionId(targetSession.id);
+      currentSessionIdRef.current = targetSession.id;
+      setActiveSessionId(targetSession.id);
+      setMessages(targetSession.messages);
+      if (targetSession.scrollY && targetSession.scrollY > 0) {
         requestAnimationFrame(() => {
-          messageListRef.current?.scrollTo({ top: latest.scrollY, behavior: "auto" });
+          messageListRef.current?.scrollTo({ top: targetSession.scrollY, behavior: "auto" });
         });
       }
     } else {
       const newSess = createNewSession(t("chat_intro"), topic);
-      saveSession(newSess);
       setCurrentSessionId(newSess.id);
-      setSessions([newSess]);
+      currentSessionIdRef.current = newSess.id;
+      setActiveSessionId(newSess.id);
+      setMessages(newSess.messages);
+      setSessions([]);
     }
   }, []);
 
@@ -477,10 +489,22 @@ export default function Chat({
 
     const next: ChatMessage[] = [...currentList, userMessage];
 
+    // Ensure session ID is initialized and synced
+    let activeId = currentSessionIdRef.current || currentSessionId;
+    if (!activeId) {
+      activeId = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      setCurrentSessionId(activeId);
+      currentSessionIdRef.current = activeId;
+      setActiveSessionId(activeId);
+    }
+
     setMessages(next);
     setInput("");
     setPendingImage(null);
     setLoading(true);
+
+    // Save immediately so user prompt is persisted even if navigation happens mid-stream
+    persistSession(next, activeId);
 
     let streamed = "";
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
@@ -502,12 +526,12 @@ export default function Chat({
 
       const finalMessages = [...next, { role: "assistant" as const, content: finalReply }];
       setMessages(finalMessages);
-      persistSession(finalMessages);
+      persistSession(finalMessages, activeId);
     } catch (err: any) {
       const errorMsg = `[DIAGNOSTIC_ERROR]: ${err?.message || (language === "ms" ? "Tidak dapat menyambung ke pelayan diagnostik. Sila tekan Cuba semula." : "Unable to reach the diagnosis server. Please tap Retry.")}`;
       const finalMessages = [...next, { role: "assistant" as const, content: errorMsg }];
       setMessages(finalMessages);
-      persistSession(finalMessages);
+      persistSession(finalMessages, activeId);
     } finally {
       setLoading(false);
     }
@@ -544,8 +568,10 @@ export default function Chat({
       updateSessionScroll(currentSessionId, messageListRef.current.scrollTop);
     }
     const fresh = createNewSession(t("chat_intro"), topic);
-    saveSession(fresh);
+    // Do not save blank sessions to localStorage
     setCurrentSessionId(fresh.id);
+    currentSessionIdRef.current = fresh.id;
+    setActiveSessionId(fresh.id);
     setMessages(fresh.messages);
     setPendingImage(null);
     setInput("");
@@ -561,17 +587,19 @@ export default function Chat({
       updateSessionScroll(currentSessionId, messageListRef.current.scrollTop);
     }
 
+    const freshStored = loadSessions();
+    const target = freshStored.find((s) => s.id === sess.id) || sess;
+
     isSelectingSessionRef.current = true;
-    setCurrentSessionId(sess.id);
-    setMessages(sess.messages);
+    setCurrentSessionId(target.id);
+    currentSessionIdRef.current = target.id;
+    setActiveSessionId(target.id);
+    setMessages(target.messages);
     setPendingImage(null);
     setInput("");
     setShowHistoryMobile(false);
 
     requestAnimationFrame(() => {
-      const freshStored = loadSessions();
-      const target = freshStored.find((s) => s.id === sess.id) || sess;
-
       if (target.scrollY && target.scrollY > 0) {
         messageListRef.current?.scrollTo({ top: target.scrollY, behavior: "smooth" });
       } else if (target.messages.length <= 1) {
@@ -595,14 +623,18 @@ export default function Chat({
     setSessions(updated);
     if (id === currentSessionId) {
       if (updated.length > 0) {
-        setCurrentSessionId(updated[0].id);
-        setMessages(updated[0].messages);
+        const nextActive = updated[0];
+        setCurrentSessionId(nextActive.id);
+        currentSessionIdRef.current = nextActive.id;
+        setActiveSessionId(nextActive.id);
+        setMessages(nextActive.messages);
       } else {
         const fresh = createNewSession(t("chat_intro"), topic);
-        saveSession(fresh);
         setCurrentSessionId(fresh.id);
+        currentSessionIdRef.current = fresh.id;
+        setActiveSessionId(fresh.id);
         setMessages(fresh.messages);
-        setSessions([fresh]);
+        setSessions([]);
       }
     }
   }
