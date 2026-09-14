@@ -118,7 +118,7 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className={`sticky top-0 z-50 w-full border-b border-line transition-colors duration-200 dark:border-dark-line ${open ? "bg-white dark:bg-[#161b22]" : "bg-surface/85 backdrop-blur-xl dark:bg-dark-surface/85"}`}>
+    <header className={`sticky top-0 z-50 shrink-0 w-full border-b border-line transition-colors duration-200 dark:border-dark-line ${open ? "bg-white dark:bg-[#161b22]" : "bg-surface/85 backdrop-blur-xl dark:bg-dark-surface/85"}`}>
       {/* Under Development Notice Banner */}
       <aside
         aria-label="Development preview announcement"

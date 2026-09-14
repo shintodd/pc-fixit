@@ -28,6 +28,13 @@
     -ms-overflow-style: none;
   }
 
+  html.chat-viewport-lock,
+  body.chat-viewport-lock {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
   body {
     @apply bg-surface text-ink font-inter;
     letter-spacing: -0.012em;

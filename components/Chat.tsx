@@ -109,10 +109,21 @@ export default function Chat({
 
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
   const lastUserMessageRef = useRef<HTMLDivElement | null>(null);
+  const messageListRef = useRef<HTMLDivElement | null>(null);
   const isSelectingSessionRef = useRef(false);
   const hasRun = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Lock document viewport on /troubleshoot so chat acts as a docked app without page scrolling
+  useEffect(() => {
+    document.documentElement.classList.add("chat-viewport-lock");
+    document.body.classList.add("chat-viewport-lock");
+    return () => {
+      document.documentElement.classList.remove("chat-viewport-lock");
+      document.body.classList.remove("chat-viewport-lock");
+    };
+  }, []);
 
   const diagnosticTools = [
     {
@@ -178,10 +189,13 @@ export default function Chat({
   }
 
   function scrollToBottomSmooth() {
-    if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else {
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
+    if (messageListRef.current) {
+      messageListRef.current.scrollTo({
+        top: messageListRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    } else if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }
 
@@ -206,7 +220,7 @@ export default function Chat({
       setMessages(latest.messages);
       if (latest.scrollY && latest.scrollY > 0) {
         requestAnimationFrame(() => {
-          window.scrollTo({ top: latest.scrollY, behavior: "auto" });
+          messageListRef.current?.scrollTo({ top: latest.scrollY, behavior: "auto" });
         });
       }
     } else {
@@ -229,45 +243,44 @@ export default function Chat({
 
   // Track scroll position: debounced save per session, and toggle floating bottom button
   useEffect(() => {
+    const listEl = messageListRef.current;
+    if (!listEl) return;
+
     let scrollTimeout: NodeJS.Timeout;
 
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const docHeight = document.documentElement.scrollHeight;
-      const distanceFromBottom = docHeight - (scrollY + windowHeight);
+      const scrollY = listEl.scrollTop;
+      const clientHeight = listEl.clientHeight;
+      const scrollHeight = listEl.scrollHeight;
+      const distanceFromBottom = scrollHeight - (scrollY + clientHeight);
 
-      // Show floating button when client has scrolled up and latest message extends below viewport
-      let isScrolledUp = false;
-      if (lastMessageRef.current) {
-        const rect = lastMessageRef.current.getBoundingClientRect();
-        isScrolledUp = rect.bottom > window.innerHeight + 100 && messages.length > 1;
-      }
+      // Show floating button when client has scrolled up away from bottom
+      const isScrolledUp = distanceFromBottom > 100 && messages.length > 1;
       setShowScrollBottom(isScrolledUp);
 
       // Save scroll position for active session in localStorage
       if (currentSessionId && scrollY >= 0 && !isSelectingSessionRef.current) {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-          updateSessionScroll(currentSessionId, window.scrollY);
+          updateSessionScroll(currentSessionId, scrollY);
         }, 150);
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    listEl.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => {
       clearTimeout(scrollTimeout);
-      window.removeEventListener("scroll", handleScroll);
+      listEl.removeEventListener("scroll", handleScroll);
     };
   }, [currentSessionId, messages.length]);
 
   // Scroll management: restore saved session position, or align to last user prompt (or top if greeting only)
   useEffect(() => {
     if (messages.length <= 1) {
-      if (typeof window !== "undefined" && window.scrollY > 0) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      if (messageListRef.current && messageListRef.current.scrollTop > 0) {
+        messageListRef.current.scrollTo({ top: 0, behavior: "smooth" });
       }
       return;
     }
@@ -277,7 +290,7 @@ export default function Chat({
       const current = stored.find((s) => s.id === currentSessionId);
 
       if (current?.scrollY && current.scrollY > 0 && !loading) {
-        window.scrollTo({
+        messageListRef.current?.scrollTo({
           top: current.scrollY,
           behavior: "smooth",
         });
@@ -290,7 +303,7 @@ export default function Chat({
       } else if (lastMessageRef.current) {
         lastMessageRef.current.scrollIntoView({
           behavior: loading ? "auto" : "smooth",
-          block: "start",
+          block: "end",
         });
       }
     });
@@ -527,8 +540,8 @@ export default function Chat({
 
   function handleNewSession() {
     if (loading) return;
-    if (currentSessionId && typeof window !== "undefined") {
-      updateSessionScroll(currentSessionId, window.scrollY);
+    if (currentSessionId && messageListRef.current) {
+      updateSessionScroll(currentSessionId, messageListRef.current.scrollTop);
     }
     const fresh = createNewSession(t("chat_intro"), topic);
     saveSession(fresh);
@@ -538,14 +551,14 @@ export default function Chat({
     setInput("");
     setSessions(loadSessions());
     setShowHistoryMobile(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    messageListRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function handleSelectSession(sess: ChatSession) {
     if (loading || sess.id === currentSessionId) return;
 
-    if (currentSessionId && typeof window !== "undefined") {
-      updateSessionScroll(currentSessionId, window.scrollY);
+    if (currentSessionId && messageListRef.current) {
+      updateSessionScroll(currentSessionId, messageListRef.current.scrollTop);
     }
 
     isSelectingSessionRef.current = true;
@@ -560,13 +573,13 @@ export default function Chat({
       const target = freshStored.find((s) => s.id === sess.id) || sess;
 
       if (target.scrollY && target.scrollY > 0) {
-        window.scrollTo({ top: target.scrollY, behavior: "smooth" });
+        messageListRef.current?.scrollTo({ top: target.scrollY, behavior: "smooth" });
       } else if (target.messages.length <= 1) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        messageListRef.current?.scrollTo({ top: 0, behavior: "smooth" });
       } else if (lastUserMessageRef.current) {
         lastUserMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (lastMessageRef.current) {
-        lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        lastMessageRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
       }
 
       setTimeout(() => {
@@ -600,9 +613,9 @@ export default function Chat({
     loading && (lastMsg?.role === "user" || (lastMsg?.role === "assistant" && !lastMsg.content.trim()));
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] flex-1 flex-col lg:flex-row gap-8 px-4 sm:px-8 lg:px-12 2xl:px-16 py-6">
+    <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] flex-1 min-h-0 flex-col lg:flex-row gap-6 px-4 sm:px-8 lg:px-12 2xl:px-16 py-3 sm:py-4 h-full overflow-hidden">
       {/* Desktop Sidebar: Diagnostics Console, Recent Sessions & Fast Starters */}
-      <aside className="hidden lg:flex flex-col w-80 shrink-0 gap-5">
+      <aside className="hidden lg:flex flex-col w-80 shrink-0 gap-4 h-full overflow-y-auto pr-1 touch-scroll">
         {/* Recent Diagnoses Client History */}
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-4 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-line/70 dark:border-dark-line/70">
@@ -755,9 +768,9 @@ export default function Chat({
       </aside>
 
       {/* Main Chat Workspace */}
-      <div className="flex-1 min-w-0 flex flex-col">
+      <div className="flex-1 min-w-0 flex flex-col h-full overflow-hidden">
         {/* Mobile History & Action Bar */}
-        <div className="flex lg:hidden items-center justify-between gap-2 mb-3 pb-2 border-b border-line/50 dark:border-dark-line/50">
+        <div className="flex lg:hidden shrink-0 items-center justify-between gap-2 mb-2 pb-2 border-b border-line/50 dark:border-dark-line/50">
           <button
             type="button"
             onClick={() => setShowHistoryMobile((v) => !v)}
@@ -786,7 +799,7 @@ export default function Chat({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="lg:hidden mb-4 overflow-hidden rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-3 shadow-card dark:shadow-card-dark"
+              className="lg:hidden mb-3 shrink-0 overflow-hidden rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-3 shadow-card dark:shadow-card-dark"
             >
               <div className="flex items-center justify-between pb-2 border-b border-line/60 dark:border-dark-line/60 mb-2">
                 <span className="text-[12px] font-bold text-ink dark:text-dark-ink">
@@ -801,7 +814,7 @@ export default function Chat({
                   <X className="h-3.5 w-3.5" />
                 </button>
               </div>
-              <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+              <div className="flex flex-col gap-1 max-h-48 overflow-y-auto touch-scroll">
                 {sessions.map((sess) => (
                   <div
                     key={sess.id}
@@ -832,7 +845,7 @@ export default function Chat({
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-line dark:border-dark-line bg-subtle/80 dark:bg-dark-subtle/80 px-4 py-3 backdrop-blur-sm shadow-xs"
+            className="mb-2 shrink-0 flex items-center justify-between gap-3 rounded-2xl border border-line dark:border-dark-line bg-subtle/80 dark:bg-dark-subtle/80 px-4 py-2.5 backdrop-blur-sm shadow-xs"
           >
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
@@ -852,10 +865,11 @@ export default function Chat({
 
         {/* Message List */}
         <div
+          ref={messageListRef}
           role="log"
           aria-live="polite"
           aria-label="Diagnostic conversation"
-          className="flex-1 space-y-5 py-4 pb-20"
+          className="flex-1 min-h-0 overflow-y-auto overscroll-contain space-y-4 py-2 pr-1 touch-scroll"
         >
           <AnimatePresence initial={false}>
             {(() => {
@@ -957,8 +971,8 @@ export default function Chat({
 
         </div>
 
-        {/* Sticky Input Bar with Image Attachment */}
-        <div className="sticky bottom-2 sm:bottom-4 mt-2 flex flex-col gap-1.5 z-20 pointer-events-none pb-safe">
+        {/* Docked Input Bar with Image Attachment */}
+        <div className="shrink-0 z-20 pt-2 pb-safe flex flex-col gap-1 pointer-events-none">
           {/* Floating Scroll to Bottom Button (ChatGPT / Claude style) */}
           <AnimatePresence>
             {showScrollBottom && (
@@ -1108,6 +1122,18 @@ export default function Chat({
               <ArrowUp className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
             </motion.button>
           </LiquidGlassPill>
+
+          <p className="text-center text-[11px] text-ink-tertiary/75 dark:text-dark-ink-tertiary/75 pt-0.5">
+            {language === "ms"
+              ? "pcfix dalam pembangunan aktif. Ada sebarang masalah atau cadangan? "
+              : "pcfix is under active development. Have an issue or suggestion? "}
+            <a
+              href="mailto:pcfixtechsupport@gmail.com"
+              className="underline underline-offset-2 hover:text-ink dark:hover:text-dark-ink transition-colors font-medium"
+            >
+              pcfixtechsupport@gmail.com
+            </a>
+          </p>
           </div>
         </div>
       </div>

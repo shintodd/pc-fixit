@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function Footer() {
+  const pathname = usePathname();
   const { t } = useLanguage();
+
+  if (pathname === "/troubleshoot") {
+    return null;
+  }
 
   return (
     <footer className="border-t border-line dark:border-dark-line bg-surface/80 dark:bg-dark-surface/80 backdrop-blur-sm">
