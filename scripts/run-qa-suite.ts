@@ -443,6 +443,55 @@ async function runDiagnoseEndpointSuite() {
         "Wi-Fi starter query uses offline_fallback source without demanding GEMINI_API_KEY"
       );
     }
+
+    // Hardware Diagnostic Domain Queries (ASUS Q-LED, WHEA 0x124, NVMe queue, Wi-Fi 6E code 10, TjMax 100C, NVIDIA TDR)
+    const hardwareDomainQueries = [
+      {
+        domain: "Won't boot (ASUS Q-LED)",
+        query: "ASUS motherboard red CPU Q-LED solid light no POST",
+      },
+      {
+        domain: "Blue screen BSOD (WHEA 0x124)",
+        query: "Windows crashes with WHEA_UNCORRECTABLE_ERROR 0x00000124",
+      },
+      {
+        domain: "Running slow (NVMe queue)",
+        query: "System stuttering and high disk queue length on NVMe",
+      },
+      {
+        domain: "Network & connectivity (Wi-Fi 6E code 10)",
+        query: "Wi-Fi 6E adapter code 10 cannot start and 169.254 self-assigned IP",
+      },
+      {
+        domain: "Thermal & power throttling (TjMax 100C)",
+        query: "CPU thermal throttling reaching TjMax 100C and shutting down",
+      },
+      {
+        domain: "GPU & display artifacts (NVIDIA TDR)",
+        query: "NVIDIA driver timeout detected and recovered screen flicker",
+      },
+    ];
+
+    for (const item of hardwareDomainQueries) {
+      const req = makeReq({
+        history: [{ role: "user", content: item.query }],
+      });
+      const res = await diagnoseHandler(req);
+      const data = await res.json();
+      assert(
+        res.status === 200,
+        `Domain query for '${item.domain}' succeeds with HTTP 200 in offline mode`,
+        `got ${res.status}`
+      );
+      assert(
+        data.source === "offline_fallback",
+        `Domain query for '${item.domain}' correctly labels source as offline_fallback`
+      );
+      assert(
+        typeof data.reply === "string" && data.reply.trim().length > 50,
+        `Domain query for '${item.domain}' returns substantive reply text (length: ${data.reply?.length})`
+      );
+    }
   } finally {
     // Restore original API key
     if (savedApiKey) {
@@ -567,6 +616,36 @@ async function runIssuesEndpointSuite() {
       `Issue '${slug}' includes proper HTTP caching headers`
     );
   }
+
+  // Comprehensive Issues Coverage: Validate all issues in ISSUES map
+  const allIssuesList = Object.values(ISSUES);
+  let issuesEndpointPassed = 0;
+  for (const issue of allIssuesList) {
+    const req = makeReq(issue.slug);
+    const res = await issuesHandler(req, { params: { slug: issue.slug } });
+    const data = await res.json();
+    if (
+      res.status === 200 &&
+      data.slug === issue.slug &&
+      typeof data.title === "string" &&
+      data.title.trim().length >= 5 &&
+      Array.isArray(data.steps) &&
+      data.steps.length >= 1 &&
+      res.headers.get("Cache-Control")?.includes("public") === true
+    ) {
+      issuesEndpointPassed++;
+    } else {
+      assert(
+        false,
+        `Researched issue '${issue.slug}' endpoint contract check`,
+        `status: ${res.status}, title: ${data?.title}, steps: ${data?.steps?.length}`
+      );
+    }
+  }
+  assert(
+    issuesEndpointPassed === allIssuesList.length,
+    `All ${allIssuesList.length} researched issues resolve via /api/issues/[slug] (HTTP 200, valid title, structured steps, Cache-Control)`
+  );
 }
 
 async function runWizardEndpointSuite() {
@@ -679,6 +758,39 @@ async function runWizardEndpointSuite() {
       `Wizard step '${nodeId}' contains question text and options array`
     );
   }
+
+  // Comprehensive Wizard Tree Coverage: Validate all wizard nodes via endpoint
+  const projectRoot = path.resolve(__dirname, "..");
+  const wizardTreePath = path.join(projectRoot, "data", "research", "wizard_tree.json");
+  const wizardTreeNodes = JSON.parse(fs.readFileSync(wizardTreePath, "utf-8"));
+  let wizardEndpointPassed = 0;
+
+  for (const node of wizardTreeNodes) {
+    const req = makeReq(node.id);
+    const res = await wizardHandler(req, { params: { nodeId: node.id } });
+    const data = await res.json();
+    if (
+      res.status === 200 &&
+      data.id === node.id &&
+      typeof data.question === "string" &&
+      data.question.trim().length >= 5 &&
+      Array.isArray(data.options) &&
+      data.options.length >= 1 &&
+      res.headers.get("Cache-Control")?.includes("public") === true
+    ) {
+      wizardEndpointPassed++;
+    } else {
+      assert(
+        false,
+        `Wizard node '${node.id}' endpoint contract check`,
+        `status: ${res.status}, question: ${data?.question}, options: ${data?.options?.length}`
+      );
+    }
+  }
+  assert(
+    wizardEndpointPassed === wizardTreeNodes.length,
+    `All ${wizardTreeNodes.length} wizard nodes resolve via /api/wizard/[nodeId] (HTTP 200, question string, options array, Cache-Control)`
+  );
 
   // Verify all options in WIZARD_TREE link to valid destinations
   let brokenPointers = 0;
@@ -804,7 +916,7 @@ async function runErrorBoundariesAndNegativeConstraintsSuite() {
   const forbiddenChar = String.fromCharCode(0x2014); // Em dash unicode point U+2014
   const forbiddenAnimation = ["animate", "ping"].join("-");
 
-  const scanDirs = ["app", "components", "lib", "scripts"];
+  const scanDirs = ["app", "components", "lib", "scripts", "data"];
   const emDashMatches: string[] = [];
   const animatePingMatches: string[] = [];
 
@@ -967,6 +1079,247 @@ async function runPostgresAndPrismaIntegritySuite() {
   );
 }
 
+async function runDataSchemaAndIntegritySuite() {
+  suite("9. Research Data Schema & Integrity Audit");
+
+  const projectRoot = path.resolve(__dirname, "..");
+  const researchDir = path.join(projectRoot, "data", "research");
+
+  // 1. Error Codes Dataset Validation
+  const mdPath = path.join(projectRoot, "data", "windows_os_errors_skill.md");
+  assert(fs.existsSync(mdPath), "data/windows_os_errors_skill.md exists on disk");
+  const mdContent = fs.readFileSync(mdPath, "utf-8");
+  const validErrorCodes = new Map<number, { name: string; explanation: string; fixGuide: string }>();
+  let malformedCodeRows = 0;
+
+  for (const line of mdContent.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith("|") || trimmed.includes("---") || trimmed.includes("Error Name")) continue;
+    const parts = trimmed.split("|").map((p) => p.trim());
+    if (parts.length >= 5) {
+      const code = parseInt(parts[1], 10);
+      if (!isNaN(code)) {
+        const name = parts[2];
+        const explanation = parts[3];
+        const fixGuide = parts[4];
+        if (code > 0 && name.length > 0 && explanation.length > 0 && fixGuide.length > 0) {
+          validErrorCodes.set(code, { name, explanation, fixGuide });
+        } else {
+          malformedCodeRows++;
+        }
+      }
+    }
+  }
+
+  assert(
+    validErrorCodes.size >= 300,
+    `Error codes dataset contains at least 300 valid entries (found: ${validErrorCodes.size})`
+  );
+  assert(
+    malformedCodeRows === 0,
+    `All error code table rows have positive integer code, non-empty name, explanation, and fix guide (malformed: ${malformedCodeRows})`
+  );
+
+  // 2. Issue Files Schema & Integrity Validation
+  const issueFiles = [
+    "wont-boot.json",
+    "blue-screen.json",
+    "running-slow.json",
+    "no-internet.json",
+    "overheating.json",
+    "driver-issues.json",
+  ];
+
+  const validCategories = new Set([
+    "wont-boot",
+    "blue-screen",
+    "running-slow",
+    "no-internet",
+    "overheating",
+    "driver-issues",
+  ]);
+
+  const validSeverities = new Set(["critical", "warn", "info"]);
+  const allJsonSlugs = new Set<string>();
+  let totalIssuesValidated = 0;
+  let schemaViolations = 0;
+  let brokenErrorCodeRefs = 0;
+
+  for (const file of issueFiles) {
+    const filePath = path.join(researchDir, file);
+    assert(fs.existsSync(filePath), `Research file '${file}' exists on disk`);
+    const rawData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    assert(
+      Array.isArray(rawData) && rawData.length > 0,
+      `File '${file}' contains non-empty issue array (count: ${rawData.length})`
+    );
+
+    for (const item of rawData) {
+      totalIssuesValidated++;
+
+      // Slug validation
+      if (typeof item.slug !== "string" || !/^[a-z0-9-]+$/.test(item.slug)) {
+        schemaViolations++;
+        console.error(`Invalid slug format: '${item.slug}' in ${file}`);
+      }
+      if (allJsonSlugs.has(item.slug)) {
+        schemaViolations++;
+        console.error(`Duplicate slug: '${item.slug}' in ${file}`);
+      }
+      allJsonSlugs.add(item.slug);
+
+      // Title validation
+      if (typeof item.title !== "string" || item.title.trim().length < 5) {
+        schemaViolations++;
+        console.error(`Title too short (<5 chars): '${item.slug}' in ${file}`);
+      }
+
+      // Summary validation
+      if (typeof item.summary !== "string" || item.summary.trim().length < 10) {
+        schemaViolations++;
+        console.error(`Summary too short (<10 chars): '${item.slug}' in ${file}`);
+      }
+
+      // Severity validation
+      if (!validSeverities.has(item.severity)) {
+        schemaViolations++;
+        console.error(`Invalid severity '${item.severity}': '${item.slug}' in ${file}`);
+      }
+
+      // Category validation
+      if (!validCategories.has(item.category_slug)) {
+        schemaViolations++;
+        console.error(`Invalid category '${item.category_slug}': '${item.slug}' in ${file}`);
+      }
+
+      // Symptoms validation
+      if (!Array.isArray(item.symptoms) || item.symptoms.length < 1) {
+        schemaViolations++;
+        console.error(`Missing symptoms array: '${item.slug}' in ${file}`);
+      } else {
+        for (const s of item.symptoms) {
+          if (typeof s !== "string" || s.trim().length === 0) {
+            schemaViolations++;
+            console.error(`Empty symptom string: '${item.slug}' in ${file}`);
+          }
+        }
+      }
+
+      // Fix steps validation
+      if (!Array.isArray(item.fix_steps) || item.fix_steps.length < 1) {
+        schemaViolations++;
+        console.error(`Missing fix_steps array: '${item.slug}' in ${file}`);
+      } else {
+        for (const step of item.fix_steps) {
+          const detail = step.detail ?? step.instruction;
+          if (typeof step.title !== "string" || step.title.trim().length === 0) {
+            schemaViolations++;
+            console.error(`Missing step title: '${item.slug}' in ${file}`);
+          }
+          if (typeof detail !== "string" || detail.trim().length === 0) {
+            schemaViolations++;
+            console.error(`Missing step detail: '${item.slug}' in ${file}`);
+          }
+        }
+      }
+
+      // Related error codes validation
+      if (Array.isArray(item.related_error_codes)) {
+        for (const code of item.related_error_codes) {
+          if (typeof code !== "number" || !Number.isInteger(code) || code <= 0 || !validErrorCodes.has(code)) {
+            brokenErrorCodeRefs++;
+            console.error(`Broken error code reference in '${item.slug}': code '${code}' not in error_codes dataset`);
+          }
+        }
+      } else {
+        schemaViolations++;
+        console.error(`related_error_codes is not an array: '${item.slug}' in ${file}`);
+      }
+    }
+  }
+
+  assert(
+    totalIssuesValidated >= 180,
+    `Total researched issues validated across all categories (count: ${totalIssuesValidated})`
+  );
+  assert(
+    schemaViolations === 0,
+    `All ${totalIssuesValidated} issues strictly satisfy schema constraints (violations: ${schemaViolations})`
+  );
+  assert(
+    brokenErrorCodeRefs === 0,
+    `All related_error_codes resolve to valid positive integer error codes (broken: ${brokenErrorCodeRefs})`
+  );
+
+  // 3. Mock Data Synchronization
+  const mockSlugs = Object.keys(ISSUES);
+  assert(
+    mockSlugs.length === allJsonSlugs.size,
+    `lib/mock-data.ts ISSUES count (${mockSlugs.length}) matches research JSON count (${allJsonSlugs.size})`
+  );
+
+  let missingMockSlugs = 0;
+  for (const slug of allJsonSlugs) {
+    if (!ISSUES[slug]) {
+      missingMockSlugs++;
+      console.error(`Slug '${slug}' from research JSON missing in lib/mock-data.ts`);
+    }
+  }
+  assert(
+    missingMockSlugs === 0,
+    `lib/mock-data.ts contains 100% of researched slugs without omissions (missing: ${missingMockSlugs})`
+  );
+
+  // 4. Wizard Tree Schema & Integrity
+  const wizardPath = path.join(researchDir, "wizard_tree.json");
+  assert(fs.existsSync(wizardPath), "data/research/wizard_tree.json exists on disk");
+  const wizardNodes = JSON.parse(fs.readFileSync(wizardPath, "utf-8"));
+  assert(Array.isArray(wizardNodes) && wizardNodes.length > 0, "wizard_tree.json contains nodes array");
+
+  const wizardNodeIds = new Set(wizardNodes.map((n: any) => n.id));
+  let wizardSchemaViolations = 0;
+  let wizardBrokenPointers = 0;
+
+  for (const node of wizardNodes) {
+    if (typeof node.id !== "string" || !/^[a-z0-9-]+$/.test(node.id)) {
+      wizardSchemaViolations++;
+      console.error(`Invalid wizard node id: '${node.id}'`);
+    }
+    if (typeof node.question !== "string" || node.question.trim().length < 5) {
+      wizardSchemaViolations++;
+      console.error(`Wizard node question too short (<5 chars): '${node.id}'`);
+    }
+    if (!Array.isArray(node.options) || node.options.length < 1) {
+      wizardSchemaViolations++;
+      console.error(`Wizard node has no options: '${node.id}'`);
+    } else {
+      for (const opt of node.options) {
+        if (typeof opt.label !== "string" || opt.label.trim().length === 0) {
+          wizardSchemaViolations++;
+          console.error(`Option missing label in node '${node.id}'`);
+        }
+        const hasNext = opt.next_id && wizardNodeIds.has(opt.next_id);
+        const hasResolve = opt.resolves_to_issue_slug && allJsonSlugs.has(opt.resolves_to_issue_slug);
+        if (!hasNext && !hasResolve) {
+          wizardBrokenPointers++;
+          console.error(
+            `Broken destination in node '${node.id}', option '${opt.label}': next_id='${opt.next_id}', resolves_to='${opt.resolves_to_issue_slug}'`
+          );
+        }
+      }
+    }
+  }
+
+  assert(
+    wizardSchemaViolations === 0,
+    `All ${wizardNodes.length} wizard nodes pass schema constraints (violations: ${wizardSchemaViolations})`
+  );
+  assert(
+    wizardBrokenPointers === 0,
+    `All wizard tree option destinations resolve cleanly (broken pointers: ${wizardBrokenPointers})`
+  );
+}
+
 async function main() {
   console.log(`======================================================`);
   console.log(`pcfix - AUTOMATED QA TEST SUITE`);
@@ -982,6 +1335,7 @@ async function main() {
     await runCategoriesAndHealthSuite();
     await runErrorBoundariesAndNegativeConstraintsSuite();
     await runPostgresAndPrismaIntegritySuite();
+    await runDataSchemaAndIntegritySuite();
     await runLiveServerSuiteIfAvailable();
   } catch (err: any) {
     console.error("Fatal exception during QA suite execution:", err);

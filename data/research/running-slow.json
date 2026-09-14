@@ -17,7 +17,7 @@
       },
       {
         "title": "Trim startup applications",
-        "detail": "Go to Task Manager \u2192 Startup apps tab. Right-click and Disable unnecessary updaters, launcher apps, and background sync clients."
+        "detail": "Go to Task Manager → Startup apps tab. Right-click and Disable unnecessary updaters, launcher apps, and background sync clients."
       },
       {
         "title": "Free up system drive space",
@@ -50,11 +50,11 @@
     "fix_steps": [
       {
         "title": "Disable or restart the SysMain (Superfetch) service",
-        "detail": "Press Win+R, type 'services.msc', scroll down to 'SysMain', right-click \u2192 Properties \u2192 set Startup type to 'Disabled' and click 'Stop'."
+        "detail": "Press Win+R, type 'services.msc', scroll down to 'SysMain', right-click → Properties → set Startup type to 'Disabled' and click 'Stop'."
       },
       {
         "title": "Rebuild Windows Search indexing",
-        "detail": "In Settings, search for 'Indexing Options' \u2192 Advanced \u2192 click 'Rebuild'. If issues persist on older hard drives, consider setting Windows Search service to Manual."
+        "detail": "In Settings, search for 'Indexing Options' → Advanced → click 'Rebuild'. If issues persist on older hard drives, consider setting Windows Search service to Manual."
       },
       {
         "title": "Run CHKDSK to test for bad storage sectors",
@@ -126,7 +126,7 @@
     "fix_steps": [
       {
         "title": "Check non-paged pool size in Task Manager",
-        "detail": "In Task Manager \u2192 Performance \u2192 Memory, check 'Non-paged pool'. If it is several gigabytes, a driver has a severe memory leak."
+        "detail": "In Task Manager → Performance → Memory, check 'Non-paged pool'. If it is several gigabytes, a driver has a severe memory leak."
       },
       {
         "title": "Disable Network Data Usage (NDU) monitoring driver",
@@ -164,11 +164,11 @@
     "fix_steps": [
       {
         "title": "Check CPU core temperatures with HWInfo64",
-        "detail": "If CPU temperature is 95-105\u00b0C, thermal throttling is saving the processor from burning. Inspect CPU cooler mounting, pump operation, and thermal paste."
+        "detail": "If CPU temperature is 95-105°C, thermal throttling is saving the processor from burning. Inspect CPU cooler mounting, pump operation, and thermal paste."
       },
       {
         "title": "Check for BD PROCHOT false trigger in ThrottleStop",
-        "detail": "If CPU temperatures are cool (30-40\u00b0C) but frequency is stuck at 0.79 GHz, a faulty motherboard or power supply temperature sensor is sending a false PROCHOT signal. Use ThrottleStop to uncheck BD PROCHOT for testing."
+        "detail": "If CPU temperatures are cool (30-40°C) but frequency is stuck at 0.79 GHz, a faulty motherboard or power supply temperature sensor is sending a false PROCHOT signal. Use ThrottleStop to uncheck BD PROCHOT for testing."
       },
       {
         "title": "Inspect AIO water cooling pump power",
@@ -201,15 +201,15 @@
     "fix_steps": [
       {
         "title": "Exclude large project folders from Windows Search",
-        "detail": "Go to Settings \u2192 Search \u2192 Searching Windows \u2192 Excluded Folders. Add large directories such as node_modules, git repos, virtual machines, and temp caches."
+        "detail": "Go to Settings → Search → Searching Windows → Excluded Folders. Add large directories such as node_modules, git repos, virtual machines, and temp caches."
       },
       {
         "title": "Run Windows Search Troubleshooter",
-        "detail": "Go to Settings \u2192 System \u2192 Troubleshoot \u2192 Other troubleshooters \u2192 Search and Indexing \u2192 run the automated fix."
+        "detail": "Go to Settings → System → Troubleshoot → Other troubleshooters → Search and Indexing → run the automated fix."
       },
       {
         "title": "Rebuild the search catalog index",
-        "detail": "Open Control Panel \u2192 Indexing Options \u2192 Advanced \u2192 click 'Rebuild'. This clears fragmented and corrupted search database files."
+        "detail": "Open Control Panel → Indexing Options → Advanced → click 'Rebuild'. This clears fragmented and corrupted search database files."
       },
       {
         "title": "Restart the Windows Search service",
@@ -239,7 +239,7 @@
     "fix_steps": [
       {
         "title": "Disable high-impact startup items in Task Manager",
-        "detail": "Open Task Manager (Ctrl+Shift+Esc) \u2192 Startup apps. Sort by 'Startup impact'. Disable everything except critical audio or security components."
+        "detail": "Open Task Manager (Ctrl+Shift+Esc) → Startup apps. Sort by 'Startup impact'. Disable everything except critical audio or security components."
       },
       {
         "title": "Inspect Startup folder shortcuts",
@@ -247,7 +247,7 @@
       },
       {
         "title": "Clean startup services using MSConfig",
-        "detail": "Open 'msconfig' \u2192 Services tab \u2192 check 'Hide all Microsoft services' \u2192 uncheck non-essential third-party background services."
+        "detail": "Open 'msconfig' → Services tab → check 'Hide all Microsoft services' → uncheck non-essential third-party background services."
       },
       {
         "title": "Uninstall pre-installed OEM software",
@@ -280,11 +280,11 @@
       },
       {
         "title": "Verify Windows Defender is in active or passive mode",
-        "detail": "Open Windows Security \u2192 Virus & threat protection. If using a third-party AV, Defender should automatically enter passive mode without real-time file hooks."
+        "detail": "Open Windows Security → Virus & threat protection. If using a third-party AV, Defender should automatically enter passive mode without real-time file hooks."
       },
       {
         "title": "Add exclusions for trusted developer or gaming directories",
-        "detail": "In Windows Security \u2192 Virus & threat protection settings \u2192 Exclusions, add folders with thousands of read/writes to prevent scan loops."
+        "detail": "In Windows Security → Virus & threat protection settings → Exclusions, add folders with thousands of read/writes to prevent scan loops."
       },
       {
         "title": "Reboot to release locked kernel file filters",
@@ -313,11 +313,11 @@
     "fix_steps": [
       {
         "title": "Switch to Balanced or High Performance plan",
-        "detail": "Open Control Panel \u2192 Power Options \u2192 select 'Balanced' (recommended for modern dynamic boosting) or 'High performance'."
+        "detail": "Open Control Panel → Power Options → select 'Balanced' (recommended for modern dynamic boosting) or 'High performance'."
       },
       {
         "title": "Inspect Maximum Processor State",
-        "detail": "In Power Options \u2192 Change plan settings \u2192 Change advanced power settings \u2192 Processor power management \u2192 Maximum processor state \u2192 verify set to 100%."
+        "detail": "In Power Options → Change plan settings → Change advanced power settings → Processor power management → Maximum processor state → verify set to 100%."
       },
       {
         "title": "Restore power plan defaults",
@@ -349,7 +349,7 @@
     "fix_steps": [
       {
         "title": "Maintain 15-20% free space on SSD",
-        "detail": "Delete unused games, run Disk Cleanup (cleanmgr.exe), and clean temporary files via Settings \u2192 System \u2192 Storage."
+        "detail": "Delete unused games, run Disk Cleanup (cleanmgr.exe), and clean temporary files via Settings → System → Storage."
       },
       {
         "title": "Run manual TRIM optimization",
@@ -379,13 +379,13 @@
     "category_slug": "running-slow",
     "symptoms": [
       "Fans spin at high speed when PC is untouched, then quiet down when mouse moves or Task Manager opens",
-      "GPU temperature stays at 70\u00b0C+ on the desktop with zero apps open",
+      "GPU temperature stays at 70°C+ on the desktop with zero apps open",
       "Browser redirects to unfamiliar search engines"
     ],
     "fix_steps": [
       {
         "title": "Run Microsoft Defender Offline scan",
-        "detail": "Go to Settings \u2192 Privacy & Security \u2192 Windows Security \u2192 Virus & threat protection \u2192 Scan options \u2192 select 'Microsoft Defender Antivirus (offline scan)'."
+        "detail": "Go to Settings → Privacy & Security → Windows Security → Virus & threat protection → Scan options → select 'Microsoft Defender Antivirus (offline scan)'."
       },
       {
         "title": "Run Malwarebytes anti-malware scan",
@@ -460,11 +460,11 @@
     "fix_steps": [
       {
         "title": "Check Virtual Memory allocation drive",
-        "detail": "Press Win+R, type 'sysdm.cpl' \u2192 Advanced tab \u2192 Performance Settings \u2192 Advanced tab \u2192 click 'Change' under Virtual Memory."
+        "detail": "Press Win+R, type 'sysdm.cpl' → Advanced tab → Performance Settings → Advanced tab → click 'Change' under Virtual Memory."
       },
       {
         "title": "Move pagefile to high-speed NVMe/SSD",
-        "detail": "Uncheck 'Automatically manage paging file size'. Highlight mechanical drive letters (e.g., D:) and select 'No paging file' \u2192 Set. Select SSD (C:) and choose 'System managed size' \u2192 Set."
+        "detail": "Uncheck 'Automatically manage paging file size'. Highlight mechanical drive letters (e.g., D:) and select 'No paging file' → Set. Select SSD (C:) and choose 'System managed size' → Set."
       },
       {
         "title": "Reboot computer to apply new paging layout",
@@ -887,7 +887,7 @@
     "slug": "clearing-directx-shader-cache-game-stutter",
     "title": "Clearing corrupted DirectX shader cache causing micro-stuttering in games",
     "summary": "Stutters, hitching, and FPS drops whenever entering new areas in DirectX 12 and Unreal Engine games.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "running-slow",
     "symptoms": [
       "Game micro-freezes for half a second when turning camera or entering new areas",
@@ -899,19 +899,22 @@
         "order": 1,
         "title": "Clear DirectX Shader Cache via Windows Disk Cleanup",
         "instruction": "Press Win+R, type 'cleanmgr' and hit Enter. Select C: drive. Uncheck everything except 'DirectX Shader Cache'. Click OK -> Delete Files.",
-        "caution": "The next time you launch a game, it will take 1-2 minutes to recompile fresh clean shaders."
+        "caution": "The next time you launch a game, it will take 1-2 minutes to recompile fresh clean shaders.",
+        "detail": "Press Win+R, type 'cleanmgr' and hit Enter. Select C: drive. Uncheck everything except 'DirectX Shader Cache'. Click OK -> Delete Files."
       },
       {
         "order": 2,
         "title": "Delete Nvidia / AMD driver shader cache folders",
         "instruction": "Close all games. Press Win+R, type '%localappdata%' and press Enter. Open the 'NVIDIA' folder -> delete contents of 'DXCache' and 'GLCache'. For AMD, delete contents of '%localappdata%\\AMD\\DxCache'.",
-        "caution": "If files say 'in use', reboot PC and delete before opening any web browsers or launchers."
+        "caution": "If files say 'in use', reboot PC and delete before opening any web browsers or launchers.",
+        "detail": "Close all games. Press Win+R, type '%localappdata%' and press Enter. Open the 'NVIDIA' folder -> delete contents of 'DXCache' and 'GLCache'. For AMD, delete contents of '%localappdata%\\AMD\\DxCache'."
       },
       {
         "order": 3,
         "title": "Increase Shader Cache Size in GPU Control Panel",
         "instruction": "In Nvidia Control Panel -> Manage 3D settings -> Global Settings -> scroll to 'Shader Cache Size'. Change from 'Driver Default' to '10 GB' or 'Unlimited'.",
-        "caution": "Prevents Windows from constantly evicting and recompiling shaders for modern 100GB+ games."
+        "caution": "Prevents Windows from constantly evicting and recompiling shaders for modern 100GB+ games.",
+        "detail": "In Nvidia Control Panel -> Manage 3D settings -> Global Settings -> scroll to 'Shader Cache Size'. Change from 'Driver Default' to '10 GB' or 'Unlimited'."
       }
     ],
     "related_error_codes": [],
@@ -923,7 +926,7 @@
     "slug": "windows-100-percent-disk-usage-freeze",
     "title": "Windows task manager shows 100% disk usage and PC freezes",
     "summary": "Task Manager reports 100% active disk time on C: drive with 0.1 MB/s transfer rate, making PC unresponsive.",
-    "severity": "high",
+    "severity": "critical",
     "category_slug": "running-slow",
     "symptoms": [
       "Task Manager shows 100% Disk Usage on HDD or SATA SSD",
@@ -935,19 +938,22 @@
         "order": 1,
         "title": "Disable Connected User Experiences and Telemetry",
         "instruction": "Press Win+R, type 'services.msc'. Find 'Connected User Experiences and Telemetry' -> right-click Properties -> Startup type: 'Disabled' -> click 'Stop' -> OK.",
-        "caution": "This disables non-essential background Windows diagnostic telemetry reporting."
+        "caution": "This disables non-essential background Windows diagnostic telemetry reporting.",
+        "detail": "Press Win+R, type 'services.msc'. Find 'Connected User Experiences and Telemetry' -> right-click Properties -> Startup type: 'Disabled' -> click 'Stop' -> OK."
       },
       {
         "order": 2,
         "title": "Disable SysMain (Superfetch) on mechanical hard drives",
         "instruction": "In 'services.msc', find 'SysMain'. Right-click Properties -> Startup type: 'Disabled' -> click 'Stop' -> OK. Reboot PC.",
-        "caution": "SysMain aggressively preloads apps into RAM, which completely saturates mechanical HDDs and budget DRAM-less SSDs."
+        "caution": "SysMain aggressively preloads apps into RAM, which completely saturates mechanical HDDs and budget DRAM-less SSDs.",
+        "detail": "In 'services.msc', find 'SysMain'. Right-click Properties -> Startup type: 'Disabled' -> click 'Stop' -> OK. Reboot PC."
       },
       {
         "order": 3,
         "title": "Check drive health with CrystalDiskInfo for bad sectors",
         "instruction": "Download CrystalDiskInfo. Check the health status. If status is 'Caution' with 'Current Pending Sector Count' or 'Reallocated Sectors Count' above 0, the drive is failing physically.",
-        "caution": "If drive health is Caution, back up personal files immediately before running any disk benchmarks."
+        "caution": "If drive health is Caution, back up personal files immediately before running any disk benchmarks.",
+        "detail": "Download CrystalDiskInfo. Check the health status. If status is 'Caution' with 'Current Pending Sector Count' or 'Reallocated Sectors Count' above 0, the drive is failing physically."
       }
     ],
     "related_error_codes": [],
@@ -959,7 +965,7 @@
     "slug": "ram-running-half-speed-xmp-expo-disabled",
     "title": "RAM running at slow base speed (2133MHz) because XMP/EXPO is disabled in BIOS",
     "summary": "Purchased 3200MHz, 3600MHz, or 6000MHz memory but Task Manager shows memory speed stuck at 2133MHz or 4800MHz.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "running-slow",
     "symptoms": [
       "Task Manager Performance -> Memory shows 2133MHz, 2400MHz or 4800MHz",
@@ -971,19 +977,22 @@
         "order": 1,
         "title": "Verify RAM installed in optimal motherboard slots (Slots 2 and 4)",
         "instruction": "For 2 sticks of RAM on a 4-slot motherboard, memory MUST be in slots A2 and B2 (the 2nd and 4th slots counting away from CPU). Daisy-chain motherboard traces fail signal integrity in slots 1 and 3.",
-        "caution": "Turn off PC and unplug power cable before opening case to reseat RAM."
+        "caution": "Turn off PC and unplug power cable before opening case to reseat RAM.",
+        "detail": "For 2 sticks of RAM on a 4-slot motherboard, memory MUST be in slots A2 and B2 (the 2nd and 4th slots counting away from CPU). Daisy-chain motherboard traces fail signal integrity in slots 1 and 3."
       },
       {
         "order": 2,
         "title": "Enable XMP / DOCP / EXPO profile in motherboard BIOS",
         "instruction": "Reboot PC and tap Delete (or F2) repeatedly to enter BIOS. Find 'XMP' (Intel/MSI/Gigabyte), 'DOCP' (ASUS AMD), or 'EXPO' (DDR5 AMD). Switch from 'Disabled' to 'Profile 1'. Press F10 to Save and Exit.",
-        "caution": "PC may power cycle 2-3 times on first boot while memory training completes; this is normal."
+        "caution": "PC may power cycle 2-3 times on first boot while memory training completes; this is normal.",
+        "detail": "Reboot PC and tap Delete (or F2) repeatedly to enter BIOS. Find 'XMP' (Intel/MSI/Gigabyte), 'DOCP' (ASUS AMD), or 'EXPO' (DDR5 AMD). Switch from 'Disabled' to 'Profile 1'. Press F10 to Save and Exit."
       },
       {
         "order": 3,
         "title": "Update motherboard BIOS if memory profile is unstable",
         "instruction": "If enabling XMP causes crashes or fails to POST, download the latest BIOS version from your motherboard vendor's support page. Newer BIOS updates contain updated AGESA and memory compatibility microcode.",
-        "caution": "Never interrupt power or turn off PC while BIOS flash progress bar is running."
+        "caution": "Never interrupt power or turn off PC while BIOS flash progress bar is running.",
+        "detail": "If enabling XMP causes crashes or fails to POST, download the latest BIOS version from your motherboard vendor's support page. Newer BIOS updates contain updated AGESA and memory compatibility microcode."
       }
     ],
     "related_error_codes": [],
@@ -995,7 +1004,7 @@
     "slug": "repair-corrupted-windows-files-sfc-dism",
     "title": "Repair corrupted Windows system files using DISM and SFC tools",
     "summary": "Fix random crashes, broken Windows menus, and system errors caused by corrupted Windows component store files.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "running-slow",
     "symptoms": [
       "Windows features and built-in apps crashing randomly",
@@ -1007,24 +1016,26 @@
         "order": 1,
         "title": "Repair Windows Component Store with DISM online cleanup",
         "instruction": "Press Win+X, select 'Terminal (Admin)' or 'Command Prompt (Admin)'. Type: 'DISM.exe /Online /Cleanup-image /Restorehealth' and press Enter. Wait 5-15 minutes until progress reaches 100%.",
-        "caution": "Keep internet connected; DISM pulls pristine replacement system files directly from Windows Update servers."
+        "caution": "Keep internet connected; DISM pulls pristine replacement system files directly from Windows Update servers.",
+        "detail": "Press Win+X, select 'Terminal (Admin)' or 'Command Prompt (Admin)'. Type: 'DISM.exe /Online /Cleanup-image /Restorehealth' and press Enter. Wait 5-15 minutes until progress reaches 100%."
       },
       {
         "order": 2,
         "title": "Run System File Checker (SFC) scan",
         "instruction": "In the same Administrator command prompt, type: 'sfc /scannow' and press Enter. Verify it finishes with 'Windows Resource Protection found corrupt files and successfully repaired them'.",
-        "caution": "Always run DISM BEFORE SFC so SFC has a healthy component store to pull files from."
+        "caution": "Always run DISM BEFORE SFC so SFC has a healthy component store to pull files from.",
+        "detail": "In the same Administrator command prompt, type: 'sfc /scannow' and press Enter. Verify it finishes with 'Windows Resource Protection found corrupt files and successfully repaired them'."
       },
       {
         "order": 3,
         "title": "Reboot computer to finalize replaced system files",
         "instruction": "Type 'shutdown /r /t 0' in the terminal or click Start -> Restart. Windows will finalize file replacements before loading desktop services.",
-        "caution": "Do not force power off during the restart phase."
+        "caution": "Do not force power off during the restart phase.",
+        "detail": "Type 'shutdown /r /t 0' in the terminal or click Start -> Restart. Windows will finalize file replacements before loading desktop services."
       }
     ],
     "related_error_codes": [
-      "0x800F081F",
-      "0x80070002"
+      2
     ],
     "source": "reddit_techsupport",
     "verified": true
@@ -1034,7 +1045,7 @@
     "slug": "perform-clean-boot-find-software-conflict",
     "title": "Isolate freezing and high CPU usage with a Windows Clean Boot",
     "summary": "Disable all non-Microsoft background startup services to identify which software is freezing your computer.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "running-slow",
     "symptoms": [
       "PC freezes or lags in desktop but runs fine in Safe Mode",
@@ -1046,19 +1057,22 @@
         "order": 1,
         "title": "Hide all Microsoft services in msconfig",
         "instruction": "Press Win+R, type 'msconfig' and hit Enter. Go to the 'Services' tab. CRITICAL: Check the box 'Hide all Microsoft services' at the bottom left.",
-        "caution": "CRITICAL: You MUST check 'Hide all Microsoft services' first, otherwise disabling all services will break Windows login PIN."
+        "caution": "CRITICAL: You MUST check 'Hide all Microsoft services' first, otherwise disabling all services will break Windows login PIN.",
+        "detail": "Press Win+R, type 'msconfig' and hit Enter. Go to the 'Services' tab. CRITICAL: Check the box 'Hide all Microsoft services' at the bottom left."
       },
       {
         "order": 2,
         "title": "Disable remaining third-party services",
         "instruction": "With Microsoft services hidden, click 'Disable all'. Then go to the 'Startup' tab -> click 'Open Task Manager' -> right-click and disable non-essential startup apps. Click OK and restart PC.",
-        "caution": "If the issue disappears after restart, re-enable services in halves to pinpoint the exact culprit app."
+        "caution": "If the issue disappears after restart, re-enable services in halves to pinpoint the exact culprit app.",
+        "detail": "With Microsoft services hidden, click 'Disable all'. Then go to the 'Startup' tab -> click 'Open Task Manager' -> right-click and disable non-essential startup apps. Click OK and restart PC."
       },
       {
         "order": 3,
         "title": "Restore normal startup once testing is complete",
         "instruction": "Once culprit software is uninstalled or identified, open 'msconfig' again, select 'Normal startup' on the General tab, click OK and reboot.",
-        "caution": "Do not leave PC permanently in selective startup if you rely on third-party security suites."
+        "caution": "Do not leave PC permanently in selective startup if you rely on third-party security suites.",
+        "detail": "Once culprit software is uninstalled or identified, open 'msconfig' again, select 'Normal startup' on the General tab, click OK and reboot."
       }
     ],
     "related_error_codes": [],
@@ -1070,7 +1084,7 @@
     "slug": "windows-update-stuck-clearing-cache",
     "title": "Windows Update stuck at 99%, 100%, or failing in a loop",
     "summary": "Clear corrupted Windows Update download cache in SoftwareDistribution folder to fix stuck update loops.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "running-slow",
     "symptoms": [
       "Windows Update stuck at downloading or installing (0%, 99% or 100%)",
@@ -1082,27 +1096,177 @@
         "order": 1,
         "title": "Stop Windows Update and Background Transfer services",
         "instruction": "Open Command Prompt as Administrator. Run these commands one by one: 'net stop wuauserv', 'net stop cryptSvc', 'net stop bits', 'net stop msiserver'.",
-        "caution": "Ensure all services confirm 'was stopped successfully' before proceeding."
+        "caution": "Ensure all services confirm 'was stopped successfully' before proceeding.",
+        "detail": "Open Command Prompt as Administrator. Run these commands one by one: 'net stop wuauserv', 'net stop cryptSvc', 'net stop bits', 'net stop msiserver'."
       },
       {
         "order": 2,
         "title": "Rename or delete SoftwareDistribution and Catroot2 folders",
         "instruction": "In the same command prompt, run: 'ren C:\\Windows\\SoftwareDistribution SoftwareDistribution.old' and 'ren C:\\Windows\\System32\\catroot2 catroot2.old'.",
-        "caution": "This wipes all corrupted pending update payloads without touching personal files."
+        "caution": "This wipes all corrupted pending update payloads without touching personal files.",
+        "detail": "In the same command prompt, run: 'ren C:\\Windows\\SoftwareDistribution SoftwareDistribution.old' and 'ren C:\\Windows\\System32\\catroot2 catroot2.old'."
       },
       {
         "order": 3,
         "title": "Restart update services and check for updates",
         "instruction": "Run: 'net start wuauserv', 'net start cryptSvc', 'net start bits', 'net start msiserver'. Open Windows Settings -> Windows Update -> click 'Check for updates'.",
-        "caution": "First check may take 5 minutes while Windows rebuilds the fresh download manifest."
+        "caution": "First check may take 5 minutes while Windows rebuilds the fresh download manifest.",
+        "detail": "Run: 'net start wuauserv', 'net start cryptSvc', 'net start bits', 'net start msiserver'. Open Windows Settings -> Windows Update -> click 'Check for updates'."
       }
     ],
     "related_error_codes": [
-      "0x80248007",
-      "0x80070003",
-      "0x800705B4"
+      2,
+      3,
+      1060
     ],
     "source": "reddit_techsupport",
     "verified": true
+  },
+  {
+    "slug": "nvme-smart-predictive-failure-spare-threshold",
+    "title": "NVMe SMART Available Spare Threshold and Critical Warning Triage",
+    "summary": "Diagnose NVMe SSD predictive hardware failures when Available Spare drops below threshold or Critical Warning flags indicate imminent flash exhaustion.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "CrystalDiskInfo displays yellow Caution or red Bad status banner for NVMe SSD",
+      "Available Spare percentage drops below the factory threshold (typically 10%)",
+      "PC experiences random 30-second system freezes and slow application launch times"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect NVMe SMART health attributes in CrystalDiskInfo",
+        "detail": "Open CrystalDiskInfo or smartctl command line. Check Available Spare, Available Spare Threshold, Percentage Used, and Media and Data Integrity Errors."
+      },
+      {
+        "title": "Immediately back up all personal data",
+        "detail": "When Available Spare falls below threshold, the drive has exhausted its reserved flash NAND blocks. Immediately copy all critical documents, photos, and game saves to an external USB drive or cloud storage before controller lockout."
+      },
+      {
+        "title": "Check Critical Warning byte flags",
+        "detail": "If Critical Warning byte is non-zero, bit 0 indicates spare capacity warning; bit 1 indicates extreme temperature; bit 2 indicates degraded reliability; bit 3 indicates read-only mode."
+      },
+      {
+        "title": "Retire and replace SSD",
+        "detail": "Once Available Spare threshold is breached, the SSD cannot relocate new failing NAND cells. Replace drive and restore backup image to ensure data safety."
+      }
+    ],
+    "related_error_codes": [
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "hdd-ssd-smart-reallocated-pending-sectors",
+    "title": "HDD and SSD SMART Attribute 05 Reallocated and C5 Pending Sectors Triage",
+    "summary": "Analyze SMART Attribute 05 (Reallocated Sectors Count) and Attribute C5 (Current Pending Sector Count) to prevent catastrophic hard drive and SSD data loss.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "CrystalDiskInfo reports Caution with non-zero raw values on 05, C5, or C6",
+      "Windows displays warning: Windows detected a hard disk problem",
+      "File copy operations freeze or fail with Cyclic Redundancy Check (CRC) error"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect Attribute 05 (Reallocated Sectors Count)",
+        "detail": "Check the Raw Values column in CrystalDiskInfo (Function -> Advanced Feature -> Raw Values -> 10 [DEC]). A non-zero value indicates physical bad sectors have been permanently remapped to reserve tracks."
+      },
+      {
+        "title": "Inspect Attribute C5 (Current Pending Sector Count)",
+        "detail": "Pending sectors are unstable sectors that could not be read and are waiting for a write operation to verify whether they can be recovered or must be reallocated."
+      },
+      {
+        "title": "Prioritize data backup over disk repair",
+        "detail": "Do not run intensive surface scans (chkdsk /r) while unbacked-up critical files remain on the drive. Copy essential files to an external drive immediately, starting with smallest most important files."
+      },
+      {
+        "title": "Run CHKDSK to force sector reassessment",
+        "detail": "After backup, open Command Prompt as Administrator and run chkdsk D: /f /r to force drive controller to read, rewrite, or permanently reallocate pending sectors. If reallocated sector count continues rising, replace drive."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "nvme-hardware-write-protect-lockout",
+    "title": "NVMe SSD Hardware Write-Protect Read-Only Lockout Recovery",
+    "summary": "Identify and handle NVMe SSD permanent hardware write-protection triggered by internal drive controller firmware when flash memory endurance is depleted.",
+    "severity": "critical",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Cannot save, edit, or delete files; Windows reports: The disk is write-protected",
+      "Changes appear to succeed but revert back completely after rebooting PC",
+      "Diskpart attributes disk clear readonly reports success, but drive remains read-only"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check disk read-only attributes in Diskpart",
+        "detail": "Open Command Prompt as Administrator, run diskpart, type select disk X (replace X with drive number), and detail disk. Note whether Current Read-only State displays Yes while Read-only displays No."
+      },
+      {
+        "title": "Attempt software read-only clear",
+        "detail": "Run command: attributes disk clear readonly. If Current Read-only State remains Yes after this command, the write protection is enforced at hardware controller firmware level, not Windows software."
+      },
+      {
+        "title": "Check SSD health in vendor utility",
+        "detail": "Launch vendor utility (Samsung Magician, WD Dashboard). If Percentage Used reaches 100% or endurance limit is exceeded, modern NVMe controllers permanently lock into read-only mode to prevent silent data corruption."
+      },
+      {
+        "title": "Recover data and replace drive",
+        "detail": "Because the drive is safely locked read-only, all existing data remains readable. Copy all files off the drive to a new SSD, as hardware write protection cannot be reversed once tripped."
+      }
+    ],
+    "related_error_codes": [
+      17,
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "ntfs-dirty-bit-chkdsk-filesystem-lock",
+    "title": "NTFS Volume Dirty Bit Lockout and Non-Destructive CHKDSK Repair",
+    "summary": "Query and clear the NTFS volume dirty bit caused by unexpected power loss or file system inconsistency to prevent recurring boot-time disk checks.",
+    "severity": "warn",
+    "category_slug": "running-slow",
+    "symptoms": [
+      "Windows runs disk checking utility on every single startup",
+      "Drive operations feel sluggish and file deletion requests hang",
+      "fsutil query reports volume dirty bit is set"
+    ],
+    "fix_steps": [
+      {
+        "title": "Query dirty bit status using fsutil",
+        "detail": "Open Command Prompt as Administrator and run: fsutil dirty query C: (or target drive letter). If output states Volume - C: is dirty, Windows has flagged file system metadata as inconsistent."
+      },
+      {
+        "title": "Schedule offline CHKDSK scan",
+        "detail": "Execute command: chkdsk C: /f /r /x. When prompted to schedule volume check on next restart, type Y and press Enter."
+      },
+      {
+        "title": "Allow disk repair to complete during reboot",
+        "detail": "Restart PC and allow Windows Check Disk to complete all 5 stages of file and index verification without power interruption. This repairs orphaned index records and clears the dirty bit."
+      },
+      {
+        "title": "Verify clean volume status",
+        "detail": "After Windows boots to desktop, run fsutil dirty query C: again. The response must state: Volume - C: is not dirty."
+      }
+    ],
+    "related_error_codes": [
+      21,
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
   }
 ]

@@ -360,6 +360,37 @@ description: >
 
 ---
 
+## Section 3: Critical Kernel Stop Codes and Hardware Diagnostic Errors
+
+| No. | Error Name | Short Explanation | Fixes Guide |
+|-----|------------|-------------------|-------------|
+| 10 | IRQL_NOT_LESS_OR_EQUAL | Kernel process accessed paged memory at an invalid IRQL (Stop 0x0000000A) | Identify driver in minidump, uninstall recent drivers, check RAM stability, run SFC /scannow |
+| 26 | MEMORY_MANAGEMENT | Severe memory management error occurred in page pool (Stop 0x0000001A) | Run TestMem5 or Windows Memory Diagnostic, reseat RAM sticks, disable XMP/DOCP profile in BIOS |
+| 41 | KERNEL_POWER_EVENT_41 | System rebooted without cleanly shutting down first (Event ID 41) | Test power supply with PSU tester, check for loose 24-pin or 8-pin power cables, verify thermals |
+| 43 | ERROR_DEVICE_DESCRIPTOR_FAILURE | Device reported a failure and was stopped by Windows (Code 43) | Uninstall device in Device Manager and reboot, reinstall OEM drivers, check hardware connection or slot |
+| 80 | PAGE_FAULT_IN_NONPAGED_AREA | Invalid system memory was referenced by a thread (Stop 0x00000050) | Test RAM with MemTest86, verify pagefile configuration, update storage controller and chipset drivers |
+| 126 | SYSTEM_THREAD_EXCEPTION_NOT_HANDLED | System thread generated an exception that was not caught (Stop 0x0000007E) | Check BSOD dump file for named driver (.sys), update or rollback that driver, run memory diagnostic |
+| 159 | DRIVER_POWER_STATE_FAILURE | Device driver is inconsistent during power state transition (Stop 0x0000009F) | Disable Fast Startup in Control Panel, update chipset and graphics drivers, check power management |
+| 169 | DHCP_APIPA_AUTOCONFIGURATION_ACTIVE | System assigned 169.254.x.x due to DHCP server timeout | Restart router and modem, restart DHCP Client service in services.msc, execute netsh int ip reset |
+| 190 | ATTEMPTED_WRITE_TO_READONLY_MEMORY | System driver attempted to write to read-only virtual memory (Stop 0x000000BE) | Identify driver in minidump with WinDbg, update or uninstall offending driver, test system RAM stability |
+| 196 | DRIVER_VERIFIER_DETECTED_VIOLATION | Windows Driver Verifier detected a kernel driver violation (Stop 0x000000C4) | Boot into Safe Mode or WinRE command prompt, execute verifier /reset to disable verifier, remove driver |
+| 239 | CRITICAL_PROCESS_DIED | Critical system process terminated unexpectedly (Stop 0x000000EF) | Run SFC /scannow and DISM restorehealth, run CHKDSK on system drive, roll back recent updates or drivers |
+| 257 | CLOCK_WATCHDOG_TIMEOUT | Expected processor clock interrupt not received within interval (Stop 0x00000101) | Reset CPU overclock or undervolt in BIOS, update motherboard BIOS firmware, check CPU temperature |
+| 265 | CRITICAL_STRUCTURE_CORRUPTION | Kernel PatchGuard detected unauthorized modification of critical structures (Stop 0x00000109) | Run Memory Diagnostic, test RAM with MemTest86, run SFC /scannow, check third-party security software |
+| 278 | VIDEO_TDR_FAILURE | Display driver failed to respond within allocated TDR threshold (Stop 0x00000116) | Perform clean GPU driver reinstall with DDU in Safe Mode, adjust TdrDelay registry key, test GPU thermals |
+| 281 | VIDEO_SCHEDULER_INTERNAL_ERROR | DirectX graphics kernel subsystem encountered a fatal error (Stop 0x00000119) | Reinstall graphics driver with DDU, verify DirectX runtime files, check GPU overclock stability |
+| 292 | WHEA_UNCORRECTABLE_ERROR | Windows Hardware Error Architecture detected uncorrectable hardware error (Stop 0x00000124) | Reset CPU overclock or undervolt in BIOS, update motherboard BIOS firmware, test PSU |
+| 307 | DPC_WATCHDOG_VIOLATION | Deferred Procedure Call ran past tick watchdog limit (Stop 0x00000133) | Update SSD firmware, update SATA/NVMe controller driver (storahci.sys/iaStorVD.sys), check LatencyMon |
+| 313 | KERNEL_SECURITY_CHECK_FAILURE | Critical kernel data structures failed integrity validation (Stop 0x00000139) | Run SFC /scannow, run Windows Memory Diagnostic, update outdated system drivers, scan for malware |
+| 340 | UNEXPECTED_STORE_EXCEPTION | Kernel data inpage or store component failed to read from storage (Stop 0x00000154) | Run chkdsk /f /r, test SSD health with SMART tools, update NVMe storage controller driver, check cables |
+| 402 | KERNEL_AUTO_BOOST_LOCK_ACQUISITION_WITH_RAISED_IRQL | Thread lock acquisition failed while executing at raised IRQL (Stop 0x00000192) | Update or rollback conflicting device drivers, update motherboard BIOS, disconnect non-essential USB peripherals |
+| 1005 | ERROR_UNRECOGNIZED_VOLUME | Volume does not contain a recognized file system | Check disk health with SMART utility, run chkdsk /f, initialize drive with diskpart or Disk Management |
+| 1060 | ERROR_SERVICE_DOES_NOT_EXIST | Specified Windows service does not exist as an installed service | Verify service name spelling, reinstall software providing service, run SFC /scannow to restore services |
+| 1117 | ERROR_IO_DEVICE | Request could not be performed because of an I/O device error | Replace SATA/NVMe cable or reseat drive in M.2 slot, check SMART status for bad sectors, update drivers |
+| 4101 | DISPLAY_DRIVER_TIMEOUT_EVENT | Display driver stopped responding and has successfully recovered (Event ID 4101) | Clean install GPU drivers using DDU, increase TdrDelay registry value to 8 seconds, lower GPU clock speed |
+
+---
+
 ## Quick Reference: Common Fixes by Category
 
 ### File & Disk Issues

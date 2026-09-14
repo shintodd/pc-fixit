@@ -13,7 +13,7 @@
     "fix_steps": [
       {
         "title": "Check hardware temperatures with HWiNFO64",
-        "detail": "Download HWiNFO64 (Sensors only mode). Check CPU Tctl/Tdie, GPU Core, and GPU Hotspot temperatures. Temperatures exceeding 95\u00b0C on CPU or 105\u00b0C on GPU Hotspot indicate thermal throttling."
+        "detail": "Download HWiNFO64 (Sensors only mode). Check CPU Tctl/Tdie, GPU Core, and GPU Hotspot temperatures. Temperatures exceeding 95°C on CPU or 105°C on GPU Hotspot indicate thermal throttling."
       },
       {
         "title": "Clean dust out of intake filters and heatsink fins",
@@ -25,7 +25,7 @@
       },
       {
         "title": "Adjust fan curves in BIOS",
-        "detail": "Enter BIOS setup \u2192 Q-Fan / Hardware Monitor. Verify fan headers are set to PWM mode (for 4-pin fans) and create a progressive curve hitting 100% fan speed at 85\u00b0C."
+        "detail": "Enter BIOS setup → Q-Fan / Hardware Monitor. Verify fan headers are set to PWM mode (for 4-pin fans) and create a progressive curve hitting 100% fan speed at 85°C."
       }
     ],
     "related_error_codes": [
@@ -38,8 +38,8 @@
   },
   {
     "slug": "cpu-thermal-shutdown-under-load",
-    "title": "CPU reaches 100\u00b0C+ and triggers emergency thermal shutdown",
-    "summary": "The central processor hits its maximum junction temperature (TjMax 100-105\u00b0C) and cuts power instantly to prevent silicon damage.",
+    "title": "CPU reaches 100°C+ and triggers emergency thermal shutdown",
+    "summary": "The central processor hits its maximum junction temperature (TjMax 100-105°C) and cuts power instantly to prevent silicon damage.",
     "severity": "critical",
     "category_slug": "overheating",
     "symptoms": [
@@ -58,7 +58,7 @@
       },
       {
         "title": "Remove factory plastic protective peel sticker",
-        "detail": "Check the copper contact base of the heatsink. Leaving the transparent 'Warning: Remove before installation' film intact is the most common reason for 100\u00b0C temperatures on new builds."
+        "detail": "Check the copper contact base of the heatsink. Leaving the transparent 'Warning: Remove before installation' film intact is the most common reason for 100°C temperatures on new builds."
       },
       {
         "title": "Disable aggressive motherboard overclocking defaults",
@@ -74,12 +74,12 @@
   },
   {
     "slug": "aio-liquid-cooler-pump-failure",
-    "title": "AIO liquid cooler pump failure (immediate 95\u00b0C at idle)",
+    "title": "AIO liquid cooler pump failure (immediate 95°C at idle)",
     "summary": "The mechanical pump impeller has seized or lost electrical power, causing zero coolant flow and thermal saturation within 60 seconds of turning on.",
     "severity": "critical",
     "category_slug": "overheating",
     "symptoms": [
-      "CPU immediately spikes to 90-100\u00b0C inside BIOS within 60 seconds of powering on",
+      "CPU immediately spikes to 90-100°C inside BIOS within 60 seconds of powering on",
       "One AIO tube is scalding hot while the other tube and radiator remain cold",
       "BIOS reports CPU_FAN or AIO_PUMP RPM as 0 or 'N/A'"
     ],
@@ -115,7 +115,7 @@
     "severity": "critical",
     "category_slug": "overheating",
     "symptoms": [
-      "Brand new PC build reaches 90\u00b0C on desktop with 3% CPU usage",
+      "Brand new PC build reaches 90°C on desktop with 3% CPU usage",
       "Fans run at 100% maximum speed constantly from the very first boot",
       "Cooler radiator or heatsink fins feel completely cold to the touch"
     ],
@@ -146,19 +146,19 @@
   },
   {
     "slug": "gpu-hotspot-delta-high",
-    "title": "High GPU hotspot delta (>30\u00b0C difference between core and hotspot)",
-    "summary": "Thermal paste pump-out or uneven mounting bracket pressure causes the GPU hotspot (junction) to hit 105\u00b0C+ while the core reports a deceptive 65\u00b0C.",
+    "title": "High GPU hotspot delta (>30°C difference between core and hotspot)",
+    "summary": "Thermal paste pump-out or uneven mounting bracket pressure causes the GPU hotspot (junction) to hit 105°C+ while the core reports a deceptive 65°C.",
     "severity": "warn",
     "category_slug": "overheating",
     "symptoms": [
       "GPU fans suddenly ramp to 100% (jet engine sound) during gaming",
-      "HWiNFO shows GPU Temperature at 68\u00b0C but GPU Hot Spot at 105-110\u00b0C",
+      "HWiNFO shows GPU Temperature at 68°C but GPU Hot Spot at 105-110°C",
       "Graphics card downclocks heavily and framerates stutter"
     ],
     "fix_steps": [
       {
         "title": "Check GPU core-to-hotspot temperature delta",
-        "detail": "Open HWiNFO64. Under GPU sensors, subtract GPU Core from GPU Hot Spot. A delta above 20-25\u00b0C indicates paste degradation or uneven heatsink contact."
+        "detail": "Open HWiNFO64. Under GPU sensors, subtract GPU Core from GPU Hot Spot. A delta above 20-25°C indicates paste degradation or uneven heatsink contact."
       },
       {
         "title": "Repaste GPU with viscous paste or PTM7950 phase-change pad",
@@ -224,7 +224,7 @@
     "severity": "warn",
     "category_slug": "overheating",
     "symptoms": [
-      "Gradual temperature increase of 15-20\u00b0C over several years of use",
+      "Gradual temperature increase of 15-20°C over several years of use",
       "Fans ramp to high speed within 5 seconds of opening any application",
       "Cooler was never repasted since original assembly 4+ years ago"
     ],
@@ -260,7 +260,7 @@
     "severity": "info",
     "category_slug": "overheating",
     "symptoms": [
-      "Removing the case tempered glass side panel instantly drops GPU temp by 10-15\u00b0C",
+      "Removing the case tempered glass side panel instantly drops GPU temp by 10-15°C",
       "Dust collects rapidly around PCIe slots and rear panel crevices",
       "GPU intake fans fight against internal case vacuum"
     ],
@@ -296,7 +296,7 @@
     "severity": "warn",
     "category_slug": "overheating",
     "symptoms": [
-      "CPU pulls 250W-320W in benchmarks and hits 100\u00b0C on a 360mm AIO cooler",
+      "CPU pulls 250W-320W in benchmarks and hits 100°C on a 360mm AIO cooler",
       "CPU Vcore voltages spike above 1.40V in HWiNFO",
       "System crashes in Cinebench or rendering after 30 seconds"
     ],
@@ -311,11 +311,11 @@
       },
       {
         "title": "Apply negative voltage offset (Undervolt)",
-        "detail": "In BIOS, set CPU Core Voltage mode to 'Offset Mode', select '-', and enter a conservative offset of 0.050V (-50mV) to drop temperatures by 5-10\u00b0C with zero performance loss."
+        "detail": "In BIOS, set CPU Core Voltage mode to 'Offset Mode', select '-', and enter a conservative offset of 0.050V (-50mV) to drop temperatures by 5-10°C with zero performance loss."
       },
       {
         "title": "Configure AMD Precision Boost Overdrive Curve Optimizer",
-        "detail": "On Ryzen processors, enable PBO Curve Optimizer \u2192 All Cores \u2192 Negative \u2192 start with 15 or 20 for cooler operating temperatures."
+        "detail": "On Ryzen processors, enable PBO Curve Optimizer → All Cores → Negative → start with 15 or 20 for cooler operating temperatures."
       }
     ],
     "related_error_codes": [
@@ -333,7 +333,7 @@
     "severity": "critical",
     "category_slug": "overheating",
     "symptoms": [
-      "Laptop was running 75\u00b0C, but after user repasting immediately hits 100\u00b0C on desktop",
+      "Laptop was running 75°C, but after user repasting immediately hits 100°C on desktop",
       "Laptop shuts down 1 minute into booting any 3D game",
       "Thermal paste on CPU shows zero spread when heatsink is reopened"
     ],
@@ -365,12 +365,12 @@
   {
     "slug": "vrm-overheating-budget-motherboard",
     "title": "Motherboard VRM (Voltage Regulator Module) overheating and throttling",
-    "summary": "An entry-level motherboard lacking VRM heatsinks throttles a high-wattage CPU down to 800MHz because power MOSFETs exceed 115\u00b0C.",
+    "summary": "An entry-level motherboard lacking VRM heatsinks throttles a high-wattage CPU down to 800MHz because power MOSFETs exceed 115°C.",
     "severity": "warn",
     "category_slug": "overheating",
     "symptoms": [
-      "CPU temperatures are fine (60\u00b0C), but CPU clock speed suddenly drops to 800MHz during heavy load",
-      "HWiNFO reports 'VRM Temperature' or 'Motherboard Temperature 4' above 105\u00b0C",
+      "CPU temperatures are fine (60°C), but CPU clock speed suddenly drops to 800MHz during heavy load",
+      "HWiNFO reports 'VRM Temperature' or 'Motherboard Temperature 4' above 105°C",
       "Plastic smell emanates from upper left corner of motherboard"
     ],
     "fix_steps": [
@@ -443,7 +443,7 @@
     "category_slug": "overheating",
     "symptoms": [
       "Fans run at deafening maximum RPM from the second the PC powers on",
-      "Fan speed never drops, even when CPU temperature is 30\u00b0C",
+      "Fan speed never drops, even when CPU temperature is 30°C",
       "Software fan control tools (Fan Control, SpeedFan) have no effect"
     ],
     "fix_steps": [
@@ -511,13 +511,13 @@
   {
     "slug": "m2-nvme-ssd-thermal-throttling",
     "title": "PCIe 4.0/5.0 NVMe SSD thermal throttling (transfer speed drops to zero)",
-    "summary": "High-speed NVMe solid state drive controller chips exceed 85\u00b0C during sustained file writes, cutting speeds by 90% to avoid burning flash memory.",
+    "summary": "High-speed NVMe solid state drive controller chips exceed 85°C during sustained file writes, cutting speeds by 90% to avoid burning flash memory.",
     "severity": "warn",
     "category_slug": "overheating",
     "symptoms": [
       "Large 50GB+ file transfer starts at 5000 MB/s then plunges to 50 MB/s",
       "Games stutter heavily when loading open-world assets",
-      "CrystalDiskInfo reports SSD Temperature in bright red warning at 80-90\u00b0C"
+      "CrystalDiskInfo reports SSD Temperature in bright red warning at 80-90°C"
     ],
     "fix_steps": [
       {
@@ -554,7 +554,7 @@
     "symptoms": [
       "Front case fans make buzzing or whooshing noise against loose wires",
       "No measurable air movement felt near GPU intake fans",
-      "Ambient internal case temperature is 10-15\u00b0C warmer than room temperature"
+      "Ambient internal case temperature is 10-15°C warmer than room temperature"
     ],
     "fix_steps": [
       {
@@ -853,7 +853,7 @@
     "slug": "pc-fans-revving-up-down-every-few-seconds",
     "title": "PC case and CPU fans revving up and down loudly every 5 seconds",
     "summary": "Fans repeatedly accelerate to 100% and drop back down during light desktop usage, causing annoying fan oscillation.",
-    "severity": "low",
+    "severity": "info",
     "category_slug": "overheating",
     "symptoms": [
       "Fans ramp up to high RPM when opening a browser tab and spin down immediately",
@@ -865,19 +865,22 @@
         "order": 1,
         "title": "Add Fan Step Up / Step Down time delay (Hysteresis) in BIOS",
         "instruction": "Reboot into BIOS -> open Hardware Monitor / Q-Fan Control / Smart Fan. Find 'CPU Fan Step Up Time' (or Spin Up Time) and set to '3.0 seconds' (or Level 3). Set 'Step Down Time' to '5.0 seconds'.",
-        "caution": "This delays fan response so short 1-second temperature spikes do not trigger sudden fan revving."
+        "caution": "This delays fan response so short 1-second temperature spikes do not trigger sudden fan revving.",
+        "detail": "Reboot into BIOS -> open Hardware Monitor / Q-Fan Control / Smart Fan. Find 'CPU Fan Step Up Time' (or Spin Up Time) and set to '3.0 seconds' (or Level 3). Set 'Step Down Time' to '5.0 seconds'."
       },
       {
         "order": 2,
         "title": "Flatten the fan curve below 65 degrees Celsius",
         "instruction": "In the BIOS fan curve graph, keep fan speed at a constant quiet 35% to 40% from 30C up to 65C. Only ramp up fan speed when temperatures exceed 75C under actual gaming or render workloads.",
-        "caution": "Modern 7nm/5nm CPUs run hot at idle by design; constant 40% fan speed is completely safe."
+        "caution": "Modern 7nm/5nm CPUs run hot at idle by design; constant 40% fan speed is completely safe.",
+        "detail": "In the BIOS fan curve graph, keep fan speed at a constant quiet 35% to 40% from 30C up to 65C. Only ramp up fan speed when temperatures exceed 75C under actual gaming or render workloads."
       },
       {
         "order": 3,
         "title": "Use Fan Control software to sync case fans to GPU temperature",
         "instruction": "Download free open-source 'Fan Control' (by Rem0o). Set front intake case fans to follow GPU temperature instead of CPU spikes for whisper-quiet desktop operation.",
-        "caution": "Save configuration and enable 'Start with Windows'."
+        "caution": "Save configuration and enable 'Start with Windows'.",
+        "detail": "Download free open-source 'Fan Control' (by Rem0o). Set front intake case fans to follow GPU temperature instead of CPU spikes for whisper-quiet desktop operation."
       }
     ],
     "related_error_codes": [],
@@ -901,19 +904,22 @@
         "order": 1,
         "title": "Check AIO pump power connector and RPM in BIOS",
         "instruction": "Check that the 3-pin or 4-pin AIO pump header is plugged into the motherboard's dedicated 'AIO_PUMP' or 'W_PUMP' port (set to 100% full speed in BIOS). Verify pump reads between 2000-4500 RPM.",
-        "caution": "Never plug an AIO pump into a port set to low DC voltage control."
+        "caution": "Never plug an AIO pump into a port set to low DC voltage control.",
+        "detail": "Check that the 3-pin or 4-pin AIO pump header is plugged into the motherboard's dedicated 'AIO_PUMP' or 'W_PUMP' port (set to 100% full speed in BIOS). Verify pump reads between 2000-4500 RPM."
       },
       {
         "order": 2,
         "title": "Feel both rubber coolant tubes for vibration and temperature disparity",
         "instruction": "Gently touch both rubber tubes with fingers. You should feel slight fluid vibration. If one tube is scorching hot and the other tube is stone cold, coolant is not circulating (pump impeller is stuck or dead).",
-        "caution": "Do not pull on the tubes; simply touch the exterior sleeve."
+        "caution": "Do not pull on the tubes; simply touch the exterior sleeve.",
+        "detail": "Gently touch both rubber tubes with fingers. You should feel slight fluid vibration. If one tube is scorching hot and the other tube is stone cold, coolant is not circulating (pump impeller is stuck or dead)."
       },
       {
         "order": 3,
         "title": "Check AIO radiator orientation for trapped air bubbles",
         "instruction": "Ensure the highest point of the AIO radiator loop is ABOVE the CPU block. If the radiator is mounted at the bottom of the case, air bubbles rise into the pump, running it dry and burning it out.",
-        "caution": "Mount radiator to the top of the case (preferred) or front with tubes at the bottom."
+        "caution": "Mount radiator to the top of the case (preferred) or front with tubes at the bottom.",
+        "detail": "Ensure the highest point of the AIO radiator loop is ABOVE the CPU block. If the radiator is mounted at the bottom of the case, air bubbles rise into the pump, running it dry and burning it out."
       }
     ],
     "related_error_codes": [],
@@ -937,19 +943,22 @@
         "order": 1,
         "title": "Remove CPU cooler and inspect coldplate base",
         "instruction": "Unscrew CPU cooler mounting bracket. Lift cooler straight up. Check the bottom copper surface. Look for a transparent plastic film with warning text ('Warning! Please peel off before installation').",
-        "caution": "On AMD AM4/AM5 CPUs, twist cooler gently back and forth before pulling up so CPU does not get pulled out of socket."
+        "caution": "On AMD AM4/AM5 CPUs, twist cooler gently back and forth before pulling up so CPU does not get pulled out of socket.",
+        "detail": "Unscrew CPU cooler mounting bracket. Lift cooler straight up. Check the bottom copper surface. Look for a transparent plastic film with warning text ('Warning! Please peel off before installation')."
       },
       {
         "order": 2,
         "title": "Peel off plastic sticker and clean surfaces with isopropyl alcohol",
         "instruction": "Peel off the plastic film completely. Clean old thermal paste off both the CPU heat spreader and cooler copper base using 90%+ Isopropyl Alcohol (IPA) and a lint-free coffee filter or paper towel.",
-        "caution": "Ensure copper base is completely clean and dry before applying new paste."
+        "caution": "Ensure copper base is completely clean and dry before applying new paste.",
+        "detail": "Peel off the plastic film completely. Clean old thermal paste off both the CPU heat spreader and cooler copper base using 90%+ Isopropyl Alcohol (IPA) and a lint-free coffee filter or paper towel."
       },
       {
         "order": 3,
         "title": "Apply fresh pea-sized drop of thermal paste and remount",
         "instruction": "Place a pea-sized dot of quality thermal paste (Arctic MX-4/MX-6, Noctua NT-H1, Thermalright TF7) in the center of the CPU. Re-tighten cooler screws in a criss-cross X pattern until snug.",
-        "caution": "Do not over-tighten; stop when screws reach natural resistance."
+        "caution": "Do not over-tighten; stop when screws reach natural resistance.",
+        "detail": "Place a pea-sized dot of quality thermal paste (Arctic MX-4/MX-6, Noctua NT-H1, Thermalright TF7) in the center of the CPU. Re-tighten cooler screws in a criss-cross X pattern until snug."
       }
     ],
     "related_error_codes": [],
@@ -961,7 +970,7 @@
     "slug": "laptop-thermal-paste-pumpout-ptm7950-fix",
     "title": "Laptop CPU/GPU overheating again 2 weeks after repasting (Thermal Paste Pump-Out)",
     "summary": "Repasted gaming laptop with thermal paste, but temperatures spike to 95C again after a few days.",
-    "severity": "high",
+    "severity": "critical",
     "category_slug": "overheating",
     "symptoms": [
       "Fresh thermal paste worked great for 1 week then CPU temps spiked to 95C-100C",
@@ -973,19 +982,22 @@
         "order": 1,
         "title": "Replace standard silicone paste with Honeywell PTM7950 Phase Change Material",
         "instruction": "Laptops lack the heavy metal heat spreader (IHS) of desktop CPUs and have low spring mounting pressure. Traditional thermal paste pumps out due to thermal expansion cycles. Apply Honeywell PTM7950 (0.2mm phase-change thermal pad) cut to exact die dimensions.",
-        "caution": "Freeze PTM7950 in freezer for 10 minutes before peeling the plastic backing to make application easy."
+        "caution": "Freeze PTM7950 in freezer for 10 minutes before peeling the plastic backing to make application easy.",
+        "detail": "Laptops lack the heavy metal heat spreader (IHS) of desktop CPUs and have low spring mounting pressure. Traditional thermal paste pumps out due to thermal expansion cycles. Apply Honeywell PTM7950 (0.2mm phase-change thermal pad) cut to exact die dimensions."
       },
       {
         "order": 2,
         "title": "Check thermal putty on VRMs and VRAM chips",
         "instruction": "Do NOT use thick thermal pads on laptop VRMs/VRAM if factory used thermal paste/putty. Thick pads prevent heatsink from making contact with CPU die. Use high-performance thermal putty (e.g. Upsiren U6 Pro or K5 Pro).",
-        "caution": "Ensure heatsink sits perfectly flat and parallel on CPU and GPU dies."
+        "caution": "Ensure heatsink sits perfectly flat and parallel on CPU and GPU dies.",
+        "detail": "Do NOT use thick thermal pads on laptop VRMs/VRAM if factory used thermal paste/putty. Thick pads prevent heatsink from making contact with CPU die. Use high-performance thermal putty (e.g. Upsiren U6 Pro or K5 Pro)."
       },
       {
         "order": 3,
         "title": "Tighten heatsink screws in strict numbered sequence (1 -> 2 -> 3 -> 4)",
         "instruction": "Laptop heatsinks have small numbers stamped near each screw hole (1 through 6 or 8). Tighten each screw halfway in numerical order, then do a second pass tightening them fully.",
-        "caution": "Prevents cracking the bare silicon corners or creating uneven contact pressure."
+        "caution": "Prevents cracking the bare silicon corners or creating uneven contact pressure.",
+        "detail": "Laptop heatsinks have small numbers stamped near each screw hole (1 through 6 or 8). Tighten each screw halfway in numerical order, then do a second pass tightening them fully."
       }
     ],
     "related_error_codes": [],
@@ -997,7 +1009,7 @@
     "slug": "gpu-hotspot-temperature-30c-delta-overheating",
     "title": "GPU Hotspot / Junction temperature reaching 105C while Core temperature is only 70C",
     "summary": "HWiNFO shows a 35C delta between GPU Core and GPU Hotspot, causing fans to scream at 100% emergency speed.",
-    "severity": "high",
+    "severity": "critical",
     "category_slug": "overheating",
     "symptoms": [
       "GPU core reports 68C-72C, but GPU Hotspot / Memory Junction reaches 105C-110C",
@@ -1009,19 +1021,22 @@
         "order": 1,
         "title": "Check GPU mounting screw torque on the back retention bracket",
         "instruction": "The X-bracket or 4 spring screws behind the GPU core provide mounting pressure. If screws loosened over time, heatsink loses contact with the silicon center. Gently snug down the 4 center spring screws in an X-pattern.",
-        "caution": "Do not force screws past their stop point."
+        "caution": "Do not force screws past their stop point.",
+        "detail": "The X-bracket or 4 spring screws behind the GPU core provide mounting pressure. If screws loosened over time, heatsink loses contact with the silicon center. Gently snug down the 4 center spring screws in an X-pattern."
       },
       {
         "order": 2,
         "title": "Repaste GPU with viscous, non-pumpout thermal paste",
         "instruction": "If the delta between core and hotspot is greater than 20C, thermal paste has dried out or pumped out. Disassemble GPU cooler, clean with 99% IPA, and apply a thick viscous paste (Gelid GC-Extreme, Thermal Grizzly Kryonaut Extreme, or PTM7950).",
-        "caution": "Fully spread the paste manually across 100% of the bare GPU die; do not rely on pea-dot method on bare silicon."
+        "caution": "Fully spread the paste manually across 100% of the bare GPU die; do not rely on pea-dot method on bare silicon.",
+        "detail": "If the delta between core and hotspot is greater than 20C, thermal paste has dried out or pumped out. Disassemble GPU cooler, clean with 99% IPA, and apply a thick viscous paste (Gelid GC-Extreme, Thermal Grizzly Kryonaut Extreme, or PTM7950)."
       },
       {
         "order": 3,
         "title": "Apply GPU undervolt in MSI Afterburner",
         "instruction": "Press Ctrl+F in MSI Afterburner to open the voltage/frequency curve editor. Flatten the curve at 900mV (0.900V) at your stock boost clock. This reduces GPU power consumption by 50-80W with zero loss in FPS, dropping hotspot temps by 15C.",
-        "caution": "Test stability with 20 loops of 3DMark Time Spy or Unigine Superposition."
+        "caution": "Test stability with 20 loops of 3DMark Time Spy or Unigine Superposition.",
+        "detail": "Press Ctrl+F in MSI Afterburner to open the voltage/frequency curve editor. Flatten the curve at 900mV (0.900V) at your stock boost clock. This reduces GPU power consumption by 50-80W with zero loss in FPS, dropping hotspot temps by 15C."
       }
     ],
     "related_error_codes": [],
@@ -1033,7 +1048,7 @@
     "slug": "dust-blanket-blocking-radiator-heatsink-fins",
     "title": "Thick 'dust felt' blanket clogging heatsink fins and radiator interior",
     "summary": "Fans spin at full speed but no air comes out of the exhaust vents due to compacted dust mat inside cooling fins.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "overheating",
     "symptoms": [
       "Fans are screaming loudly, but placing your hand behind exhaust vents reveals almost zero airflow",
@@ -1045,23 +1060,235 @@
         "order": 1,
         "title": "Hold fan blades still while blowing compressed air",
         "instruction": "CRITICAL: Hold fan blades with a pencil or finger so they cannot spin when using compressed air. Blowing air on free-spinning fans can over-spin bearings and generate reverse electrical current into the motherboard fan header.",
-        "caution": "CRITICAL: Never let fans spin freely at high RPM from compressed air."
+        "caution": "CRITICAL: Never let fans spin freely at high RPM from compressed air.",
+        "detail": "CRITICAL: Hold fan blades with a pencil or finger so they cannot spin when using compressed air. Blowing air on free-spinning fans can over-spin bearings and generate reverse electrical current into the motherboard fan header."
       },
       {
         "order": 2,
         "title": "Blow air opposite the normal airflow direction",
         "instruction": "To dislodge the compacted dust blanket, blow compressed air from the outside exhaust vents BACKWARDS toward the fan intake. The solid dust mat will pop off the fins intact for easy removal with tweezers.",
-        "caution": "Do this outdoors or in a garage to avoid inhaling fine dust particles."
+        "caution": "Do this outdoors or in a garage to avoid inhaling fine dust particles.",
+        "detail": "To dislodge the compacted dust blanket, blow compressed air from the outside exhaust vents BACKWARDS toward the fan intake. The solid dust mat will pop off the fins intact for easy removal with tweezers."
       },
       {
         "order": 3,
         "title": "Clean magnetic case dust filters with warm water",
         "instruction": "Remove front and bottom PSU mesh dust filters. Wash under warm tap water, dry completely with a towel for 30 minutes, and reinstall. Clean filters restore 100% fresh air intake to GPU and CPU.",
-        "caution": "Ensure mesh filters are 100% dry before putting them back near electronics."
+        "caution": "Ensure mesh filters are 100% dry before putting them back near electronics.",
+        "detail": "Remove front and bottom PSU mesh dust filters. Wash under warm tap water, dry completely with a towel for 30 minutes, and reinstall. Clean filters restore 100% fresh air intake to GPU and CPU."
       }
     ],
     "related_error_codes": [],
     "source": "reddit_techsupport",
     "verified": true
+  },
+  {
+    "slug": "cpu-tjmax-shutdown-and-prochot-throttling",
+    "title": "CPU TjMax Thermal Shutdown and PROCHOT Throttling Triage",
+    "summary": "Diagnose processor thermal throttling at Intel/AMD TjMax temperature boundaries (100C-105C) and emergency PROCHOT hardware thermal shutdowns.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "CPU clock frequencies drop dramatically from 5GHz down to 800MHz under load",
+      "PC powers off abruptly without blue screen dump when reaching 100C-115C temperatures",
+      "HWInfo64 shows red flags on Core Thermal Throttling or PROCHOT EXT / CPU"
+    ],
+    "fix_steps": [
+      {
+        "title": "Monitor per-core temperatures and PROCHOT in HWInfo64",
+        "detail": "Launch HWInfo64 in Sensors-only mode, run Cinebench or game, and watch Core Max and PROCHOT flags. Intel chips throttle at 100C-105C; AMD Zen 4/5 chips throttle at 95C. Shutoff occurs at roughly 115C."
+      },
+      {
+        "title": "Verify cooler peel sticker was removed",
+        "detail": "A transparent plastic peel sticker left on the copper cold plate of the CPU cooler prevents direct heat transfer. Remove cooler, inspect base, peel plastic film if present, clean, and repaste."
+      },
+      {
+        "title": "Check cooler mounting standoff torque and backplate",
+        "detail": "Uneven mounting pressure causes poor thermal contact. Ensure LGA1700 or AM4/AM5 standoffs are screwed down completely and cooler retention screws are tightened diagonally in criss-cross pattern until hand-tight."
+      },
+      {
+        "title": "Apply high-quality non-conductive thermal paste",
+        "detail": "Clean old paste with 99% isopropyl alcohol. Apply a pea-sized dot or thin X pattern of quality thermal paste (Noctua NT-H2, Thermal Grizzly Kryonaut, Arctic MX-6) across the integrated heat spreader (IHS)."
+      }
+    ],
+    "related_error_codes": [
+      41,
+      257
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gpu-hotspot-junction-shutdown-threshold",
+    "title": "GPU Hotspot Junction Temperature Limit and Shutoff Triage",
+    "summary": "Troubleshoot GPU thermal emergency shutdowns triggered when GPU Hotspot (Junction) temperature hits 105C-110C while average core temperature appears normal.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "GPU fans suddenly scream at 100% maximum RPM while gaming",
+      "Display goes black while game audio continues playing in background",
+      "HWInfo64 reports GPU Core at 72C while GPU Hotspot is at 105C (delta exceeding 30C)"
+    ],
+    "fix_steps": [
+      {
+        "title": "Monitor GPU Core and Hotspot delta simultaneously",
+        "detail": "In HWInfo64, observe GPU Temperature and GPU Hotspot Temperature under 3D load. A normal delta is 10C to 15C. A delta exceeding 25C indicates thermal paste pump-out or uneven heatsink contact."
+      },
+      {
+        "title": "Inspect rear X-bracket retention screws",
+        "detail": "Check the four spring-loaded screws securing the heatsink to the GPU core on the backplate. Gently tighten each screw diagonally half a turn at a time to equalize mounting pressure."
+      },
+      {
+        "title": "Repaste GPU die with phase-change PTM7950 pad",
+        "detail": "Direct-die bare silicon GPUs pump out standard thermal paste within weeks. Disassemble heatsink, clean die, and apply Honeywell PTM7950 phase-change pad or high-viscosity paste (Thermal Grizzly Aeronaut/Kryonaut Extreme)."
+      },
+      {
+        "title": "Replace degraded VRAM thermal pads",
+        "detail": "Inspect GDDR6/GDDR6X thermal pads for oil weeping or tearing. Replace with precise manufacturer-thickness pads (usually 1.0mm, 1.5mm, or 2.0mm) to prevent pad thickness from lifting the cold plate off the core."
+      }
+    ],
+    "related_error_codes": [
+      41,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "bios-fan-curve-hysteresis-pwm-dc-tuning",
+    "title": "BIOS Fan Curve Hysteresis and PWM vs DC Header Optimization",
+    "summary": "Eliminate annoying fan revving loops every few seconds by configuring temperature smoothing hysteresis and setting proper 4-pin PWM header modes.",
+    "severity": "info",
+    "category_slug": "overheating",
+    "symptoms": [
+      "CPU and chassis fans ramp loudly to 100% then drop back down every 5 to 10 seconds",
+      "Fans make annoying pulsing noises during light tasks like opening browser tabs",
+      "Case fans spin at maximum speed constantly despite low system temperatures"
+    ],
+    "fix_steps": [
+      {
+        "title": "Enter motherboard BIOS fan control interface",
+        "detail": "Restart computer and press Del or F2 during boot. Navigate to Hardware Monitor / Fan Control (ASUS Q-Fan, MSI Smart Fan, Gigabyte Smart Fan 6, ASRock Fan-Tastic)."
+      },
+      {
+        "title": "Verify PWM vs DC header mode for each fan",
+        "detail": "For 4-pin fans, ensure header control mode is set to PWM (Pulse Width Modulation). Setting a 4-pin fan to DC (Voltage) mode can cause erratic RPM control or run at 100% full speed."
+      },
+      {
+        "title": "Configure fan step-up and step-down hysteresis delay",
+        "detail": "Locate Fan Step Up / Step Down time (or Temperature Interval / Smoothing). Set step-up delay to 2-3 seconds and step-down delay to 3-5 seconds so brief 1-second CPU temperature spikes do not trigger fan ramp-ups."
+      },
+      {
+        "title": "Tune flat baseline curve up to 65C",
+        "detail": "Set fan curve to hold quiet 35%-40% RPM flatly until CPU temperature reaches 65C, then gradually ramp up to 75% at 80C, and 100% at 85C."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "aio-pump-header-constant-speed-configuration",
+    "title": "AIO Liquid Cooler Pump Header Constant Speed Configuration",
+    "summary": "Configure dedicated AIO_PUMP and W_PUMP motherboard headers to constant 100% speed to prevent liquid coolant stalling, cavitation, and overheating.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "AIO cooler tubes feel hot near CPU block while radiator remains completely cold",
+      "CPU idles at 60C-75C and throttles instantly under any small load",
+      "Liquid cooler pump makes clicking, gurgling, or buzzing noises"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify pump tachometer header connection",
+        "detail": "Inspect physical wiring inside chassis. The 3-pin or 4-pin cable running from the AIO pump block should be connected to the dedicated AIO_PUMP or W_PUMP header on the motherboard, not standard CPU_FAN."
+      },
+      {
+        "title": "Set AIO_PUMP header to 100% constant full speed in BIOS",
+        "detail": "Enter BIOS setup -> Fan Monitor. Select AIO_PUMP / W_PUMP header, change control mode to Full Speed or 100% duty cycle, and disable temperature curve regulation. Liquid pumps require constant 12V voltage to maintain coolant flow."
+      },
+      {
+        "title": "Connect radiator fans to CPU_FAN header",
+        "detail": "Connect the radiator cooling fans to CPU_FAN (and CPU_OPT if multiple fans). This ensures fan RPM ramps up and down dynamically based on CPU temperature while pump flow remains steady."
+      },
+      {
+        "title": "Tilt chassis to dislodge air bubbles",
+        "detail": "If gurgling or cavitation sounds persist, tilt the PC chassis gently while running so trapped air bubbles migrate out of the pump block up into the radiator reservoir."
+      }
+    ],
+    "related_error_codes": [],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "psu-transient-power-spike-ocp-tripping",
+    "title": "GPU Microsecond Transient Power Spike and PSU OCP Tripping Triage",
+    "summary": "Diagnose instant PC shutdowns during intense gaming caused by modern high-end GPU microsecond transient power spikes tripping PSU Over Current Protection.",
+    "severity": "critical",
+    "category_slug": "overheating",
+    "symptoms": [
+      "PC powers off instantly during sudden gameplay transitions (launching game, explosion, loading screen)",
+      "No blue screen dump is created; power supply requires flipping AC rocker switch off and on to restart",
+      "System runs fine under synthetic CPU stress tests but shuts off immediately in games"
+    ],
+    "fix_steps": [
+      {
+        "title": "Identify GPU transient power spikes",
+        "detail": "Modern graphics cards (RTX 3080/3090/4080/4090 and RX 6900/7900 series) generate microsecond transient load spikes drawing 2x to 3x their rated TDP, triggering Over Current Protection (OCP) or Over Power Protection (OPP) on older ATX 2.4 power supplies."
+      },
+      {
+        "title": "Ensure independent PCIe 8-pin cables",
+        "detail": "Do not use daisy-chained pigtail cables. Each 8-pin power socket on the GPU must have its own dedicated cable running directly to a separate output port on the modular PSU."
+      },
+      {
+        "title": "Test with GPU power limit reduced to 80%",
+        "detail": "Open MSI Afterburner, reduce Power Limit slider to 80%, and test gaming load. If shutdowns cease completely, transient power excursions tripping PSU protections are confirmed."
+      },
+      {
+        "title": "Upgrade to ATX 3.0 / PCIe 5.0 compliant power supply",
+        "detail": "ATX 3.0 compliant power supplies are engineered to withstand up to 200% excursion power spikes for 100 microseconds without tripping protection circuits."
+      }
+    ],
+    "related_error_codes": [
+      41
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "pcie-cable-daisy-chain-vs-dedicated-rails",
+    "title": "Dedicated PCIe 8-Pin Cables vs Daisy-Chain Pigtails Triage",
+    "summary": "Prevent 12V rail voltage droop, connector overheating, and stability crashes by using separate dedicated PCIe 8-pin power cables for high-wattage graphics cards.",
+    "severity": "warn",
+    "category_slug": "overheating",
+    "symptoms": [
+      "Graphics card crashes or display driver resets under 3D load",
+      "PCIe power connector or cable feels uncomfortably hot to the touch near GPU",
+      "HWInfo64 reports GPU 12V PCIe input voltage dropping below 11.4V under load"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect GPU power cabling setup",
+        "detail": "Examine the cables connected to your graphics card. If a single cable from the power supply branches into two 6+2 pin connectors plugged into the GPU, this is a daisy-chained pigtail configuration."
+      },
+      {
+        "title": "Understand 8-pin PCIe power delivery limits",
+        "detail": "A standard 8-pin PCIe connector is rated for 150W; the motherboard PCIe slot provides 75W. For GPUs drawing over 225W, drawing 300W through a single 18AWG wire run causes significant resistance, heat, and voltage droop."
+      },
+      {
+        "title": "Run separate dedicated PCIe cables from PSU",
+        "detail": "Plug additional independent PCIe 8-pin cables into your modular power supply and connect one dedicated cable to each socket on the graphics card."
+      },
+      {
+        "title": "Monitor 12V input voltage under load",
+        "detail": "Launch HWInfo64, start a 3D gaming workload, and monitor GPU 12V Input Voltage. The reading should remain firmly between 11.8V and 12.2V."
+      }
+    ],
+    "related_error_codes": [
+      41,
+      43
+    ],
+    "source": "researched",
+    "verified": false
   }
 ]

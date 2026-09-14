@@ -22,12 +22,20 @@ const STOP_WORDS = new Set([
 const HIGH_VALUE_TECH_TOKENS = new Set([
   "dram", "vga", "cpu", "ram", "gpu", "bios", "uefi", "cmos", "nvme", "ssd", "hdd",
   "bsod", "wifi", "wlan", "ethernet", "bluetooth", "hdmi", "displayport", "psu",
-  "post", "motherboard", "overheating", "artifact", "beeps"
+  "post", "motherboard", "overheating", "artifact", "beeps",
+  "asus", "msi", "gigabyte", "asrock", "qled", "qcode", "drdebug", "ezdebug",
+  "nvidia", "amd", "radeon", "geforce", "arc", "tdr", "nvlddmkm", "amdkmdag",
+  "igdkmdn64", "12vhpwr", "spaceinvaders", "vram", "smart", "vmd", "rst",
+  "chkdsk", "dirtybit", "writeprotect", "unallocated", "dhcp", "apipa", "169254",
+  "winsock", "netsh", "tcpip", "wifi6", "wifi6e", "wifi7", "mlo", "80211be", "tjmax", "prochot",
+  "hysteresis", "transient", "excursion", "ocp", "opp"
 ]);
 
 function extractKeywords(query: string): string[] {
   const normalized = query
     .toLowerCase()
+    .replace(/\bwi[- ]?fi\s*6e?\b/g, "wifi6 wifi6e")
+    .replace(/\bwi[- ]?fi\s*7\b/g, "wifi7")
     .replace(/\bwi[- ]?fi\b/g, "wifi")
     .replace(/\bblue[- ]?screen\b/g, "bluescreen")
     .replace(/\bno[- ]?boot\b/g, "wontboot")
@@ -35,6 +43,24 @@ function extractKeywords(query: string): string[] {
     .replace(/\bshut[- ]?down\b/g, "shutdown")
     .replace(/\bturn(ing)?\s+on\b/g, "boot")
     .replace(/\bnot\s+turning\s+on\b/g, "wontboot")
+    .replace(/\bq[- ]?code\b/g, "qcode")
+    .replace(/\bez[- ]?debug\b/g, "ezdebug")
+    .replace(/\bdr[\.-]?\s*debug\b/gi, "drdebug")
+    .replace(/\b12v[- ]?2x6\b/g, "12vhpwr")
+    .replace(/\b12v[- ]?hpwr\b/g, "12vhpwr")
+    .replace(/\b12vhpwr\b/g, "12vhpwr")
+    .replace(/\b169\.254(?:\.\d+\.\d+)?\b/g, "169254 apipa dhcp")
+    .replace(/\btjmax\b/g, "tjmax throttle")
+    .replace(/\btj[- ]?max\b/g, "tjmax throttle")
+    .replace(/\bprochot\b/g, "prochot throttle")
+    .replace(/\bproc[- ]?hot\b/g, "prochot throttle")
+    .replace(/\bdebug\s+leds?\b/g, "debug led qled")
+    .replace(/\bdriver\s+timeout\b/g, "driver timeout tdr")
+    .replace(/\bpending\s+sectors?\b/g, "pending sector smart")
+    .replace(/\bdirty\s+bits?\b/g, "dirty bit dirtybit smart")
+    .replace(/\bwrite\s+protect(?:ed|ion)?\b/g, "write protect writeprotect smart")
+    .replace(/\bself\s+assigned\b/g, "self assigned apipa 169254 dhcp")
+    .replace(/\bspace\s+invaders?\b/g, "spaceinvaders")
     .replace(/[^a-z0-9\s]/g, " ");
 
   const rawTokens = normalized.split(/\s+/).filter(Boolean);
@@ -78,6 +104,103 @@ function extractKeywords(query: string): string[] {
         keywords.add("audio");
         keywords.add("sound");
       }
+
+      // Vendor debug synonym cluster: asus, msi, gigabyte, asrock, qled, qcode, debug led
+      if (token === "drdebug" || token === "asrock") {
+        keywords.add("asrock");
+        keywords.add("drdebug");
+        keywords.add("debug");
+      } else if (token === "ezdebug" || token === "msi") {
+        keywords.add("msi");
+        keywords.add("ezdebug");
+        keywords.add("debug");
+      } else if (token === "qled" || token === "qcode" || token === "asus") {
+        keywords.add("asus");
+        keywords.add("qled");
+        keywords.add("qcode");
+        keywords.add("debug");
+        keywords.add("led");
+      } else if (token === "gigabyte") {
+        keywords.add("gigabyte");
+        keywords.add("debug");
+      }
+
+      // GPU TDR synonym cluster: isolate NVIDIA, AMD, and generic TDR
+      if (token === "nvlddmkm" || token === "nvidia" || token === "geforce") {
+        keywords.add("nvidia");
+        keywords.add("nvlddmkm");
+        keywords.add("tdr");
+        keywords.add("timeout");
+        keywords.add("driver");
+      } else if (token === "amdkmdag" || token === "amd" || token === "radeon") {
+        keywords.add("amd");
+        keywords.add("radeon");
+        keywords.add("amdkmdag");
+        keywords.add("tdr");
+        keywords.add("timeout");
+        keywords.add("driver");
+      } else if (token === "tdr") {
+        keywords.add("tdr");
+        keywords.add("timeout");
+        keywords.add("driver");
+      }
+
+      // Storage synonym cluster: smart, reallocated, pending sector, vmd, dirty bit, write protect
+      if (token === "smart" || token === "reallocated") {
+        keywords.add("smart");
+        keywords.add("reallocated");
+        keywords.add("sector");
+        keywords.add("pending");
+      } else if (token === "vmd" || token === "rst") {
+        keywords.add("vmd");
+        keywords.add("rst");
+        keywords.add("inaccessible");
+      } else if (token === "dirtybit") {
+        keywords.add("dirtybit");
+        keywords.add("chkdsk");
+        keywords.add("ntfs");
+      } else if (token === "writeprotect") {
+        keywords.add("writeprotect");
+        keywords.add("readonly");
+        keywords.add("lockout");
+      }
+
+      // Network synonym cluster: isolate Winsock and Netsh from APIPA and DHCP
+      if (token === "apipa" || token === "169254" || token === "dhcp") {
+        keywords.add("apipa");
+        keywords.add("169254");
+        keywords.add("dhcp");
+        keywords.add("network");
+      } else if (token === "winsock" || token === "netsh") {
+        keywords.add("winsock");
+        keywords.add("netsh");
+        keywords.add("tcpip");
+        keywords.add("network");
+      }
+
+      // Reset / Recovery synonym cluster
+      if (token === "reset" || token === "recovery") {
+        keywords.add("reset");
+        keywords.add("recovery");
+      }
+
+      // Thermal/Power synonym cluster: tjmax, prochot, transient, trip, ocp, hysteresis
+      if (token === "tjmax" || token === "prochot") {
+        keywords.add("tjmax");
+        keywords.add("prochot");
+        keywords.add("throttle");
+        keywords.add("thermal");
+      } else if (token === "transient" || token === "trip" || token === "ocp" || token === "opp" || token === "excursion") {
+        keywords.add("transient");
+        keywords.add("trip");
+        keywords.add("ocp");
+        keywords.add("power");
+        keywords.add("psu");
+      } else if (token === "hysteresis") {
+        keywords.add("hysteresis");
+        keywords.add("curve");
+        keywords.add("thermal");
+      }
     }
   }
 
@@ -107,6 +230,7 @@ function getSearchCorpus(): SearchCorpusItem[] {
         .toLowerCase()
         .replace(/\bwi[- ]?fi\b/g, "wifi");
       const slugText = (issue.slug || "").replace(/-/g, " ");
+      const compactSlug = (issue.slug || "").replace(/-/g, "");
       const categoryText = (issue.category_slug || "").replace(/-/g, " ");
 
       return {
@@ -116,7 +240,7 @@ function getSearchCorpus(): SearchCorpusItem[] {
         severity: issue.severity,
         category_slug: issue.category_slug,
         steps: issue.steps,
-        haystack: `${normalizedTitle} ${normalizedSummary} ${normalizedSymptoms} ${slugText} ${categoryText}`,
+        haystack: `${normalizedTitle} ${normalizedSummary} ${normalizedSymptoms} ${slugText} ${compactSlug} ${categoryText}`,
       };
     });
   }
@@ -375,7 +499,12 @@ export async function POST(req: NextRequest) {
           .map((item) => {
             let score = 0;
             let directMatches = 0;
-            const lowerTitle = item.title.toLowerCase().replace(/\bwi[- ]?fi\b/g, "wifi");
+            const lowerTitle = item.title
+              .toLowerCase()
+              .replace(/\bwi[- ]?fi\b/g, "wifi")
+              .replace(/\bez[- ]?debug\b/g, "ezdebug")
+              .replace(/\bdr[\.-]?\s*debug\b/gi, "drdebug")
+              .replace(/\bq[- ]?code\b/g, "qcode");
 
             for (const kw of queryKeywords) {
               const isHighValue = HIGH_VALUE_TECH_TOKENS.has(kw);
@@ -395,7 +524,7 @@ export async function POST(req: NextRequest) {
             return { item, directMatches, score: normalizedScore };
           })
           .filter((res) => res.directMatches >= 1 && res.score >= 0.08)
-          .sort((a, b) => b.score - a.score)
+          .sort((a, b) => b.score - a.score || b.directMatches - a.directMatches)
           .slice(0, 2);
 
         if (scoredIssues.length > 0) {

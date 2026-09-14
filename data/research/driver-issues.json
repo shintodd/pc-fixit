@@ -17,7 +17,7 @@
       },
       {
         "title": "Perform a clean driver reinstall",
-        "detail": "Right-click the problematic device \u2192 Uninstall device \u2192 check 'Attempt to remove the driver for this device' \u2192 click Uninstall. Reboot and install the latest WHQL driver from the vendor website."
+        "detail": "Right-click the problematic device → Uninstall device → check 'Attempt to remove the driver for this device' → click Uninstall. Reboot and install the latest WHQL driver from the vendor website."
       },
       {
         "title": "Install motherboard chipset drivers",
@@ -25,7 +25,7 @@
       },
       {
         "title": "Roll back recently updated drivers",
-        "detail": "If the issue started after an automatic update, right-click the device in Device Manager \u2192 Properties \u2192 Driver tab \u2192 click 'Roll Back Driver'."
+        "detail": "If the issue started after an automatic update, right-click the device in Device Manager → Properties → Driver tab → click 'Roll Back Driver'."
       }
     ],
     "related_error_codes": [
@@ -53,7 +53,7 @@
     "fix_steps": [
       {
         "title": "Perform clean DDU driver wipe in Safe Mode",
-        "detail": "Download Display Driver Uninstaller (DDU). Boot into Safe Mode, run DDU, select GPU (Nvidia/AMD/Intel) \u2192 'Clean and restart'. Install the latest stable WHQL driver on normal boot."
+        "detail": "Download Display Driver Uninstaller (DDU). Boot into Safe Mode, run DDU, select GPU (Nvidia/AMD/Intel) → 'Clean and restart'. Install the latest stable WHQL driver on normal boot."
       },
       {
         "title": "Increase TDR delay in Windows Registry",
@@ -65,7 +65,7 @@
       },
       {
         "title": "Disable Windows Hardware-Accelerated GPU Scheduling (HAGS)",
-        "detail": "In Settings \u2192 System \u2192 Display \u2192 Graphics \u2192 Change default graphics settings \u2192 toggle 'Hardware-accelerated GPU scheduling' OFF and reboot."
+        "detail": "In Settings → System → Display → Graphics → Change default graphics settings → toggle 'Hardware-accelerated GPU scheduling' OFF and reboot."
       }
     ],
     "related_error_codes": [
@@ -90,7 +90,7 @@
     "fix_steps": [
       {
         "title": "Disable automatic driver downloads in System Properties",
-        "detail": "Press Win+R, type 'sysdm.cpl' \u2192 Hardware tab \u2192 Device Installation Settings \u2192 select 'No (your device might not work as expected)' and save."
+        "detail": "Press Win+R, type 'sysdm.cpl' → Hardware tab → Device Installation Settings → select 'No (your device might not work as expected)' and save."
       },
       {
         "title": "Use Microsoft 'Show or Hide Updates' troubleshooter (wushowhide)",
@@ -98,7 +98,7 @@
       },
       {
         "title": "Configure Group Policy to block driver updates",
-        "detail": "In gpedit.msc (Pro/Enterprise editions), go to Computer Configuration \u2192 Administrative Templates \u2192 Windows Components \u2192 Windows Update \u2192 Manage updates offered from Windows Update \u2192 Enable 'Do not include drivers with Windows Updates'."
+        "detail": "In gpedit.msc (Pro/Enterprise editions), go to Computer Configuration → Administrative Templates → Windows Components → Windows Update → Manage updates offered from Windows Update → Enable 'Do not include drivers with Windows Updates'."
       },
       {
         "title": "Reinstall latest vendor driver package",
@@ -130,11 +130,11 @@
       },
       {
         "title": "Switch to generic Microsoft 'High Definition Audio Device' driver",
-        "detail": "In Device Manager \u2192 Sound, video and game controllers \u2192 right-click Realtek Audio \u2192 Update driver \u2192 Browse my computer \u2192 Let me pick from a list \u2192 select 'High Definition Audio Device' (generic Microsoft driver) \u2192 reboot."
+        "detail": "In Device Manager → Sound, video and game controllers → right-click Realtek Audio → Update driver → Browse my computer → Let me pick from a list → select 'High Definition Audio Device' (generic Microsoft driver) → reboot."
       },
       {
         "title": "Disable audio enhancements in sound properties",
-        "detail": "Press Win+R, type 'mmsys.cpl' \u2192 select your playback device \u2192 Properties \u2192 Enhancements (or Advanced) tab \u2192 check 'Disable all enhancements'."
+        "detail": "Press Win+R, type 'mmsys.cpl' → select your playback device → Properties → Enhancements (or Advanced) tab → check 'Disable all enhancements'."
       },
       {
         "title": "Set Default Format to 24-bit, 48000 Hz (Studio Quality)",
@@ -167,11 +167,11 @@
       },
       {
         "title": "Disable USB Selective Suspend in Power Options",
-        "detail": "Open Control Panel \u2192 Power Options \u2192 Change plan settings \u2192 Change advanced power settings \u2192 expand 'USB settings' \u2192 USB selective suspend setting \u2192 set to 'Disabled'."
+        "detail": "Open Control Panel → Power Options → Change plan settings → Change advanced power settings → expand 'USB settings' → USB selective suspend setting → set to 'Disabled'."
       },
       {
         "title": "Uninstall USB Root Hubs in Device Manager",
-        "detail": "In Device Manager, expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' \u2192 Uninstall device. Restart PC to let Windows reinstall controllers automatically."
+        "detail": "In Device Manager, expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' → Uninstall device. Restart PC to let Windows reinstall controllers automatically."
       },
       {
         "title": "Test on rear motherboard ports directly",
@@ -195,7 +195,7 @@
     "severity": "warn",
     "category_slug": "driver-issues",
     "symptoms": [
-      "No Bluetooth toggle under Settings \u2192 Bluetooth & devices",
+      "No Bluetooth toggle under Settings → Bluetooth & devices",
       "Action Center Bluetooth quick tile is gone",
       "Wireless mice, keyboards, and headphones cannot connect"
     ],
@@ -206,11 +206,11 @@
       },
       {
         "title": "Restart Bluetooth Support Service",
-        "detail": "Open 'services.msc', locate 'Bluetooth Support Service', right-click \u2192 Properties \u2192 set Startup type to 'Automatic' and click 'Start'."
+        "detail": "Open 'services.msc', locate 'Bluetooth Support Service', right-click → Properties → set Startup type to 'Automatic' and click 'Start'."
       },
       {
         "title": "Show Hidden Devices in Device Manager",
-        "detail": "In Device Manager, click View menu \u2192 check 'Show hidden devices'. If Bluetooth appears greyed out, right-click and select 'Update driver' or 'Uninstall device' and reboot."
+        "detail": "In Device Manager, click View menu → check 'Show hidden devices'. If Bluetooth appears greyed out, right-click and select 'Update driver' or 'Uninstall device' and reboot."
       },
       {
         "title": "Install official Intel / Realtek Wireless Bluetooth driver",
@@ -234,7 +234,7 @@
     "category_slug": "driver-issues",
     "symptoms": [
       "Primary monitor works fine, but second display stays black with 'No Signal'",
-      "Settings \u2192 Display \u2192 Multiple displays \u2192 'Detect other display' reports 'Didn't detect another display'",
+      "Settings → Display → Multiple displays → 'Detect other display' reports 'Didn't detect another display'",
       "Windows Project menu (Win+P) is set to 'Duplicate' or 'Extend' but nothing appears"
     ],
     "fix_steps": [
@@ -270,7 +270,7 @@
     "category_slug": "driver-issues",
     "symptoms": [
       "Basic pointer movement works, but two-finger scrolling and tap-to-click fail",
-      "Settings \u2192 Bluetooth & devices \u2192 Touchpad lacks gesture configuration sliders",
+      "Settings → Bluetooth & devices → Touchpad lacks gesture configuration sliders",
       "Device Manager lists 'PS/2 Compatible Mouse' instead of 'I2C HID Device'"
     ],
     "fix_steps": [
@@ -280,11 +280,11 @@
       },
       {
         "title": "Update Synaptics / ELAN touchpad driver",
-        "detail": "In Device Manager \u2192 Human Interface Devices (HID) or Mice \u2192 right-click the touchpad device \u2192 Update driver \u2192 Search automatically for drivers."
+        "detail": "In Device Manager → Human Interface Devices (HID) or Mice → right-click the touchpad device → Update driver → Search automatically for drivers."
       },
       {
         "title": "Reset touchpad settings to default",
-        "detail": "Go to Settings \u2192 Bluetooth & devices \u2192 Touchpad \u2192 expand 'Touchpad' card \u2192 click the 'Reset' button."
+        "detail": "Go to Settings → Bluetooth & devices → Touchpad → expand 'Touchpad' card → click the 'Reset' button."
       },
       {
         "title": "Verify physical Fn lock switch",
@@ -312,7 +312,7 @@
     "fix_steps": [
       {
         "title": "Remove printer and delete existing driver package",
-        "detail": "Go to Settings \u2192 Bluetooth & devices \u2192 Printers & scanners \u2192 select printer \u2192 Remove. Next, press Win+R, type 'printui.exe /s', go to Drivers tab, and remove the printer driver package."
+        "detail": "Go to Settings → Bluetooth & devices → Printers & scanners → select printer → Remove. Next, press Win+R, type 'printui.exe /s', go to Drivers tab, and remove the printer driver package."
       },
       {
         "title": "Restart the Print Spooler service",
@@ -354,7 +354,7 @@
       },
       {
         "title": "Configure Steam Controller Settings",
-        "detail": "In Steam \u2192 Settings \u2192 Controller \u2192 enable 'Enable Steam Input for Xbox/PlayStation controllers' to emulate standard XInput across non-Steam games."
+        "detail": "In Steam → Settings → Controller → enable 'Enable Steam Input for Xbox/PlayStation controllers' to emulate standard XInput across non-Steam games."
       },
       {
         "title": "Test inputs in Windows Game Controllers utility",
@@ -362,7 +362,7 @@
       },
       {
         "title": "Remove and re-pair Bluetooth device",
-        "detail": "In Settings \u2192 Bluetooth & devices, remove the controller. Hold the pairing button until the LED flashes rapidly, and pair again."
+        "detail": "In Settings → Bluetooth & devices, remove the controller. Hold the pairing button until the LED flashes rapidly, and pair again."
       }
     ],
     "related_error_codes": [
@@ -391,7 +391,7 @@
       },
       {
         "title": "Enable Camera Privacy permissions in Windows Settings",
-        "detail": "Go to Settings \u2192 Privacy & security \u2192 Camera. Ensure 'Camera access' is turned ON, and 'Let apps access your camera' is enabled for your target apps."
+        "detail": "Go to Settings → Privacy & security → Camera. Ensure 'Camera access' is turned ON, and 'Let apps access your camera' is enabled for your target apps."
       },
       {
         "title": "Disable third-party antivirus webcam protection",
@@ -399,7 +399,7 @@
       },
       {
         "title": "Roll back or reinstall USB Video Device driver",
-        "detail": "In Device Manager \u2192 Cameras, right-click the webcam \u2192 Uninstall device \u2192 restart PC to reload the clean Microsoft UVC driver."
+        "detail": "In Device Manager → Cameras, right-click the webcam → Uninstall device → restart PC to reload the clean Microsoft UVC driver."
       }
     ],
     "related_error_codes": [
@@ -467,7 +467,7 @@
       },
       {
         "title": "Reboot into Windows Safe Mode",
-        "detail": "Hold Shift while clicking 'Restart' in Start Menu \u2192 Troubleshoot \u2192 Advanced options \u2192 Startup Settings \u2192 Restart \u2192 press 4 for Safe Mode."
+        "detail": "Hold Shift while clicking 'Restart' in Start Menu → Troubleshoot → Advanced options → Startup Settings → Restart → press 4 for Safe Mode."
       },
       {
         "title": "Run DDU for the previous GPU brand first",
@@ -500,7 +500,7 @@
     "fix_steps": [
       {
         "title": "Temporarily disable Driver Signature Enforcement",
-        "detail": "Hold Shift while clicking Restart \u2192 Troubleshoot \u2192 Advanced options \u2192 Startup Settings \u2192 Restart \u2192 press '7' or 'F7' to 'Disable driver signature enforcement'."
+        "detail": "Hold Shift while clicking Restart → Troubleshoot → Advanced options → Startup Settings → Restart → press '7' or 'F7' to 'Disable driver signature enforcement'."
       },
       {
         "title": "Install the required driver while enforcement is disabled",
@@ -588,7 +588,7 @@
       },
       {
         "title": "Disable PCIe Link State Power Management",
-        "detail": "In Control Panel Power Options \u2192 Change advanced power settings \u2192 PCI Express \u2192 Link State Power Management \u2192 set to 'Off'."
+        "detail": "In Control Panel Power Options → Change advanced power settings → PCI Express → Link State Power Management → set to 'Off'."
       }
     ],
     "related_error_codes": [
@@ -886,7 +886,7 @@
     "slug": "audio-mic-discord-game-sound-leak",
     "title": "Microphone picking up PC game audio and desktop sounds in Discord",
     "summary": "Friends hear your game, YouTube, or music through your mic even when wearing headphones.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "driver-issues",
     "symptoms": [
       "Discord friends hear themselves or your game audio",
@@ -898,19 +898,22 @@
         "order": 1,
         "title": "Disable Stereo Mix in Windows Sound Control Panel",
         "instruction": "Press Win+R, type 'mmsys.cpl' and hit Enter. Go to the 'Recording' tab. If you see 'Stereo Mix' or 'Wave Out', right-click and select 'Disable'.",
-        "caution": "Do not disable your primary physical microphone device."
+        "caution": "Do not disable your primary physical microphone device.",
+        "detail": "Press Win+R, type 'mmsys.cpl' and hit Enter. Go to the 'Recording' tab. If you see 'Stereo Mix' or 'Wave Out', right-click and select 'Disable'."
       },
       {
         "order": 2,
         "title": "Check 3.5mm combo jack splitter crosstalk",
         "instruction": "If using a single 4-pole 3.5mm headset plugged into separate mic/audio PC ports, cheap splitters leak electrical audio signals between channels. Test with a dedicated USB audio dongle or Apple 3.5mm-to-USB-C DAC.",
-        "caution": "Ensure the 3.5mm jack is pushed completely into the socket until it clicks."
+        "caution": "Ensure the 3.5mm jack is pushed completely into the socket until it clicks.",
+        "detail": "If using a single 4-pole 3.5mm headset plugged into separate mic/audio PC ports, cheap splitters leak electrical audio signals between channels. Test with a dedicated USB audio dongle or Apple 3.5mm-to-USB-C DAC."
       },
       {
         "order": 3,
         "title": "Enable Discord Noise Suppression and Echo Cancellation",
         "instruction": "In Discord Settings -> Voice & Video, set Noise Suppression to 'Krisp'. Turn on 'Echo Cancellation' and disable 'Listen to this Device' in Windows recording device properties.",
-        "caution": "Krisp requires slight CPU overhead; on very old 4-core CPUs use 'Standard' instead."
+        "caution": "Krisp requires slight CPU overhead; on very old 4-core CPUs use 'Standard' instead.",
+        "detail": "In Discord Settings -> Voice & Video, set Noise Suppression to 'Krisp'. Turn on 'Echo Cancellation' and disable 'Listen to this Device' in Windows recording device properties."
       }
     ],
     "related_error_codes": [],
@@ -922,7 +925,7 @@
     "slug": "monitor-stuck-60hz-high-refresh-rate",
     "title": "144Hz or 240Hz gaming monitor stuck running at 60Hz",
     "summary": "High refresh rate monitor is displaying only 60Hz in Windows display settings or feels choppy.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "driver-issues",
     "symptoms": [
       "144Hz, 165Hz or 240Hz monitor capped at 60Hz",
@@ -934,19 +937,22 @@
         "order": 1,
         "title": "Replace HDMI cable with DisplayPort cable",
         "instruction": "Older HDMI 1.4 cables or budget motherboard/monitor HDMI ports cap output to 1080p 60Hz. Connect your GPU directly to the monitor using a DisplayPort 1.4 cable.",
-        "caution": "Connect cable to your dedicated graphics card ports (horizontal), NEVER to the motherboard ports (vertical)."
+        "caution": "Connect cable to your dedicated graphics card ports (horizontal), NEVER to the motherboard ports (vertical).",
+        "detail": "Older HDMI 1.4 cables or budget motherboard/monitor HDMI ports cap output to 1080p 60Hz. Connect your GPU directly to the monitor using a DisplayPort 1.4 cable."
       },
       {
         "order": 2,
         "title": "Change refresh rate in Windows Advanced Display",
         "instruction": "Right-click desktop -> Display settings -> Advanced display. Click the 'Choose a refresh rate' dropdown and select your monitor's native max Hz (144Hz / 165Hz / 240Hz).",
-        "caution": "If the screen goes black for 15 seconds, do not panic; Windows will automatically revert if unsupported."
+        "caution": "If the screen goes black for 15 seconds, do not panic; Windows will automatically revert if unsupported.",
+        "detail": "Right-click desktop -> Display settings -> Advanced display. Click the 'Choose a refresh rate' dropdown and select your monitor's native max Hz (144Hz / 165Hz / 240Hz)."
       },
       {
         "order": 3,
         "title": "Configure Nvidia Control Panel / AMD Adrenalin resolution list",
         "instruction": "In Nvidia Control Panel under 'Change resolution', scroll down past 'Ultra HD, HD, SD' to the 'PC' section. Select your resolution under 'PC' to unlock higher refresh rates.",
-        "caution": "Resolutions under 'TV' often restrict refresh rates to 60Hz."
+        "caution": "Resolutions under 'TV' often restrict refresh rates to 60Hz.",
+        "detail": "In Nvidia Control Panel under 'Change resolution', scroll down past 'Ultra HD, HD, SD' to the 'PC' section. Select your resolution under 'PC' to unlock higher refresh rates."
       }
     ],
     "related_error_codes": [],
@@ -958,7 +964,7 @@
     "slug": "bluetooth-toggle-missing-disappeared-windows",
     "title": "Bluetooth toggle completely missing from Windows 11 Action Center",
     "summary": "Bluetooth switch disappeared from settings and Device Manager shows yellow triangle or code 43 on Intel Bluetooth.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "driver-issues",
     "symptoms": [
       "No Bluetooth toggle in Windows Settings or Action Center",
@@ -970,23 +976,26 @@
         "order": 1,
         "title": "Perform a complete motherboard capacitor drain (Cold Boot)",
         "instruction": "Shut down PC. Turn off power supply switch and unplug power cord from wall. Hold PC power button down for 30 seconds to drain motherboard capacitors. Plug back in and boot up.",
-        "caution": "Most Intel/MediaTek Wi-Fi+BT cards share a PCIe USB bus that hangs and requires complete power cut to reset."
+        "caution": "Most Intel/MediaTek Wi-Fi+BT cards share a PCIe USB bus that hangs and requires complete power cut to reset.",
+        "detail": "Shut down PC. Turn off power supply switch and unplug power cord from wall. Hold PC power button down for 30 seconds to drain motherboard capacitors. Plug back in and boot up."
       },
       {
         "order": 2,
         "title": "Restart Bluetooth Support Service",
         "instruction": "Press Win+R, type 'services.msc', find 'Bluetooth Support Service'. Right-click -> Properties -> set Startup type to 'Automatic'. Click 'Start', then click OK.",
-        "caution": "Also restart 'Bluetooth Audio Gateway Service' if using wireless headsets."
+        "caution": "Also restart 'Bluetooth Audio Gateway Service' if using wireless headsets.",
+        "detail": "Press Win+R, type 'services.msc', find 'Bluetooth Support Service'. Right-click -> Properties -> set Startup type to 'Automatic'. Click 'Start', then click OK."
       },
       {
         "order": 3,
         "title": "Reinstall clean vendor Bluetooth driver",
         "instruction": "Download latest Bluetooth driver from motherboard manufacturer site (or Intel Driver & Support Assistant). Uninstall current driver from Device Manager and install the downloaded package.",
-        "caution": "Do not use third-party automated driver finder apps."
+        "caution": "Do not use third-party automated driver finder apps.",
+        "detail": "Download latest Bluetooth driver from motherboard manufacturer site (or Intel Driver & Support Assistant). Uninstall current driver from Device Manager and install the downloaded package."
       }
     ],
     "related_error_codes": [
-      "0x0000002B"
+      43
     ],
     "source": "reddit_techsupport",
     "verified": true
@@ -996,7 +1005,7 @@
     "slug": "usb-disconnect-reconnect-sound-loop",
     "title": "Windows plays USB disconnect and connect chime sound repeatedly in a loop",
     "summary": "Constant Windows hardware disconnect and connect chimes playing every few seconds or minutes.",
-    "severity": "low",
+    "severity": "info",
     "category_slug": "driver-issues",
     "symptoms": [
       "Windows plays USB disconnect sound every 5-30 seconds",
@@ -1008,19 +1017,22 @@
         "order": 1,
         "title": "Identify offending device using USBDeview",
         "instruction": "Download free NirSoft USBDeview. Sort by 'Last Plug/Unplug Date'. Look at the top entry when the sound plays to identify the exact USB peripheral or internal hub disconnecting.",
-        "caution": "Run USBDeview as Administrator to see internal motherboard USB headers."
+        "caution": "Run USBDeview as Administrator to see internal motherboard USB headers.",
+        "detail": "Download free NirSoft USBDeview. Sort by 'Last Plug/Unplug Date'. Look at the top entry when the sound plays to identify the exact USB peripheral or internal hub disconnecting."
       },
       {
         "order": 2,
         "title": "Disable USB Selective Suspend in Power Options",
         "instruction": "Press Win+R, type 'powercfg.cpl', click 'Change plan settings' -> 'Change advanced power settings'. Expand 'USB settings' -> 'USB selective suspend setting' -> set to 'Disabled'.",
-        "caution": "This prevents Windows from putting idle USB controllers into sleep mode."
+        "caution": "This prevents Windows from putting idle USB controllers into sleep mode.",
+        "detail": "Press Win+R, type 'powercfg.cpl', click 'Change plan settings' -> 'Change advanced power settings'. Expand 'USB settings' -> 'USB selective suspend setting' -> set to 'Disabled'."
       },
       {
         "order": 3,
         "title": "Uncheck 'Allow computer to turn off this device' in Device Manager",
         "instruction": "Open Device Manager -> expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' -> Properties -> Power Management -> uncheck 'Allow the computer to turn off this device to save power'.",
-        "caution": "Repeat for USB Input Devices under 'Human Interface Devices' if mouse or keyboard disconnects."
+        "caution": "Repeat for USB Input Devices under 'Human Interface Devices' if mouse or keyboard disconnects.",
+        "detail": "Open Device Manager -> expand 'Universal Serial Bus controllers'. Right-click each 'USB Root Hub' and 'Generic USB Hub' -> Properties -> Power Management -> uncheck 'Allow the computer to turn off this device to save power'."
       }
     ],
     "related_error_codes": [],
@@ -1032,7 +1044,7 @@
     "slug": "audio-crackling-popping-dpc-latency",
     "title": "Audio crackling, popping, and micro-stuttering in games and videos",
     "summary": "Sound pops, stutters, and glitches whenever moving the mouse, launching games, or watching videos.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "driver-issues",
     "symptoms": [
       "Audio pops or crackles during gaming or YouTube playback",
@@ -1044,19 +1056,22 @@
         "order": 1,
         "title": "Run LatencyMon to identify the faulty driver",
         "instruction": "Download and run LatencyMon. Click the green Play button and reproduce audio pops for 3 minutes. Check the 'Drivers' tab to see which driver has the highest execution time (e.g. Wi-Fi, GPU, or Audio).",
-        "caution": "ndis.sys points to Wi-Fi/Ethernet drivers; nvlddmkm.sys points to Nvidia GPU driver."
+        "caution": "ndis.sys points to Wi-Fi/Ethernet drivers; nvlddmkm.sys points to Nvidia GPU driver.",
+        "detail": "Download and run LatencyMon. Click the green Play button and reproduce audio pops for 3 minutes. Check the 'Drivers' tab to see which driver has the highest execution time (e.g. Wi-Fi, GPU, or Audio)."
       },
       {
         "order": 2,
         "title": "Change Power Management mode in GPU control panel",
         "instruction": "In Nvidia Control Panel -> Manage 3D Settings -> set 'Power management mode' to 'Prefer consistent performance' (or 'Prefer maximum performance'). Rapid GPU power state switching causes audio pops.",
-        "caution": "Increases idle GPU power draw by ~5 to 10 watts."
+        "caution": "Increases idle GPU power draw by ~5 to 10 watts.",
+        "detail": "In Nvidia Control Panel -> Manage 3D Settings -> set 'Power management mode' to 'Prefer consistent performance' (or 'Prefer maximum performance'). Rapid GPU power state switching causes audio pops."
       },
       {
         "order": 3,
         "title": "Disable Wi-Fi Roaming Aggressiveness and Energy Efficient Ethernet",
         "instruction": "In Device Manager -> Network adapters -> right-click your network card -> Properties -> Advanced. Set 'Energy Efficient Ethernet' to 'Disabled' and 'Roaming Aggressiveness' to 'Lowest'.",
-        "caution": "Network card power-saving interrupts are the #1 cause of DPC audio spikes."
+        "caution": "Network card power-saving interrupts are the #1 cause of DPC audio spikes.",
+        "detail": "In Device Manager -> Network adapters -> right-click your network card -> Properties -> Advanced. Set 'Energy Efficient Ethernet' to 'Disabled' and 'Roaming Aggressiveness' to 'Lowest'."
       }
     ],
     "related_error_codes": [],
@@ -1068,7 +1083,7 @@
     "slug": "ddu-clean-reinstall-graphics-drivers",
     "title": "Clean GPU driver reinstall using Display Driver Uninstaller (DDU)",
     "summary": "Purge corrupted graphics driver fragments and registry keys causing crashes, black screens, and stuttering.",
-    "severity": "high",
+    "severity": "critical",
     "category_slug": "driver-issues",
     "symptoms": [
       "Games crashing immediately on startup after driver update",
@@ -1080,26 +1095,285 @@
         "order": 1,
         "title": "Download DDU and standalone GPU driver installer",
         "instruction": "Download latest DDU from Wagnardsoft. Download the official standalone driver installer for your GPU model from nvidia.com or amd.com. Disconnect internet (unplug ethernet or turn off Wi-Fi).",
-        "caution": "Disconnecting internet prevents Windows Update from automatically installing a generic driver during the process."
+        "caution": "Disconnecting internet prevents Windows Update from automatically installing a generic driver during the process.",
+        "detail": "Download latest DDU from Wagnardsoft. Download the official standalone driver installer for your GPU model from nvidia.com or amd.com. Disconnect internet (unplug ethernet or turn off Wi-Fi)."
       },
       {
         "order": 2,
         "title": "Boot into Windows Safe Mode",
         "instruction": "Hold Shift while clicking 'Restart' in the Windows Start menu. Go to Troubleshoot -> Advanced options -> Startup Settings -> click Restart -> press 4 or F4 for Safe Mode.",
-        "caution": "Always run DDU in Safe Mode to ensure no driver files are locked in memory."
+        "caution": "Always run DDU in Safe Mode to ensure no driver files are locked in memory.",
+        "detail": "Hold Shift while clicking 'Restart' in the Windows Start menu. Go to Troubleshoot -> Advanced options -> Startup Settings -> click Restart -> press 4 or F4 for Safe Mode."
       },
       {
         "order": 3,
         "title": "Run DDU and click 'Clean and restart'",
         "instruction": "Open DDU in Safe Mode. Select device type 'GPU', select your vendor (Nvidia, AMD, Intel). Click 'Clean and restart'. Once booted back into normal Windows, run your downloaded driver installer.",
-        "caution": "Reconnect internet only after your new driver installation finishes."
+        "caution": "Reconnect internet only after your new driver installation finishes.",
+        "detail": "Open DDU in Safe Mode. Select device type 'GPU', select your vendor (Nvidia, AMD, Intel). Click 'Clean and restart'. Once booted back into normal Windows, run your downloaded driver installer."
       }
     ],
     "related_error_codes": [
-      "0x00000116",
-      "0x00000119"
+      278,
+      281
     ],
     "source": "reddit_techsupport",
     "verified": true
+  },
+  {
+    "slug": "gpu-tdr-timeout-detection-recovery-tuning",
+    "title": "GPU TDR Timeout Detection and Recovery Registry Tuning",
+    "summary": "Tune Windows Graphics Driver Timeout Detection and Recovery (TDR) parameters to prevent premature GPU resets, black screens, and nvlddmkm recovery freezes.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Screen goes black for 2-4 seconds during intensive 3D gaming or rendering",
+      "Display recovers with notification: Display driver stopped responding and has recovered",
+      "Windows Event Viewer logs Event ID 4101 from source Display"
+    ],
+    "fix_steps": [
+      {
+        "title": "Navigate to GraphicsDrivers registry key",
+        "detail": "Press Win+R, type regedit, press Enter, and navigate to: HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers."
+      },
+      {
+        "title": "Create and configure TdrDelay value",
+        "detail": "Right-click in right pane, select New -> DWORD (32-bit) Value, name it TdrDelay, double-click it, set Base to Decimal, and enter Value data: 8. This increases the timeout threshold from default 2 seconds to 8 seconds."
+      },
+      {
+        "title": "Create TdrDdiDelay value",
+        "detail": "Create another DWORD (32-bit) Value named TdrDdiDelay, set Base to Decimal, and set Value data: 8. This grants DirectX additional time to recover without resetting the driver."
+      },
+      {
+        "title": "Clean install graphics driver with DDU",
+        "detail": "Reboot PC into Safe Mode, run Display Driver Uninstaller (DDU) to wipe all remaining display driver registry entries, and install clean latest WHQL driver package."
+      }
+    ],
+    "related_error_codes": [
+      278,
+      281,
+      4101
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "nvidia-nvlddmkm-event-id-153-crash",
+    "title": "NVIDIA nvlddmkm.sys Event ID 153 and 14 Driver Crash Recovery",
+    "summary": "Diagnose NVIDIA nvlddmkm.sys Event ID 153 and Event ID 14 graphics driver crashes caused by PCIe bus errors, unstable factory overclocks, and power limits.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Games freeze abruptly, audio loops, and game crashes to desktop",
+      "Event Viewer System log records: The description for Event ID 153 from source nvlddmkm cannot be found",
+      "GPU clock speed drops to lowest P-state (210MHz) and locks until PC restart"
+    ],
+    "fix_steps": [
+      {
+        "title": "Enable NVIDIA Control Panel Debug Mode",
+        "detail": "Open NVIDIA Control Panel, click Help menu in top bar, and click Debug Mode. This removes factory overclocks applied by board vendors (ASUS, MSI, Gigabyte) and tests stability at reference NVIDIA clocks."
+      },
+      {
+        "title": "Adjust PCIe generation in BIOS",
+        "detail": "Enter motherboard BIOS, navigate to PCIe Configuration, and change the primary PCIe x16 slot link speed from Auto / Gen 4 / Gen 5 to Gen 3. This resolves signal integrity issues on vertical riser cables."
+      },
+      {
+        "title": "Clean install driver without GeForce Experience",
+        "detail": "Use DDU in Safe Mode to remove drivers. Download standalone NVIDIA driver installer, select Custom (Advanced), and uncheck GeForce Experience, HD Audio, and USB-C drivers."
+      },
+      {
+        "title": "Verify separate PCIe power cables",
+        "detail": "Ensure the graphics card is powered using independent, dedicated 8-pin PCIe cables from the PSU rather than a single daisy-chained pigtail cable."
+      }
+    ],
+    "related_error_codes": [
+      278,
+      281,
+      4101
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "amd-amdkmdag-driver-timeout-recovery",
+    "title": "AMD amdkmdag.sys Driver Timeout and WattMan Crash Triage",
+    "summary": "Troubleshoot AMD Radeon Software driver timeout dialogs, WattMan settings resets, and amdkmdag.sys crashes in modern DirectX 11/12 games.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Screen flickers and AMD Software displays: AMD software detected that a driver timeout has occurred on your system",
+      "Radeon WattMan notification: Default Radeon WattMan settings have been restored due to unexpected system failure",
+      "Game crashes to desktop during shader compilation or alt-tabbing"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disable Multi-Plane Overlay (MPO) in Windows",
+        "detail": "MPO causes display plane conflicts between Desktop Window Manager (DWM) and AMD driver. Open regedit, navigate to HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Dwm, create DWORD OverlayTestMode, and set value to 5."
+      },
+      {
+        "title": "Turn off Enhanced Sync and Hardware Acceleration",
+        "detail": "In AMD Software: Adrenalin Edition, navigate to Gaming -> Graphics, and set Radeon Enhanced Sync to Disabled. In Discord and Chrome/Edge settings, turn off Hardware Acceleration."
+      },
+      {
+        "title": "Tighten GPU minimum clock frequency",
+        "detail": "In AMD Adrenalin -> Performance -> Tuning, enable Custom Tuning, enable GPU Tuning, and set Min Frequency (MHz) to approximately 100MHz below Max Frequency to prevent rapid voltage droop during state switching."
+      },
+      {
+        "title": "Run AMD Cleanup Utility in Safe Mode",
+        "detail": "Download official AMD Cleanup Utility, boot into Safe Mode, run tool to remove all audio and display driver traces, and reinstall the latest recommended WHQL Adrenalin package."
+      }
+    ],
+    "related_error_codes": [
+      278,
+      281,
+      4101
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "intel-arc-igdkmdn64-driver-crash",
+    "title": "Intel Arc and Iris Xe igdkmdn64.sys Display Driver Hang Recovery",
+    "summary": "Resolve Intel Arc A-Series and Iris Xe display driver hangs (igdkmdn64.sys) by enabling Resizable BAR and optimizing DirectX 9/11 emulation layers.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Intel Arc GPU displays black screen or game crashes with igdkmdn64.sys fault",
+      "Extremely low frame rates and microstuttering in older DirectX 9 or DirectX 11 games",
+      "Intel Arc Control crashes or fails to launch on startup"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify Resizable BAR is Enabled in BIOS",
+        "detail": "Intel Arc architecture fundamentally requires Resizable BAR (ReBAR) and Above 4G Decoding enabled in motherboard BIOS. Check Intel Arc Control settings to confirm Resizable BAR status shows Supported and Enabled."
+      },
+      {
+        "title": "Update to latest WHQL Arc driver package",
+        "detail": "Run Intel Driver & Support Assistant (DSA) to install the latest WHQL graphics driver. Intel releases frequent optimizations specifically rewriting DirectX legacy emulation pipelines."
+      },
+      {
+        "title": "Configure DXVK translation layer for DX9/DX11 titles",
+        "detail": "For older titles experiencing severe stuttering, copy dxvk d3d9.dll or dxgi.dll files into the game executable directory to translate legacy API calls to modern Vulkan pipelines."
+      },
+      {
+        "title": "Disable PCIe Link State Power Management",
+        "detail": "Open Windows Power Options -> Edit Plan Settings -> Change advanced power settings -> PCI Express -> Link State Power Management -> set to Off to prevent ASPM bus sleep hangs."
+      }
+    ],
+    "related_error_codes": [
+      278,
+      281,
+      4101
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gpu-vram-space-invaders-checkerboard-artifacts",
+    "title": "GPU VRAM Space Invaders and Checkerboard Artifact Triage",
+    "summary": "Isolate physical video RAM (VRAM) hardware failure, solder ball fatigue, and defective GDDR6/GDDR6X memory chips causing Space Invaders patterns.",
+    "severity": "critical",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Screen displays repeating small Space Invaders glyphs or green/magenta checkerboard tiles",
+      "Horizontal pink lines or corrupted 3D polygons appear across the display",
+      "Artifacts are visible even on motherboard BIOS splash screen before Windows loads"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check BIOS screen for visual artifacts",
+        "detail": "Reboot into motherboard BIOS. If visual artifacts, colored lines, or glyphs appear in BIOS, the fault is 100% physical hardware (defective VRAM chip or solder joint) and cannot be fixed with software or drivers."
+      },
+      {
+        "title": "Run OCCT VRAM or MATS memory diagnostic test",
+        "detail": "Run OCCT VRAM stress test in Windows or boot into NVIDIA MATS/MODS diagnostic environment to determine which specific memory channel (A0, A1, B0, B1) is recording read/write bit errors."
+      },
+      {
+        "title": "Lower VRAM memory clock by 500MHz",
+        "detail": "Open MSI Afterburner, reduce Memory Clock slider by -500MHz, and apply. If artifacts disappear, degraded memory chips can no longer maintain factory rated clock frequencies."
+      },
+      {
+        "title": "Initiate manufacturer warranty RMA replacement",
+        "detail": "Physical VRAM memory degradation requires professional BGA rework and chip replacement. Contact GPU manufacturer or retailer for warranty replacement."
+      }
+    ],
+    "related_error_codes": [
+      278,
+      43
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "12vhpwr-connector-seating-and-melting-prevention",
+    "title": "12VHPWR and 12V-2x6 16-Pin Connector Seating and Melt Prevention",
+    "summary": "Inspect and seat the 12VHPWR / 12V-2x6 16-pin power connector on modern high-power graphics cards to prevent terminal resistance, contact melting, and black screens.",
+    "severity": "critical",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "GPU fans suddenly blast at 100% RPM with black screen under 3D gaming load",
+      "Faint plastic burning or hot electrical smell coming from GPU power inlet",
+      "GPU sensor reporting abnormal 12V input voltage drop below 11.5V"
+    ],
+    "fix_steps": [
+      {
+        "title": "Power down and inspect female terminals for thermal damage",
+        "detail": "Unplug AC power, remove the 16-pin connector, and use a flashlight to inspect female terminal pins for discoloration, melted black plastic, or terminal recession. If melted, do not reuse; replace cable and RMA card."
+      },
+      {
+        "title": "Seat connector until positive mechanical click occurs",
+        "detail": "Align the connector squarely, push with firm, even pressure until the top latch produces a distinct mechanical click, and verify with a flashlight that there is zero visible gap between plug housing and GPU header."
+      },
+      {
+        "title": "Ensure at least 35mm straight cable run before bend",
+        "detail": "Do not bend the 16-pin cable horizontally or vertically close to the plug. Maintain at least 35mm of straight wire run to prevent lateral pin deflection and uneven terminal resistance."
+      },
+      {
+        "title": "Verify sideband sense pin engagement",
+        "detail": "The four small sense pins on top (pins S1 through S4) tell the GPU whether 450W or 600W power delivery is safe. Incomplete sense pin contact causes the GPU to drop into emergency fan 100% black screen state."
+      }
+    ],
+    "related_error_codes": [
+      41,
+      43
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "pcie-gpu-sag-pin-disengagement",
+    "title": "PCIe GPU Sag and Motherboard Slot Contact Pin Disengagement",
+    "summary": "Correct heavy triple-slot graphics card sagging that causes PCIe gold finger disengagement, intermittent black screens, and card detection loss.",
+    "severity": "warn",
+    "category_slug": "driver-issues",
+    "symptoms": [
+      "Monitor loses signal or displays black screen when computer desk is bumped",
+      "GPU-Z reports graphics card operating at PCIe x8 or x4 link width instead of x16",
+      "Motherboard VGA debug LED intermittently lights up on cold boot"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect physical card tilt and sag angle",
+        "detail": "Observe the graphics card from the side of the chassis. Modern heavy heatsinks (exceeding 1.5kg) cause noticeable downward droop at the rear corner, pulling PCIe gold fingers out of contact with slot pins."
+      },
+      {
+        "title": "Install adjustable GPU anti-sag support bracket",
+        "detail": "Place an adjustable screw-column kickstand or bracket underneath the far corner of the GPU shroud, raising it until the backplate is perfectly level with the motherboard PCIe slot."
+      },
+      {
+        "title": "Re-seat card and tighten bracket screws while supporting card",
+        "detail": "Loosen case expansion bracket thumb screws, push graphics card firmly into PCIe slot until latch clicks, hold card slightly above horizontal level, and securely tighten case screws."
+      },
+      {
+        "title": "Verify PCIe bus link speed in GPU-Z",
+        "detail": "Open GPU-Z, click the question mark icon next to Bus Interface to run the render test, and verify link speed displays PCIe x16 4.0 or PCIe x16 5.0 at full 16-lane width."
+      }
+    ],
+    "related_error_codes": [
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
   }
 ]

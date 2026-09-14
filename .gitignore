@@ -38,3 +38,9 @@ build-out.txt
 .vercel
 
 pcfixit-test-report.json
+
+# teamwork agent artifacts
+.agents/
+PROJECT.md
+TEST_INFRA.md
+TEST_READY.md

@@ -58,6 +58,11 @@
         "label": "Shows the motherboard or Windows logo, but then freezes or loops",
         "next_id": "wizard-wont-boot-freeze",
         "resolves_to_issue_slug": null
+      },
+      {
+        "label": "Checking power supply pinout, green wire jump test, or power rails",
+        "next_id": "wizard-wont-boot-power-diagnostics",
+        "resolves_to_issue_slug": null
       }
     ]
   },
@@ -84,6 +89,11 @@
         "label": "The BOOT LED is lit, or the PC boots directly into the BIOS menu",
         "next_id": null,
         "resolves_to_issue_slug": "no-post-boot-led"
+      },
+      {
+        "label": "Identify motherboard manufacturer debug LED or beep codes (ASUS, MSI, Gigabyte, ASRock)",
+        "next_id": "wizard-wont-boot-vendor-debug",
+        "resolves_to_issue_slug": null
       }
     ]
   },
@@ -157,6 +167,11 @@
         "label": "Screen freezes solid for 5-10 seconds before DPC_WATCHDOG_VIOLATION",
         "next_id": null,
         "resolves_to_issue_slug": "dpc-watchdog-violation"
+      },
+      {
+        "label": "UNEXPECTED_STORE_EXCEPTION (0x154) during gaming or disk load",
+        "next_id": null,
+        "resolves_to_issue_slug": "bsod-unexpected-store-exception-0x154"
       }
     ]
   },
@@ -183,6 +198,11 @@
         "label": "CRITICAL_PROCESS_DIED or immediate restart without dump file",
         "next_id": null,
         "resolves_to_issue_slug": "critical-process-died"
+      },
+      {
+        "label": "CRITICAL_STRUCTURE_CORRUPTION (0x109) or Driver Verifier loop",
+        "next_id": null,
+        "resolves_to_issue_slug": "bsod-critical-structure-corruption-0x109"
       }
     ]
   },
@@ -214,6 +234,11 @@
         "label": "Booting and signing into the desktop takes several minutes",
         "next_id": null,
         "resolves_to_issue_slug": "bloatware-startup-apps-overload"
+      },
+      {
+        "label": "SMART drive failure warning, read-only NVMe, or missing drive",
+        "next_id": "wizard-storage-smart-failure",
+        "resolves_to_issue_slug": null
       }
     ]
   },
@@ -245,6 +270,11 @@
         "label": "Wi-Fi drops connection every 10-20 minutes, especially while gaming",
         "next_id": null,
         "resolves_to_issue_slug": "random-wifi-disconnects-gaming"
+      },
+      {
+        "label": "Wi-Fi 6/7 adapter Code 10/43, 169.254 APIPA IP, or Winsock reset",
+        "next_id": "wizard-network-advanced-triage",
+        "resolves_to_issue_slug": null
       }
     ]
   },
@@ -276,6 +306,11 @@
         "label": "PC was quiet previously, but now heatsink fins are clogged with dust",
         "next_id": null,
         "resolves_to_issue_slug": "dust-clogged-heatsink-fins"
+      },
+      {
+        "label": "TjMax shutdown, fan curve hysteresis revving, or AIO pump speed",
+        "next_id": "wizard-thermal-advanced-tuning",
+        "resolves_to_issue_slug": null
       }
     ]
   },
@@ -307,6 +342,177 @@
         "label": "Second monitor is not detected or shows 'No Signal'",
         "next_id": null,
         "resolves_to_issue_slug": "dual-monitor-not-detected"
+      },
+      {
+        "label": "Display driver timeout (TDR), VRAM artifacts, or 12VHPWR seating",
+        "next_id": "wizard-gpu-artifacts-display",
+        "resolves_to_issue_slug": null
+      }
+    ]
+  },
+  {
+    "id": "wizard-wont-boot-vendor-debug",
+    "question": "Which manufacturer made your motherboard or PC?",
+    "options": [
+      {
+        "label": "ASUS (Q-LED red/yellow/white LEDs or 2-digit Q-Code display)",
+        "next_id": null,
+        "resolves_to_issue_slug": "asus-qled-qcode-debug-troubleshooting"
+      },
+      {
+        "label": "MSI (EZ Debug LED indicators: CPU, DRAM, VGA, BOOT)",
+        "next_id": null,
+        "resolves_to_issue_slug": "msi-ez-debug-led-troubleshooting"
+      },
+      {
+        "label": "Gigabyte (Status Code 7-segment display or Debug LEDs)",
+        "next_id": null,
+        "resolves_to_issue_slug": "gigabyte-status-code-debug-led"
+      },
+      {
+        "label": "ASRock (Dr. Debug 2-digit hex code display)",
+        "next_id": null,
+        "resolves_to_issue_slug": "asrock-dr-debug-post-codes"
+      },
+      {
+        "label": "Beep codes from motherboard speaker (AMI / Award BIOS)",
+        "next_id": null,
+        "resolves_to_issue_slug": "motherboard-post-beep-codes-ami-award"
+      },
+      {
+        "label": "Dell, HP, or Lenovo OEM prebuilt power button flashing code",
+        "next_id": null,
+        "resolves_to_issue_slug": "dell-hp-diagnostic-blink-codes"
+      }
+    ]
+  },
+  {
+    "id": "wizard-wont-boot-power-diagnostics",
+    "question": "How is the power supply behaving during the power-on attempt?",
+    "options": [
+      {
+        "label": "Testing 24-pin and 8-pin PSU rails or paperclip green wire jump test",
+        "next_id": null,
+        "resolves_to_issue_slug": "power-sequence-atx-24pin-pson-triage"
+      },
+      {
+        "label": "Power Good signal delay, 5VSB standby voltage, or click without spin",
+        "next_id": null,
+        "resolves_to_issue_slug": "psu-power-good-5vsb-signal-timing"
+      },
+      {
+        "label": "High-end graphics card trips power supply during sudden load spikes",
+        "next_id": null,
+        "resolves_to_issue_slug": "psu-transient-power-spike-ocp-tripping"
+      }
+    ]
+  },
+  {
+    "id": "wizard-gpu-artifacts-display",
+    "question": "What visual glitch or graphics symptom are you seeing?",
+    "options": [
+      {
+        "label": "Screen flickers black and displays 'Display driver stopped responding'",
+        "next_id": null,
+        "resolves_to_issue_slug": "gpu-tdr-timeout-detection-recovery-tuning"
+      },
+      {
+        "label": "Space Invaders, green blocks, checkerboards, or corrupted 3D textures",
+        "next_id": null,
+        "resolves_to_issue_slug": "gpu-vram-space-invaders-checkerboard-artifacts"
+      },
+      {
+        "label": "12VHPWR 16-pin power connector inspection or high temperature warning",
+        "next_id": null,
+        "resolves_to_issue_slug": "12vhpwr-connector-seating-and-melting-prevention"
+      },
+      {
+        "label": "Heavy GPU sagging in PCIe slot, causing loss of signal or black screen",
+        "next_id": null,
+        "resolves_to_issue_slug": "pcie-gpu-sag-pin-disengagement"
+      }
+    ]
+  },
+  {
+    "id": "wizard-storage-smart-failure",
+    "question": "What drive failure or filesystem error is reported?",
+    "options": [
+      {
+        "label": "CrystalDiskInfo reports 'Caution' with Reallocated or Pending Sectors",
+        "next_id": null,
+        "resolves_to_issue_slug": "hdd-ssd-smart-reallocated-pending-sectors"
+      },
+      {
+        "label": "NVMe SSD reports Available Spare warning or 100% Percentage Used",
+        "next_id": null,
+        "resolves_to_issue_slug": "nvme-smart-predictive-failure-spare-threshold"
+      },
+      {
+        "label": "NVMe drive became read-only and cannot save, delete, or modify files",
+        "next_id": null,
+        "resolves_to_issue_slug": "nvme-hardware-write-protect-lockout"
+      },
+      {
+        "label": "Windows setup cannot find drive (Intel VMD / RST controller needed)",
+        "next_id": null,
+        "resolves_to_issue_slug": "intel-vmd-rst-driver-missing-install"
+      },
+      {
+        "label": "Drive locked by NTFS volume dirty bit or chkdsk cannot finish",
+        "next_id": null,
+        "resolves_to_issue_slug": "ntfs-dirty-bit-chkdsk-filesystem-lock"
+      }
+    ]
+  },
+  {
+    "id": "wizard-network-advanced-triage",
+    "question": "What specific adapter or protocol failure is occurring?",
+    "options": [
+      {
+        "label": "Intel AX200/AX210/BE200 Wi-Fi 6/7 adapter in Code 10/43 reset loop",
+        "next_id": null,
+        "resolves_to_issue_slug": "intel-wifi-6-6e-7-code-10-reset-loop"
+      },
+      {
+        "label": "IP address shows 169.254.x.x (APIPA) and router fails to grant lease",
+        "next_id": null,
+        "resolves_to_issue_slug": "dhcp-169-254-apipa-ip-resolution"
+      },
+      {
+        "label": "Winsock catalog or TCP/IP protocol stack broken after update or malware",
+        "next_id": null,
+        "resolves_to_issue_slug": "winsock-and-tcpip-stack-reset-triage"
+      },
+      {
+        "label": "MediaTek or Realtek Wi-Fi card drops offline after PC sleeps",
+        "next_id": null,
+        "resolves_to_issue_slug": "mediatek-realtek-wifi-pcie-sleep-hang"
+      }
+    ]
+  },
+  {
+    "id": "wizard-thermal-advanced-tuning",
+    "question": "What temperature limit or fan regulation issue are you diagnosing?",
+    "options": [
+      {
+        "label": "CPU reaches 100C-115C TjMax limit and immediately shuts down PC",
+        "next_id": null,
+        "resolves_to_issue_slug": "cpu-tjmax-shutdown-and-prochot-throttling"
+      },
+      {
+        "label": "GPU hotspot/junction reaches 105C while core temperature looks moderate",
+        "next_id": null,
+        "resolves_to_issue_slug": "gpu-hotspot-junction-shutdown-threshold"
+      },
+      {
+        "label": "Fans loudly rev up and down every few seconds (need fan hysteresis curve)",
+        "next_id": null,
+        "resolves_to_issue_slug": "bios-fan-curve-hysteresis-pwm-dc-tuning"
+      },
+      {
+        "label": "AIO cooler water pump speed configuration and header pinout check",
+        "next_id": null,
+        "resolves_to_issue_slug": "aio-pump-header-constant-speed-configuration"
       }
     ]
   }

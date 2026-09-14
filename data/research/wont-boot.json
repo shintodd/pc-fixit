@@ -204,7 +204,7 @@
       },
       {
         "title": "Repair EFI bootloader with Windows installation media",
-        "detail": "Boot from a Windows USB installer, select Repair Your Computer \u2192 Command Prompt, and run 'bootrec /fixboot' and 'bcdboot C:\\Windows /s S: /f UEFI'."
+        "detail": "Boot from a Windows USB installer, select Repair Your Computer → Command Prompt, and run 'bootrec /fixboot' and 'bcdboot C:\\Windows /s S: /f UEFI'."
       }
     ],
     "related_error_codes": [
@@ -266,7 +266,7 @@
     "fix_steps": [
       {
         "title": "Boot into Windows Safe Mode",
-        "detail": "Interrupt boot three times by holding the power button. In Recovery Mode, navigate to Troubleshoot \u2192 Advanced Options \u2192 Startup Settings \u2192 Restart \u2192 press 4 for Safe Mode."
+        "detail": "Interrupt boot three times by holding the power button. In Recovery Mode, navigate to Troubleshoot → Advanced Options → Startup Settings → Restart → press 4 for Safe Mode."
       },
       {
         "title": "Uninstall graphics driver via DDU",
@@ -348,7 +348,7 @@
       },
       {
         "title": "Mark system partition as active using Diskpart",
-        "detail": "In Command Prompt, run diskpart \u2192 select disk 0 \u2192 select partition 1 \u2192 active \u2192 exit, ensuring BIOS directs to the correct bootable partition."
+        "detail": "In Command Prompt, run diskpart → select disk 0 → select partition 1 → active → exit, ensuring BIOS directs to the correct bootable partition."
       },
       {
         "title": "Inspect storage drive health",
@@ -378,7 +378,7 @@
     "fix_steps": [
       {
         "title": "Disable Automatic Startup Repair loop",
-        "detail": "In Advanced Options \u2192 Command Prompt, run: 'bcdedit /set {default} recoveryenabled No' to see the underlying stop code causing crashes."
+        "detail": "In Advanced Options → Command Prompt, run: 'bcdedit /set {default} recoveryenabled No' to see the underlying stop code causing crashes."
       },
       {
         "title": "Restore corrupted registry hives",
@@ -386,7 +386,7 @@
       },
       {
         "title": "Uninstall recent Windows quality or feature updates",
-        "detail": "In Recovery Options, select Troubleshoot \u2192 Advanced Options \u2192 Uninstall Updates \u2192 Uninstall latest quality update."
+        "detail": "In Recovery Options, select Troubleshoot → Advanced Options → Uninstall Updates → Uninstall latest quality update."
       },
       {
         "title": "Run DISM and SFC offline repair",
@@ -410,7 +410,7 @@
     "symptoms": [
       "Endless loop of turning on and off automatically",
       "No display or BIOS splash screen ever appears",
-      "Motherboard debug LEDs cycle through CPU \u2192 DRAM then shut off"
+      "Motherboard debug LEDs cycle through CPU → DRAM then shut off"
     ],
     "fix_steps": [
       {
@@ -882,23 +882,26 @@
         "order": 1,
         "title": "Use separate PCIe power cables instead of daisy-chained pigtail cables",
         "instruction": "Check GPU power connectors. High-power graphics cards (RTX 3080/4080, RX 6800/7900) draw up to 350W+. Never use a single split 'pigtail' cable for two 8-pin ports. Run two or three separate individual cables directly from PSU.",
-        "caution": "A single PCIe cable is rated for 150W; pulling 300W over one cable trips PSU Over-Current Protection (OCP)."
+        "caution": "A single PCIe cable is rated for 150W; pulling 300W over one cable trips PSU Over-Current Protection (OCP).",
+        "detail": "Check GPU power connectors. High-power graphics cards (RTX 3080/4080, RX 6800/7900) draw up to 350W+. Never use a single split 'pigtail' cable for two 8-pin ports. Run two or three separate individual cables directly from PSU."
       },
       {
         "order": 2,
         "title": "Test GPU power target or undervolt to tame transient spikes",
         "instruction": "In MSI Afterburner, reduce 'Power Limit' slider to 85% or apply a gentle undervolt. If the PC stops crashing during benchmarks, your PSU is failing to handle microsecond GPU power spikes.",
-        "caution": "Temporary diagnostic workaround until a higher quality Tier-A/B power supply is installed."
+        "caution": "Temporary diagnostic workaround until a higher quality Tier-A/B power supply is installed.",
+        "detail": "In MSI Afterburner, reduce 'Power Limit' slider to 85% or apply a gentle undervolt. If the PC stops crashing during benchmarks, your PSU is failing to handle microsecond GPU power spikes."
       },
       {
         "order": 3,
         "title": "Verify PSU wattage and 12V rail health",
         "instruction": "Check your PSU rated wattage against total system draw. Modern GPUs have transient spikes up to 2x TDP lasting 10 milliseconds. Older PSUs shut down immediately to protect components.",
-        "caution": "Avoid budget unrated power supplies; refer to the Cultists Network PSU Tier List."
+        "caution": "Avoid budget unrated power supplies; refer to the Cultists Network PSU Tier List.",
+        "detail": "Check your PSU rated wattage against total system draw. Modern GPUs have transient spikes up to 2x TDP lasting 10 milliseconds. Older PSUs shut down immediately to protect components."
       }
     ],
     "related_error_codes": [
-      "Event ID 41"
+      41
     ],
     "source": "reddit_techsupport",
     "verified": true
@@ -920,19 +923,22 @@
         "order": 1,
         "title": "Retrieve recovery key from your Microsoft Account portal",
         "instruction": "On your phone or another device, go to 'account.microsoft.com/devices/recoverykey'. Sign in with every Microsoft account ever logged into the PC (including school/work accounts). Locate the matching Key ID.",
-        "caution": "Check the 'Key ID' displayed on the PC screen to ensure you match the correct recovery key."
+        "caution": "Check the 'Key ID' displayed on the PC screen to ensure you match the correct recovery key.",
+        "detail": "On your phone or another device, go to 'account.microsoft.com/devices/recoverykey'. Sign in with every Microsoft account ever logged into the PC (including school/work accounts). Locate the matching Key ID."
       },
       {
         "order": 2,
         "title": "Revert BIOS TPM / Security settings if key is missing",
         "instruction": "If you cannot find the key and this started immediately after a BIOS update: enter BIOS settings. Ensure 'fTPM' / 'Intel PTT' is enabled and 'Secure Boot' mode is set to 'Standard'. Do not clear TPM keys.",
-        "caution": "Never select 'Clear TPM' in BIOS unless you have your 48-digit key or intend to wipe the drive."
+        "caution": "Never select 'Clear TPM' in BIOS unless you have your 48-digit key or intend to wipe the drive.",
+        "detail": "If you cannot find the key and this started immediately after a BIOS update: enter BIOS settings. Ensure 'fTPM' / 'Intel PTT' is enabled and 'Secure Boot' mode is set to 'Standard'. Do not clear TPM keys."
       },
       {
         "order": 3,
         "title": "Suspend BitLocker before performing future BIOS updates",
         "instruction": "Once back in Windows, open Command Prompt (Admin) and run: 'manage-bde -protectors -disable C:'. Run your update, then run 'manage-bde -protectors -enable C:'.",
-        "caution": "Always back up your 48-digit key to a USB drive or printout."
+        "caution": "Always back up your 48-digit key to a USB drive or printout.",
+        "detail": "Once back in Windows, open Command Prompt (Admin) and run: 'manage-bde -protectors -disable C:'. Run your update, then run 'manage-bde -protectors -enable C:'."
       }
     ],
     "related_error_codes": [],
@@ -956,19 +962,22 @@
         "order": 1,
         "title": "Clear CMOS to force motherboard back to default CSM settings",
         "instruction": "Turn off power supply and unplug PC power cord. Locate the round silver CR2032 battery on motherboard. Use a flathead screwdriver or fingernail to pop battery out. Wait 5 minutes. Reinsert battery and turn PC on.",
-        "caution": "This resets all BIOS settings back to factory defaults with display output restored."
+        "caution": "This resets all BIOS settings back to factory defaults with display output restored.",
+        "detail": "Turn off power supply and unplug PC power cord. Locate the round silver CR2032 battery on motherboard. Use a flathead screwdriver or fingernail to pop battery out. Wait 5 minutes. Reinsert battery and turn PC on."
       },
       {
         "order": 2,
         "title": "Update GPU UEFI Firmware / GOP driver",
         "instruction": "Older GPUs (Nvidia GTX 900/1000 series) lack modern UEFI GOP firmware and black-screen when CSM is disabled. Download the official 'NVIDIA Graphics Firmware Update Tool for DisplayPort 1.3 and 1.4 Displays' in Windows.",
-        "caution": "Run the firmware updater before attempting to enable Secure Boot again."
+        "caution": "Run the firmware updater before attempting to enable Secure Boot again.",
+        "detail": "Older GPUs (Nvidia GTX 900/1000 series) lack modern UEFI GOP firmware and black-screen when CSM is disabled. Download the official 'NVIDIA Graphics Firmware Update Tool for DisplayPort 1.3 and 1.4 Displays' in Windows."
       },
       {
         "order": 3,
         "title": "Convert MBR drive to GPT before disabling CSM",
         "instruction": "If your Windows drive is formatted as legacy MBR, disabling CSM makes the drive unbootable. In Windows Command Prompt (Admin), run 'mbr2gpt /validate /allowFullOS' then 'mbr2gpt /convert /allowFullOS'.",
-        "caution": "Do not convert if you are dual-booting with 32-bit legacy operating systems."
+        "caution": "Do not convert if you are dual-booting with 32-bit legacy operating systems.",
+        "detail": "If your Windows drive is formatted as legacy MBR, disabling CSM makes the drive unbootable. In Windows Command Prompt (Admin), run 'mbr2gpt /validate /allowFullOS' then 'mbr2gpt /convert /allowFullOS'."
       }
     ],
     "related_error_codes": [],
@@ -980,7 +989,7 @@
     "slug": "new-ssd-hard-drive-not-showing-file-explorer",
     "title": "New NVMe M.2 SSD or SATA hard drive not showing up in File Explorer",
     "summary": "Installed a new solid-state drive or hard drive but it does not appear in 'This PC' or File Explorer.",
-    "severity": "medium",
+    "severity": "warn",
     "category_slug": "wont-boot",
     "symptoms": [
       "New SSD installed but missing in File Explorer / 'This PC'",
@@ -992,19 +1001,22 @@
         "order": 1,
         "title": "Initialize and format disk in Disk Management (diskmgmt.msc)",
         "instruction": "Press Win+X, select 'Disk Management' (or press Win+R and type 'diskmgmt.msc'). Look at the bottom list for a disk marked 'Unknown / Not Initialized' or 'Unallocated'.",
-        "caution": "Make sure you select the brand new unallocated disk, not your existing OS drive."
+        "caution": "Make sure you select the brand new unallocated disk, not your existing OS drive.",
+        "detail": "Press Win+X, select 'Disk Management' (or press Win+R and type 'diskmgmt.msc'). Look at the bottom list for a disk marked 'Unknown / Not Initialized' or 'Unallocated'."
       },
       {
         "order": 2,
         "title": "Initialize disk as GPT partition style",
         "instruction": "Right-click the disk number (e.g. 'Disk 1') -> select 'Initialize Disk'. Choose 'GPT (GUID Partition Table)' -> click OK.",
-        "caution": "Always choose GPT for modern drives and NVMe SSDs; MBR is legacy only."
+        "caution": "Always choose GPT for modern drives and NVMe SSDs; MBR is legacy only.",
+        "detail": "Right-click the disk number (e.g. 'Disk 1') -> select 'Initialize Disk'. Choose 'GPT (GUID Partition Table)' -> click OK."
       },
       {
         "order": 3,
         "title": "Create Simple Volume and assign drive letter",
         "instruction": "Right-click the black 'Unallocated' space -> select 'New Simple Volume'. Follow the wizard: assign maximum size, choose a drive letter (e.g. D: or E:), format as NTFS with 'Perform a quick format'. Click Finish.",
-        "caution": "Your new SSD will now immediately appear in File Explorer ready for use."
+        "caution": "Your new SSD will now immediately appear in File Explorer ready for use.",
+        "detail": "Right-click the black 'Unallocated' space -> select 'New Simple Volume'. Follow the wizard: assign maximum size, choose a drive letter (e.g. D: or E:), format as NTFS with 'Perform a quick format'. Click Finish."
       }
     ],
     "related_error_codes": [],
@@ -1016,7 +1028,7 @@
     "slug": "laptop-hot-battery-drain-closed-bag-modern-standby",
     "title": "Laptop burning hot and battery drains while closed inside backpack (Modern Standby)",
     "summary": "Laptop wakes up inside laptop sleeve or backpack, fans scream at 100%, and battery is completely drained.",
-    "severity": "high",
+    "severity": "critical",
     "category_slug": "wont-boot",
     "symptoms": [
       "Laptop burning hot to the touch when pulled out of bag",
@@ -1028,19 +1040,22 @@
         "order": 1,
         "title": "Switch Windows lid close action to 'Hibernate' instead of 'Sleep'",
         "instruction": "Press Win+R, type 'powercfg.cpl' and press Enter. Click 'Choose what closing the lid does' on the left sidebar. Set 'When I close the lid:' to 'Hibernate' for both On Battery and Plugged In.",
-        "caution": "Hibernate saves complete RAM state to disk and powers off the motherboard 100% with zero heat and zero battery drain."
+        "caution": "Hibernate saves complete RAM state to disk and powers off the motherboard 100% with zero heat and zero battery drain.",
+        "detail": "Press Win+R, type 'powercfg.cpl' and press Enter. Click 'Choose what closing the lid does' on the left sidebar. Set 'When I close the lid:' to 'Hibernate' for both On Battery and Plugged In."
       },
       {
         "order": 2,
         "title": "Disable Network Connectivity in Standby",
         "instruction": "Open Windows Settings -> System -> Power & battery. Under 'Network connectivity in standby', set to 'Never' (or run in Admin terminal: 'powercfg /setdcvalueindex scheme_current sub_none F15ADD7D-0D7D-4863-A7D0-84E73B719971 0').",
-        "caution": "Prevents Windows from waking up in your bag to download telemetry or email updates."
+        "caution": "Prevents Windows from waking up in your bag to download telemetry or email updates.",
+        "detail": "Open Windows Settings -> System -> Power & battery. Under 'Network connectivity in standby', set to 'Never' (or run in Admin terminal: 'powercfg /setdcvalueindex scheme_current sub_none F15ADD7D-0D7D-4863-A7D0-84E73B719971 0')."
       },
       {
         "order": 3,
         "title": "Check sleep study logs for wake culprits",
         "instruction": "Open Command Prompt as Administrator and run: 'powercfg /sleepstudy'. Open the generated HTML file in your browser to inspect which USB device, Bluetooth radio, or background app triggered the wake event.",
-        "caution": "Look for entries with 'Low Power State Time' below 90%."
+        "caution": "Look for entries with 'Low Power State Time' below 90%.",
+        "detail": "Open Command Prompt as Administrator and run: 'powercfg /sleepstudy'. Open the generated HTML file in your browser to inspect which USB device, Bluetooth radio, or background app triggered the wake event."
       }
     ],
     "related_error_codes": [],
@@ -1064,23 +1079,426 @@
         "order": 1,
         "title": "Disassemble motherboard and place on non-conductive cardboard box",
         "instruction": "Remove motherboard from PC case. Place it on the flat cardboard motherboard box. CRITICAL: Never place it on an anti-static bag (the outer surface of anti-static bags is electrically conductive).",
-        "caution": "CRITICAL: Anti-static bags are conductive on the outside; only use plain dry cardboard or wood."
+        "caution": "CRITICAL: Anti-static bags are conductive on the outside; only use plain dry cardboard or wood.",
+        "detail": "Remove motherboard from PC case. Place it on the flat cardboard motherboard box. CRITICAL: Never place it on an anti-static bag (the outer surface of anti-static bags is electrically conductive)."
       },
       {
         "order": 2,
         "title": "Install only the absolute bare minimum components",
         "instruction": "Install ONLY: CPU + CPU cooler, 1 stick of RAM in slot 2, 24-pin ATX power cable, and 8-pin EPS CPU power cable. Disconnect all SATA cables, front panel wires, case fans, and RGB headers.",
-        "caution": "If CPU lacks integrated graphics, install your GPU and connect its PCIe power cables."
+        "caution": "If CPU lacks integrated graphics, install your GPU and connect its PCIe power cables.",
+        "detail": "Install ONLY: CPU + CPU cooler, 1 stick of RAM in slot 2, 24-pin ATX power cable, and 8-pin EPS CPU power cable. Disconnect all SATA cables, front panel wires, case fans, and RGB headers."
       },
       {
         "order": 3,
         "title": "Bridge the two Power Switch pins with a flathead screwdriver",
         "instruction": "Locate the front panel header (JFP1 / PANEL). Momentarily touch the tip of a metal screwdriver across the two 'PWR_SW' (Power Switch) pins for 1 second to turn on the board.",
-        "caution": "If the system POSTs cleanly on cardboard, your PC case has an extra standoff shorting the back of the motherboard."
+        "caution": "If the system POSTs cleanly on cardboard, your PC case has an extra standoff shorting the back of the motherboard.",
+        "detail": "Locate the front panel header (JFP1 / PANEL). Momentarily touch the tip of a metal screwdriver across the two 'PWR_SW' (Power Switch) pins for 1 second to turn on the board."
       }
     ],
     "related_error_codes": [],
     "source": "reddit_techsupport",
     "verified": true
+  },
+  {
+    "slug": "asus-qled-qcode-debug-troubleshooting",
+    "title": "ASUS Q-LED and Q-Code Motherboard Debug Diagnostic Guide",
+    "summary": "Diagnose ASUS motherboard POST failures using 4-color Q-LED status lights (CPU, DRAM, VGA, BOOT) and 2-digit alphanumeric Q-Code hexadecimal readouts.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "System fails to complete POST",
+      "Q-LED stays lit on Red (CPU), Yellow (DRAM), White (VGA), or Yellow-Green (BOOT)",
+      "2-digit Q-Code LED displays codes 00, 55, d6, or 99"
+    ],
+    "fix_steps": [
+      {
+        "title": "Decode Q-LED color indicator",
+        "detail": "Observe the four color LEDs adjacent to the 24-pin ATX connector. Red indicates CPU failure or missing 8-pin EPS 12V connection; Yellow indicates DRAM memory training failure; White indicates VGA GPU handshake failure; Yellow-Green indicates no bootable OS device found."
+      },
+      {
+        "title": "Decode 2-digit Q-Code readout",
+        "detail": "If your board includes a 7-segment display, read the hex code. Code 00 indicates CPU not detected or seated incorrectly; Code 55 indicates memory not detected; Code d6 indicates no console output device (GPU); Code 99 indicates Super I/O or PCIe initialization halt."
+      },
+      {
+        "title": "Clear CMOS and reset memory profiles",
+        "detail": "Shut down PC, unplug AC power cord, and press the Clear CMOS rear I/O button for 5 seconds (or bridge the 2-pin CLRTC header with a screwdriver) to wipe unstable DOCP, EXPO, or memory timings."
+      },
+      {
+        "title": "Isolate memory to slot A2",
+        "detail": "Remove all RAM sticks except a single module in primary DIMM slot A2 (second slot away from CPU). Power on and allow up to 3 minutes for initial DDR5 memory training to complete."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "msi-ez-debug-led-troubleshooting",
+    "title": "MSI EZ Debug LED Motherboard Diagnostic and POST Triage",
+    "summary": "Troubleshoot boot hangs and hardware initialization failures indicated by MSI EZ Debug LEDs (CPU, DRAM, VGA, BOOT) and 2-digit Debug Code LEDs.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "MSI motherboard stops during power-on sequence",
+      "One of four EZ Debug LEDs remains constantly illuminated",
+      "Black screen with case fans spinning at high speed"
+    ],
+    "fix_steps": [
+      {
+        "title": "Inspect EZ Debug LED sequence",
+        "detail": "During normal boot, MSI boards cycle through CPU -> DRAM -> VGA -> BOOT and turn off. If an LED halts and remains solidly lit, initialization failed on that specific component."
+      },
+      {
+        "title": "Resolve DRAM LED hang",
+        "detail": "Turn off power and reseat RAM sticks firmly into slots DIMMA2 and DIMMB2 until both retention clips click. Test with a single stick in DIMMA2 if dual-channel training fails."
+      },
+      {
+        "title": "Resolve CPU LED hang",
+        "detail": "Verify the EPS 8-pin CPU power cable is firmly clicked into the top-left motherboard header (do not confuse with PCIe 8-pin). Check CPU socket for bent pins or uneven cooler mounting pressure."
+      },
+      {
+        "title": "Resolve VGA LED hang",
+        "detail": "Reseat the graphics card into the primary PCIe x16 slot. Ensure all 8-pin or 12VHPWR auxiliary power cables are fully locked with zero gap."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "gigabyte-status-code-debug-led",
+    "title": "Gigabyte Motherboard Status Code Display and Debug LED Triage",
+    "summary": "Diagnose Gigabyte AORUS motherboard boot failures using onboard 2-digit 7-segment status codes and 4-phase diagnostic LEDs.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Motherboard hangs on 2-digit code such as C1, 54, 78, or 90",
+      "Diagnostic status LED stays illuminated without video display",
+      "Monitor displays no signal while fans spin continuously"
+    ],
+    "fix_steps": [
+      {
+        "title": "Read 7-segment debug display code",
+        "detail": "Inspect the 2-digit LED readout at the bottom or top edge of the motherboard. Identify whether the system is stuck in an initialization loop or halting on a specific subsystem code."
+      },
+      {
+        "title": "Diagnose memory training codes (C1, 54, 15)",
+        "detail": "Codes 15, C1, and 54 indicate DRAM memory training. On AMD AM5 and Intel LGA1700 platforms, first-time memory training can take 2 to 4 minutes. If it exceeds 5 minutes, clear CMOS and test single stick in DDR5_A2."
+      },
+      {
+        "title": "Inspect PCIe lane initialization (Codes d6, 78)",
+        "detail": "Code d6 or 78 indicates GPU display handshake failure. Ensure monitor cable is plugged into GPU rather than motherboard I/O panel. Reseat graphics card and check monitor input source."
+      },
+      {
+        "title": "Flash BIOS using Q-Flash Plus",
+        "detail": "If CPU is newer than factory BIOS, use Gigabyte Q-Flash Plus button: format USB drive to FAT32, rename BIOS file to GIGABYTE.bin, insert into designated Q-Flash USB port, and press button with PC in standby."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "asrock-dr-debug-post-codes",
+    "title": "ASRock Dr. Debug Hexadecimal POST Code Triage",
+    "summary": "Decode ASRock Dr. Debug 2-digit hexadecimal POST codes to isolate CPU, memory, chipset, and GPU hardware initialization failures.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "ASRock motherboard stops booting with 2-digit LED code displayed",
+      "POST stops at code 00, 19, 4C, 53, or d7",
+      "System powers on but fails to enter BIOS setup screen"
+    ],
+    "fix_steps": [
+      {
+        "title": "Reference Dr. Debug code table",
+        "detail": "Code 00 means CPU not detected; Code 19 indicates early Southbridge/chipset initialization; Code 4C/53 indicates memory detection and training error; Code d7 indicates console input device (keyboard/mouse) not detected."
+      },
+      {
+        "title": "Perform power cycle and clear CMOS",
+        "detail": "Power off system, unplug AC power cord, and short the CLRCMOS1 jumper pins for 10 seconds (or press the rear Clear CMOS button) to reset BIOS settings."
+      },
+      {
+        "title": "Reseat DIMM modules in slots A2 and B2",
+        "detail": "ASRock motherboards require memory installed in slots DDR4_A2 and DDR4_B2 (or DDR5_A2 and DDR5_B2). Clean DIMM edge contacts with isopropyl alcohol before reseating."
+      },
+      {
+        "title": "Disconnect peripheral devices",
+        "detail": "Unplug all external USB drives, hubs, webcams, and RGB controllers. A failing USB peripheral frequently halts Dr. Debug at codes b4 or d7 during device enumeration."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "motherboard-post-beep-codes-ami-award",
+    "title": "Motherboard POST Beep Codes Diagnostic Guide (AMI, Award, Phoenix)",
+    "summary": "Interpret standard motherboard speaker acoustic beep codes across American Megatrends (AMI) and Award BIOS architectures to identify hardware faults.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Internal motherboard PC speaker emits beeping patterns upon power on",
+      "Screen remains completely black without video output",
+      "System fails to complete Power-On Self Test"
+    ],
+    "fix_steps": [
+      {
+        "title": "Connect internal PC buzzer or speaker",
+        "detail": "Verify a 4-pin piezo buzzer is connected to the SPEAKER pins on the front panel header. Modern cases lack built-in speakers, requiring a standalone buzzer to hear acoustic error codes."
+      },
+      {
+        "title": "Decode AMI BIOS beep codes",
+        "detail": "1 short beep indicates successful POST; 1 continuous long beep indicates memory refresh failure; 5 short beeps indicate CPU failure; 1 long 3 short beeps indicate memory test failure; 1 long 8 short beeps indicate video adapter failure."
+      },
+      {
+        "title": "Decode Award BIOS beep codes",
+        "detail": "1 long 2 short beeps indicate video adapter error or loose GPU; 1 long 3 short beeps indicate keyboard controller failure; continuous repeating high-pitched beeps indicate memory error or overheating."
+      },
+      {
+        "title": "Test minimum configuration",
+        "detail": "Disconnect all storage drives, remove GPU (if CPU has integrated graphics), and test with one RAM stick to isolate which component triggers the fault beep."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "dell-hp-diagnostic-blink-codes",
+    "title": "Dell and HP Power Button Diagnostic Blink Code Triage",
+    "summary": "Decode OEM prebuilt desktop and laptop power button amber and white flashing LED patterns to troubleshoot hardware startup failures.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Power button flashes repeatedly in amber and white blink sequences",
+      "Fans pulse briefly but screen remains black",
+      "System will not boot or display manufacturer splash logo"
+    ],
+    "fix_steps": [
+      {
+        "title": "Count Dell power button blink sequence",
+        "detail": "Dell diagnostic codes flash amber followed by white. For example: 2 amber, 1 white indicates CPU failure; 2 amber, 3 white indicates system board/memory failure; 2 amber, 7 white indicates LCD/display failure; 3 amber, 3 white indicates BIOS recovery image missing."
+      },
+      {
+        "title": "Count HP power and Caps Lock blink sequence",
+        "detail": "HP systems blink the Caps Lock LED and power button. For example: 3 slow blinks followed by 2 fast blinks indicates memory module failure; 5 slow blinks followed by 2 fast blinks indicates embedded controller timeout or system board fault."
+      },
+      {
+        "title": "Perform hard RTC real-time clock reset",
+        "detail": "Disconnect AC power cord, remove laptop battery if external, and hold the power button down for a full 30 to 35 seconds to force a hardware RTC reset and clear corrupted CMOS registers."
+      },
+      {
+        "title": "Reseat memory and clean contacts",
+        "detail": "Open chassis or service hatch, remove RAM modules, clean gold contacts with a lint-free swab dampened with 99% isopropyl alcohol, and reseat firmly in primary slots."
+      }
+    ],
+    "related_error_codes": [
+      26,
+      43,
+      278
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "power-sequence-atx-24pin-pson-triage",
+    "title": "ATX 24-Pin Power Sequence and PS_ON Green Wire Triage",
+    "summary": "Test ATX power supply startup sequences using the paperclip green wire PS_ON jump test and verify primary +12V, +5V, and +3.3V DC rail delivery.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "PC does not respond at all when pressing the front power button",
+      "Zero lights, zero fan movement, and zero acoustic clicks from PSU",
+      "Suspected dead power supply, blown fuse, or broken front panel switch"
+    ],
+    "fix_steps": [
+      {
+        "title": "Disconnect power and unplug 24-pin connector",
+        "detail": "Turn off the PSU rocker switch and unplug the AC wall cable. Unplug the 24-pin main motherboard power connector and all internal power cables."
+      },
+      {
+        "title": "Perform paperclip PS_ON jump test",
+        "detail": "Locate Pin 16 PS_ON# (green wire on standard ATX cables) and any adjacent COM ground pin (black wire, Pins 15, 17, or 18). Bend a metal paperclip and insert ends into Pin 16 and Pin 17."
+      },
+      {
+        "title": "Connect minimum load and power on",
+        "detail": "Connect a single 12V case fan or old SATA drive to provide minimum load. Plug AC cord in and flip rocker switch to ON. If PSU fan spins, the power supply turns on correctly."
+      },
+      {
+        "title": "Measure DC rail voltages with multimeter",
+        "detail": "Using a digital multimeter, check yellow wires for +12V DC, red wires for +5V DC, orange wires for +3.3V DC, and purple wire for +5VSB standby voltage. Replace PSU if voltages fall below 5% tolerance."
+      }
+    ],
+    "related_error_codes": [
+      41
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "psu-power-good-5vsb-signal-timing",
+    "title": "PSU Power Good PWR_OK Signal Delay and 5VSB Standby Rail Timing",
+    "summary": "Diagnose power supply startup handshake failures where +5VSB standby power is present but the PWR_OK (Power Good) signal fails to assert within 100-500ms.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Motherboard standby RGB lights illuminate but pressing power button produces an audible click and zero fan movement",
+      "PC fan twitches for a fraction of a second then immediately shuts off",
+      "System refuses to enter S0 running power state"
+    ],
+    "fix_steps": [
+      {
+        "title": "Verify Pin 9 (+5VSB purple wire) standby voltage",
+        "detail": "With PSU plugged in and rocker switch on, test Pin 9 against ground with a multimeter. It must read between +4.75V and +5.25V DC. If absent or below 4.5V, the standby transformer is dead."
+      },
+      {
+        "title": "Measure Pin 8 (PWR_OK / Power Good gray wire) signal",
+        "detail": "The PWR_OK signal informs the motherboard chipset that all DC voltages have stabilized. ATX specification requires PWR_OK to rise to +5V within 100ms to 500ms after PS_ON# assertion. A delay outside this window causes the motherboard to abort startup."
+      },
+      {
+        "title": "Isolate 12V rail short circuits",
+        "detail": "Unplug the 8-pin EPS CPU power cable and all PCIe GPU power cables. If the system turns on without them, a shorted MOSFET on the motherboard VRM or GPU core is triggering PSU protection."
+      },
+      {
+        "title": "Replace failing power supply unit",
+        "detail": "Degraded capacitors on secondary filtering stages often delay PWR_OK beyond the motherboard 500ms timeout window. Replace unit with a tier-A or tier-B rated power supply."
+      }
+    ],
+    "related_error_codes": [
+      41
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "intel-vmd-rst-driver-missing-install",
+    "title": "Intel VMD and RST Storage Controller Missing Driver Windows Setup Fix",
+    "summary": "Resolve missing NVMe drives during Windows 10/11 installation on Intel 11th through 14th Gen systems caused by Intel Volume Management Device (VMD).",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Windows Setup displays message: We could not find any drives. To get a storage driver, click Load driver",
+      "NVMe SSD is fully visible in motherboard BIOS but missing from Windows partition screen",
+      "Cannot install Windows on new Intel Core laptop or desktop"
+    ],
+    "fix_steps": [
+      {
+        "title": "Download Intel RST VMD driver package",
+        "detail": "On another computer, visit laptop or motherboard manufacturer support page and download Intel Rapid Storage Technology (IRST) driver package containing VMD storage controller drivers."
+      },
+      {
+        "title": "Extract driver INF files to USB",
+        "detail": "Open command prompt or 7-Zip to extract the setup executable. Locate the driver folder (named f6vmdflpy-x64 or similar) containing iaStorVD.inf, iaStorVD.sys, and iaStorVD.cat files. Copy folder onto Windows USB install drive."
+      },
+      {
+        "title": "Load driver during Windows Setup",
+        "detail": "On the Windows Setup disk selection screen, click Load driver, click Browse, navigate to the extracted driver folder on the USB drive, and select Intel RST VMD Controller. Click Next."
+      },
+      {
+        "title": "Alternative: Disable Intel VMD in BIOS",
+        "detail": "If not using RAID, enter BIOS setup, locate VMD Setup Menu under Advanced or System Configuration, set Intel VMD Controller to Disabled, save changes (F10), and restart Windows Setup."
+      }
+    ],
+    "related_error_codes": [
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "uefi-gpt-vs-csm-mbr-partition-unbootable",
+    "title": "UEFI GPT vs Legacy CSM MBR Partition Table Boot Mode Mismatch",
+    "summary": "Fix boot failure where BIOS cannot detect a bootable drive due to mismatch between UEFI pure mode (requiring GPT) and Legacy CSM mode (requiring MBR).",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "BIOS boot menu reports: No bootable device found",
+      "Storage drive appears in BIOS hardware list but not in boot priority list",
+      "PC repeatedly drops directly into BIOS setup after disabling CSM or enabling Secure Boot"
+    ],
+    "fix_steps": [
+      {
+        "title": "Check disk partition table style in WinRE",
+        "detail": "Boot from Windows install media, press Shift+F10 to open command prompt, type diskpart, then list disk. If an asterisk (*) appears in the GPT column for your disk, it is GPT; if blank, it is MBR."
+      },
+      {
+        "title": "Enable CSM in BIOS for MBR disks",
+        "detail": "If your drive uses MBR partition table, enter BIOS setup, find Compatibility Support Module (CSM), set to Enabled, and set Boot Device Control to UEFI and Legacy OPROM."
+      },
+      {
+        "title": "Convert MBR disk to GPT without data loss",
+        "detail": "In Windows Recovery command prompt, run: mbr2gpt /validate /disk:0 /allowFullOS. If validation succeeds, run: mbr2gpt /convert /disk:0 /allowFullOS. This creates an EFI system partition and converts partition table to GPT."
+      },
+      {
+        "title": "Switch BIOS to pure UEFI mode",
+        "detail": "After successful conversion, re-enter BIOS, disable CSM, enable UEFI boot mode and Secure Boot, select Windows Boot Manager as primary boot device, and reboot."
+      }
+    ],
+    "related_error_codes": [
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
+  },
+  {
+    "slug": "efi-system-partition-corrupted-bcd-rebuild",
+    "title": "EFI System Partition Corrupted BCD Rebuild Procedure",
+    "summary": "Repair corrupted or missing Boot Configuration Data (BCD) on the UEFI EFI System Partition using Diskpart and the bcdboot command in Windows Recovery.",
+    "severity": "critical",
+    "category_slug": "wont-boot",
+    "symptoms": [
+      "Windows fails to start with error code 0xc000000f, 0xc0000034, or 0xc0000098",
+      "Screen displays: The Boot Configuration Data for your PC is missing or contains errors",
+      "Automatic Startup Repair fails repeatedly with SrtTrail.txt log error"
+    ],
+    "fix_steps": [
+      {
+        "title": "Open Command Prompt in Windows Recovery Environment",
+        "detail": "Boot from Windows USB installation media, select Next -> Repair your computer -> Troubleshoot -> Advanced options -> Command Prompt."
+      },
+      {
+        "title": "Identify EFI FAT32 system partition with Diskpart",
+        "detail": "Run diskpart, then list volume. Identify the small FAT32 volume (typically 100MB to 260MB in size). Run select volume X (replace X with EFI volume number), then assign letter=S: to mount it."
+      },
+      {
+        "title": "Format corrupted EFI partition",
+        "detail": "If the partition file structure is damaged, format it cleanly in diskpart: format fs=fat32 quick label=\"ESP\". Type exit to return to command prompt."
+      },
+      {
+        "title": "Rebuild BCD store using bcdboot",
+        "detail": "Execute command: bcdboot C:\\Windows /s S: /f UEFI. If your Windows installation resides on another drive letter, substitute C: with that letter. Verify output: Boot files successfully created."
+      }
+    ],
+    "related_error_codes": [
+      1005,
+      1117
+    ],
+    "source": "researched",
+    "verified": false
   }
 ]
