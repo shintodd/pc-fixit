@@ -45,6 +45,9 @@ export default function Footer() {
             <Link href="/wizard" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("footer_nav_guided_fix")}
             </Link>
+            <Link href="/tips" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+              {t("nav_tips" as any) || "Tips & Tools"}
+            </Link>
             <Link href="/" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("footer_nav_kb")}
             </Link>

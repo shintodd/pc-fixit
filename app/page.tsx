@@ -14,6 +14,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import HeroInput from "@/components/HeroInput";
 import QuickTriageDeck from "@/components/QuickTriageDeck";
 import QuickToolsBar from "@/components/QuickToolsBar";
+import HomeTipsPreview from "@/components/HomeTipsPreview";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function HomePage() {
@@ -105,6 +106,9 @@ export default function HomePage() {
 
         <CategoryGrid />
       </section>
+
+      {/* Curated Power Tips, Cool Tools & Windows Easter Eggs */}
+      <HomeTipsPreview />
 
       {/* How It Works */}
       <section className="border-t border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 py-16 sm:py-24">
