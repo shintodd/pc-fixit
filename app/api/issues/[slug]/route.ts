@@ -37,6 +37,14 @@ export async function GET(
     );
   }
 
+  const VALID_SLUG_REGEX = /^[a-zA-Z0-9_-]{1,120}$/;
+  if (!VALID_SLUG_REGEX.test(slug)) {
+    return NextResponse.json(
+      { error: "Invalid issue slug format" },
+      { status: 400, headers: { "Cache-Control": "no-store" } }
+    );
+  }
+
   if (await isDatabaseAvailable()) {
     try {
       const issue = await prisma.issue.findUnique({

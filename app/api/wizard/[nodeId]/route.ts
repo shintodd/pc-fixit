@@ -37,6 +37,14 @@ export async function GET(
     );
   }
 
+  const VALID_NODE_ID_REGEX = /^[a-zA-Z0-9_-]{1,120}$/;
+  if (!VALID_NODE_ID_REGEX.test(nodeId)) {
+    return NextResponse.json(
+      { error: "Invalid wizard nodeId format" },
+      { status: 400, headers: { "Cache-Control": "no-store" } }
+    );
+  }
+
   if (await isDatabaseAvailable()) {
     try {
       const node = await prisma.wizardNode.findUnique({

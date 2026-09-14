@@ -1,3 +1,5 @@
+import { isIP } from "node:net";
+
 export interface RateLimitResult {
   allowed: boolean;
   limit: number;
@@ -18,7 +20,8 @@ export function cleanupRateLimitMap(now: number): void {
   }
 }
 
-export function checkRateLimit(ip: string): RateLimitResult {
+export function checkRateLimit(rawIp: string): RateLimitResult {
+  const ip = typeof rawIp === "string" && isIP(rawIp.trim()) !== 0 ? rawIp.trim().toLowerCase() : "127.0.0.1";
   const now = Date.now();
   if (rateLimitMap.size > MAX_RATE_LIMIT_ENTRIES) {
     cleanupRateLimitMap(now);
@@ -74,18 +77,18 @@ export function getRateLimitMapSize(): number {
 
 export function extractClientIp(req: { headers: { get(name: string): string | null } }): string {
   const cfIp = req.headers.get("cf-connecting-ip")?.trim();
-  if (cfIp) return cfIp;
+  if (cfIp && isIP(cfIp) !== 0) return cfIp.toLowerCase();
 
   const realIp = req.headers.get("x-real-ip")?.trim();
-  if (realIp) return realIp;
+  if (realIp && isIP(realIp) !== 0) return realIp.toLowerCase();
 
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) {
-    const firstNonEmpty = forwarded
+    const validCandidate = forwarded
       .split(",")
       .map((part) => part.trim())
-      .find((part) => part.length > 0);
-    if (firstNonEmpty) return firstNonEmpty;
+      .find((part) => part.length > 0 && isIP(part) !== 0);
+    if (validCandidate) return validCandidate.toLowerCase();
   }
 
   return "127.0.0.1";

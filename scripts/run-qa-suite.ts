@@ -108,6 +108,72 @@ async function runRateLimiterAndIpSuite() {
     "Default fallback IP is 127.0.0.1 when headers are absent"
   );
 
+  // Malformed or forged IP address protection (anti-spoofing)
+  const spoofedCfReq = {
+    headers: {
+      get(name: string) {
+        if (name === "cf-connecting-ip") return "malicious-spoof-string";
+        return null;
+      },
+    },
+  };
+  assert(
+    extractClientIp(spoofedCfReq) === "127.0.0.1",
+    "Malformed cf-connecting-ip is rejected and falls back to 127.0.0.1"
+  );
+
+  const spoofedRealIpReq = {
+    headers: {
+      get(name: string) {
+        if (name === "x-real-ip") return "999.999.999.999";
+        return null;
+      },
+    },
+  };
+  assert(
+    extractClientIp(spoofedRealIpReq) === "127.0.0.1",
+    "Out-of-range IPv4 in x-real-ip is rejected and falls back to 127.0.0.1"
+  );
+
+  const spoofedForwardedReq = {
+    headers: {
+      get(name: string) {
+        if (name === "x-forwarded-for") return "junk-header, 198.51.100.77, 10.0.0.1";
+        return null;
+      },
+    },
+  };
+  assert(
+    extractClientIp(spoofedForwardedReq) === "198.51.100.77",
+    "Malformed entries in x-forwarded-for chain are skipped to find valid IP"
+  );
+
+  const allInvalidForwardedReq = {
+    headers: {
+      get(name: string) {
+        if (name === "x-forwarded-for") return "bad1, bad2, bad3";
+        return null;
+      },
+    },
+  };
+  assert(
+    extractClientIp(allInvalidForwardedReq) === "127.0.0.1",
+    "All-invalid x-forwarded-for chain safely falls back to 127.0.0.1"
+  );
+
+  const ipv6Req = {
+    headers: {
+      get(name: string) {
+        if (name === "cf-connecting-ip") return "2001:0db8:85a3:0000:0000:8a2e:0370:7334";
+        return null;
+      },
+    },
+  };
+  assert(
+    extractClientIp(ipv6Req) === "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+    "Valid IPv6 address in cf-connecting-ip is accepted"
+  );
+
   // Rate limit boundary testing: 10 requests allowed, 11th blocked
   const testIp = "192.168.99.1";
   for (let i = 1; i <= RATE_LIMIT_MAX_REQUESTS; i++) {
@@ -261,6 +327,34 @@ async function runDiagnoseEndpointSuite() {
       );
     }
 
+    // Security Case: Oversized base64 image (> 7MB chars / > 5MB binary)
+    {
+      const hugeImage = "data:image/png;base64," + "A".repeat(7 * 1024 * 1024 + 10);
+      const req = makeReq({
+        history: [{ role: "user", content: "Check this screenshot", image: hugeImage }],
+      });
+      const res = await diagnoseHandler(req);
+      assert(
+        res.status === 400 || res.status === 413,
+        "Oversized base64 image (> 5MB) returns HTTP 400 or 413",
+        `got ${res.status}`
+      );
+    }
+
+    // Security Case: Disallowed image MIME type (e.g. SVG or script injection)
+    {
+      const svgImage = "data:image/svg+xml;base64,PHN2Zz48c2NyaXB0PmFsZXJ0KDEpPC9zY3JpcHQ+PC9zdmc+";
+      const req = makeReq({
+        history: [{ role: "user", content: "Check this SVG", image: svgImage }],
+      });
+      const res = await diagnoseHandler(req);
+      assert(
+        res.status === 400,
+        "Disallowed image MIME type (SVG) returns HTTP 400",
+        `got ${res.status}`
+      );
+    }
+
     // Edge Case: Live Rate Limit HTTP 429 enforcement
     {
       const rateLimitIp = "10.200.99.88";
@@ -301,6 +395,7 @@ async function runDiagnoseEndpointSuite() {
 
     // Offline KB Fallback retrieval in /api/diagnose
     {
+      resetRateLimits();
       const req = makeReq({
         history: [
           {
@@ -384,6 +479,42 @@ async function runIssuesEndpointSuite() {
     assert(res.status === 400, "Malformed percent-encoding returns HTTP 400", `got ${res.status}`);
   }
 
+  // Security Case: Path traversal attempt in slug
+  {
+    const traversalSlug = "../../etc/passwd";
+    const req = makeReq(traversalSlug);
+    const res = await issuesHandler(req, { params: { slug: traversalSlug } });
+    assert(
+      res.status === 400,
+      "Path traversal attempt in issue slug is rejected with HTTP 400",
+      `got ${res.status}`
+    );
+  }
+
+  // Security Case: Special characters in slug
+  {
+    const injectionSlug = "no-post<script>alert(1)</script>";
+    const req = makeReq(injectionSlug);
+    const res = await issuesHandler(req, { params: { slug: injectionSlug } });
+    assert(
+      res.status === 400,
+      "Special characters in issue slug are rejected with HTTP 400",
+      `got ${res.status}`
+    );
+  }
+
+  // Security Case: Oversized slug (> 120 chars)
+  {
+    const longSlug = "a".repeat(121);
+    const req = makeReq(longSlug);
+    const res = await issuesHandler(req, { params: { slug: longSlug } });
+    assert(
+      res.status === 400,
+      "Oversized issue slug (> 120 chars) is rejected with HTTP 400",
+      `got ${res.status}`
+    );
+  }
+
   // Edge Case: Non-existent slug
   {
     const fakeSlug = "completely-fictional-issue-12345";
@@ -464,6 +595,42 @@ async function runWizardEndpointSuite() {
     const req = makeReq("%E0%A4%A");
     const res = await wizardHandler(req, { params: { nodeId: "%E0%A4%A" } });
     assert(res.status === 400, "Malformed percent-encoding returns HTTP 400", `got ${res.status}`);
+  }
+
+  // Security Case: Path traversal attempt in nodeId
+  {
+    const traversalNode = "../start";
+    const req = makeReq(traversalNode);
+    const res = await wizardHandler(req, { params: { nodeId: traversalNode } });
+    assert(
+      res.status === 400,
+      "Path traversal attempt in wizard nodeId is rejected with HTTP 400",
+      `got ${res.status}`
+    );
+  }
+
+  // Security Case: Special characters in nodeId
+  {
+    const injectionNode = "start;drop table";
+    const req = makeReq(injectionNode);
+    const res = await wizardHandler(req, { params: { nodeId: injectionNode } });
+    assert(
+      res.status === 400,
+      "Special characters in wizard nodeId are rejected with HTTP 400",
+      `got ${res.status}`
+    );
+  }
+
+  // Security Case: Oversized nodeId (> 120 chars)
+  {
+    const longNode = "b".repeat(121);
+    const req = makeReq(longNode);
+    const res = await wizardHandler(req, { params: { nodeId: longNode } });
+    assert(
+      res.status === 400,
+      "Oversized wizard nodeId (> 120 chars) is rejected with HTTP 400",
+      `got ${res.status}`
+    );
   }
 
   // Edge Case: Non-existent step ID

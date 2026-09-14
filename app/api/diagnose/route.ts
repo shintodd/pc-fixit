@@ -223,16 +223,45 @@ export async function POST(req: NextRequest) {
     }
 
     const history: Array<{ role: "user" | "assistant"; content: string; image?: string }> = [];
+    const ALLOWED_IMAGE_MIME_TYPES = new Set([
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ]);
+    const MAX_IMAGE_BASE64_LENGTH = 7 * 1024 * 1024; // 7MB chars (~5MB binary)
+
     for (const item of rawHistory) {
       if (!item || typeof item !== "object") continue;
       const role =
         item.role === "assistant" ? "assistant" : item.role === "user" ? "user" : null;
       if (!role) continue;
       const content = typeof item.content === "string" ? item.content : "";
-      const image =
-        typeof item.image === "string" && item.image.startsWith("data:image/")
-          ? item.image
-          : undefined;
+      let image: string | undefined = undefined;
+
+      if (item.image !== undefined && item.image !== null) {
+        if (typeof item.image !== "string") {
+          return NextResponse.json(
+            { error: "Invalid image format" },
+            { status: 400, headers: rateLimitHeaders }
+          );
+        }
+        if (item.image.length > MAX_IMAGE_BASE64_LENGTH) {
+          return NextResponse.json(
+            { error: "Image payload exceeds maximum allowed size of 5MB" },
+            { status: 413, headers: rateLimitHeaders }
+          );
+        }
+        const match = item.image.match(/^data:(image\/[a-zA-Z0-9.+_-]+);base64,/);
+        if (!match || !ALLOWED_IMAGE_MIME_TYPES.has(match[1].toLowerCase())) {
+          return NextResponse.json(
+            { error: "Unsupported or invalid image format. Only JPEG, PNG, WEBP, and GIF images are supported." },
+            { status: 400, headers: rateLimitHeaders }
+          );
+        }
+        image = item.image;
+      }
+
       history.push({ role, content, image });
     }
 
