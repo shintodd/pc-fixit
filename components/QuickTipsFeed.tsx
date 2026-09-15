@@ -163,7 +163,7 @@ export default function QuickTipsFeed({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => {
               const Icon = getCategoryIcon(item.category);
               const isCopied = copiedId === item.id;
@@ -176,12 +176,16 @@ export default function QuickTipsFeed({
               return (
                 <motion.article
                   key={item.id}
-                  layout
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-line/80 dark:border-dark-line/80 bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark hover:border-accent/40 dark:hover:border-dark-accent/40 hover:shadow-card-hover transition-all duration-200 backdrop-blur-md overflow-hidden"
+                  layout="position"
+                  initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, transition: { duration: 0.15 } }}
+                  transition={{
+                    layout: { type: "spring", stiffness: 350, damping: 28 },
+                    opacity: { duration: 0.2 },
+                    scale: { duration: 0.18 },
+                  }}
+                  className="group relative flex flex-col justify-between rounded-2xl border border-line/80 dark:border-dark-line/80 bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark hover:border-accent/40 dark:hover:border-dark-accent/40 hover:shadow-card-hover transition-[border-color,box-shadow] duration-200 backdrop-blur-md overflow-hidden"
                 >
                   <div>
                     {/* Top Header: Badge & Category */}
@@ -261,16 +265,19 @@ export default function QuickTipsFeed({
                           {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                         </button>
 
-                        <AnimatePresence>
+                        <AnimatePresence initial={false}>
                           {isExpanded && (
-                            <motion.p
+                            <motion.div
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: "auto" }}
                               exit={{ opacity: 0, height: 0 }}
-                              className="mt-1.5 text-[12px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary border-l-2 border-accent/40 pl-2.5 py-0.5 overflow-hidden"
+                              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                              className="overflow-hidden"
                             >
-                              {details}
-                            </motion.p>
+                              <p className="mt-1.5 text-[12px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary border-l-2 border-accent/40 pl-2.5 py-0.5">
+                                {details}
+                              </p>
+                            </motion.div>
                           )}
                         </AnimatePresence>
                       </div>

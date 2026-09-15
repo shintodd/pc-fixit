@@ -464,16 +464,19 @@ export default function QuickTriageDeck() {
       </div>
 
       {/* Problem Cards Grid */}
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-        <AnimatePresence mode="wait">
-          {problems.map((prob, idx) => (
-            <motion.div
-              key={`${activeTab}-${prob.slug}`}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.22, delay: idx * 0.04 }}
-              className="group flex flex-col justify-between rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md transition-all duration-200 hover:border-accent/40 dark:hover:border-dark-accent/40 hover:shadow-card-hover"
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4"
+        >
+          {problems.map((prob) => (
+            <div
+              key={prob.slug}
+              className="group flex flex-col justify-between rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-5 shadow-card dark:shadow-card-dark backdrop-blur-md transition-[border-color,box-shadow] duration-200 hover:border-accent/40 dark:hover:border-dark-accent/40 hover:shadow-card-hover"
             >
               <div>
                 <div className="flex items-start justify-between gap-2 mb-2.5">
@@ -518,10 +521,10 @@ export default function QuickTriageDeck() {
                   {prob.quickCheck}
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </AnimatePresence>
-      </div>
+        </motion.div>
+      </AnimatePresence>
     </section>
   );
 }

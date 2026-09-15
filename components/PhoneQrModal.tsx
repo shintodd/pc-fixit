@@ -49,8 +49,6 @@ export default function PhoneQrModal({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
   function handleCopy() {
     navigator.clipboard.writeText(activeUrl);
     setCopied(true);
@@ -59,16 +57,21 @@ export default function PhoneQrModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-        {/* Backdrop */}
+      {isOpen && (
         <motion.div
+          key="phone-qr-modal"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
-          aria-hidden="true"
-        />
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+        >
+          {/* Backdrop */}
+          <div
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+            aria-hidden="true"
+          />
 
         {/* Modal Window */}
         <motion.div
@@ -161,7 +164,8 @@ export default function PhoneQrModal({
             </button>
           </div>
         </motion.div>
-      </div>
-    </AnimatePresence>
-  );
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
 }
