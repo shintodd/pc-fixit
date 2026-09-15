@@ -1,0 +1,93 @@
+[
+  {
+    "id": "intel-13-14-gen-vmin-shift",
+    "component": "Intel Core i9 / i7 / i5 (13th & 14th Gen)",
+    "category": "CPU",
+    "severity": "CRITICAL",
+    "flawNameEn": "Elevated Voltage Vmin Shift Degradation",
+    "flawNameMs": "Degradasi Voltan Tinggi Vmin Shift",
+    "symptomsEn": "Game crashes during shader compilation (Oodle / Unreal Engine), BSOD 0x00000139 or 0x00000124 under load.",
+    "symptomsMs": "Game 'crash' ketika compile shader (Unreal Engine), BSOD 0x00000139 atau 0x00000124 ketika beban tinggi.",
+    "fixEn": "Update motherboard BIOS immediately to microcode 0x12B or newer. Enforce 'Intel Default Settings' profile in BIOS.",
+    "fixMs": "Kemas kini BIOS motherboard serta-merta ke versi microcode 0x12B atau terkini. Tetapkan profil 'Intel Default Settings'.",
+    "verified": true
+  },
+  {
+    "id": "nvidia-12vhpwr-cable-melting",
+    "component": "GeForce RTX 4090 / 4080 (12VHPWR 16-Pin)",
+    "category": "GPU",
+    "severity": "CRITICAL",
+    "flawNameEn": "12VHPWR Connector High Resistance Thermal Melting",
+    "flawNameMs": "Kabel 12VHPWR Lebur Akibat Rintangan Haba",
+    "symptomsEn": "Burning plastic smell, GPU fans ramp to 100% with black screen, pin discoloration at 16-pin connector.",
+    "symptomsMs": "Bau plastik terbakar, kipas GPU pusing 100% dan skrin hitam, warna pin soket 16-pin berubah kehitaman.",
+    "fixEn": "Ensure at least 35mm straight clearance before bending cable. Push connector until latch clicks fully shut with zero gap.",
+    "fixMs": "Pastikan wayar lurus sekurang-kurangnya 35mm sebelum dibengkokkan. Tolak penyambung sehingga klip berbunyi klik tanpa jurang.",
+    "verified": true
+  },
+  {
+    "id": "amd-am5-ryzen-7000-vsoc-burnout",
+    "component": "AMD Ryzen 7000 Series (Socket AM5)",
+    "category": "CPU",
+    "severity": "CRITICAL",
+    "flawNameEn": "EXPO Overvoltage SoC Thermal Expansion",
+    "flawNameMs": "Voltan Lebih SoC EXPO Merosakkan Pin Soket",
+    "symptomsEn": "Motherboard fails to POST after EXPO memory profile enabled, visible burn mark on CPU contact pads.",
+    "symptomsMs": "Motherboard gagal POST selepas aktifkan profil EXPO, kesan terbakar pada tapak tembaga CPU.",
+    "fixEn": "Update motherboard BIOS to AGESA 1.0.0.7c or later. Confirms SoC voltage is hard-locked to a safe maximum of 1.30V.",
+    "fixMs": "Kemas kini BIOS motherboard ke AGESA 1.0.0.7c atau terkini untuk mengehadkan voltan SoC kepada maksimum 1.30V yang selamat.",
+    "verified": true
+  },
+  {
+    "id": "samsung-980-pro-0e-firmware-lock",
+    "component": "Samsung 980 Pro NVMe SSD (1TB / 2TB)",
+    "category": "STORAGE",
+    "severity": "CRITICAL",
+    "flawNameEn": "0E Spare Blocks Depletion & Read-Only Lockout",
+    "flawNameMs": "Penyusutan Blok Simpanan 0E & Kunci 'Read-Only'",
+    "symptomsEn": "Drive suddenly becomes read-only, Windows refuses to write files or crashes on boot with INACCESSIBLE_BOOT_DEVICE.",
+    "symptomsMs": "Pemacu SSD tiba-tiba jadi 'read-only', Windows gagal tulis fail atau crash dengan INACCESSIBLE_BOOT_DEVICE.",
+    "fixEn": "If drive is running firmware 3B2QGXA7, immediately update to 5B2QGXA7 via Samsung Magician before 0E error count increases.",
+    "fixMs": "Jika SSD menggunakan firmware 3B2QGXA7, kemas kini segera ke 5B2QGXA7 melalui perisian Samsung Magician sebelum rosak.",
+    "verified": true
+  },
+  {
+    "id": "intel-i225-v-ethernet-drops",
+    "component": "Intel I225-V & I226-V 2.5GbE Onboard LAN",
+    "category": "NETWORK",
+    "severity": "WARN",
+    "flawNameEn": "Micro-Drop Intermittent Packet Loss",
+    "flawNameMs": "Sambungan Internet Terputus 2-3 Saat Secara Berkala",
+    "symptomsEn": "Ethernet drops connection for 2 to 3 seconds during Discord calls or online gaming, event log shows e2fnexpress errors.",
+    "symptomsMs": "Internet terputus selama 2 hingga 3 saat ketika panggilan Discord atau main game online, log paparkan ralat e2fnexpress.",
+    "fixEn": "Open Device Manager > Network Adapters > Intel Controller Properties > Advanced > Disable 'Energy Efficient Ethernet' (EEE).",
+    "fixMs": "Buka Device Manager > Network Adapters > Properties Intel LAN > Advanced > Matikan (Disable) 'Energy Efficient Ethernet' (EEE).",
+    "verified": true
+  },
+  {
+    "id": "amd-ftpm-stutter-windows-11",
+    "component": "AMD Ryzen 3000 / 5000 Series (AM4 fTPM)",
+    "category": "CPU",
+    "severity": "WARN",
+    "flawNameEn": "fTPM Memory Transaction Stuttering",
+    "flawNameMs": "Sangkut (Stutter) Berulang Akibat Cip fTPM AMD",
+    "symptomsEn": "Random 1-2 second audio buzzing and mouse freeze while doing normal desktop tasks in Windows 11.",
+    "symptomsMs": "Audio berbunyi berdengung dan tetikus tersangkut selama 1-2 saat secara rawak dalam Windows 11.",
+    "fixEn": "Update motherboard BIOS to version with AGESA 1.2.0.7 or newer, which eliminates SPI flash transaction latency.",
+    "fixMs": "Kemas kini BIOS motherboard ke versi AGESA 1.2.0.7 atau lebih baharu untuk menghapuskan kelewatan transaksi cip fTPM.",
+    "verified": true
+  },
+  {
+    "id": "modular-psu-cable-mixing",
+    "component": "All Modular Power Supplies (Corsair, Seasonic, EVGA)",
+    "category": "PSU",
+    "severity": "CRITICAL",
+    "flawNameEn": "Cross-Brand Modular Cable Polarity Reversal",
+    "flawNameMs": "Penyambungan Kabel Modular Berlainan Jenama",
+    "symptomsEn": "Instant pop, smoke, or dead motherboard / SSD when turning on PC with cables from a different power supply.",
+    "symptomsMs": "Bunyi letup kecil, asap, atau motherboard terus mati apabila guna kabel modular dari PSU jenama berbeza.",
+    "fixEn": "NEVER mix modular PSU cables between different brands or generations. Modular PSU pinouts are NOT standardized at the PSU end.",
+    "fixMs": "JANGAN sesekali campur kabel modular antara jenama berbeza. Susunan pin di bahagian kotak PSU tidak standard.",
+    "verified": true
+  }
+]

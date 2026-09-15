@@ -2,19 +2,34 @@
 
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
-import { Monitor, Volume2, Smartphone, Terminal, Calculator, Wrench } from "lucide-react";
+import {
+  Monitor,
+  Volume2,
+  Smartphone,
+  Terminal,
+  Calculator,
+  Wrench,
+  Zap,
+  Activity,
+  Cpu,
+} from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 
 const PortLocatorModal = dynamic(() => import("@/components/PortLocatorModal"), { ssr: false });
 const BeepLedDecoderModal = dynamic(() => import("@/components/BeepLedDecoderModal"), { ssr: false });
+const FrontPanelPinoutModal = dynamic(() => import("@/components/FrontPanelPinoutModal"), { ssr: false });
+const BrowserDiagnosticsModal = dynamic(() => import("@/components/BrowserDiagnosticsModal"), { ssr: false });
+const SiliconDefectsModal = dynamic(() => import("@/components/SiliconDefectsModal"), { ssr: false });
 const PhoneQrModal = dynamic(() => import("@/components/PhoneQrModal"), { ssr: false });
 const CommandExplainerModal = dynamic(() => import("@/components/CommandExplainerModal"), { ssr: false });
 const RepairFeasibilityModal = dynamic(() => import("@/components/RepairFeasibilityModal"), { ssr: false });
 
 export default function QuickToolsBar({ className = "" }: { className?: string }) {
   const { t, language } = useLanguage();
-  const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | null>(null);
+  const [activeModal, setActiveModal] = useState<
+    "port" | "beep" | "pinout" | "lab" | "defects" | "phone" | "cmd" | "calc" | null
+  >(null);
 
   const isMs = language === "ms";
 
@@ -30,14 +45,28 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
       id: "beep",
       icon: Volume2,
       label: t("tool_beep_led"),
-      sub: isMs ? "Diagnos screen hitam" : "Black screen diagnostic",
+      sub: isMs ? "Diagnos LED & beep" : "Black screen diagnostic",
       color: "text-amber-500 bg-amber-500/10",
     },
     {
-      id: "phone",
-      icon: Smartphone,
-      label: t("tool_phone_qr"),
-      sub: isMs ? "Baiki masa PC padam" : "Read with PC off",
+      id: "pinout",
+      icon: Zap,
+      label: isMs ? "Pin Front Panel" : "Front-Panel Pinout",
+      sub: isMs ? "Wayar suis & jumpstart" : "Wiring & jumpstart test",
+      color: "text-rose-500 bg-rose-500/10",
+    },
+    {
+      id: "lab",
+      icon: Activity,
+      label: isMs ? "Makmal Browser" : "Browser Hardware Lab",
+      sub: isMs ? "Pixel, Hz, chatter, audio" : "Dead pixel, Hz, chatter",
+      color: "text-emerald-500 bg-emerald-500/10",
+    },
+    {
+      id: "defects",
+      icon: Cpu,
+      label: isMs ? "Kecacatan Silikon" : "Silicon Defect Matrix",
+      sub: isMs ? "Intel 13/14th, 4090, 980Pro" : "Known flaws & recalls",
       color: "text-purple-500 bg-purple-500/10",
     },
     {
@@ -45,14 +74,14 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
       icon: Terminal,
       label: t("tool_commands"),
       sub: isMs ? "SFC, DISM, DNS" : "SFC, DISM, DNS fixes",
-      color: "text-emerald-500 bg-emerald-500/10",
+      color: "text-teal-500 bg-teal-500/10",
     },
     {
       id: "calc",
       icon: Calculator,
       label: t("tool_feasibility"),
-      sub: isMs ? "Kira kos & kelayakan" : "Cost vs replacement",
-      color: "text-rose-500 bg-rose-500/10",
+      sub: isMs ? "Kira kos baiki" : "Cost vs replacement",
+      color: "text-indigo-500 bg-indigo-500/10",
     },
   ];
 
@@ -65,10 +94,10 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2 text-[12px] font-bold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
             <Wrench className="h-3.5 w-3.5 text-accent" />
-            <span>{isMs ? "Alatan Interaktif Pantas" : "Quick Diagnostic Helpers"}</span>
+            <span>{isMs ? "Alatan Interaktif Pantas" : "Interactive Diagnostic Suite"}</span>
           </div>
           <span className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary hidden sm:inline">
-            {isMs ? "1-klik buka panduan visual & audio" : "1-click visual & audio guides"}
+            {isMs ? "7 alat diagnostik terus dalam pelayar web" : "7 zero-install browser diagnostic tools"}
           </span>
         </div>
 
@@ -78,7 +107,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
             aria-hidden="true"
             className="pointer-events-none absolute -inset-2 -z-10 rounded-2xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 blur-xl opacity-60 dark:opacity-40"
           />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
             {tools.map((item) => {
               const Icon = item.icon;
               return (
@@ -94,7 +123,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
                   <div className={`p-2 rounded-xl ${item.color} mb-2.5 transition-transform duration-200 group-hover:scale-105`}>
                     <Icon className="h-4 w-4" />
                   </div>
-                  <div className="font-bold text-[13px] text-ink dark:text-dark-ink group-hover:text-accent transition-colors">
+                  <div className="font-bold text-[13px] text-ink dark:text-dark-ink group-hover:text-accent transition-colors leading-snug">
                     {item.label}
                   </div>
                   <div className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary truncate w-full mt-0.5">
@@ -110,6 +139,9 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
       {/* Modals */}
       <PortLocatorModal isOpen={activeModal === "port"} onClose={() => setActiveModal(null)} />
       <BeepLedDecoderModal isOpen={activeModal === "beep"} onClose={() => setActiveModal(null)} />
+      <FrontPanelPinoutModal isOpen={activeModal === "pinout"} onClose={() => setActiveModal(null)} />
+      <BrowserDiagnosticsModal isOpen={activeModal === "lab"} onClose={() => setActiveModal(null)} />
+      <SiliconDefectsModal isOpen={activeModal === "defects"} onClose={() => setActiveModal(null)} />
       <PhoneQrModal isOpen={activeModal === "phone"} onClose={() => setActiveModal(null)} />
       <CommandExplainerModal isOpen={activeModal === "cmd"} onClose={() => setActiveModal(null)} />
       <RepairFeasibilityModal isOpen={activeModal === "calc"} onClose={() => setActiveModal(null)} />

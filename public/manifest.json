@@ -1,0 +1,24 @@
+{
+  "name": "pcfix: PC Diagnostic & Hardware Repair Suite",
+  "short_name": "pcfix",
+  "description": "Guided PC hardware troubleshooting, plain-language fixes, and zero-install in-browser hardware diagnostics.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["utilities", "productivity", "hardware"]
+}

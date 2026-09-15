@@ -1,0 +1,55 @@
+[
+  {
+    "category": "wont-boot.json",
+    "slug": "usb-bios-flashback-black-screen-recovery",
+    "title": "Corrupted BIOS black screen recovery via USB Flashback",
+    "step": "Insert drive into designated BIOS Flashback USB port",
+    "severity": "WARN",
+    "type": "BIOS_CLAIM",
+    "claim": "Locate the specific rear I/O USB port bordered by a white or grey outline labeled 'BIOS Flashback' or 'Q-Flash Plus'. Insert the USB flash drive. CRIT",
+    "verdict": "BIOS flash USB must be formatted as FAT32. Missing this specification could lead to failed flash.",
+    "correction": "Always specify: USB drive must be formatted FAT32, 4GB or larger"
+  },
+  {
+    "category": "wont-boot.json",
+    "slug": "power-sequence-atx-24pin-pson-triage",
+    "title": "ATX 24-Pin Power Sequence and PS_ON Green Wire Triage",
+    "step": "Measure DC rail voltages with multimeter",
+    "severity": "WARN",
+    "type": "VOLTAGE_CLAIM",
+    "claim": "12V DC, red wires for +5V DC, orange wires for +3.3V",
+    "verdict": "12V value of 3.3V outside normal ATX ±10% range (10.8V-13.2V). Verify context."
+  },
+  {
+    "category": "running-slow.json",
+    "slug": "fragmented-or-nearly-full-ssd",
+    "title": "Solid state drive is over 90% full",
+    "step": "Run manual TRIM optimization",
+    "severity": "CRITICAL",
+    "type": "SSD_CLAIM",
+    "claim": "Press Start, type 'Defragment and Optimize Drives', select your SSD, and click 'Optimize' to run TRIM and reclaim stale flash blocks.",
+    "verdict": "Defragmenting an SSD is unnecessary and increases write wear. Windows Optimize already uses TRIM on SSDs.",
+    "correction": "Never run disk defragmentation on SSDs. Use TRIM via Windows Optimize instead."
+  },
+  {
+    "category": "overheating.json",
+    "slug": "overheating",
+    "title": "Overheating, loud fans, and thermal throttling",
+    "step": "Repaste CPU and GPU with high-grade thermal paste",
+    "severity": "CRITICAL",
+    "type": "CHEMICAL_CLAIM",
+    "claim": "isopropyl alcohol (90%+",
+    "verdict": "0% IPA is too low for electronics cleaning. Leaves water residue that causes corrosion.",
+    "correction": "Use 90%+ IPA for electronics. 99% IPA is optimal."
+  },
+  {
+    "category": "overheating.json",
+    "slug": "aggressive-motherboard-multicore-enhancement",
+    "title": "Motherboard pushing excessive voltage (ASUS MCE / Gigabyte Enhanced)",
+    "step": "Apply negative voltage offset (Undervolt)",
+    "severity": "WARN",
+    "type": "TEMP_CLAIM",
+    "claim": "10°C",
+    "verdict": "10°C seems unusually cold for normal operating temp claim - verify context"
+  }
+]
