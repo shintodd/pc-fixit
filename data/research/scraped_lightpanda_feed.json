@@ -1,0 +1,52 @@
+[
+  {
+    "url": "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands",
+    "category": "pc-tips",
+    "pageTitle": "Windows commands | Microsoft Learn",
+    "elapsedMs": 81,
+    "summaryText": "Windows commands | Microsoft Learn Skip to main content Skip to Ask Learn chat experience This browser is no longer supported. Upgrade to Microsoft Edge to take advantage of the latest features, security updates, and technical support. Download Microsoft Edge More info about Internet Explorer and Microsoft Edge Table of contents Exit editor mode Ask Learn Ask Learn Reading mode Table of contents Read in English Add Add to Plans Edit Copy Markdown Print Note Access to this page requires authoriza",
+    "extractedLength": 16127,
+    "scrapedAt": "2026-09-15T03:51:51.610Z",
+    "engine": "http-fetch-fallback"
+  },
+  {
+    "url": "https://github.com/ChrisTitusTech/winutil",
+    "category": "cool-tools",
+    "pageTitle": "GitHub - ChrisTitusTech/winutil: Chris Titus Tech&#39;s Windows Utility - Install Programs, Tweaks, Fixes, and Updates · GitHub",
+    "elapsedMs": 226,
+    "summaryText": "GitHub - ChrisTitusTech/winutil: Chris Titus Tech&#39;s Windows Utility - Install Programs, Tweaks, Fixes, and Updates · GitHub Skip to content Navigation Menu Sign in Appearance settings Platform AI CODE CREATION GitHub Copilot Write better code with AI GitHub Copilot app Direct agents from issue to merge MCP Registry Integrate external tools DEVELOPER WORKFLOWS Actions Automate any workflow Codespaces Instant dev environments Issues Plan and track work Code Review Manage code changes Code Qual",
+    "extractedLength": 5416,
+    "scrapedAt": "2026-09-15T03:51:51.837Z",
+    "engine": "http-fetch-fallback"
+  },
+  {
+    "url": "https://github.com/bleachbit/bleachbit",
+    "category": "cool-tools",
+    "pageTitle": "GitHub - bleachbit/bleachbit: BleachBit system cleaner for Windows and Linux · GitHub",
+    "elapsedMs": 17,
+    "summaryText": "GitHub - bleachbit/bleachbit: BleachBit system cleaner for Windows and Linux · GitHub Skip to content Navigation Menu Sign in Appearance settings Platform AI CODE CREATION GitHub Copilot Write better code with AI GitHub Copilot app Direct agents from issue to merge MCP Registry Integrate external tools DEVELOPER WORKFLOWS Actions Automate any workflow Codespaces Instant dev environments Issues Plan and track work Code Review Manage code changes Code Quality Enforce quality at merge APPLICATION S",
+    "extractedLength": 5950,
+    "scrapedAt": "2026-09-15T03:51:51.855Z",
+    "engine": "http-fetch-fallback"
+  },
+  {
+    "url": "https://github.com/microsoft/PowerToys",
+    "category": "cool-tools",
+    "pageTitle": "GitHub - microsoft/PowerToys: Microsoft PowerToys is a collection of utilities that supercharge productivity and customization on Windows · GitHub",
+    "elapsedMs": 15,
+    "summaryText": "GitHub - microsoft/PowerToys: Microsoft PowerToys is a collection of utilities that supercharge productivity and customization on Windows · GitHub Skip to content Navigation Menu Sign in Appearance settings Platform AI CODE CREATION GitHub Copilot Write better code with AI GitHub Copilot app Direct agents from issue to merge MCP Registry Integrate external tools DEVELOPER WORKFLOWS Actions Automate any workflow Codespaces Instant dev environments Issues Plan and track work Code Review Manage cod",
+    "extractedLength": 8282,
+    "scrapedAt": "2026-09-15T03:51:51.871Z",
+    "engine": "http-fetch-fallback"
+  },
+  {
+    "url": "https://rtech.support/",
+    "category": "troubleshooting",
+    "pageTitle": "Welcome to the rTS Wiki | rTS Wiki",
+    "elapsedMs": 306,
+    "summaryText": "Welcome to the rTS Wiki | rTS Wiki Skip to content rTS Wiki Other Tools Specify Specify: a lightweight and fast tool to gather information about a Windows computer, designed for support purposes HWGV A csv graph reader for .csv hwinfo files WebDBG Online BSOD dump parser Hyde A web editor and CMS for this wiki Search Ctrl K Cancel Information Rules Supported Operating Systems Appeal a Ban Subreddit Commands Support Guidelines Contributing to the Wiki Change notes: Jekyll to Astro Enabling Discor",
+    "extractedLength": 4882,
+    "scrapedAt": "2026-09-15T03:51:52.178Z",
+    "engine": "http-fetch-fallback"
+  }
+]

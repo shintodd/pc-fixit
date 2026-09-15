@@ -17,7 +17,8 @@
     "test": "tsx scripts/run-qa-suite.ts",
     "test:mobile": "tsx scripts/test-mobile-ux.ts",
     "test:pentest": "tsx scripts/pentagi-security-audit.ts",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "tsx scripts/seed.ts",
+    "scrape:lightpanda": "node scripts/lightpanda_scraper.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.21.0",
