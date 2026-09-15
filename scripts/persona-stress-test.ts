@@ -13,7 +13,7 @@ interface PersonaSpec {
   name: string;
   archetype: string;
   technicalLiteracy: "LOW" | "MEDIUM" | "HIGH";
-  panicLevel: "LOW" | "HIGH" | "CRITICAL";
+  panicLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   language: "en" | "ms";
   query: string;
   expectedKeywords: string[];
