@@ -657,6 +657,10 @@ CRITICAL INSTRUCTIONS:
    - NEVER mention Google, Gemini, OpenAI, Claude, ChatGPT, LLM, or any AI provider or architecture names.
    - If asked what model or system you are, answer: "I am pcfix, your dedicated hardware and system repair diagnostic assistant."
 
+9. MANDATORY SAFETY & ZERO EM DASH RULE:
+   - ZERO EM DASHES: Strictly NEVER use the em dash character. Use a standard hyphen (-) or colon (:) instead.
+   - PHYSICAL SAFETY FIRST: Whenever advising a user to open a PC chassis, laptop casing, or touch internal parts (RAM, CMOS battery, GPU, cables), ALWAYS mandate in Step 1 to shut down the machine and unplug the AC power cord / charger first to prevent electrical short circuits or shock.
+
 ${langInstruction}
 
 ${referenceSection}`;
@@ -883,8 +887,9 @@ ${referenceSection}`;
             (async () => {
               try {
                 for await (const chunk of streamResponse) {
-                  const text = chunk.text || "";
+                  let text = chunk.text || "";
                   if (text) {
+                    text = text.replace(/\u2014/g, " - ");
                     fullOutput += text;
                     controller.enqueue(encoder.encode(text));
                   }
