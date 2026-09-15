@@ -26,6 +26,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import PhoneQrModal from "@/components/PhoneQrModal";
 import PortLocatorModal from "@/components/PortLocatorModal";
+import HardwareVisualGuide from "@/components/HardwareVisualGuide";
 import JargonTooltip, { type JargonTerm } from "@/components/JargonTooltip";
 
 const SEVERITY_STYLE: Record<Severity, string> = {
@@ -300,6 +301,9 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               ))}
             </ul>
           </motion.div>
+
+          {/* Real Hardware Visual Recognition Guide */}
+          <HardwareVisualGuide slug={issue.slug} categorySlug={issue.category_slug} />
 
           {/* Interactive Step-by-Step Fix Checklist */}
           <div className="mt-10">

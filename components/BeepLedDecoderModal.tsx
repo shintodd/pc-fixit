@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Volume2, Lightbulb, Play, Square, Check, AlertCircle, Wrench } from "lucide-react";
+import { X, Volume2, Lightbulb, Play, Square, Check, AlertCircle, Wrench, Camera } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface BeepPattern {
@@ -143,6 +144,33 @@ const DEBUG_LEDS = [
     ],
   },
 ];
+
+const LED_HARDWARE_IMAGES: Record<string, { src: string; alt: string; labelEn: string; labelMs: string }> = {
+  CPU: {
+    src: "/images/hardware/motherboard-cpu.jpg",
+    alt: "Processor socket and retention lever",
+    labelEn: "CPU Socket & Retention Lever",
+    labelMs: "Soket CPU & Tuil Pengunci",
+  },
+  DRAM: {
+    src: "/images/hardware/ram-dimm-slots.jpg",
+    alt: "Motherboard RAM DIMM slots and clips",
+    labelEn: "RAM DIMM Slots & Latches",
+    labelMs: "Slot RAM & Klip Pengunci",
+  },
+  VGA: {
+    src: "/images/hardware/gpu-bracket-ports.jpg",
+    alt: "Graphics card rear PCIe bracket ports",
+    labelEn: "GPU Rear Expansion Bracket",
+    labelMs: "Plat Belakang Kad Grafik",
+  },
+  BOOT: {
+    src: "/images/hardware/hard-drive-storage.jpg",
+    alt: "Storage drive connectors and SATA ports",
+    labelEn: "Storage Drive & SATA Cables",
+    labelMs: "Pemacu Simpanan & Wayar SATA",
+  },
+};
 
 export default function BeepLedDecoderModal({
   isOpen,
@@ -355,16 +383,49 @@ export default function BeepLedDecoderModal({
                 </div>
 
                 {/* LED Diagnostic Details Card */}
-                <div className="rounded-2xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 p-5 space-y-3 shadow-xs">
-                  <div className="flex items-center gap-2">
-                    <span className={`h-3 w-3 rounded-full ${selectedLed.color}`} />
-                    <h3 className="font-bold text-[15px] text-ink dark:text-dark-ink">
-                      {isMs ? selectedLed.nameMs : selectedLed.nameEn}
-                    </h3>
+                <div className="rounded-2xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 p-5 space-y-3.5 shadow-xs">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className={`h-3 w-3 rounded-full ${selectedLed.color}`} />
+                      <h3 className="font-bold text-[15px] text-ink dark:text-dark-ink">
+                        {isMs ? selectedLed.nameMs : selectedLed.nameEn}
+                      </h3>
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-subtle dark:bg-dark-subtle px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
+                      <Camera className="h-3 w-3 text-accent" />
+                      <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
+                    </span>
                   </div>
                   <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed">
                     {isMs ? selectedLed.descMs : selectedLed.descEn}
                   </p>
+
+                  {/* Real Hardware Reference Photo */}
+                  {LED_HARDWARE_IMAGES[selectedLed.id] && (
+                    <div className="flex items-center gap-3 rounded-xl border border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 p-2.5">
+                      <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg border border-line/80 dark:border-dark-line/80 bg-black/10">
+                        <Image
+                          src={LED_HARDWARE_IMAGES[selectedLed.id].src}
+                          alt={LED_HARDWARE_IMAGES[selectedLed.id].alt}
+                          fill
+                          sizes="120px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <div className="text-[12px] font-bold text-ink dark:text-dark-ink truncate">
+                          {isMs
+                            ? LED_HARDWARE_IMAGES[selectedLed.id].labelMs
+                            : LED_HARDWARE_IMAGES[selectedLed.id].labelEn}
+                        </div>
+                        <p className="text-[11px] text-ink-secondary dark:text-dark-ink-secondary leading-tight">
+                          {isMs
+                            ? "Foto rujukan fizikal untuk kenal pasti komponen motherboard."
+                            : "Physical hardware reference to identify motherboard component."}
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="pt-2 border-t border-line/60 dark:border-dark-line/60 space-y-2">
                     <div className="text-[11px] font-bold uppercase tracking-wider text-accent dark:text-dark-accent flex items-center gap-1.5">

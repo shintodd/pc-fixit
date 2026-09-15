@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle2, AlertTriangle, Monitor, Zap, Cable, Check, HelpCircle } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -117,28 +118,60 @@ export default function PortLocatorModal({
             {activeTab === "ports" ? (
               <div className="space-y-4">
                 {/* Visual Illustration Cards */}
-                <div className="rounded-2xl border border-critical/30 bg-critical/5 dark:bg-critical/10 p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-critical font-bold text-[13px]">
-                    <AlertTriangle className="h-4 w-4" />
-                    <span>{isMs ? "PORT ATAS (Motherboard): SALAH untuk PC ada GPU" : "TOP PORTS (Motherboard): WRONG if GPU installed"}</span>
+                <div className="rounded-2xl border border-critical/30 bg-critical/5 dark:bg-critical/10 p-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
+                    <div className="sm:col-span-4 relative h-28 w-full rounded-xl overflow-hidden border border-critical/30 bg-black/20 shrink-0">
+                      <Image
+                        src="/images/hardware/motherboard-rear-io.jpg"
+                        alt="Motherboard rear I/O ports"
+                        fill
+                        sizes="(max-width: 640px) 100vw, 200px"
+                        className="object-cover"
+                      />
+                      <div className="absolute top-1.5 left-1.5 rounded-md bg-critical px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+                        {isMs ? "SALAH (Motherboard)" : "WRONG (Motherboard)"}
+                      </div>
+                    </div>
+                    <div className="sm:col-span-8 space-y-1.5">
+                      <div className="flex items-center gap-2 text-critical font-bold text-[13px]">
+                        <AlertTriangle className="h-4 w-4 shrink-0" />
+                        <span>{isMs ? "PORT ATAS (Motherboard): SALAH untuk PC ada GPU" : "TOP PORTS (Motherboard): WRONG if GPU installed"}</span>
+                      </div>
+                      <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed text-[12px]">
+                        {isMs
+                          ? "Jika casing anda mempunyai kad grafik (GPU) di bahagian bawah, port HDMI/DisplayPort di bahagian atas motherboard akan dimatikan secara automatik oleh BIOS. Skrin akan kekal hitam."
+                          : "If your computer has a dedicated graphics card (GPU) installed below, the top motherboard display ports are automatically disabled. Plugging here causes a black screen."}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed">
-                    {isMs
-                      ? "Jika casing anda mempunyai kad grafik (GPU) di bahagian bawah, port HDMI/DisplayPort di bahagian atas motherboard akan dimatikan secara automatik oleh BIOS. Skrin akan kekal hitam."
-                      : "If your computer has a dedicated graphics card (GPU) installed below, the top motherboard display ports are automatically disabled. Plugging here causes a black screen."}
-                  </p>
                 </div>
 
-                <div className="rounded-2xl border border-ok/30 bg-ok/5 dark:bg-ok/10 p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-ok font-bold text-[13px]">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>{isMs ? "PORT BAWAH (Kad Grafik GPU): BETUL & WAJIB" : "BOTTOM HORIZONTAL PORTS (Graphics Card): CORRECT"}</span>
+                <div className="rounded-2xl border border-ok/30 bg-ok/5 dark:bg-ok/10 p-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
+                    <div className="sm:col-span-4 relative h-28 w-full rounded-xl overflow-hidden border border-ok/30 bg-black/20 shrink-0">
+                      <Image
+                        src="/images/hardware/gpu-bracket-ports.jpg"
+                        alt="Graphics card rear PCIe bracket ports"
+                        fill
+                        sizes="(max-width: 640px) 100vw, 200px"
+                        className="object-cover"
+                      />
+                      <div className="absolute top-1.5 left-1.5 rounded-md bg-ok px-2 py-0.5 text-[10px] font-bold text-white shadow-xs">
+                        {isMs ? "BETUL (Kad Grafik)" : "CORRECT (Graphics Card)"}
+                      </div>
+                    </div>
+                    <div className="sm:col-span-8 space-y-1.5">
+                      <div className="flex items-center gap-2 text-ok font-bold text-[13px]">
+                        <CheckCircle2 className="h-4 w-4 shrink-0" />
+                        <span>{isMs ? "PORT BAWAH (Kad Grafik GPU): BETUL & WAJIB" : "BOTTOM HORIZONTAL PORTS (Graphics Card): CORRECT"}</span>
+                      </div>
+                      <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed text-[12px]">
+                        {isMs
+                          ? "Sentiasa cucuk kabel monitor terus ke barisan slot mendatar di bahagian bawah casing (lihat cop 'D' dan 'HDMI' pada plat besi). Ini port sebenar yang menghasilkan gambar."
+                          : "Always plug your monitor cable directly into the horizontal metal bracket ports near the bottom of the PC (look for stamped 'D' and 'HDMI' markings). This is where your graphics card outputs display."}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed">
-                    {isMs
-                      ? "Sentiasa cucuk kabel HDMI atau DisplayPort anda terus ke barisan slot mendatar di bahagian bawah casing. Ini port sebenar yang menghasilkan gambar."
-                      : "Always plug your monitor cable directly into the horizontal metal bracket ports near the bottom of the PC. This is where your graphics card outputs display."}
-                  </p>
                 </div>
 
                 {/* PSU Rocker Switch */}
