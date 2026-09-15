@@ -1,0 +1,52 @@
+[
+  {
+    "file": "wont-boot.json",
+    "slug": "bios-cmos-checksum-error",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "wont-boot.json",
+    "slug": "bitlocker-recovery-screen-on-boot",
+    "rule": "BitLocker hardware revert power isolation"
+  },
+  {
+    "file": "wont-boot.json",
+    "slug": "secure-boot-violation-invalid-signature",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "wont-boot.json",
+    "slug": "usb-bios-flashback-black-screen-recovery",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "wont-boot.json",
+    "slug": "cpu-uneven-mounting-pressure-channel-loss",
+    "rule": "AM4 cooler twist safety"
+  },
+  {
+    "file": "blue-screen.json",
+    "slug": "system-thread-exception-not-handled",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "blue-screen.json",
+    "slug": "clock-watchdog-timeout",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "blue-screen.json",
+    "slug": "kernel-security-check-failure",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "blue-screen.json",
+    "slug": "bsod-system-pte-misuse",
+    "rule": "BIOS flashing interruption protection"
+  },
+  {
+    "file": "overheating.json",
+    "slug": "dry-cracked-thermal-paste",
+    "rule": "AM4 cooler twist safety"
+  }
+]

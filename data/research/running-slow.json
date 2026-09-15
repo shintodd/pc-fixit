@@ -163,6 +163,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Check CPU core temperatures with HWInfo64",
         "detail": "If CPU temperature is 95-105°C, thermal throttling is saving the processor from burning. Inspect CPU cooler mounting, pump operation, and thermal paste."
       },
@@ -459,6 +463,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Check Virtual Memory allocation drive",
         "detail": "Press Win+R, type 'sysdm.cpl' → Advanced tab → Performance Settings → Advanced tab → click 'Change' under Virtual Memory."
       },
@@ -532,6 +540,10 @@
       "Only one RAM stick is installed, or two sticks placed in adjacent slots"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Install RAM sticks in slots 2 and 4 (A2 and B2)",
         "detail": "When installing two sticks on a 4-slot motherboard, place them in the second and fourth slots from the CPU socket to engage dual-channel mode."
@@ -992,7 +1004,7 @@
         "title": "Update motherboard BIOS if memory profile is unstable",
         "instruction": "If enabling XMP causes crashes or fails to POST, download the latest BIOS version from your motherboard vendor's support page. Newer BIOS updates contain updated AGESA and memory compatibility microcode.",
         "caution": "Never interrupt power or turn off PC while BIOS flash progress bar is running.",
-        "detail": "If enabling XMP causes crashes or fails to POST, download the latest BIOS version from your motherboard vendor's support page. Newer BIOS updates contain updated AGESA and memory compatibility microcode."
+        "detail": "If enabling XMP causes crashes or fails to POST, download the latest BIOS version from your motherboard vendor's support page. Newer BIOS updates contain updated AGESA and memory compatibility microcode. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [],

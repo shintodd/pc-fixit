@@ -12,6 +12,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Check hardware temperatures with HWiNFO64",
         "detail": "Download HWiNFO64 (Sensors only mode). Check CPU Tctl/Tdie, GPU Core, and GPU Hotspot temperatures. Temperatures exceeding 95°C on CPU or 105°C on GPU Hotspot indicate thermal throttling."
       },
@@ -48,6 +52,10 @@
       "BIOS warning on next boot: 'CPU Over Temperature Error!'"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Verify CPU cooler fan and pump are running",
         "detail": "Look inside the chassis when powering on. Ensure CPU cooler fans are spinning. If using an AIO liquid cooler, place two fingers on the pump block to feel for vibration."
@@ -121,8 +129,12 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Dismount CPU cooler block",
-        "detail": "Unscrew the four mounting thumb-screws diagonally and carefully lift the cooler block off the CPU."
+        "detail": "Unscrew the four mounting thumb-screws diagonally and gently twist the cooler block slightly left and right to break thermal paste vacuum, then carefully lift it off the CPU."
       },
       {
         "title": "Peel off the transparent plastic film",
@@ -156,6 +168,10 @@
       "Graphics card downclocks heavily and framerates stutter"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Check GPU core-to-hotspot temperature delta",
         "detail": "Open HWiNFO64. Under GPU sensors, subtract GPU Core from GPU Hot Spot. A delta above 20-25°C indicates paste degradation or uneven heatsink contact."
@@ -194,12 +210,16 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Power down and clean dust filters",
         "detail": "Remove magnetic or slide-out dust filters from the front, top, and bottom PSU intake of the case. Wash with warm water or vacuum thoroughly and dry completely."
       },
       {
         "title": "Blow compressed air through heatsink fins from inside out",
-        "detail": "Use a can of compressed air or electric air duster. Blow air in the opposite direction of normal airflow to eject compacted lint mats out of the radiator."
+        "detail": "Use a can of compressed air or electric air duster. Blow air in the opposite direction of normal airflow to eject compacted lint mats out of the radiator. SAFETY: Hold the fan blades still with a finger or non-conductive tool while spraying compressed air. Allowing fans to free-spin rapidly can burn out bearings and generate reverse voltage back into the motherboard fan header."
       },
       {
         "title": "Hold fan blades still while blowing air",
@@ -229,6 +249,10 @@
       "Cooler was never repasted since original assembly 4+ years ago"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Remove CPU cooler carefully (twist before pulling)",
         "detail": "Warm up the CPU with a benchmark before shutdown. Unscrew cooler and gently twist back and forth. Never pull straight up on AMD AM4 CPUs, which can yank the CPU out of the locked socket."
@@ -302,12 +326,16 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Disable ASUS MultiCore Enhancement / MSI Enhanced Turbo",
         "detail": "In BIOS under Ai Tweaker / Overclocking, find 'ASUS MultiCore Enhancement' and change from 'Auto - Enforce All Limits' to 'Disabled - Enforce All Limits'."
       },
       {
         "title": "Apply Intel Baseline / Default Power Profile",
-        "detail": "Update to the latest BIOS version containing the Intel Default Settings profile. Ensure PL1 (Long Duration) is set to 125W or 253W according to Intel specifications."
+        "detail": "Update to the latest BIOS version containing the Intel Default Settings profile. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing to avoid corrupting the motherboard EEPROM. Ensure PL1 (Long Duration) is set to 125W or 253W according to Intel specifications."
       },
       {
         "title": "Apply negative voltage offset (Undervolt)",
@@ -338,6 +366,10 @@
       "Thermal paste on CPU shows zero spread when heatsink is reopened"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Replace solid pads with high-conformability Thermal Putty",
         "detail": "Laptops use non-standard pad thicknesses (0.75mm, 1.25mm). Replace stiff silicone pads with moldable thermal putty (Upsiren U6 Pro, ZT-PY6, CX-H98) that compresses perfectly."
@@ -374,6 +406,10 @@
       "Plastic smell emanates from upper left corner of motherboard"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Direct an airflow fan onto the motherboard VRM area",
         "detail": "AIO water coolers provide zero airflow over the socket. Position a small 80mm or 120mm fan blowing directly over the naked MOSFETs near the CPU socket."
@@ -412,12 +448,16 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Toggle the PSU Eco / Hybrid / Zero-RPM switch",
         "detail": "Many high-end PSUs (EVGA, Seasonic, Corsair) feature a toggle switch on the back for 'Eco Mode' or 'Hybrid Fan'. Flip it OFF to force the fan to spin continuously."
       },
       {
         "title": "Clean dust buildup inside PSU shroud",
-        "detail": "Use compressed air through the PSU fan grille. (WARNING: Never open a power supply casing; internal capacitors carry lethal electric charges even when unplugged)."
+        "detail": "Use compressed air through the PSU fan grille. (WARNING: Never open a power supply casing; internal capacitors carry lethal electric charges even when unplugged). SAFETY: Hold the fan blades still with a finger or non-conductive tool while spraying compressed air. Allowing fans to free-spin rapidly can burn out bearings and generate reverse voltage back into the motherboard fan header."
       },
       {
         "title": "Verify PSU orientation (fan facing fresh air)",
@@ -521,6 +561,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Install motherboard M.2 aluminum heatsink",
         "detail": "PCIe Gen 4 and Gen 5 SSDs require active or passive heatsinks. Ensure the motherboard metal heatsink cover is screwed down firmly over the drive."
       },
@@ -558,6 +602,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Route power cables through rear motherboard tray grommets",
         "detail": "Unplug modular cables and tuck them behind the rear motherboard tray. Use zip-ties or velcro straps to bind them flat against chassis tie-down loops."
       },
@@ -594,6 +642,10 @@
       "GPU core temp is cool (65C) but GPU fans spin at 100% emergency speed"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Monitor GPU Memory Junction Temperature in HWInfo64",
         "detail": "Download HWInfo64, launch in Sensors-only mode, launch a demanding game, and observe 'GPU Memory Junction Temperature'. Maximum operating limit before thermal throttling is 105C."
@@ -661,6 +713,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Place laptop on a hard, flat, rigid surface",
         "detail": "Always operate gaming laptops on a desk, wooden lap desk, or hard tray. Soft bedding compresses under the rubber feet and blocks the bottom intake vents completely."
       },
@@ -670,7 +726,7 @@
       },
       {
         "title": "Clean lint and pet hair from internal heatsink fins",
-        "detail": "Laptops used on beds ingest high volumes of blanket fibers and dust. Remove the bottom chassis cover and use compressed air to blast lint out through the copper exhaust fins."
+        "detail": "Laptops used on beds ingest high volumes of blanket fibers and dust. Remove the bottom chassis cover and use compressed air to blast lint out through the copper exhaust fins. SAFETY: Hold the fan blades still with a finger or non-conductive tool while spraying compressed air. Allowing fans to free-spin rapidly can burn out bearings and generate reverse voltage back into the motherboard fan header."
       },
       {
         "title": "Invest in a pressurized laptop cooling pad (IETS / Llano)",
@@ -693,6 +749,10 @@
       "Fan noise is deafening even when CPU temperature is at cool 30C idle"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Switch fan header mode from DC to PWM in BIOS",
         "detail": "Restart PC and tap Del to enter BIOS. Open Q-Fan / Smart Fan / Hardware Monitor. Locate each fan header (CHA_FAN, SYS_FAN) and change control mode from 'DC' to 'PWM'."
@@ -726,6 +786,10 @@
       "Heatsink was dropped, bent, or damaged during shipping or moving"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Perform touch test on cooler heatpipes and fin stack",
         "detail": "When the CPU reports 95C-100C under load, touch the top of the aluminum cooling fins. If the heatpipes and fins feel room temperature while the CPU throttles, heat is not transferring through the pipes."
@@ -795,6 +859,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Install motherboard metal M.2 thermal armor heatsink",
         "detail": "Never run high-speed PCIe Gen 4/5 SSDs bare. Install the thick aluminum heatsink shield that came with your motherboard, ensuring the blue protective plastic film is peeled from the thermal pad."
       },
@@ -827,6 +895,10 @@
       "Disassembly reveals thermal paste pushed out around die edges with bare center silicon"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Replace standard paste with Honeywell PTM7950 phase-change pad",
         "detail": "Standard paste (MX-4, Kryonaut) pumps out quickly on bare silicon dies. Order genuine Honeywell PTM7950 phase-change pad; it is solid at room temperature and melts under heat, completely eliminating pump-out."
@@ -940,11 +1012,15 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "order": 1,
         "title": "Remove CPU cooler and inspect coldplate base",
         "instruction": "Unscrew CPU cooler mounting bracket. Lift cooler straight up. Check the bottom copper surface. Look for a transparent plastic film with warning text ('Warning! Please peel off before installation').",
         "caution": "On AMD AM4/AM5 CPUs, twist cooler gently back and forth before pulling up so CPU does not get pulled out of socket.",
-        "detail": "Unscrew CPU cooler mounting bracket. Lift cooler straight up. Check the bottom copper surface. Look for a transparent plastic film with warning text ('Warning! Please peel off before installation')."
+        "detail": "Unscrew CPU cooler mounting bracket. gently twist the cooler left and right to break the thermal paste seal before lifting. Check the bottom copper surface. Look for a transparent plastic film with warning text ('Warning! Please peel off before installation')."
       },
       {
         "order": 2,
@@ -978,6 +1054,10 @@
       "Direct-die mobile silicon with low mounting pressure suffers from pump-out effect"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "order": 1,
         "title": "Replace standard silicone paste with Honeywell PTM7950 Phase Change Material",
@@ -1018,6 +1098,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "order": 1,
         "title": "Check GPU mounting screw torque on the back retention bracket",
         "instruction": "The X-bracket or 4 spring screws behind the GPU core provide mounting pressure. If screws loosened over time, heatsink loses contact with the silicon center. Gently snug down the 4 center spring screws in an X-pattern.",
@@ -1057,6 +1141,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "order": 1,
         "title": "Hold fan blades still while blowing compressed air",
         "instruction": "CRITICAL: Hold fan blades with a pencil or finger so they cannot spin when using compressed air. Blowing air on free-spinning fans can over-spin bearings and generate reverse electrical current into the motherboard fan header.",
@@ -1068,7 +1156,7 @@
         "title": "Blow air opposite the normal airflow direction",
         "instruction": "To dislodge the compacted dust blanket, blow compressed air from the outside exhaust vents BACKWARDS toward the fan intake. The solid dust mat will pop off the fins intact for easy removal with tweezers.",
         "caution": "Do this outdoors or in a garage to avoid inhaling fine dust particles.",
-        "detail": "To dislodge the compacted dust blanket, blow compressed air from the outside exhaust vents BACKWARDS toward the fan intake. The solid dust mat will pop off the fins intact for easy removal with tweezers."
+        "detail": "To dislodge the compacted dust blanket, blow compressed air from the outside exhaust vents BACKWARDS toward the fan intake. The solid dust mat will pop off the fins intact for easy removal with tweezers. SAFETY: Hold the fan blades still with a finger or non-conductive tool while spraying compressed air. Allowing fans to free-spin rapidly can burn out bearings and generate reverse voltage back into the motherboard fan header."
       },
       {
         "order": 3,
@@ -1095,12 +1183,16 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Monitor per-core temperatures and PROCHOT in HWInfo64",
         "detail": "Launch HWInfo64 in Sensors-only mode, run Cinebench or game, and watch Core Max and PROCHOT flags. Intel chips throttle at 100C-105C; AMD Zen 4/5 chips throttle at 95C. Shutoff occurs at roughly 115C."
       },
       {
         "title": "Verify cooler peel sticker was removed",
-        "detail": "A transparent plastic peel sticker left on the copper cold plate of the CPU cooler prevents direct heat transfer. Remove cooler, inspect base, peel plastic film if present, clean, and repaste."
+        "detail": "A transparent plastic peel sticker left on the copper cold plate of the CPU cooler prevents direct heat transfer. Warm up CPU with a brief workload beforehand, then gently twist cooler left and right to break thermal paste vacuum before removing. Inspect base, peel plastic film if present, clean, and repaste."
       },
       {
         "title": "Check cooler mounting standoff torque and backplate",
@@ -1130,6 +1222,10 @@
       "HWInfo64 reports GPU Core at 72C while GPU Hotspot is at 105C (delta exceeding 30C)"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Monitor GPU Core and Hotspot delta simultaneously",
         "detail": "In HWInfo64, observe GPU Temperature and GPU Hotspot Temperature under 3D load. A normal delta is 10C to 15C. A delta exceeding 25C indicates thermal paste pump-out or uneven heatsink contact."
@@ -1238,7 +1334,7 @@
       },
       {
         "title": "Ensure independent PCIe 8-pin cables",
-        "detail": "Do not use daisy-chained pigtail cables. Each 8-pin power socket on the GPU must have its own dedicated cable running directly to a separate output port on the modular PSU."
+        "detail": "Do not use daisy-chained pigtail cables. Each 8-pin power socket on the GPU must have its own dedicated cable running directly to a separate output port on the modular PSU. CRITICAL SAFETY: Only use modular cables designed specifically for your exact power supply model. Modular PSU pinouts are not standardized across manufacturers; mixing cables can deliver reverse polarity and immediately destroy components."
       },
       {
         "title": "Test with GPU power limit reduced to 80%",
@@ -1268,6 +1364,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Inspect GPU power cabling setup",
         "detail": "Examine the cables connected to your graphics card. If a single cable from the power supply branches into two 6+2 pin connectors plugged into the GPU, this is a daisy-chained pigtail configuration."
       },
@@ -1277,7 +1377,7 @@
       },
       {
         "title": "Run separate dedicated PCIe cables from PSU",
-        "detail": "Plug additional independent PCIe 8-pin cables into your modular power supply and connect one dedicated cable to each socket on the graphics card."
+        "detail": "Plug additional independent PCIe 8-pin cables into your modular power supply and connect one dedicated cable to each socket on the graphics card. CRITICAL SAFETY: Only use modular cables designed specifically for your exact power supply model. Modular PSU pinouts are not standardized across manufacturers; mixing cables can deliver reverse polarity and immediately destroy components."
       },
       {
         "title": "Monitor 12V input voltage under load",

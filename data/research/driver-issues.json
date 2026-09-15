@@ -683,6 +683,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Reseat the physical hardware cable or connector",
         "detail": "If it is an internal M.2 Wi-Fi card, PCIe expansion card, or webcam cable, shut down the PC, unplug power, and reseat the card firmly into its motherboard slot."
       },
@@ -1170,6 +1174,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Enable NVIDIA Control Panel Debug Mode",
         "detail": "Open NVIDIA Control Panel, click Help menu in top bar, and click Debug Mode. This removes factory overclocks applied by board vendors (ASUS, MSI, Gigabyte) and tests stability at reference NVIDIA clocks."
       },
@@ -1352,6 +1360,10 @@
       "Motherboard VGA debug LED intermittently lights up on cold boot"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Inspect physical card tilt and sag angle",
         "detail": "Observe the graphics card from the side of the chassis. Modern heavy heatsinks (exceeding 1.5kg) cause noticeable downward droop at the rear corner, pulling PCIe gold fingers out of contact with slot pins."

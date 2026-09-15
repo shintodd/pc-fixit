@@ -360,11 +360,7 @@ export default function HardwareVisualGuide({
         <div className="flex items-center gap-2">
           <span className="inline-flex h-6 items-center gap-1.5 rounded-full bg-accent/10 dark:bg-dark-accent/20 px-2.5 text-[11px] font-bold uppercase tracking-wider text-accent dark:text-dark-accent">
             <Camera className="h-3 w-3" />
-            <span>{isMs ? "Pengecam Perkakasan Sebenar" : "Real Hardware Visual Guide"}</span>
-          </span>
-          <span className="hidden sm:inline-flex items-center gap-1 text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary font-medium">
-            <ShieldCheck className="h-3 w-3 text-ok" />
-            <span>{isMs ? "Foto Asli (Bukan AI)" : "Authentic Reference Photo"}</span>
+            <span>{isMs ? "Panduan Visual Perkakasan" : "Hardware Visual Guide"}</span>
           </span>
         </div>
 
@@ -374,13 +370,13 @@ export default function HardwareVisualGuide({
           className="inline-flex items-center gap-1 text-[12px] font-semibold text-accent dark:text-dark-accent hover:underline focus:outline-none"
         >
           <ZoomIn className="h-3.5 w-3.5" />
-          <span>{isMs ? "Besarkan Foto" : "Inspect Full Resolution"}</span>
+          <span>{isMs ? "Besarkan Foto" : "Inspect Image"}</span>
         </button>
       </div>
 
       {/* Main Grid: Photo + Key Points */}
       <div className="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Real Photo with Click to Zoom */}
+        {/* Hardware Photo with Click to Zoom */}
         <div className="lg:col-span-5 relative group">
           <div
             onClick={() => setIsZoomed(true)}

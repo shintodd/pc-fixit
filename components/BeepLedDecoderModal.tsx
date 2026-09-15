@@ -391,10 +391,6 @@ export default function BeepLedDecoderModal({
                         {isMs ? selectedLed.nameMs : selectedLed.nameEn}
                       </h3>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-subtle dark:bg-dark-subtle px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
-                      <Camera className="h-3 w-3 text-accent" />
-                      <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
-                    </span>
                   </div>
                   <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed">
                     {isMs ? selectedLed.descMs : selectedLed.descEn}
@@ -454,10 +450,6 @@ export default function BeepLedDecoderModal({
                       <Volume2 className="h-4 w-4 text-accent" />
                       <span>{isMs ? "Buzzer Motherboard / Speaker PC (4-Pin)" : "Motherboard Buzzer Speaker (4-Pin)"}</span>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-dark-card border border-line dark:border-dark-line px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
-                      <Camera className="h-3 w-3 text-accent" />
-                      <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
-                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">

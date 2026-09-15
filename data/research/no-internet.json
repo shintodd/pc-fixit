@@ -202,6 +202,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Perform a complete static discharge (Drain flea power)",
         "detail": "Shut down PC. Disconnect AC power cord. Hold down chassis power button for 30 seconds to drain capacitors. Reconnect power and turn on. This fixes stuck firmware state in 90% of Intel Code 10 incidents."
       },
@@ -389,6 +393,10 @@
       "LAN file transfers are excruciatingly slow"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Replace the Ethernet cable with CAT6",
         "detail": "Gigabit Ethernet requires all 8 wires inside the cable. If a single pin (especially pins 4, 5, 7, 8) is severed or corroded, the NIC drops to 4-wire 100 Mbps mode."
@@ -1173,6 +1181,10 @@
       "Bluetooth continues working while Wi-Fi component reports hardware failure"
     ],
     "fix_steps": [
+      {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
       {
         "title": "Disable PCIe Link State Power Management",
         "detail": "Open Windows Control Panel -> Power Options -> Edit Plan Settings -> Change advanced power settings -> PCI Express -> Link State Power Management -> set both On battery and Plugged in to Off."

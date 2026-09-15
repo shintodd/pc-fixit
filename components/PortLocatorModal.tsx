@@ -181,17 +181,13 @@ export default function PortLocatorModal({
                       <Zap className="h-4 w-4 text-accent" />
                       <span>{isMs ? "Suis Power Supply (I vs O)" : "Power Supply Toggle Switch (I vs O)"}</span>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-subtle dark:bg-dark-subtle px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
-                      <Camera className="h-3 w-3 text-accent" />
-                      <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
-                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                     <div className="sm:col-span-4 relative h-28 w-full rounded-xl overflow-hidden border border-line dark:border-dark-line bg-black/20 shrink-0">
                       <Image
                         src="/images/hardware/psu-power-switch.jpg"
-                        alt="Real power supply I/O rocker switch"
+                        alt="Power supply I/O rocker switch"
                         fill
                         sizes="(max-width: 640px) 100vw, 200px"
                         className="object-cover"
@@ -223,20 +219,13 @@ export default function PortLocatorModal({
                 <div className="rounded-2xl border border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 p-4 space-y-3">
                   <div className="font-bold text-ink dark:text-dark-ink flex items-center justify-between">
                     <span>DisplayPort vs HDMI</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-subtle dark:bg-dark-subtle px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
-                        <Camera className="h-3 w-3 text-accent" />
-                        <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
-                      </span>
-                      <span className="text-[11px] rounded-full bg-accent/10 px-2 py-0.5 text-accent font-medium">Video</span>
-                    </div>
                   </div>
 
-                  {/* Real Comparison Photo */}
+                  {/* Comparison Photo */}
                   <div className="relative h-36 w-full rounded-xl overflow-hidden border border-line dark:border-dark-line bg-black/20">
                     <Image
                       src="/images/hardware/displayport-vs-hdmi-cables.jpg"
-                      alt="Real comparison photograph of DisplayPort and HDMI cable plugs"
+                      alt="Comparison photograph of DisplayPort and HDMI cable plugs"
                       fill
                       sizes="(max-width: 640px) 100vw, 600px"
                       className="object-cover"
@@ -266,20 +255,14 @@ export default function PortLocatorModal({
                 <div className="rounded-2xl border border-critical/20 bg-critical/5 dark:bg-critical/10 p-4 space-y-3">
                   <div className="font-bold text-critical flex items-center justify-between">
                     <span>{isMs ? "Amaran: Wayar PCIe GPU vs CPU 8-Pin" : "Danger: PCIe 8-Pin (GPU) vs CPU 8-Pin"}</span>
-                    <div className="flex items-center gap-1.5">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-critical/10 px-2 py-0.5 text-[10px] font-semibold text-critical">
-                        <Camera className="h-3 w-3 text-critical" />
-                        <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
-                      </span>
-                      <span className="text-[11px] rounded-full bg-critical/20 px-2 py-0.5 text-critical font-medium">Power</span>
-                    </div>
+                    <span className="text-[11px] rounded-full bg-critical/20 px-2 py-0.5 text-critical font-medium">Power</span>
                   </div>
 
                   {/* Real Comparison Photo */}
                   <div className="relative h-36 w-full rounded-xl overflow-hidden border border-critical/20 bg-black/20">
                     <Image
                       src="/images/hardware/pcie-gpu-vs-cpu-eps-cables.jpg"
-                      alt="Real photograph comparing PCIe 6+2 pin GPU connector with CPU 4+4 pin EPS connector"
+                      alt="Comparison between PCIe 6+2 pin GPU connector and CPU 4+4 pin EPS connector"
                       fill
                       sizes="(max-width: 640px) 100vw, 600px"
                       className="object-cover"

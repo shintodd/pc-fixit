@@ -12,6 +12,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Verify wall outlet and power strip",
         "detail": "Plug a lamp or phone charger into the exact wall outlet to confirm live mains voltage. If using a surge protector, toggle its rocker switch or test directly into the wall."
       },
@@ -25,7 +29,7 @@
       },
       {
         "title": "Test front-panel power switch header",
-        "detail": "Locate the front-panel header pins (PWR_SW) on the bottom right of the motherboard. Disconnect the case cable and briefly bridge the two pins with a flathead screwdriver to bypass a faulty chassis switch."
+        "detail": "Locate the front-panel header pins (PWR_SW) on the bottom right of the motherboard. Disconnect the case cable and briefly bridge the two pins with a flathead screwdriver to bypass a faulty chassis switch. SAFETY: Bridge ONLY the two PWR_SW pins. Never touch 12V RGB headers, USB headers, or audio pins, as shorting voltage rails will permanently damage the motherboard."
       }
     ],
     "related_error_codes": [
@@ -46,6 +50,10 @@
       "System requires power cord pull to attempt turning on again"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Check 8-pin CPU (EPS) power cable",
         "detail": "Ensure the 8-pin CPU power cable near the top left of the motherboard is fully seated. Do not confuse 8-pin PCIe graphics cables with 8-pin EPS CPU cables."
@@ -82,8 +90,12 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Check CPU compatibility and BIOS revision",
-        "detail": "Modern motherboards often require a BIOS update to support newer processor generations. Use the rear USB Flashback button to flash the latest BIOS without a supported CPU installed."
+        "detail": "Modern motherboards often require a BIOS update to support newer processor generations. Use the rear USB Flashback button to flash the latest BIOS without a supported CPU installed. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Reseat processor and inspect socket pins",
@@ -117,6 +129,10 @@
       "Continuous long beeps on motherboards with internal speaker"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Verify primary DIMM slot population (A2 / B2)",
         "detail": "Dual-channel motherboards require memory in slots 2 and 4 (counted from CPU socket). Installing in slots 1 and 3 frequently prevents POST."
@@ -155,6 +171,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Verify cable connection to dedicated GPU, not motherboard",
         "detail": "Ensure HDMI or DisplayPort cable is plugged directly into the graphics card outputs, not the rear motherboard I/O ports (which require integrated graphics)."
       },
@@ -190,6 +210,10 @@
       "Message: 'Reboot and Select proper Boot device'"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Toggle CSM / UEFI boot mode in BIOS",
         "detail": "If Windows was installed in legacy MBR mode, enabling UEFI only will hide the drive. In BIOS Settings, test toggling CSM (Compatibility Support Module) On or Off."
@@ -302,7 +326,7 @@
     "fix_steps": [
       {
         "title": "Verify SATA / NVMe mode in BIOS (AHCI vs RAID / VMD)",
-        "detail": "Enter BIOS and locate SATA Operation or Intel VMD. If it was switched from AHCI to RAID/VMD (or vice versa) during a BIOS flash, switch it back."
+        "detail": "Enter BIOS and locate SATA Operation or Intel VMD. If a prior firmware update or CMOS reset reverted the storage controller from AHCI to RAID/VMD (or vice versa), switch it back to your original configuration."
       },
       {
         "title": "Boot into Safe Mode once to reload storage drivers",
@@ -414,6 +438,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Clear CMOS and let memory train",
         "detail": "Unplug PSU power, remove CMOS battery for 5 minutes, reseat. On next boot, leave PC untouched for 3 minutes while memory retrains."
       },
@@ -450,6 +478,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Replace CR2032 3V coin cell battery",
         "detail": "Standard motherboard CR2032 lithium batteries last 3-5 years. Replace with a fresh brand-name battery."
       },
@@ -459,7 +491,7 @@
       },
       {
         "title": "Update to the latest stable BIOS revision",
-        "detail": "Corrupted EEPROM storage sectors can trigger checksum mismatches; flashing fresh firmware overwrites damaged sectors."
+        "detail": "Corrupted EEPROM storage sectors can trigger checksum mismatches; flashing fresh firmware overwrites damaged sectors. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Save BIOS settings with F10 before exit",
@@ -495,7 +527,7 @@
       },
       {
         "title": "Revert hardware changes temporarily",
-        "detail": "If you changed your GPU, SSD slot, or CPU, put back the original part temporarily to boot into Windows and suspend BitLocker protection."
+        "detail": "Shut down the PC and unplug the AC power cord first. If you changed your GPU, SSD slot, or CPU, put back the original part temporarily to boot into Windows and suspend BitLocker protection."
       },
       {
         "title": "Suspend BitLocker before updating firmware in future",
@@ -523,8 +555,12 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Use Motherboard USB BIOS Flashback",
-        "detail": "Download manufacturer BIOS on another computer. Rename it according to vendor specifications (e.g., ASUS.CAP, MSI.ROM). Copy to a FAT32 USB drive, insert into dedicated Flashback port, and press button for 3 seconds."
+        "detail": "Download manufacturer BIOS on another computer. Rename it according to vendor specifications (e.g., ASUS.CAP, MSI.ROM). Copy to a FAT32 USB drive, insert into dedicated Flashback port, and press button for 3 seconds. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Switch to Dual BIOS backup chip (if equipped)",
@@ -536,7 +572,7 @@
       },
       {
         "title": "Contact manufacturer RMA if board lacks Flashback",
-        "detail": "If the board lacks hardware BIOS Flashback and the primary EEPROM chip is corrupted, the chip requires an external SPI programmer (CH341A) or board RMA."
+        "detail": "If the board lacks hardware BIOS Flashback and the primary EEPROM chip is corrupted, the chip requires an external SPI programmer (CH341A) or board RMA. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [
@@ -565,7 +601,7 @@
       },
       {
         "title": "Jump the power pins directly",
-        "detail": "Carefully touch a flathead metal screwdriver across the two PWR_SW pins. If the system turns on immediately, the case button or wiring is defective."
+        "detail": "Carefully touch a flathead metal screwdriver across the two PWR_SW pins. If the system turns on immediately, the case button or wiring is defective. SAFETY: Bridge ONLY the two PWR_SW pins. Never touch 12V RGB headers, USB headers, or audio pins, as shorting voltage rails will permanently damage the motherboard."
       },
       {
         "title": "Swap with Reset Switch as temporary fix",
@@ -595,6 +631,10 @@
       "PC requires F1 or F2 keystroke every time power cord is reconnected"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Replace the CR2032 coin cell battery",
         "detail": "Power off the PC and unplug the power supply. Locate the silver circular battery on the motherboard, gently push the metal retention clip to eject it, and insert a fresh 3V CR2032 lithium battery with the positive (+) side facing up."
@@ -644,7 +684,7 @@
       },
       {
         "title": "Update motherboard BIOS firmware",
-        "detail": "Download the latest BIOS from your motherboard manufacturer website onto a FAT32 USB flash drive. Flash the update to receive updated Microsoft revocation lists and re-enable Secure Boot."
+        "detail": "Download the latest BIOS from your motherboard manufacturer website onto a FAT32 USB flash drive. Flash the update to receive updated Microsoft revocation lists and re-enable Secure Boot. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [
@@ -742,15 +782,15 @@
       },
       {
         "title": "Download firmware and rename file with official renamer",
-        "detail": "Download the correct motherboard BIOS file from the official manufacturer support page. Run the included renamer tool (e.g. ASUS: 'creative.CAP', MSI: 'MSI.ROM', Gigabyte: 'GIGABYTE.bin') and copy the renamed file to the root of the USB drive."
+        "detail": "Download the correct motherboard BIOS file from the official manufacturer support page. Run the included renamer tool (e.g. ASUS: 'creative.CAP', MSI: 'MSI.ROM', Gigabyte: 'GIGABYTE.bin') and copy the renamed file to the root of the USB drive. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Insert drive into designated BIOS Flashback USB port",
-        "detail": "Locate the specific rear I/O USB port bordered by a white or grey outline labeled 'BIOS Flashback' or 'Q-Flash Plus'. Insert the USB flash drive."
+        "detail": "Locate the specific rear I/O USB port bordered by a white or grey outline labeled 'BIOS Flashback' or 'Q-Flash Plus'. Insert the USB flash drive. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Hold Flashback button until LED starts blinking",
-        "detail": "With the PSU connected and switched on (PC powered off), hold the Flashback button for 3 seconds until the indicator LED starts flashing. Wait 5-8 minutes until the blinking stops completely before powering on."
+        "detail": "With the PSU connected and switched on (PC powered off), hold the Flashback button for 3 seconds until the indicator LED starts flashing. Wait 5-8 minutes until the blinking stops completely before powering on. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [
@@ -785,7 +825,7 @@
       },
       {
         "title": "Update BIOS to resolve AMD fTPM stutter fix",
-        "detail": "If TPM prompts continue appearing after every reboot, update the motherboard BIOS to AGESA 1.2.0.7 or newer to eliminate the known AMD fTPM NVRAM retention bug."
+        "detail": "If TPM prompts continue appearing after every reboot, update the motherboard BIOS to AGESA 1.2.0.7 or newer to eliminate the known AMD fTPM NVRAM retention bug. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [
@@ -807,12 +847,16 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Loosen cooler screws by half a turn",
         "detail": "Turn each cooler mount screw counterclockwise by half a turn in a cross pattern (top-left, bottom-right, top-right, bottom-left) to relieve asymmetric PCB flexing."
       },
       {
         "title": "Remove cooler and inspect CPU socket pins",
-        "detail": "Remove the cooler, lift the socket retention lever, and inspect the motherboard LGA socket (Intel LGA 1700 or AMD AM5) with bright light for any bent or flattened gold pins."
+        "detail": "Remove the cooler, lift the socket retention lever, and inspect the motherboard LGA socket (Intel LGA 1700 or AMD AM5) with bright light for any bent or flattened gold pins. SAFETY NOTE: If removing a CPU cooler (especially AMD AM4), warm up the CPU with a brief workload first, then twist the cooler gently left and right before lifting. Never yank straight up, as cold paste can rip the CPU out of the socket and bend pins."
       },
       {
         "title": "Clean CPU contact pads with isopropyl alcohol",
@@ -879,6 +923,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "order": 1,
         "title": "Use separate PCIe power cables instead of daisy-chained pigtail cables",
         "instruction": "Check GPU power connectors. High-power graphics cards (RTX 3080/4080, RX 6800/7900) draw up to 350W+. Never use a single split 'pigtail' cable for two 8-pin ports. Run two or three separate individual cables directly from PSU.",
@@ -938,7 +986,7 @@
         "title": "Suspend BitLocker before performing future BIOS updates",
         "instruction": "Once back in Windows, open Command Prompt (Admin) and run: 'manage-bde -protectors -disable C:'. Run your update, then run 'manage-bde -protectors -enable C:'.",
         "caution": "Always back up your 48-digit key to a USB drive or printout.",
-        "detail": "Once back in Windows, open Command Prompt (Admin) and run: 'manage-bde -protectors -disable C:'. Run your update, then run 'manage-bde -protectors -enable C:'."
+        "detail": "Once back in Windows, open Command Prompt (Admin) and run: 'manage-bde -protectors -disable C:'. Run your update, then run 'manage-bde -protectors -enable C:'. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [],
@@ -959,11 +1007,15 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "order": 1,
         "title": "Clear CMOS to force motherboard back to default CSM settings",
         "instruction": "Turn off power supply and unplug PC power cord. Locate the round silver CR2032 battery on motherboard. Use a flathead screwdriver or fingernail to pop battery out. Wait 5 minutes. Reinsert battery and turn PC on.",
         "caution": "This resets all BIOS settings back to factory defaults with display output restored.",
-        "detail": "Turn off power supply and unplug PC power cord. Locate the round silver CR2032 battery on motherboard. Use a flathead screwdriver or fingernail to pop battery out. Wait 5 minutes. Reinsert battery and turn PC on."
+        "detail": "Turn off power supply and unplug PC power cord. Locate the round silver CR2032 battery on motherboard. use a non-conductive plastic pry tool or fingernail (or carefully with a flathead screwdriver without scratching motherboard traces) to release the battery retention clip. Wait 5 minutes. Reinsert battery and turn PC on."
       },
       {
         "order": 2,
@@ -1076,6 +1128,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "order": 1,
         "title": "Disassemble motherboard and place on non-conductive cardboard box",
         "instruction": "Remove motherboard from PC case. Place it on the flat cardboard motherboard box. CRITICAL: Never place it on an anti-static bag (the outer surface of anti-static bags is electrically conductive).",
@@ -1094,7 +1150,7 @@
         "title": "Bridge the two Power Switch pins with a flathead screwdriver",
         "instruction": "Locate the front panel header (JFP1 / PANEL). Momentarily touch the tip of a metal screwdriver across the two 'PWR_SW' (Power Switch) pins for 1 second to turn on the board.",
         "caution": "If the system POSTs cleanly on cardboard, your PC case has an extra standoff shorting the back of the motherboard.",
-        "detail": "Locate the front panel header (JFP1 / PANEL). Momentarily touch the tip of a metal screwdriver across the two 'PWR_SW' (Power Switch) pins for 1 second to turn on the board."
+        "detail": "Locate the front panel header (JFP1 / PANEL). Momentarily touch the tip of a metal screwdriver across the two 'PWR_SW' (Power Switch) pins for 1 second to turn on the board. SAFETY: Bridge ONLY the two PWR_SW pins. Never touch 12V RGB headers, USB headers, or audio pins, as shorting voltage rails will permanently damage the motherboard."
       }
     ],
     "related_error_codes": [],
@@ -1151,6 +1207,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Inspect EZ Debug LED sequence",
         "detail": "During normal boot, MSI boards cycle through CPU -> DRAM -> VGA -> BOOT and turn off. If an LED halts and remains solidly lit, initialization failed on that specific component."
       },
@@ -1188,6 +1248,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Read 7-segment debug display code",
         "detail": "Inspect the 2-digit LED readout at the bottom or top edge of the motherboard. Identify whether the system is stuck in an initialization loop or halting on a specific subsystem code."
       },
@@ -1197,11 +1261,11 @@
       },
       {
         "title": "Inspect PCIe lane initialization (Codes d6, 78)",
-        "detail": "Code d6 or 78 indicates GPU display handshake failure. Ensure monitor cable is plugged into GPU rather than motherboard I/O panel. Reseat graphics card and check monitor input source."
+        "detail": "Code d6 or 78 indicates GPU display handshake failure. Ensure monitor cable is plugged into GPU rather than motherboard I/O panel. Reseat graphics card and check monitor input source. Always release the plastic PCIe retention lock at the end of the slot before pulling the graphics card to avoid tearing the slot off the motherboard."
       },
       {
         "title": "Flash BIOS using Q-Flash Plus",
-        "detail": "If CPU is newer than factory BIOS, use Gigabyte Q-Flash Plus button: format USB drive to FAT32, rename BIOS file to GIGABYTE.bin, insert into designated Q-Flash USB port, and press button with PC in standby."
+        "detail": "If CPU is newer than factory BIOS, use Gigabyte Q-Flash Plus button: format USB drive to FAT32, rename BIOS file to GIGABYTE.bin, insert into designated Q-Flash USB port, and press button with PC in standby. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       }
     ],
     "related_error_codes": [
@@ -1234,7 +1298,7 @@
       },
       {
         "title": "Reseat DIMM modules in slots A2 and B2",
-        "detail": "ASRock motherboards require memory installed in slots DDR4_A2 and DDR4_B2 (or DDR5_A2 and DDR5_B2). Clean DIMM edge contacts with isopropyl alcohol before reseating."
+        "detail": "ASRock motherboards require memory installed in slots DDR4_A2 and DDR4_B2 (or DDR5_A2 and DDR5_B2). Clean DIMM edge contacts with isopropyl alcohol before reseating. Press firmly on both ends until the retention latches snap shut with an audible click."
       },
       {
         "title": "Disconnect peripheral devices",
@@ -1261,6 +1325,10 @@
       "System fails to complete Power-On Self Test"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Connect internal PC buzzer or speaker",
         "detail": "Verify a 4-pin piezo buzzer is connected to the SPEAKER pins on the front panel header. Modern cases lack built-in speakers, requiring a standalone buzzer to hear acoustic error codes."
@@ -1299,6 +1367,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Count Dell power button blink sequence",
         "detail": "Dell diagnostic codes flash amber followed by white. For example: 2 amber, 1 white indicates CPU failure; 2 amber, 3 white indicates system board/memory failure; 2 amber, 7 white indicates LCD/display failure; 3 amber, 3 white indicates BIOS recovery image missing."
       },
@@ -1312,7 +1384,7 @@
       },
       {
         "title": "Reseat memory and clean contacts",
-        "detail": "Open chassis or service hatch, remove RAM modules, clean gold contacts with a lint-free swab dampened with 99% isopropyl alcohol, and reseat firmly in primary slots."
+        "detail": "Open chassis or service hatch, remove RAM modules, clean gold contacts with a lint-free swab dampened with 99% isopropyl alcohol, and reseat firmly in primary slots. Press firmly on both ends until the retention latches snap shut with an audible click."
       }
     ],
     "related_error_codes": [
@@ -1370,6 +1442,10 @@
       "System refuses to enter S0 running power state"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Verify Pin 9 (+5VSB purple wire) standby voltage",
         "detail": "With PSU plugged in and rocker switch on, test Pin 9 against ground with a multimeter. It must read between +4.75V and +5.25V DC. If absent or below 4.5V, the standby transformer is dead."
@@ -1487,7 +1563,7 @@
       },
       {
         "title": "Format corrupted EFI partition",
-        "detail": "If the partition file structure is damaged, format it cleanly in diskpart: format fs=fat32 quick label=\"ESP\". Type exit to return to command prompt."
+        "detail": "If the partition file structure is damaged, format it cleanly in diskpart: format fs=fat32 quick label=\"ESP\". Type exit to return to command prompt. DATA SAFETY: Triple-check that you selected the small EFI partition (100MB to 260MB FAT32) and NEVER your main Windows C: drive or data volume, as formatting will permanently erase all data on the selected volume."
       },
       {
         "title": "Rebuild BCD store using bcdboot",

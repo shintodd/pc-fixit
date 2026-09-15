@@ -12,6 +12,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Note the exact stop code",
         "detail": "Disable automatic restart (System Properties → Advanced → Startup and Recovery) so the code stays on screen, or check Event Viewer → Windows Logs → System after a crash."
       },
@@ -86,6 +90,10 @@
       "Occurs after installing a new RAM module or expansion card"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Run MemTest86 on each RAM stick individually",
         "detail": "Create a bootable MemTest86 USB drive and test one stick at a time. A single error in Test 6 or 8 confirms hardware memory replacement is needed."
@@ -162,6 +170,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Inspect SSD / HDD health with CrystalDiskInfo",
         "detail": "Check SMART attributes. Look for Reallocated Sectors, Current Pending Sectors, or Uncorrectable Error Count. Any non-zero count warns of drive degradation."
       },
@@ -199,6 +211,10 @@
       "System reboots into BIOS or displays 'No bootable device found'"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Check SSD health and connections immediately",
         "detail": "When an SSD drops off the PCIe/SATA bus, Windows cannot read critical system files, causing csrss.exe to terminate. Reseat the SSD and check SMART logs."
@@ -247,7 +263,7 @@
       },
       {
         "title": "Reinstall latest chipset and BIOS firmware",
-        "detail": "Download latest motherboard chipset INF drivers and audio drivers directly from the manufacturer motherboard support page."
+        "detail": "Download latest motherboard chipset INF drivers and audio drivers directly from the manufacturer motherboard support page. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Run DISM image repair",
@@ -356,7 +372,7 @@
       },
       {
         "title": "Update motherboard BIOS for microcode patches",
-        "detail": "Motherboard vendors release BIOS updates containing Intel/AMD CPU microcode stability fixes to resolve internal bus parity errors."
+        "detail": "Motherboard vendors release BIOS updates containing Intel/AMD CPU microcode stability fixes to resolve internal bus parity errors. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Test with an alternate power supply",
@@ -384,6 +400,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "title": "Test RAM with MemTest86",
         "detail": "Boot to a MemTest86 flash drive and run a minimum of 4 passes. Any red errors indicate a defective physical RAM stick that must be replaced."
       },
@@ -393,7 +413,7 @@
       },
       {
         "title": "Reseat RAM sticks in slots A2 and B2",
-        "detail": "Ensure modules are installed in the second and fourth slots from the CPU socket, and contacts are free of dust."
+        "detail": "Ensure modules are installed in the second and fourth slots from the CPU socket, and contacts are free of dust. Press firmly on both ends until the retention latches snap shut with an audible click."
       },
       {
         "title": "Run System File Checker",
@@ -459,12 +479,16 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Reset BIOS settings to factory defaults",
         "detail": "Clear all CPU multiplier adjustments, manual voltages, and power limits in BIOS to verify stock processor stability."
       },
       {
         "title": "Update motherboard BIOS firmware",
-        "detail": "Motherboard manufacturers release updated AGESA (AMD) or microcode (Intel) firmware specifically addressing inter-core communication deadlocks."
+        "detail": "Motherboard manufacturers release updated AGESA (AMD) or microcode (Intel) firmware specifically addressing inter-core communication deadlocks. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Check CPU operating temperature and mounting pressure",
@@ -504,7 +528,7 @@
       },
       {
         "title": "Update motherboard BIOS and chipset drivers",
-        "detail": "Security checks can fail if processor virtualization extensions (Intel VT-x / AMD-V) behave erratically on outdated firmware."
+        "detail": "Security checks can fail if processor virtualization extensions (Intel VT-x / AMD-V) behave erratically on outdated firmware. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Perform clean boot to isolate startup services",
@@ -607,6 +631,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
+      {
         "title": "Clean reinstall GPU driver with Display Driver Uninstaller (DDU)",
         "detail": "Download DDU and the latest driver package from NVIDIA or AMD. Boot Windows into Safe Mode, run DDU to completely strip graphics drivers, restart, and perform a clean install."
       },
@@ -677,6 +705,10 @@
       "Chkdsk finds indexing discrepancies on the system drive"
     ],
     "fix_steps": [
+      {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
       {
         "title": "Run Windows Memory Diagnostic tool",
         "detail": "Press Win + R, type 'mdsched.exe', and select 'Restart now and check for problems'. Allow the standard test pass to complete; if any hardware errors are found, RAM is defective."
@@ -858,7 +890,7 @@
     "fix_steps": [
       {
         "title": "Update motherboard BIOS firmware",
-        "detail": "System PTE tracking is heavily tied to motherboard ACPI tables and memory mapping registers. Download and flash the latest UEFI release from the manufacturer."
+        "detail": "System PTE tracking is heavily tied to motherboard ACPI tables and memory mapping registers. Download and flash the latest UEFI release from the manufacturer. CRITICAL SAFETY: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
       },
       {
         "title": "Check for incompatible third-party antivirus filters",
@@ -1058,6 +1090,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
+      {
         "order": 1,
         "title": "Test RAM with 1 stick at a time to find the defective module",
         "instruction": "Turn off PC and unplug power. Remove all RAM sticks except 1 stick in slot 2 (A2). Use PC. If stable, swap in the second stick. A single bad memory chip on a RAM stick will trigger random page fault crashes.",
@@ -1138,6 +1174,10 @@
       "Entire system freezes completely for 20-30 seconds before BSOD appears"
     ],
     "fix_steps": [
+      {
+        "title": "Safety power-off and discharge",
+        "detail": "Shut down the PC, turn off the power supply rocker switch (O), and unplug the AC power cord from the wall outlet. Press the front power button once while unplugged to discharge residual capacitor energy before touching any internal components."
+      },
       {
         "title": "Reseat NVMe M.2 SSD and check thermal pads",
         "detail": "Power off PC, unplug power, remove NVMe SSD from M.2 slot, clean gold contacts, and reseat firmly. Ensure motherboard heatsink thermal pad is not causing PCB flex or excessive thermal throttling."
@@ -1285,6 +1325,10 @@
       "Games crash to desktop without error dialog after 10-30 minutes of play"
     ],
     "fix_steps": [
+      {
+        "title": "Safety isolation and power discharge",
+        "detail": "Shut down the PC, switch off the power supply rocker switch (O), and unplug the AC power cord from the wall. Press and hold the chassis power button for 5 seconds while unplugged to drain all residual capacitor energy before touching any internal hardware."
+      },
       {
         "title": "Decode Bugcheck 0x1A Parameter 1",
         "detail": "Examine minidump in WinDbg: Parameter 1 0x41792 indicates a corrupted Page Table Entry (PTE); 0x41284 indicates PTE damage; 0x444 indicates unhandled pool corruption. Values in 0x40000+ range almost always indicate physical DRAM hardware instability."
