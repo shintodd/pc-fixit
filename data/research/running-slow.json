@@ -129,6 +129,10 @@
         "detail": "In Task Manager → Performance → Memory, check 'Non-paged pool'. If it is several gigabytes, a driver has a severe memory leak."
       },
       {
+        "title": "Back up the registry before editing",
+        "detail": "Before making any registry changes, open Registry Editor (Win + R, type regedit, press Enter). Go to File > Export, set Export range to All, and save the .reg backup file to your Desktop. This allows a full restore if something goes wrong."
+      },
+      {
         "title": "Disable Network Data Usage (NDU) monitoring driver",
         "detail": "Open Regedit, navigate to 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Ndu', double-click 'Start' and change value from 2 to 4. Reboot PC."
       },
@@ -357,7 +361,7 @@
       },
       {
         "title": "Run manual TRIM optimization",
-        "detail": "Press Start, type 'Defragment and Optimize Drives', select your SSD, and click 'Optimize' to run TRIM and reclaim stale flash blocks."
+        "detail": "Press Start, type 'Defragment and Optimize Drives', select your SSD, and click 'Optimize' to run TRIM and reclaim stale flash blocks. Windows Optimize automatically runs TRIM on SSDs and does not perform physical block defragmentation. Never use third-party defragmenter tools on SSDs."
       },
       {
         "title": "Clear Windows update download cache",

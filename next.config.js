@@ -10,8 +10,14 @@ const nextConfig = {
         ? { exclude: ["error", "warn"] }
         : false,
   },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    minimumCacheTTL: 31536000,
+  },
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "framer-motion"],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -56,9 +62,28 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // Immutable cache for all Next.js hashed static chunks
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        // Long-lived cache for images
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=2592000, stale-while-revalidate=86400",
+          },
+        ],
+      },
     ];
   },
 };
 
 module.exports = nextConfig;
-

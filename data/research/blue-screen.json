@@ -1374,6 +1374,10 @@
         "detail": "In WinRE Command Prompt, execute: verifier /bootmode resetonbootfail followed by verifier /reset. This clears all active driver verifier hooks."
       },
       {
+        "title": "Back up the registry before editing",
+        "detail": "Before making any registry changes, open Registry Editor (Win + R, type regedit, press Enter). Go to File > Export, set Export range to All, and save the .reg backup file to your Desktop. This allows a full restore if something goes wrong."
+      },
+      {
         "title": "Delete Driver Verifier registry keys if command fails",
         "detail": "Run regedit in command prompt, select HKEY_LOCAL_MACHINE, click File -> Load Hive, browse to C:\\Windows\\System32\\config\\SYSTEM, name it TempSystem, navigate to TempSystem\\ControlSet001\\Control\\Session Manager\\Memory Management, delete VerifyDrivers and VerifyDriverLevel keys, click TempSystem and select Unload Hive."
       },

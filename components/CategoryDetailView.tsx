@@ -28,7 +28,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { type CategoryInfo, type Severity } from "@/lib/categories";
 import { type IssueDetail } from "@/lib/mock-data";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
-import HardwareVisualGuide from "@/components/HardwareVisualGuide";
+import dynamic from "next/dynamic";
+
+const HardwareVisualGuide = dynamic(() => import("@/components/HardwareVisualGuide"), { ssr: false });
 
 const SEVERITY_STYLE: Record<Severity, string> = {
   critical: "bg-critical/10 text-critical border-critical/20 dark:bg-critical/15 dark:text-critical",

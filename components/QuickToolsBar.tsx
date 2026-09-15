@@ -1,14 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Monitor, Volume2, Smartphone, Terminal, Calculator, Sparkles, Wrench } from "lucide-react";
-import PortLocatorModal from "@/components/PortLocatorModal";
-import BeepLedDecoderModal from "@/components/BeepLedDecoderModal";
-import PhoneQrModal from "@/components/PhoneQrModal";
-import CommandExplainerModal from "@/components/CommandExplainerModal";
-import RepairFeasibilityModal from "@/components/RepairFeasibilityModal";
+import dynamic from "next/dynamic";
+import { Monitor, Volume2, Smartphone, Terminal, Calculator, Wrench } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
+
+const PortLocatorModal = dynamic(() => import("@/components/PortLocatorModal"), { ssr: false });
+const BeepLedDecoderModal = dynamic(() => import("@/components/BeepLedDecoderModal"), { ssr: false });
+const PhoneQrModal = dynamic(() => import("@/components/PhoneQrModal"), { ssr: false });
+const CommandExplainerModal = dynamic(() => import("@/components/CommandExplainerModal"), { ssr: false });
+const RepairFeasibilityModal = dynamic(() => import("@/components/RepairFeasibilityModal"), { ssr: false });
 
 export default function QuickToolsBar({ className = "" }: { className?: string }) {
   const { t, language } = useLanguage();

@@ -56,6 +56,10 @@
         "detail": "Download Display Driver Uninstaller (DDU). Boot into Safe Mode, run DDU, select GPU (Nvidia/AMD/Intel) → 'Clean and restart'. Install the latest stable WHQL driver on normal boot."
       },
       {
+        "title": "Back up the registry before editing",
+        "detail": "Before making any registry changes, open Registry Editor (Win + R, type regedit, press Enter). Go to File > Export, set Export range to All, and save the .reg backup file to your Desktop. This allows a full restore if something goes wrong."
+      },
+      {
         "title": "Increase TDR delay in Windows Registry",
         "detail": "Open Regedit, navigate to 'HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers'. Create a DWORD (32-bit) named 'TdrDelay' and set decimal value to 8 (seconds) to prevent premature driver restarts."
       },
@@ -620,6 +624,10 @@
         "detail": "In Device Manager, right-click the failing device > select 'Uninstall device' > check 'Attempt to remove the driver for this device' if available > click Uninstall. Restart Windows to force Plug and Play re-enumeration."
       },
       {
+        "title": "Back up the registry before editing",
+        "detail": "Before making any registry changes, open Registry Editor (Win + R, type regedit, press Enter). Go to File > Export, set Export range to All, and save the .reg backup file to your Desktop. This allows a full restore if something goes wrong."
+      },
+      {
         "title": "Delete UpperFilters and LowerFilters registry values",
         "detail": "Press Win + R, type 'regedit', navigate to HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Class\\{Device_Class_GUID}, and delete corrupted UpperFilters and LowerFilters keys."
       },
@@ -1137,6 +1145,10 @@
     ],
     "fix_steps": [
       {
+        "title": "Back up the registry before editing",
+        "detail": "Before making any registry changes, open Registry Editor (Win + R, type regedit, press Enter). Go to File > Export, set Export range to All, and save the .reg backup file to your Desktop. This allows a full restore if something goes wrong."
+      },
+      {
         "title": "Navigate to GraphicsDrivers registry key",
         "detail": "Press Win+R, type regedit, press Enter, and navigate to: HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers."
       },
@@ -1214,6 +1226,10 @@
       "Game crashes to desktop during shader compilation or alt-tabbing"
     ],
     "fix_steps": [
+      {
+        "title": "Back up the registry before editing",
+        "detail": "Before making any registry changes, open Registry Editor (Win + R, type regedit, press Enter). Go to File > Export, set Export range to All, and save the .reg backup file to your Desktop. This allows a full restore if something goes wrong."
+      },
       {
         "title": "Disable Multi-Plane Overlay (MPO) in Windows",
         "detail": "MPO causes display plane conflicts between Desktop Window Manager (DWM) and AMD driver. Open regedit, navigate to HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\Dwm, create DWORD OverlayTestMode, and set value to 5."

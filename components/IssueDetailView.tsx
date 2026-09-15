@@ -24,10 +24,12 @@ import {
 import { type IssueDetail, type Severity } from "@/lib/mock-data";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
-import PhoneQrModal from "@/components/PhoneQrModal";
-import PortLocatorModal from "@/components/PortLocatorModal";
-import HardwareVisualGuide from "@/components/HardwareVisualGuide";
+import dynamic from "next/dynamic";
 import JargonTooltip, { type JargonTerm } from "@/components/JargonTooltip";
+
+const PhoneQrModal = dynamic(() => import("@/components/PhoneQrModal"), { ssr: false });
+const PortLocatorModal = dynamic(() => import("@/components/PortLocatorModal"), { ssr: false });
+const HardwareVisualGuide = dynamic(() => import("@/components/HardwareVisualGuide"), { ssr: false });
 
 const SEVERITY_STYLE: Record<Severity, string> = {
   critical: "bg-critical/10 text-critical border-critical/20",

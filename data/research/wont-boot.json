@@ -786,7 +786,7 @@
       },
       {
         "title": "Insert drive into designated BIOS Flashback USB port",
-        "detail": "Locate the specific rear I/O USB port bordered by a white or grey outline labeled 'BIOS Flashback' or 'Q-Flash Plus'. Insert the USB flash drive. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard."
+        "detail": "Locate the specific rear I/O USB port bordered by a white or grey outline labeled 'BIOS Flashback' or 'Q-Flash Plus'. Insert the USB flash drive. CRITICAL: Never turn off, reset, or unplug the PC while the BIOS update is flashing. A power interruption during EEPROM write will corrupt the firmware and brick the motherboard. REQUIREMENT: The USB drive must be formatted as FAT32 (not NTFS or exFAT). 4GB drive or larger recommended."
       },
       {
         "title": "Hold Flashback button until LED starts blinking",
