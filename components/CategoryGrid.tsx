@@ -140,7 +140,7 @@ export default function CategoryGrid() {
             className="group opacity-100"
           >
             <Link
-              href={`/troubleshoot?topic=${cat.slug}`}
+              href={`/categories/${cat.slug}`}
               className={`flex h-full flex-col justify-between rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-6 shadow-card dark:shadow-card-dark backdrop-blur-md transition-all duration-200 ${theme.glow} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
             >
               <div>
@@ -194,7 +194,7 @@ export default function CategoryGrid() {
                   <span>{label}</span>
                 </span>
                 <span className="flex items-center gap-1 text-accent dark:text-dark-accent font-semibold group-hover:underline">
-                  <span>{t("cat_action_diagnose")}</span>
+                  <span>{t("cat_action_browse")}</span>
                   <span className="transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true">
                     &rarr;
                   </span>

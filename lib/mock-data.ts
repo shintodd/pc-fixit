@@ -95,6 +95,13 @@ export function getCategoryGuideStats(categorySlug: string) {
   };
 }
 
+/**
+ * Returns all issues belonging to a category slug.
+ */
+export function getIssuesByCategory(categorySlug: string): IssueDetail[] {
+  return allResearchedIssues.filter((i) => i.category_slug === categorySlug);
+}
+
 export {
   type WizardOption,
   type WizardStep,
