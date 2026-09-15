@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
 import { loadSessions, type ChatSession } from "@/lib/chat-storage";
+import MovingIcon, { type MovingIconAnimation } from "@/components/MovingIcon";
 
 export default function HeroInput() {
   const [value, setValue] = useState("");
@@ -34,12 +35,17 @@ export default function HeroInput() {
     }
   }, []);
 
-  const POPULAR_QUERIES = [
-    { label: t("hero_pill_no_display"), icon: MonitorX, color: "text-rose-500" },
-    { label: t("hero_pill_clicks_off"), icon: Zap, color: "text-amber-500" },
-    { label: t("hero_pill_bsod"), icon: Sparkles, color: "text-blue-500" },
-    { label: t("hero_pill_no_internet"), icon: WifiOff, color: "text-sky-500" },
-    { label: t("hero_pill_fans_100"), icon: Flame, color: "text-orange-500" },
+  const POPULAR_QUERIES: Array<{
+    label: string;
+    icon: typeof MonitorX;
+    color: string;
+    animation: MovingIconAnimation;
+  }> = [
+    { label: t("hero_pill_no_display"), icon: MonitorX, color: "text-rose-500", animation: "shake" },
+    { label: t("hero_pill_clicks_off"), icon: Zap, color: "text-amber-500", animation: "pulse" },
+    { label: t("hero_pill_bsod"), icon: Sparkles, color: "text-blue-500", animation: "spin" },
+    { label: t("hero_pill_no_internet"), icon: WifiOff, color: "text-sky-500", animation: "bounce" },
+    { label: t("hero_pill_fans_100"), icon: Flame, color: "text-orange-500", animation: "flicker" },
   ];
 
   function handleSubmit(e?: FormEvent) {
@@ -136,16 +142,19 @@ export default function HeroInput() {
                 <motion.button
                   key={q.label}
                   type="button"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + idx * 0.04, duration: 0.2 }}
-                  whileHover={{ y: -2, scale: 1.02 }}
+                  initial="initial"
+                  animate="initial"
+                  variants={{
+                    initial: { opacity: 1, y: 0 },
+                    hover: { y: -2, scale: 1.02 },
+                  }}
+                  whileHover="hover"
                   whileTap={{ scale: 0.95 }}
                   onClick={() => handleQuickPrompt(q.label)}
                   aria-label={`Diagnose: ${q.label}`}
-                  className="flex min-h-[36px] shrink-0 items-center gap-2 rounded-pill border border-line/80 dark:border-dark-line/80 bg-white/80 dark:bg-dark-card/80 px-3.5 py-1.5 text-[12.5px] sm:text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary backdrop-blur-md transition-all duration-150 hover:border-accent/40 hover:bg-accent/10 dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="group flex min-h-[36px] shrink-0 items-center gap-2 rounded-pill border border-line/80 dark:border-dark-line/80 bg-white/80 dark:bg-dark-card/80 px-3.5 py-1.5 text-[12.5px] sm:text-[13px] font-medium text-ink-secondary dark:text-dark-ink-secondary backdrop-blur-md transition-all duration-150 hover:border-accent/40 hover:bg-accent/10 dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent shadow-2xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 >
-                  <Icon className={`h-4 w-4 ${q.color}`} aria-hidden="true" />
+                  <MovingIcon icon={Icon} animation={q.animation} className={`h-4 w-4 ${q.color}`} />
                   <span className="whitespace-nowrap">{q.label}</span>
                 </motion.button>
               );
@@ -177,19 +186,19 @@ export default function HeroInput() {
       <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
         <Link
           href="/troubleshoot"
-          className="flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-pill bg-ink dark:bg-white px-6 py-3 text-[14.5px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="group flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-pill bg-ink dark:bg-white px-6 py-3 text-[14.5px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          <Sparkles className="h-4 w-4 text-accent dark:text-accent" aria-hidden="true" />
+          <MovingIcon icon={Sparkles} animation="spin" className="h-4 w-4 text-accent dark:text-accent" />
           <span>{t("hero_action_launch_ai")}</span>
         </Link>
 
         <Link
           href="/wizard"
-          className="flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-pill border border-line-strong dark:border-dark-line-strong bg-white/80 dark:bg-dark-card/80 px-6 py-3 text-[14.5px] font-semibold text-ink dark:text-dark-ink backdrop-blur-sm transition-all duration-150 hover:bg-subtle dark:hover:bg-dark-subtle active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="group flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-pill border border-line-strong dark:border-dark-line-strong bg-white/80 dark:bg-dark-card/80 px-6 py-3 text-[14.5px] font-semibold text-ink dark:text-dark-ink backdrop-blur-sm transition-all duration-150 hover:bg-subtle dark:hover:bg-dark-subtle active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          <Wrench className="h-4 w-4 text-ink-secondary dark:text-dark-ink-secondary" aria-hidden="true" />
+          <MovingIcon icon={Wrench} animation="wrench" className="h-4 w-4 text-ink-secondary dark:text-dark-ink-secondary" />
           <span>{t("hero_action_wizard")}</span>
-          <ArrowRight className="h-3.5 w-3.5 text-ink-tertiary" aria-hidden="true" />
+          <ArrowRight className="h-3.5 w-3.5 text-ink-tertiary transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
         </Link>
       </div>
     </motion.div>

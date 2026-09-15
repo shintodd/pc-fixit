@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { TranslationKey } from "@/lib/i18n/translations";
+import MovingIcon, { type MovingIconAnimation } from "@/components/MovingIcon";
 
 interface TriageProblem {
   slug: string;
@@ -30,15 +31,16 @@ const TRIAGE_TABS: Array<{
   id: string;
   labelKey: TranslationKey;
   icon: typeof Power;
+  animation: MovingIconAnimation;
   color: string;
   activeBg: string;
 }> = [
-  { id: "wont-boot", labelKey: "triage_tab_wont_boot", icon: Power, color: "text-rose-500", activeBg: "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400" },
-  { id: "blue-screen", labelKey: "triage_tab_blue_screen", icon: MonitorX, color: "text-blue-500", activeBg: "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400" },
-  { id: "running-slow", labelKey: "triage_tab_running_slow", icon: Gauge, color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400" },
-  { id: "no-internet", labelKey: "triage_tab_no_internet", icon: WifiOff, color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/30 text-sky-600 dark:text-sky-400" },
-  { id: "overheating", labelKey: "triage_tab_overheating", icon: Flame, color: "text-orange-500", activeBg: "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400" },
-  { id: "driver-issues", labelKey: "triage_tab_driver_issues", icon: Cpu, color: "text-purple-500", activeBg: "bg-purple-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400" },
+  { id: "wont-boot", labelKey: "triage_tab_wont_boot", icon: Power, animation: "pulse", color: "text-rose-500", activeBg: "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400" },
+  { id: "blue-screen", labelKey: "triage_tab_blue_screen", icon: MonitorX, animation: "shake", color: "text-blue-500", activeBg: "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400" },
+  { id: "running-slow", labelKey: "triage_tab_running_slow", icon: Gauge, animation: "gauge", color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400" },
+  { id: "no-internet", labelKey: "triage_tab_no_internet", icon: WifiOff, animation: "bounce", color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/30 text-sky-600 dark:text-sky-400" },
+  { id: "overheating", labelKey: "triage_tab_overheating", icon: Flame, animation: "flicker", color: "text-orange-500", activeBg: "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400" },
+  { id: "driver-issues", labelKey: "triage_tab_driver_issues", icon: Cpu, animation: "pulse", color: "text-purple-500", activeBg: "bg-purple-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400" },
 ];
 
 const TRIAGE_DATA_EN: Record<string, TriageProblem[]> = {
@@ -456,7 +458,7 @@ export default function QuickTriageDeck() {
                   : "border-line dark:border-dark-line bg-white/70 dark:bg-dark-card/70 text-ink-secondary dark:text-dark-ink-secondary hover:border-line-strong dark:hover:border-dark-line-strong hover:text-ink dark:hover:text-dark-ink"
               }`}
             >
-              <Icon className={`h-4 w-4 ${tab.color}`} aria-hidden="true" />
+              <MovingIcon icon={Icon} animation={tab.animation} className={`h-4 w-4 ${tab.color}`} />
               <span>{t(tab.labelKey)}</span>
             </button>
           );

@@ -17,6 +17,7 @@ import { CATEGORIES, type Severity } from "@/lib/categories";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { TranslationKey } from "@/lib/i18n/translations";
+import MovingIcon, { type MovingIconAnimation } from "@/components/MovingIcon";
 
 const SEVERITY_STYLE: Record<Severity, string> = {
   critical: "bg-critical/10 text-critical border-critical/20 dark:bg-critical/15 dark:text-critical",
@@ -28,6 +29,7 @@ const CATEGORY_THEME: Record<
   string,
   {
     icon: LucideIcon;
+    animation: MovingIconAnimation;
     glow: string;
     iconBg: string;
     iconColor: string;
@@ -38,6 +40,7 @@ const CATEGORY_THEME: Record<
 > = {
   "wont-boot": {
     icon: Power,
+    animation: "pulse",
     glow: "group-hover:border-rose-500/40 group-hover:shadow-[0_0_24px_rgba(244,63,94,0.12)]",
     iconBg: "bg-rose-500/10 text-rose-600 dark:text-rose-400 group-hover:bg-rose-500 group-hover:text-white",
     iconColor: "text-rose-500",
@@ -47,6 +50,7 @@ const CATEGORY_THEME: Record<
   },
   "blue-screen": {
     icon: MonitorX,
+    animation: "shake",
     glow: "group-hover:border-blue-500/40 group-hover:shadow-[0_0_24px_rgba(59,130,246,0.12)]",
     iconBg: "bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500 group-hover:text-white",
     iconColor: "text-blue-500",
@@ -56,6 +60,7 @@ const CATEGORY_THEME: Record<
   },
   "running-slow": {
     icon: Gauge,
+    animation: "gauge",
     glow: "group-hover:border-amber-500/40 group-hover:shadow-[0_0_24px_rgba(245,158,11,0.12)]",
     iconBg: "bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:bg-amber-500 group-hover:text-white",
     iconColor: "text-amber-500",
@@ -65,6 +70,7 @@ const CATEGORY_THEME: Record<
   },
   "no-internet": {
     icon: WifiOff,
+    animation: "bounce",
     glow: "group-hover:border-sky-500/40 group-hover:shadow-[0_0_24px_rgba(14,165,233,0.12)]",
     iconBg: "bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:bg-sky-500 group-hover:text-white",
     iconColor: "text-sky-500",
@@ -74,6 +80,7 @@ const CATEGORY_THEME: Record<
   },
   overheating: {
     icon: Flame,
+    animation: "flicker",
     glow: "group-hover:border-orange-500/40 group-hover:shadow-[0_0_24px_rgba(249,115,22,0.12)]",
     iconBg: "bg-orange-500/10 text-orange-600 dark:text-orange-400 group-hover:bg-orange-500 group-hover:text-white",
     iconColor: "text-orange-500",
@@ -83,6 +90,7 @@ const CATEGORY_THEME: Record<
   },
   "driver-issues": {
     icon: Cpu,
+    animation: "pulse",
     glow: "group-hover:border-purple-500/40 group-hover:shadow-[0_0_24px_rgba(168,85,247,0.12)]",
     iconBg: "bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:bg-purple-500 group-hover:text-white",
     iconColor: "text-purple-500",
@@ -113,6 +121,7 @@ export default function CategoryGrid() {
       {CATEGORIES.map((cat, idx) => {
         const theme = CATEGORY_THEME[cat.slug] || {
           icon: HelpCircle,
+          animation: "pulse" as MovingIconAnimation,
           glow: "group-hover:border-accent/40",
           iconBg: "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white",
           iconColor: "text-accent",
@@ -128,14 +137,18 @@ export default function CategoryGrid() {
         return (
           <motion.div
             key={cat.slug}
-            initial={false}
-            animate={{ opacity: 1, y: 0 }}
+            initial="initial"
+            animate="initial"
+            variants={{
+              initial: { opacity: 1, y: 0 },
+              hover: { y: -4 },
+            }}
             transition={{
               duration: 0.35,
               delay: idx * 0.03,
               ease: [0.16, 1, 0.3, 1],
             }}
-            whileHover={{ y: -4 }}
+            whileHover="hover"
             whileTap={{ scale: 0.985 }}
             className="group opacity-100"
           >
@@ -149,7 +162,11 @@ export default function CategoryGrid() {
                   <div
                     className={`flex h-12 w-12 items-center justify-center rounded-xl shadow-xs transition-all duration-200 group-hover:scale-105 ${theme.iconBg}`}
                   >
-                    <IconComponent className="h-6 w-6" aria-hidden="true" />
+                    <MovingIcon
+                      icon={IconComponent}
+                      animation={theme.animation}
+                      className="h-6 w-6"
+                    />
                   </div>
                   <div className="flex items-center gap-2">
                     <span
@@ -159,10 +176,16 @@ export default function CategoryGrid() {
                     >
                       {getSeverityLabel(cat.severity)}
                     </span>
-                    <ArrowUpRight
-                      className="h-4 w-4 text-ink-tertiary dark:text-dark-ink-tertiary transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink dark:group-hover:text-dark-ink"
+                    <motion.span
+                      variants={{
+                        initial: { x: 0, y: 0 },
+                        hover: { x: 2, y: -2, transition: { duration: 0.2, ease: "easeOut" } },
+                      }}
+                      className="inline-flex items-center justify-center text-ink-tertiary dark:text-dark-ink-tertiary group-hover:text-ink dark:group-hover:text-dark-ink transition-colors"
                       aria-hidden="true"
-                    />
+                    >
+                      <ArrowUpRight className="h-4 w-4" />
+                    </motion.span>
                   </div>
                 </div>
 
@@ -195,9 +218,16 @@ export default function CategoryGrid() {
                 </span>
                 <span className="flex items-center gap-1 text-accent dark:text-dark-accent font-semibold group-hover:underline">
                   <span>{t("cat_action_browse")}</span>
-                  <span className="transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true">
+                  <motion.span
+                    variants={{
+                      initial: { x: 0 },
+                      hover: { x: 3, transition: { duration: 0.2, ease: "easeOut" } },
+                    }}
+                    className="inline-block"
+                    aria-hidden="true"
+                  >
                     &rarr;
-                  </span>
+                  </motion.span>
                 </span>
               </div>
             </Link>
