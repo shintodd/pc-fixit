@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle2, AlertTriangle, Monitor, Zap, Cable, Check, HelpCircle } from "lucide-react";
+import { X, CheckCircle2, AlertTriangle, Monitor, Zap, Cable, Check, HelpCircle, Camera } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function PortLocatorModal({
@@ -175,22 +175,43 @@ export default function PortLocatorModal({
                 </div>
 
                 {/* PSU Rocker Switch */}
-                <div className="rounded-2xl border border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 p-4 space-y-2">
-                  <div className="flex items-center gap-2 font-bold text-ink dark:text-dark-ink text-[13px]">
-                    <Zap className="h-4 w-4 text-accent" />
-                    <span>{isMs ? "Suis Power Supply (I vs O)" : "Power Supply Toggle Switch (I vs O)"}</span>
+                <div className="rounded-2xl border border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 font-bold text-ink dark:text-dark-ink text-[13px]">
+                      <Zap className="h-4 w-4 text-accent" />
+                      <span>{isMs ? "Suis Power Supply (I vs O)" : "Power Supply Toggle Switch (I vs O)"}</span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-subtle dark:bg-dark-subtle px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
+                      <Camera className="h-3 w-3 text-accent" />
+                      <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
+                    </span>
                   </div>
-                  <div className="grid grid-cols-2 gap-3 pt-1">
-                    <div className="rounded-xl border border-ok/40 bg-white dark:bg-dark-card p-3">
-                      <div className="font-bold text-ok text-[14px]">I (Garis) = ON</div>
-                      <div className="text-[12px] text-ink-secondary dark:text-dark-ink-secondary mt-1">
-                        {isMs ? "Tekan belah garis (I) ke dalam untuk salur elektrik." : "Press the line side (I) in to allow wall power."}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                    <div className="sm:col-span-4 relative h-28 w-full rounded-xl overflow-hidden border border-line dark:border-dark-line bg-black/20 shrink-0">
+                      <Image
+                        src="/images/hardware/psu-power-switch.jpg"
+                        alt="Real power supply I/O rocker switch"
+                        fill
+                        sizes="(max-width: 640px) 100vw, 200px"
+                        className="object-cover"
+                      />
+                      <div className="absolute bottom-1.5 right-1.5 rounded-md bg-black/70 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-medium text-white">
+                        I = ON / O = OFF
                       </div>
                     </div>
-                    <div className="rounded-xl border border-critical/40 bg-white dark:bg-dark-card p-3">
-                      <div className="font-bold text-critical text-[14px]">O (Bulatan) = OFF</div>
-                      <div className="text-[12px] text-ink-secondary dark:text-dark-ink-secondary mt-1">
-                        {isMs ? "Belah bulatan (O) potong bekalan elektrik sepenuhnya." : "Circle side (O) completely cuts all electrical power."}
+                    <div className="sm:col-span-8 grid grid-cols-2 gap-2">
+                      <div className="rounded-xl border border-ok/40 bg-white dark:bg-dark-card p-2.5">
+                        <div className="font-bold text-ok text-[13px]">I (Garis) = ON</div>
+                        <div className="text-[11px] text-ink-secondary dark:text-dark-ink-secondary mt-0.5 leading-snug">
+                          {isMs ? "Tekan garis (I) ke dalam untuk salur elektrik." : "Press line side (I) inward to allow wall power."}
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-critical/40 bg-white dark:bg-dark-card p-2.5">
+                        <div className="font-bold text-critical text-[13px]">O (Bulatan) = OFF</div>
+                        <div className="text-[11px] text-ink-secondary dark:text-dark-ink-secondary mt-0.5 leading-snug">
+                          {isMs ? "Bulatan (O) potong elektrik sepenuhnya." : "Circle side (O) cuts electrical power completely."}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -199,40 +220,76 @@ export default function PortLocatorModal({
             ) : (
               <div className="space-y-3.5">
                 {/* Cable Comparisons */}
-                <div className="rounded-2xl border border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 p-4 space-y-2">
+                <div className="rounded-2xl border border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 p-4 space-y-3">
                   <div className="font-bold text-ink dark:text-dark-ink flex items-center justify-between">
                     <span>DisplayPort vs HDMI</span>
-                    <span className="text-[11px] rounded-full bg-accent/10 px-2 py-0.5 text-accent font-medium">Video</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-subtle dark:bg-dark-subtle px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
+                        <Camera className="h-3 w-3 text-accent" />
+                        <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
+                      </span>
+                      <span className="text-[11px] rounded-full bg-accent/10 px-2 py-0.5 text-accent font-medium">Video</span>
+                    </div>
                   </div>
+
+                  {/* Real Comparison Photo */}
+                  <div className="relative h-36 w-full rounded-xl overflow-hidden border border-line dark:border-dark-line bg-black/20">
+                    <Image
+                      src="/images/hardware/displayport-vs-hdmi-cables.jpg"
+                      alt="Real comparison photograph of DisplayPort and HDMI cable plugs"
+                      fill
+                      sizes="(max-width: 640px) 100vw, 600px"
+                      className="object-cover"
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[12px]">
                     <div className="rounded-xl bg-white dark:bg-dark-card p-3 border border-line/60 dark:border-dark-line">
                       <span className="font-bold text-ink dark:text-dark-ink block">DisplayPort (DP)</span>
                       <p className="text-ink-secondary dark:text-dark-ink-secondary mt-1">
                         {isMs
-                          ? "Satu bucu senget flat, ada butang klip kecil. Tarik sambil tekan klip."
-                          : "Has one angled corner and a small release button. Squeeze button to unplug."}
+                          ? "Satu bucu senget flat, ada butang klip kecil. Tarik sambil tekan butang klip."
+                          : "Has one angled flat corner and a release latch button. Squeeze button to unplug."}
                       </p>
                     </div>
                     <div className="rounded-xl bg-white dark:bg-dark-card p-3 border border-line/60 dark:border-dark-line">
                       <span className="font-bold text-ink dark:text-dark-ink block">HDMI</span>
                       <p className="text-ink-secondary dark:text-dark-ink-secondary mt-1">
                         {isMs
-                          ? "Bentuk simetri trapezoid leper. Tiada klip pengunci."
+                          ? "Bentuk simetri trapezoid leper. Tiada klip pengunci, tarik lurus ke luar."
                           : "Symmetric trapezoid shape with two sloped bottom corners. Pulls straight out."}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-critical/20 bg-critical/5 dark:bg-critical/10 p-4 space-y-2">
+                <div className="rounded-2xl border border-critical/20 bg-critical/5 dark:bg-critical/10 p-4 space-y-3">
                   <div className="font-bold text-critical flex items-center justify-between">
                     <span>{isMs ? "Amaran: Wayar PCIe GPU vs CPU 8-Pin" : "Danger: PCIe 8-Pin (GPU) vs CPU 8-Pin"}</span>
-                    <span className="text-[11px] rounded-full bg-critical/20 px-2 py-0.5 text-critical font-medium">Power</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-critical/10 px-2 py-0.5 text-[10px] font-semibold text-critical">
+                        <Camera className="h-3 w-3 text-critical" />
+                        <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
+                      </span>
+                      <span className="text-[11px] rounded-full bg-critical/20 px-2 py-0.5 text-critical font-medium">Power</span>
+                    </div>
                   </div>
+
+                  {/* Real Comparison Photo */}
+                  <div className="relative h-36 w-full rounded-xl overflow-hidden border border-critical/20 bg-black/20">
+                    <Image
+                      src="/images/hardware/pcie-gpu-vs-cpu-eps-cables.jpg"
+                      alt="Real photograph comparing PCIe 6+2 pin GPU connector with CPU 4+4 pin EPS connector"
+                      fill
+                      sizes="(max-width: 640px) 100vw, 600px"
+                      className="object-cover"
+                    />
+                  </div>
+
                   <p className="text-[12px] text-ink-secondary dark:text-dark-ink-secondary leading-relaxed">
                     {isMs
-                      ? "JANGAN sesekali paksa wayar CPU 8-pin (4+4) masuk ke kad grafik GPU. Gunakan HANYA wayar berlabel 'PCIe' atau 'VGA' (6+2 pin). Salah cucuk boleh menyebabkan litar pintas."
-                      : "NEVER force a CPU 8-pin (4+4) cable into a graphics card. Use ONLY cables labeled 'PCIe' or 'VGA' (6+2 pins). Swapping them causes short circuits."}
+                      ? "JANGAN sesekali paksa wayar CPU 8-pin (4+4) masuk ke kad grafik GPU. Gunakan HANYA wayar berlabel 'PCIe' atau 'VGA' (6+2 pin). Pin PCIe terbelah 6+2 manakala CPU terbelah 4+4. Salah cucuk boleh menyebabkan litar pintas."
+                      : "NEVER force a CPU 8-pin (4+4) cable into a graphics card. Use ONLY cables labeled 'PCIe' or 'VGA' (6+2 pins). PCIe splits into 6+2 pins while CPU splits into 4+4 pins. Swapping them causes short circuits."}
                   </p>
                 </div>
 

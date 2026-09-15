@@ -181,6 +181,98 @@ const HARDWARE_GUIDES: Record<string, HardwarePhotoGuide> = {
     ],
     calloutEn: "SAFETY FIRST: Always turn off power strip and discharge static by touching metal case before handling internal parts.",
     calloutMs: "UTAMAKAN KESELAMATAN: Tutup suis plug dan sentuh bahagian besi casing untuk nyahcas elektrik statik sebelum sentuh komponen."
+  },
+  bsod: {
+    id: "bsod",
+    imageSrc: "/images/hardware/windows-bsod-screen.jpg",
+    altText: "Real Windows Blue Screen of Death BSOD stop code screen",
+    titleEn: "Windows Blue Screen (BSOD) & Stop Code",
+    titleMs: "Skrin Biru Windows (BSOD) & Kod Stop",
+    subtitleEn: "Locate stop code name, QR code, and failing system driver file.",
+    subtitleMs: "Kenal pasti nama kod ralat, kod QR, dan fail pemacu sistem yang gagal.",
+    keyPointsEn: [
+      "Note the capital STOP CODE name at bottom (e.g. CRITICAL_PROCESS_DIED, MEMORY_MANAGEMENT).",
+      "Check if a specific filename is listed next to 'What failed' (e.g. nvlddmkm.sys, ntoskrnl.exe).",
+      "Scan the on-screen QR code with your phone camera for Microsoft troubleshooting documentation.",
+      "If the percentage progress freezes at 0%, hold the power button for 10 seconds to force a restart."
+    ],
+    keyPointsMs: [
+      "Salin nama KOD STOP huruf besar di bawah (contohnya CRITICAL_PROCESS_DIED atau MEMORY_MANAGEMENT).",
+      "Periksa sama ada fail dinyatakan di 'What failed' (contoh: nvlddmkm.sys atau ntoskrnl.exe).",
+      "Imbas kod QR pada skrin guna telefon pintar untuk buka panduan rasmi Microsoft.",
+      "Jika peratusan terhenti pada 0%, tekan dan tahan butang power 10 saat untuk restart paksa."
+    ],
+    calloutEn: "PRO TIP: Snap a quick phone photo as soon as BSOD appears before your PC automatically restarts.",
+    calloutMs: "TIP PENTING: Tangkap gambar skrin guna telefon segera sebaik BSOD muncul sebelum PC restart sendiri."
+  },
+  network: {
+    id: "network",
+    imageSrc: "/images/hardware/ethernet-rj45-cable.jpg",
+    altText: "Real Ethernet RJ45 network cable with 8P8C modular connector plug and retention clip",
+    titleEn: "Ethernet RJ45 Cable & Port Inspection",
+    titleMs: "Pemeriksaan Kabel & Port Ethernet RJ45",
+    subtitleEn: "Verify physical clip latch, 8 gold pin contacts, and port LED link indicators.",
+    subtitleMs: "Sahkan klip pengunci kabel, 8 pin tembaga emas, dan lampu LED status pada port.",
+    keyPointsEn: [
+      "Inspect the flexible plastic retaining clip on top of the plug; a snapped clip causes loose drops.",
+      "Check for green (link connection) and amber/orange (activity) indicator LEDs next to the port.",
+      "Ensure all 8 gold copper pins inside the clear connector are clean, straight, and uncorroded.",
+      "Firmly press cable into RJ45 socket until you hear and feel an audible mechanical click."
+    ],
+    keyPointsMs: [
+      "Periksa klip plastik di atas kepala kabel; jika patah, wayar mudah longgar dan internet terputus.",
+      "Lihat lampu LED hijau (sambungan) dan jingga (aktiviti) di sebelah port rangkaian.",
+      "Pastikan 8 pin tembaga emas di dalam kepala jernih bersih, lurus, dan tidak berkarat.",
+      "Tekan kabel masuk ke soket RJ45 sehingga terdengar bunyi klik pengunci kemas."
+    ],
+    calloutEn: "PRO TIP: If port lights stay completely dark, test with another Ethernet cable or router LAN port to rule out cable damage.",
+    calloutMs: "TIP PENTING: Jika lampu port langsung gelap, uji dengan kabel Ethernet lain atau port router lain untuk pastikan wayar tidak putus."
+  },
+  driver: {
+    id: "driver",
+    imageSrc: "/images/hardware/device-manager-driver.jpg",
+    altText: "Real Windows Device Manager utility showing hardware tree and driver device status",
+    titleEn: "Windows Device Manager & Hardware Status",
+    titleMs: "Pengurus Peranti Windows & Status Pemacu",
+    subtitleEn: "Identify yellow warning exclamation marks and faulty hardware drivers.",
+    subtitleMs: "Kesan tanda seruan amaran kuning dan komponen perkakasan yang bermasalah.",
+    keyPointsEn: [
+      "Press Win + X and select 'Device Manager' (or run devmgmt.msc from Run dialog).",
+      "Look for hardware categories expanded automatically with a yellow triangular exclamation mark.",
+      "Double-click warning item to check Device Status code (e.g. Code 43, Code 10, Code 28).",
+      "Right-click item and choose 'Uninstall device', then reboot PC so Windows re-detects fresh drivers."
+    ],
+    keyPointsMs: [
+      "Tekan Win + X dan pilih 'Device Manager' (atau taip devmgmt.msc dalam menu Run).",
+      "Cari senarai kategori yang terbuka automatik dengan ikon tanda seruan kuning.",
+      "Klik dua kali peranti bermasalah untuk semak kod ralat (contoh: Code 43, Code 10, Code 28).",
+      "Klik kanan peranti dan pilih 'Uninstall device', kemudian restart PC untuk Windows kesan semula pemacu."
+    ],
+    calloutEn: "PRO TIP: Code 43 on graphics cards often indicates PCIe slot seating or hardware VRAM fault rather than pure driver bug.",
+    calloutMs: "TIP PENTING: Ralat Code 43 pada kad grafik selalunya berpunca daripada slot PCIe longgar atau kerosakan VRAM."
+  },
+  performance: {
+    id: "performance",
+    imageSrc: "/images/hardware/task-manager-performance.jpg",
+    altText: "Real Windows Task Manager Performance tab showing CPU, Memory, and Disk resource utilization",
+    titleEn: "Task Manager Resource Performance",
+    titleMs: "Prestasi & Penggunaan Sumber Task Manager",
+    subtitleEn: "Pinpoint CPU, RAM, Disk, or GPU utilization spikes causing system lag and freezes.",
+    subtitleMs: "Kenal pasti kesesakan pada penggunaan CPU, RAM, Storan, atau GPU yang punca lembap.",
+    keyPointsEn: [
+      "Press Ctrl + Shift + Esc to open Task Manager directly and switch to the 'Performance' tab.",
+      "Check if CPU or Disk 0 is pinned near 100% utilization while the computer is idle.",
+      "Inspect Memory graph: if In Use exceeds 90%, Windows is heavily swapping memory to storage.",
+      "Switch to 'Processes' tab and click column header (CPU or Memory) to sort highest consuming apps."
+    ],
+    keyPointsMs: [
+      "Tekan Ctrl + Shift + Esc untuk buka Task Manager terus dan pilih tab 'Performance'.",
+      "Periksa sama ada graf CPU atau Storan (Disk 0) tersekat hampir 100% semasa PC santai.",
+      "Semak graf Memori: jika penggunaan melebihi 90%, Windows terpaksa bergantung pada swap storan.",
+      "Tukar ke tab 'Processes' dan klik kepala lajur untuk susun aplikasi yang memakan sumber paling tinggi."
+    ],
+    calloutEn: "PRO TIP: 100% Disk usage on traditional mechanical hard drives (HDDs) is permanently fixed by upgrading to an SSD.",
+    calloutMs: "TIP PENTING: Isu Disk 100% pada hard disk mekanikal (HDD) lama boleh diselesaikan serta-merta dengan menaik taraf ke SSD."
   }
 };
 
@@ -212,12 +304,29 @@ function resolveHardwareGuide(slug: string, categorySlug?: string): HardwarePhot
   if (s.includes("ssd") || s.includes("bootmgr") || s.includes("inaccessible-boot") || s.includes("hard-drive") || s.includes("nvme") || s.includes("sata") || s.includes("storage")) {
     return HARDWARE_GUIDES.storage;
   }
+  // Blue Screen (BSOD)
+  if (cat.includes("blue-screen") || s.includes("bsod") || s.includes("stop-code") || s.includes("bugcheck")) {
+    return HARDWARE_GUIDES.bsod;
+  }
+  // No Internet / Networking
+  if (cat.includes("no-internet") || s.includes("internet") || s.includes("ethernet") || s.includes("wifi") || s.includes("network") || s.includes("dns") || s.includes("ip-config")) {
+    return HARDWARE_GUIDES.network;
+  }
+  // Driver Issues
+  if (cat.includes("driver") || s.includes("driver") || s.includes("device-manager") || s.includes("code-43") || s.includes("code-10") || s.includes("peripheral")) {
+    return HARDWARE_GUIDES.driver;
+  }
+  // Running Slow / Performance
+  if (cat.includes("running-slow") || s.includes("slow") || s.includes("lag") || s.includes("freeze") || s.includes("high-cpu") || s.includes("100-disk") || s.includes("taskmgr") || s.includes("performance")) {
+    return HARDWARE_GUIDES.performance;
+  }
   // Won't boot general layout
   if (cat.includes("wont-boot") || s.includes("power-sequence") || s.includes("breadboarding") || s.includes("fans-spin") || s.includes("no-power")) {
     return HARDWARE_GUIDES.desktop;
   }
 
-  return null;
+  // Fallback: 100% of guides resolve to desktop interior reference
+  return HARDWARE_GUIDES.desktop;
 }
 
 interface HardwareVisualGuideProps {

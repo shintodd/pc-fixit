@@ -446,10 +446,50 @@ export default function BeepLedDecoderModal({
                 </div>
               </div>
             ) : (
-              <div className="space-y-3">
-                <span className="text-[12px] font-semibold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary block mb-1">
-                  {isMs ? "Tekan butang play untuk dengar contoh bunyi:" : "Click play to listen and match your PC beep sound:"}
-                </span>
+              <div className="space-y-4">
+                {/* Motherboard Buzzer Reference Card */}
+                <div className="rounded-2xl border border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 p-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 font-bold text-ink dark:text-dark-ink text-[13px]">
+                      <Volume2 className="h-4 w-4 text-accent" />
+                      <span>{isMs ? "Buzzer Motherboard / Speaker PC (4-Pin)" : "Motherboard Buzzer Speaker (4-Pin)"}</span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-white dark:bg-dark-card border border-line dark:border-dark-line px-2 py-0.5 text-[10px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary">
+                      <Camera className="h-3 w-3 text-accent" />
+                      <span>{isMs ? "Foto Sebenar" : "Real Photo"}</span>
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3.5 items-center">
+                    <div className="sm:col-span-4 relative h-24 w-full rounded-xl overflow-hidden border border-line dark:border-dark-line bg-black/20 shrink-0">
+                      <Image
+                        src="/images/hardware/motherboard-buzzer-speaker.jpg"
+                        alt="Real motherboard 4-pin piezo buzzer speaker"
+                        fill
+                        sizes="(max-width: 640px) 100vw, 200px"
+                        className="object-cover"
+                      />
+                      <div className="absolute bottom-1.5 right-1.5 rounded-md bg-black/70 backdrop-blur-xs px-1.5 py-0.5 text-[9px] font-medium text-white">
+                        Header: SPEAKER
+                      </div>
+                    </div>
+                    <div className="sm:col-span-8 space-y-1">
+                      <div className="font-bold text-ink dark:text-dark-ink text-[12px]">
+                        {isMs ? "Diperlukan untuk mendengar kod beep" : "Required to hear diagnostic beep codes"}
+                      </div>
+                      <p className="text-ink-secondary dark:text-dark-ink-secondary leading-relaxed text-[11px]">
+                        {isMs
+                          ? "Kebanyakan motherboard moden tiada speaker terbina. Buzzer mini 4-pin ini mesti dicucuk pada pin header 'SPEAKER' (SPK) di sudut bawah kanan motherboard untuk mengeluarkan kod bunyi kegagalan POST."
+                          : "Most modern motherboards lack an onboard speaker. This tiny 4-pin piezo buzzer must be plugged into the 'SPEAKER' (SPK) header on the bottom-right of the motherboard to hear POST failure codes."}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <span className="text-[12px] font-semibold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary block mb-1">
+                    {isMs ? "Tekan butang play untuk dengar contoh bunyi:" : "Click play to listen and match your PC beep sound:"}
+                  </span>
 
                 {BEEP_PATTERNS.map((p) => {
                   const isPlaying = playingBeepId === p.id;
@@ -503,6 +543,7 @@ export default function BeepLedDecoderModal({
                     </div>
                   );
                 })}
+                </div>
               </div>
             )}
           </div>
