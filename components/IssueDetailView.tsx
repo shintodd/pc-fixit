@@ -178,7 +178,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <button
                 type="button"
                 onClick={() => setShowQrModal(true)}
-                className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="hidden sm:inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3.5 py-2 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
                 title={t("tool_phone_qr")}
               >
                 <Smartphone className="h-3.5 w-3.5 text-accent" />
@@ -188,7 +188,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <button
                 type="button"
                 onClick={() => setShowPortModal(true)}
-                className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium whitespace-nowrap text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3.5 py-2 text-[12px] font-medium whitespace-nowrap text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
                 title={t("tool_port_locator")}
               >
                 <Monitor className="h-3.5 w-3.5 text-blue-500" />
@@ -198,7 +198,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
               <button
                 type="button"
                 onClick={handlePrint}
-                className="hidden sm:inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
+                className="hidden sm:inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3.5 py-2 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs"
                 title={t("print_cheat_sheet")}
               >
                 <Printer className="h-3.5 w-3.5 text-ink-tertiary" />
@@ -209,7 +209,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                 type="button"
                 onClick={handleShare}
                 aria-label={copied ? t("issue_copied_link") : t("issue_share")}
-                className="inline-flex min-h-[36px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3.5 py-1.5 text-[12px] font-medium whitespace-nowrap text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs active:scale-95"
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-3.5 py-2 text-[12px] font-medium whitespace-nowrap text-ink-secondary dark:text-dark-ink-secondary transition-colors hover:text-ink dark:hover:text-dark-ink shadow-xs active:scale-95"
               >
                 {copied ? (
                   <>
@@ -360,18 +360,22 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                       <button
                         type="button"
                         onClick={() => toggleStep(i)}
-                        className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors ${
-                          isDone
-                            ? "bg-ok text-white shadow-xs"
-                            : "border border-line-strong dark:border-dark-line-strong text-ink-tertiary dark:text-dark-ink-tertiary hover:border-accent hover:text-accent"
-                        }`}
+                        className="flex min-h-[44px] min-w-[44px] -ml-2.5 -mt-2.5 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         aria-label={`Mark step ${i + 1} as completed`}
                       >
-                        {isDone ? (
-                          <Check className="h-3.5 w-3.5 stroke-[3]" aria-hidden="true" />
-                        ) : (
-                          <span className="text-[11px] font-semibold">{i + 1}</span>
-                        )}
+                        <span
+                          className={`flex h-6 w-6 items-center justify-center rounded-full transition-colors ${
+                            isDone
+                              ? "bg-ok text-white shadow-xs"
+                              : "border border-line-strong dark:border-dark-line-strong text-ink-tertiary dark:text-dark-ink-tertiary hover:border-accent hover:text-accent"
+                          }`}
+                        >
+                          {isDone ? (
+                            <Check className="h-3.5 w-3.5 stroke-[3]" aria-hidden="true" />
+                          ) : (
+                            <span className="text-[11px] font-semibold">{i + 1}</span>
+                          )}
+                        </span>
                       </button>
 
                       <div className="flex-1 min-w-0">
@@ -388,7 +392,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                           <button
                             type="button"
                             onClick={() => speakStep(i, `${step.title}. ${step.detail}`)}
-                            className="no-print p-1 text-ink-tertiary hover:text-accent rounded-md transition-colors"
+                            className="no-print min-h-[44px] min-w-[44px] -mr-2 -my-2 flex items-center justify-center text-ink-tertiary hover:text-accent rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                             title={isSpeaking ? t("voice_stop") : t("voice_read_step")}
                             aria-label={isSpeaking ? t("voice_stop") : t("voice_read_step")}
                           >
@@ -416,7 +420,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                               if (!isDone) toggleStep(i);
                               setSolvedAtStep(i + 1);
                             }}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-ok/10 hover:bg-ok/20 text-ok px-3 py-1.5 text-[12px] font-semibold transition-colors"
+                            className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full bg-ok/10 hover:bg-ok/20 text-ok px-3.5 py-2 text-[12px] font-semibold transition-colors"
                           >
                             <ThumbsUp className="h-3.5 w-3.5" />
                             <span>{t("btn_it_worked")}</span>
@@ -428,7 +432,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
                               onClick={() => {
                                 if (!isDone) toggleStep(i);
                               }}
-                              className="inline-flex items-center gap-1 rounded-full border border-line dark:border-dark-line bg-white dark:bg-dark-card hover:bg-subtle px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors"
+                              className="inline-flex min-h-[40px] items-center gap-1 rounded-full border border-line dark:border-dark-line bg-white dark:bg-dark-card hover:bg-subtle px-3.5 py-2 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary transition-colors"
                             >
                               <span>{t("btn_still_broken")}</span>
                             </button>

@@ -98,7 +98,7 @@ export default function PhoneQrModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -140,7 +140,7 @@ export default function PhoneQrModal({
             <button
               type="button"
               onClick={handleCopy}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-line dark:border-dark-line bg-subtle dark:bg-dark-subtle py-2.5 text-[13px] font-semibold text-ink dark:text-dark-ink hover:border-accent/40 transition-colors"
+              className="flex-1 min-h-[44px] flex items-center justify-center gap-2 rounded-xl border border-line dark:border-dark-line bg-subtle dark:bg-dark-subtle py-2.5 px-3 text-[13px] font-semibold text-ink dark:text-dark-ink hover:border-accent/40 transition-colors"
             >
               {copied ? (
                 <>
@@ -158,7 +158,7 @@ export default function PhoneQrModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl bg-accent px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
+              className="min-h-[44px] flex items-center justify-center rounded-xl bg-accent px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
             >
               {isMs ? "Tutup" : "Done"}
             </button>

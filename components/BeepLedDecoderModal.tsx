@@ -313,7 +313,7 @@ export default function BeepLedDecoderModal({
                 stopBeeps();
                 onClose();
               }}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -328,7 +328,7 @@ export default function BeepLedDecoderModal({
                 stopBeeps();
                 setActiveTab("led");
               }}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
                 activeTab === "led"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -339,8 +339,11 @@ export default function BeepLedDecoderModal({
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("beeps")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              onClick={() => {
+                stopBeeps();
+                setActiveTab("beeps");
+              }}
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
                 activeTab === "beeps"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -499,7 +502,7 @@ export default function BeepLedDecoderModal({
                         <button
                           type="button"
                           onClick={() => (isPlaying ? stopBeeps() : playBeeps(p))}
-                          className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-all ${
+                          className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-4 py-2 text-[12px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                             isPlaying
                               ? "bg-critical text-white shadow-sm"
                               : "bg-accent text-white hover:bg-accent-hover shadow-sm shadow-accent/20 active:scale-95"
@@ -548,7 +551,7 @@ export default function BeepLedDecoderModal({
                 stopBeeps();
                 onClose();
               }}
-              className="rounded-pill bg-accent px-5 py-2 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
+              className="rounded-pill bg-accent min-h-[44px] px-6 py-2.5 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
             >
               {isMs ? "Tutup Decoder" : "Close Decoder"}
             </button>

@@ -78,7 +78,7 @@ export default function PortLocatorModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -90,7 +90,7 @@ export default function PortLocatorModal({
             <button
               type="button"
               onClick={() => setActiveTab("ports")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 min-h-[44px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-[13px] font-semibold transition-all ${
                 activeTab === "ports"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -102,7 +102,7 @@ export default function PortLocatorModal({
             <button
               type="button"
               onClick={() => setActiveTab("cables")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 min-h-[44px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-[13px] font-semibold transition-all ${
                 activeTab === "cables"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -295,7 +295,7 @@ export default function PortLocatorModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-pill bg-accent px-5 py-2 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
+              className="min-h-[44px] rounded-pill bg-accent px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all flex items-center justify-center"
             >
               {isMs ? "Faham, Tutup Panduan" : "Got It, Close Guide"}
             </button>

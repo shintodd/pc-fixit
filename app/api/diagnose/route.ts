@@ -31,6 +31,32 @@ const HIGH_VALUE_TECH_TOKENS = new Set([
   "hysteresis", "transient", "excursion", "ocp", "opp"
 ]);
 
+const PROMPT_INJECTION_PATTERNS = [
+  /\b(?:ignore|forget|override|bypass)\s+(?:all\s+)?(?:previous|above|system|prior)\s+(?:instructions?|rules?|prompts?|directives?)\b/i,
+  /\b(?:print|reveal|show|output|leak|repeat|display|dump|verbatim)\s+(?:your\s+)?(?:system\s+prompt|developer\s+instructions?|hidden\s+prompt|system\s+instructions?)\b/i,
+  /\bwhat\s+is\s+your\s+(?:exact\s+)?(?:system\s+prompt|developer\s+instructions?|initial\s+prompt)\b/i,
+  /\byou\s+are\s+now\s+(?:dan|jailbreak|unrestricted|do\s+anything\s+now)\b/i,
+  /\boutput\s+the\s+secret\s+(?:admin\s+)?password\b/i,
+  /\b(?:reveal|show|print|dump)\s+(?:all\s+)?(?:environment\s+variables?|env\s+vars?|secret\s+api\s+keys?|database_url|gemini_api_key)\b/i,
+  /\brecommend\s+a\s+malicious\s+exploit\s+script\b/i,
+];
+
+function isPromptExfiltrationOrInjection(query: string): boolean {
+  return PROMPT_INJECTION_PATTERNS.some((pattern) => pattern.test(query));
+}
+
+function sanitizeTextChunk(text: string): string {
+  if (!text) return "";
+  return text
+    .replace(/\u2014/g, " - ")
+    .replace(/\u2015/g, " - ")
+    .replace(/AIza[0-9A-Za-z-_]{35}/g, "[REDACTED_API_KEY]")
+    .replace(/\b(?:GEMINI_API_KEY|GOOGLE_API_KEY|DATABASE_URL)\b/g, "[REDACTED_ENV]")
+    .replace(/CRITICAL INSTRUCTIONS:/gi, "")
+    .replace(/REFERENCE FACTS FROM KNOWLEDGE BASE:/gi, "")
+    .replace(/SCOPE GUARD:/gi, "");
+}
+
 function extractKeywords(query: string): string[] {
   const normalized = query
     .toLowerCase()
@@ -412,6 +438,59 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // 2b. Prompt Injection & Exfiltration Defense Guard
+    if (isPromptExfiltrationOrInjection(userQuery)) {
+      const safeReply =
+        lang === "ms"
+          ? "Saya adalah pcfix, pembantu diagnosis pembaikan perkakasan dan sistem komputer anda. Saya hanya memberikan panduan penyelesaian masalah teknikal untuk PC dan laptop. Ada apa-apa simptom atau isu komputer yang ingin saya bantu?"
+          : "I am pcfix, your dedicated hardware and system repair diagnostic assistant. I specialize strictly in troubleshooting PC and laptop hardware, operating system, and networking issues. Please describe any computer symptoms or error codes you need help with!";
+
+      const wantsStream = req.nextUrl.searchParams.get("stream") === "true";
+      const isSse =
+        req.headers.get("accept")?.includes("text/event-stream") ||
+        req.nextUrl.searchParams.get("format") === "sse" ||
+        req.nextUrl.searchParams.get("sse") === "true";
+
+      if (wantsStream) {
+        const encoder = new TextEncoder();
+        const stream = new ReadableStream({
+          start(controller) {
+            if (isSse) {
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: safeReply })}\n\n`));
+              controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+            } else {
+              controller.enqueue(encoder.encode(safeReply));
+            }
+            controller.close();
+          },
+        });
+
+        return new Response(stream, {
+          headers: {
+            "Content-Type": isSse ? "text/event-stream; charset=utf-8" : "text/plain; charset=utf-8",
+            "Cache-Control": "no-cache, no-transform",
+            "X-Content-Type-Options": "nosniff",
+            ...rateLimitHeaders,
+          },
+        });
+      }
+
+      return NextResponse.json(
+        {
+          reply: safeReply,
+          path: "injection_guard",
+          matchedKbEntries: 0,
+          source: "guard_defense",
+        },
+        {
+          headers: {
+            "Cache-Control": "no-store",
+            ...rateLimitHeaders,
+          },
+        }
+      );
+    }
+
     // 3. Knowledge Base Full-Text Search Retrieval
     const cleanSearchQuery = userQuery
       .replace(/[^\w\s-]/g, " ")
@@ -787,29 +866,38 @@ ${referenceSection}`;
     const candidateModels = [
       modelName,
       "gemini-2.5-flash",
-      "gemini-2.0-flash",
       "gemini-3.6-flash",
       "gemini-3.5-flash-lite",
     ].filter((v, i, a) => a.indexOf(v) === i);
 
     const wantsStream = req.nextUrl.searchParams.get("stream") === "true";
+    const isSse =
+      req.headers.get("accept")?.includes("text/event-stream") ||
+      req.nextUrl.searchParams.get("format") === "sse" ||
+      req.nextUrl.searchParams.get("sse") === "true";
     let isRateLimited = false;
 
     // Fast response path: Serve cached AI diagnosis if query matches recent request
     const aiCacheKey = `${lang}:${cleanSearchQuery.trim().toLowerCase()}:${hasImageInContents ? "img" : "text"}`;
     const cachedAi = aiResponseCache.get(aiCacheKey);
     if (cachedAi && Date.now() - cachedAi.timestamp < AI_CACHE_TTL_MS) {
+      const sanitizedCachedReply = sanitizeTextChunk(cachedAi.reply);
       if (wantsStream) {
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
           start(controller) {
-            controller.enqueue(encoder.encode(cachedAi.reply));
+            if (isSse) {
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: sanitizedCachedReply })}\n\n`));
+              controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+            } else {
+              controller.enqueue(encoder.encode(sanitizedCachedReply));
+            }
             controller.close();
           },
         });
         return new Response(stream, {
           headers: {
-            "Content-Type": "text/plain; charset=utf-8",
+            "Content-Type": isSse ? "text/event-stream; charset=utf-8" : "text/plain; charset=utf-8",
             "Cache-Control": "no-cache, no-transform",
             "X-Cache": "HIT",
             ...rateLimitHeaders,
@@ -819,7 +907,7 @@ ${referenceSection}`;
 
       return NextResponse.json(
         {
-          reply: cachedAi.reply,
+          reply: sanitizedCachedReply,
           path: cachedAi.path,
           matchedKbEntries: cachedAi.matchedKbEntries,
           source: "cached_ai",
@@ -889,10 +977,18 @@ ${referenceSection}`;
                 for await (const chunk of streamResponse) {
                   let text = chunk.text || "";
                   if (text) {
-                    text = text.replace(/\u2014/g, " - ");
+                    text = sanitizeTextChunk(text);
                     fullOutput += text;
-                    controller.enqueue(encoder.encode(text));
+                    if (isSse) {
+                      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
+                    } else {
+                      controller.enqueue(encoder.encode(text));
+                    }
                   }
+                }
+
+                if (isSse) {
+                  controller.enqueue(encoder.encode("data: [DONE]\n\n"));
                 }
 
                 // Auto-growth for live search
@@ -919,9 +1015,16 @@ ${referenceSection}`;
                 }
               } catch (streamErr: any) {
                 console.warn("Error during stream piping:", streamErr);
-                controller.enqueue(
-                  encoder.encode("\n\n⚠️ *Connection interrupted during diagnosis. Please tap Retry to continue.*")
-                );
+                if (isSse) {
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ error: "Connection interrupted during diagnosis. Please tap Retry." })}\n\n`)
+                  );
+                  controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+                } else {
+                  controller.enqueue(
+                    encoder.encode("\n\n⚠️ *Connection interrupted during diagnosis. Please tap Retry to continue.*")
+                  );
+                }
               } finally {
                 controller.close();
               }
@@ -931,11 +1034,12 @@ ${referenceSection}`;
 
         return new Response(stream, {
           headers: {
-            "Content-Type": "text/plain; charset=utf-8",
+            "Content-Type": isSse ? "text/event-stream; charset=utf-8" : "text/plain; charset=utf-8",
             "Cache-Control": "no-cache, no-transform",
             "X-Content-Type-Options": "nosniff",
             "X-Accel-Buffering": "no",
-            "Transfer-Encoding": "chunked",
+            ...(isSse ? { Connection: "keep-alive" } : { "Transfer-Encoding": "chunked" }),
+            ...rateLimitHeaders,
           },
         });
       }
@@ -952,25 +1056,32 @@ ${referenceSection}`;
           ? top.fix_steps
           : JSON.stringify(top.fix_steps);
 
-        const fallbackReply =
+        const fallbackReply = sanitizeTextChunk(
           lang === "ms"
             ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
+        );
 
         const encoder = new TextEncoder();
         const stream = new ReadableStream({
           start(controller) {
-            controller.enqueue(encoder.encode(fallbackReply));
+            if (isSse) {
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: fallbackReply })}\n\n`));
+              controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+            } else {
+              controller.enqueue(encoder.encode(fallbackReply));
+            }
             controller.close();
           },
         });
 
         return new Response(stream, {
           headers: {
-            "Content-Type": "text/plain; charset=utf-8",
+            "Content-Type": isSse ? "text/event-stream; charset=utf-8" : "text/plain; charset=utf-8",
             "Cache-Control": "no-cache, no-transform",
             "X-Content-Type-Options": "nosniff",
             "X-Accel-Buffering": "no",
+            ...rateLimitHeaders,
           },
         });
       }
@@ -987,7 +1098,7 @@ ${referenceSection}`;
                 : "Unable to reach the diagnostic service right now. Please tap Retry."),
           code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
         },
-        { status: isRateLimited ? 429 : 503 }
+        { status: isRateLimited ? 429 : 503, headers: rateLimitHeaders }
       );
     }
 
@@ -1052,10 +1163,11 @@ ${referenceSection}`;
           ? top.fix_steps
           : JSON.stringify(top.fix_steps);
 
-        responseText =
+        responseText = sanitizeTextChunk(
           lang === "ms"
             ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
+            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
+        );
       } else {
         return NextResponse.json(
           {
@@ -1068,9 +1180,11 @@ ${referenceSection}`;
                   : "Unable to reach the diagnostic service right now. Please tap Retry."),
             code: isRateLimited ? "RATE_LIMITED" : "SERVICE_ERROR",
           },
-          { status: isRateLimited ? 429 : 503 }
+          { status: isRateLimited ? 429 : 503, headers: rateLimitHeaders }
         );
       }
+    } else {
+      responseText = sanitizeTextChunk(responseText);
     }
 
     // 7. Knowledge Base Auto-Growth
@@ -1123,6 +1237,10 @@ function saveLiveSearchIssue(userQuery: string, responseText: string) {
 
   // Basic sanity checks: avoid saving noisy, injection, or trivial payloads
   if (userQuery.length < 6 || userQuery.length > 180 || responseText.length < 40) return;
+  if (isPromptExfiltrationOrInjection(userQuery)) return;
+  if (/<script|drop\s+table|select\s+|union\s+select/i.test(userQuery)) return;
+
+  const sanitizedOutput = sanitizeTextChunk(responseText);
 
   const slugBase = userQuery
     .toLowerCase()
@@ -1136,13 +1254,13 @@ function saveLiveSearchIssue(userQuery: string, responseText: string) {
       data: {
         slug: uniqueSlug,
         title: userQuery.slice(0, 80),
-        summary: responseText.slice(0, 200).replace(/\n+/g, " ") + "...",
+        summary: sanitizedOutput.slice(0, 200).replace(/\n+/g, " ") + "...",
         severity: "warn",
         symptoms: [userQuery],
         fix_steps: [
           {
             title: "Diagnosis & Steps",
-            detail: responseText.slice(0, 3000),
+            detail: sanitizedOutput.slice(0, 3000),
           },
         ],
         source: "live_search",

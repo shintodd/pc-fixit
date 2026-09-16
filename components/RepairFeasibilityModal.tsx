@@ -122,7 +122,7 @@ export default function RepairFeasibilityModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -145,7 +145,7 @@ export default function RepairFeasibilityModal({
                     key={a.id}
                     type="button"
                     onClick={() => setPcAge(a.id as any)}
-                    className={`py-2 px-3 rounded-xl border text-center font-semibold transition-all ${
+                    className={`min-h-[44px] py-2.5 px-3 flex items-center justify-center rounded-xl border text-center font-semibold transition-all ${
                       pcAge === a.id
                         ? "border-accent ring-2 ring-accent/20 bg-accent-soft/30 dark:bg-dark-accent/15 text-accent dark:text-dark-accent"
                         : "border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 hover:bg-subtle text-ink-secondary dark:text-dark-ink-secondary"
@@ -173,7 +173,7 @@ export default function RepairFeasibilityModal({
                     key={t.id}
                     type="button"
                     onClick={() => setIssueType(t.id as any)}
-                    className={`p-2.5 rounded-xl border text-left font-semibold transition-all ${
+                    className={`min-h-[44px] p-2.5 flex items-center rounded-xl border text-left font-semibold transition-all ${
                       issueType === t.id
                         ? "border-accent ring-2 ring-accent/20 bg-accent-soft/30 dark:bg-dark-accent/15 text-accent dark:text-dark-accent"
                         : "border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 hover:bg-subtle text-ink-secondary dark:text-dark-ink-secondary"
@@ -218,7 +218,7 @@ export default function RepairFeasibilityModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-pill bg-accent px-5 py-2 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
+              className="min-h-[44px] rounded-pill bg-accent px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all flex items-center justify-center"
             >
               {isMs ? "Tutup" : "Done"}
             </button>

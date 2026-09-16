@@ -152,6 +152,144 @@ async function runMcpTests() {
     assert(data.result.contents[0].uri === "pcfix://categories", "Returns requested resource URI");
   }
 
+  // 8. Error Handling: Invalid JSON-RPC version
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "1.0",
+        id: 7,
+        method: "ping",
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(res.status === 400, "POST with invalid jsonrpc version returns HTTP 400");
+    assert(data.error?.code === -32600, "Returns code -32600 for invalid jsonrpc version");
+  }
+
+  // 9. Error Handling: Unknown Method
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 8,
+        method: "non_existent_method",
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(res.status === 200, "POST with unknown method returns HTTP 200 with error object");
+    assert(data.error?.code === -32601, "Returns code -32601 for Method not found");
+  }
+
+  // 10. Error Handling: Missing Tool Call Name
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 9,
+        method: "tools/call",
+        params: {},
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(data.error?.code === -32602, "Returns code -32602 when tool name is missing");
+  }
+
+  // 11. Error Handling: Tool Call with Missing Required Params
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 10,
+        method: "tools/call",
+        params: {
+          name: "pcfix_diagnose",
+          arguments: {},
+        },
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(data.error?.code === -32602, "Returns code -32602 when diagnose 'query' is omitted");
+    assert(data.error?.message.includes("query"), "Error message specifies missing 'query'");
+  }
+
+  // 12. Error Handling: Invalid Resource URI Scheme
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 11,
+        method: "resources/read",
+        params: { uri: "https://external-resource.com" },
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(data.error?.code === -32602, "Returns code -32602 for invalid URI scheme");
+    assert(data.error?.message.includes("pcfix://"), "Error message mandates 'pcfix://' scheme");
+  }
+
+  // 13. Error Handling: Non-Existent Resource URI
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 12,
+        method: "resources/read",
+        params: { uri: "pcfix://fictional-resource" },
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(data.error?.code === -32602, "Returns code -32602 for unknown resource URI");
+    assert(data.error?.message.includes("Resource not found"), "Error message states Resource not found");
+  }
+
+  // 14. Notification Handling (notifications/initialized returns HTTP 204)
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        method: "notifications/initialized",
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    assert(res.status === 204, "Notification returns HTTP 204 No Content");
+  }
+
+  // 15. Preserving numeric id 0 in JSON-RPC
+  {
+    const req = new NextRequest("http://localhost:3000/api/mcp", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 0,
+        method: "ping",
+      }),
+    });
+    const res = await mcpPostHandler(req);
+    const data = await res.json();
+    assert(data.id === 0, "Preserves numeric id 0 without converting to null");
+  }
+
   console.log("\n======================================================");
   console.log(`MCP SERVER TESTS COMPLETED: ${passes} Passed, ${fails} Failed`);
   console.log("======================================================");

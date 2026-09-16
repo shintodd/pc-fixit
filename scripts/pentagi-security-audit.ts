@@ -17,6 +17,7 @@ import { GET as issuesHandler } from "../app/api/issues/[slug]/route";
 import { GET as wizardHandler } from "../app/api/wizard/[nodeId]/route";
 import { GET as categoriesHandler } from "../app/api/categories/route";
 import { GET as healthGetHandler } from "../app/api/health/route";
+import path from "path";
 import {
   checkRateLimit,
   resetRateLimits,
@@ -78,6 +79,34 @@ async function runPhase1Reconnaissance() {
     catRes.headers.get("Cache-Control")?.includes("public") === true,
     "Headers: /api/categories sets public caching for static categories"
   );
+
+  // Security Headers: next.config.js inspection (HSTS, CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy)
+  const nextConfigPath = path.resolve(__dirname, "..", "next.config.js");
+  const nextConfig = require(nextConfigPath);
+  const headersList = await nextConfig.headers();
+  const globalRule = headersList.find((h: any) => h.source === "/:path*");
+  const configuredHeaders = new Map<string, string>(
+    globalRule?.headers?.map((h: any) => [h.key, h.value]) || []
+  );
+
+  const securityHeaderSpecs = [
+    { key: "Strict-Transport-Security", expectedSubstring: "max-age=" },
+    { key: "Content-Security-Policy", expectedSubstring: "default-src 'self'" },
+    { key: "X-Frame-Options", expectedSubstring: "SAMEORIGIN" },
+    { key: "X-Content-Type-Options", expectedSubstring: "nosniff" },
+    { key: "Referrer-Policy", expectedSubstring: "origin" },
+    { key: "Permissions-Policy", expectedSubstring: "camera=" },
+  ];
+
+  for (const spec of securityHeaderSpecs) {
+    const val = configuredHeaders.get(spec.key);
+    const passes = typeof val === "string" && val.includes(spec.expectedSubstring);
+    recordResult(
+      passes,
+      `Security Headers: ${spec.key} is actively configured in next.config.js`,
+      passes ? undefined : `configured value: '${val}'`
+    );
+  }
 }
 
 async function runPhase2InjectionAttacks() {

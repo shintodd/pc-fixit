@@ -263,10 +263,10 @@ export default function CategoryDetailView({ category, issues }: CategoryDetailV
               <button
                 type="button"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-tertiary hover:text-ink dark:hover:text-dark-ink"
+                className="absolute right-2 top-1/2 -translate-y-1/2 min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors"
                 aria-label="Clear search"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </button>
             )}
           </div>
@@ -283,7 +283,7 @@ export default function CategoryDetailView({ category, issues }: CategoryDetailV
             <button
               type="button"
               onClick={() => setSelectedTag(null)}
-              className={`rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors ${
+              className={`min-h-[36px] inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                 selectedTag === null
                   ? "bg-accent text-white shadow-xs"
                   : "bg-subtle dark:bg-dark-subtle text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink border border-line/60 dark:border-dark-line"
@@ -297,7 +297,7 @@ export default function CategoryDetailView({ category, issues }: CategoryDetailV
                 key={tag}
                 type="button"
                 onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-                className={`rounded-full px-2.5 py-1 text-[11px] font-semibold transition-colors ${
+                className={`min-h-[36px] inline-flex items-center rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
                   selectedTag === tag
                     ? "bg-accent text-white shadow-xs"
                     : "bg-subtle dark:bg-dark-subtle text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink border border-line/60 dark:border-dark-line"
@@ -314,7 +314,7 @@ export default function CategoryDetailView({ category, issues }: CategoryDetailV
                   setSearchQuery("");
                   setSelectedTag(null);
                 }}
-                className="text-[11px] font-semibold text-critical hover:underline ml-2"
+                className="min-h-[36px] inline-flex items-center text-[11px] font-semibold text-critical hover:underline ml-2"
               >
                 {isMs ? "Padam Penapis" : "Reset Filters"}
               </button>

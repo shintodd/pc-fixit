@@ -158,7 +158,7 @@ export default function CommandExplainerModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -172,7 +172,7 @@ export default function CommandExplainerModal({
                 key={c.id}
                 type="button"
                 onClick={() => setSelectedCmd(c)}
-                className={`flex flex-col p-2.5 rounded-xl border text-left text-[12px] font-semibold transition-all ${
+                className={`min-h-[44px] flex flex-col justify-center p-2.5 rounded-xl border text-left text-[12px] font-semibold transition-all ${
                   selectedCmd.id === c.id
                     ? "border-accent ring-2 ring-accent/20 bg-accent-soft/30 dark:bg-dark-accent/15 text-accent dark:text-dark-accent"
                     : "border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 hover:bg-subtle text-ink-secondary dark:text-dark-ink-secondary"
@@ -208,7 +208,8 @@ export default function CommandExplainerModal({
                 <button
                   type="button"
                   onClick={() => handleCopy(selectedCmd)}
-                  className="shrink-0 flex items-center gap-1.5 rounded-pill bg-white/10 hover:bg-white/20 px-3.5 py-1.5 text-[12px] font-semibold text-white transition-all active:scale-95"
+                  className="shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center gap-1.5 rounded-pill bg-white/10 hover:bg-white/20 px-3.5 py-2 text-[12px] font-semibold text-white transition-all active:scale-95"
+                  aria-label={isMs ? "Salin arahan" : "Copy command"}
                 >
                   {copiedId === selectedCmd.id ? (
                     <>
@@ -272,7 +273,7 @@ export default function CommandExplainerModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-pill bg-accent px-5 py-2 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all"
+              className="min-h-[44px] rounded-pill bg-accent px-5 py-2.5 text-[13px] font-semibold text-white shadow-sm shadow-accent/25 hover:bg-accent-hover active:scale-95 transition-all flex items-center justify-center"
             >
               {isMs ? "Tutup" : "Done"}
             </button>

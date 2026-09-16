@@ -38,17 +38,17 @@ export default function Footer() {
             </a>
           </p>
 
-          <nav aria-label="Footer navigation" className="flex items-center gap-6">
-            <Link href="/troubleshoot" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+          <nav aria-label="Footer navigation" className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link href="/troubleshoot" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("footer_nav_diagnose")}
             </Link>
-            <Link href="/wizard" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+            <Link href="/wizard" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("footer_nav_guided_fix")}
             </Link>
-            <Link href="/tips" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+            <Link href="/tips" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("nav_tips" as any) || "Tips & Tools"}
             </Link>
-            <Link href="/" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+            <Link href="/" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("footer_nav_kb")}
             </Link>
           </nav>

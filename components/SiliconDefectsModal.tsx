@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Cpu, Search, AlertOctagon, CheckCircle2, ShieldAlert, ChevronRight, ExternalLink } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -34,17 +34,38 @@ export default function SiliconDefectsModal({
     return matchesCat && matchesSearch;
   });
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        {/* Backdrop */}
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          aria-hidden="true"
+        />
+
+        {/* Modal Window */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.96 }}
           transition={{ duration: 0.16 }}
-          className="relative w-full max-w-3xl max-h-[92vh] flex flex-col rounded-3xl bg-white dark:bg-dark-card border border-line dark:border-dark-line shadow-2xl overflow-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="defects-modal-title"
+          className="relative z-10 w-full max-w-3xl max-h-[92vh] flex flex-col rounded-3xl bg-white dark:bg-dark-card border border-line dark:border-dark-line shadow-2xl overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-line dark:border-dark-line shrink-0">
@@ -53,7 +74,7 @@ export default function SiliconDefectsModal({
                 <Cpu className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-bold text-[16px] text-ink dark:text-dark-ink">
+                <h2 id="defects-modal-title" className="font-bold text-[16px] text-ink dark:text-dark-ink">
                   {isMs ? "Daftar Kecacatan Silikon & Isu Pengeluar" : "Known Silicon Defects & Recall Matrix"}
                 </h2>
                 <p className="text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
@@ -67,7 +88,7 @@ export default function SiliconDefectsModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -77,13 +98,13 @@ export default function SiliconDefectsModal({
           {/* Search & Category Filter Bar */}
           <div className="p-4 border-b border-line dark:border-dark-line bg-subtle/30 dark:bg-dark-subtle/30 space-y-2.5 shrink-0">
             <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-tertiary" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ink-tertiary dark:text-dark-ink-tertiary" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={isMs ? "Cari model (cth: Intel 14900K, 4090, Samsung 980, AM5)..." : "Search component (e.g. 13900K, 4090, Samsung 980, AM5)..."}
-                className="w-full pl-10 pr-4 py-2 rounded-xl bg-white dark:bg-dark-card border border-line dark:border-dark-line text-[13px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-dark-card border border-line dark:border-dark-line text-[13px] text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
 
@@ -94,7 +115,7 @@ export default function SiliconDefectsModal({
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                  className={`inline-flex min-h-[38px] sm:min-h-[44px] items-center justify-center px-3.5 py-1.5 rounded-xl text-[11px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                     selectedCategory === cat
                       ? "bg-accent text-white shadow-xs"
                       : "bg-white dark:bg-dark-card border border-line dark:border-dark-line text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -160,7 +181,7 @@ export default function SiliconDefectsModal({
                       <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-purple-500/15 text-purple-600 dark:text-purple-400">
                         {activeDefect.category} VULNERABILITY
                       </span>
-                      <span className="text-[11px] font-bold text-ink-tertiary">
+                      <span className="text-[11px] font-bold text-ink-tertiary dark:text-dark-ink-tertiary">
                         Verified Hardware Flaw
                       </span>
                     </div>

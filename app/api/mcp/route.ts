@@ -150,44 +150,79 @@ export async function GET() {
   );
 }
 
+// Helper functions for strict JSON-RPC 2.0 compliance
+function jsonRpcResponse(id: any, result: any) {
+  return NextResponse.json(
+    { jsonrpc: "2.0", id: id !== undefined ? id : null, result },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+      },
+    }
+  );
+}
+
+function jsonRpcError(id: any, code: number, message: string, status = 200) {
+  return NextResponse.json(
+    {
+      jsonrpc: "2.0",
+      id: id !== undefined ? id : null,
+      error: { code, message },
+    },
+    {
+      status,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+      },
+    }
+  );
+}
+
 // POST: JSON-RPC 2.0 Handler
 export async function POST(req: NextRequest) {
   let body: any;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      { jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error: Invalid JSON" } },
-      { status: 400 }
-    );
+    return jsonRpcError(null, -32700, "Parse error: Invalid JSON", 400);
+  }
+
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return jsonRpcError(null, -32600, "Invalid Request: Request body must be a JSON object", 400);
   }
 
   const { jsonrpc, id, method, params } = body;
+  const responseId = id !== undefined ? id : null;
 
   if (jsonrpc !== "2.0") {
-    return NextResponse.json(
-      { jsonrpc: "2.0", id: id || null, error: { code: -32600, message: "Invalid Request: jsonrpc must be '2.0'" } },
-      { status: 400 }
-    );
+    return jsonRpcError(responseId, -32600, "Invalid Request: jsonrpc must be '2.0'", 400);
+  }
+
+  if (typeof method !== "string" || !method.trim()) {
+    return jsonRpcError(responseId, -32600, "Invalid Request: method must be a non-empty string", 400);
+  }
+
+  if (params !== undefined && (typeof params !== "object" || params === null)) {
+    return jsonRpcError(responseId, -32602, "Invalid params: params must be an object or array");
   }
 
   // 1. Initialize
   if (method === "initialize") {
-    return NextResponse.json({
-      jsonrpc: "2.0",
-      id,
-      result: {
-        protocolVersion: "2024-11-05",
-        capabilities: {
-          tools: { listChanged: false },
-          resources: { listChanged: false },
-        },
-        serverInfo: {
-          name: "pcfix-mcp-server",
-          version: "1.0.0",
-        },
-        instructions: "pcfix MCP Server provides verified PC hardware diagnostic procedures, motherboard POST Q-Code decoders, and silicon defect alerts. Always prioritize power safety steps before instructing users to open computer chassis or touch components.",
+    return jsonRpcResponse(responseId, {
+      protocolVersion: "2024-11-05",
+      capabilities: {
+        tools: { listChanged: false },
+        resources: { listChanged: false },
       },
+      serverInfo: {
+        name: "pcfix-mcp-server",
+        version: "1.0.0",
+      },
+      instructions: "pcfix MCP Server provides verified PC hardware diagnostic procedures, motherboard POST Q-Code decoders, and silicon defect alerts. Always prioritize power safety steps before instructing users to open computer chassis or touch components.",
     });
   }
 
@@ -198,41 +233,57 @@ export async function POST(req: NextRequest) {
 
   // 3. Ping
   if (method === "ping") {
-    return NextResponse.json({ jsonrpc: "2.0", id, result: {} });
+    return jsonRpcResponse(responseId, {});
   }
 
   // 4. Tools List
   if (method === "tools/list") {
-    return NextResponse.json({
-      jsonrpc: "2.0",
-      id,
-      result: {
-        tools: TOOLS,
-      },
+    return jsonRpcResponse(responseId, {
+      tools: TOOLS,
     });
   }
 
   // 5. Tools Call
   if (method === "tools/call") {
-    const toolName = params?.name;
-    const args = params?.arguments || {};
-
-    if (!toolName) {
-      return NextResponse.json({
-        jsonrpc: "2.0",
-        id,
-        error: { code: -32602, message: "Invalid params: missing tool name" },
-      });
+    if (!params || typeof params !== "object" || Array.isArray(params)) {
+      return jsonRpcError(responseId, -32602, "Invalid params: tools/call requires a params object with 'name' and 'arguments'");
     }
+
+    const toolName = params.name;
+    if (!toolName || typeof toolName !== "string" || !toolName.trim()) {
+      return jsonRpcError(responseId, -32602, "Invalid params: missing tool name");
+    }
+
+    const args = params.arguments;
+    if (args !== undefined && (typeof args !== "object" || args === null || Array.isArray(args))) {
+      return jsonRpcError(responseId, -32602, "Invalid params: tool 'arguments' must be an object");
+    }
+
+    const safeArgs = args || {};
 
     try {
       let resultData: any;
 
       switch (toolName) {
         case "pcfix_diagnose": {
-          const query = String(args.query || "").toLowerCase();
-          const category = args.category;
-          const limit = typeof args.limit === "number" ? Math.min(args.limit, 10) : 3;
+          if (!safeArgs.query || typeof safeArgs.query !== "string" || !safeArgs.query.trim()) {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'query' is required and must be a non-empty string");
+          }
+
+          if (safeArgs.category !== undefined) {
+            const validCategories = ["wont-boot", "blue-screen", "running-slow", "no-internet", "overheating", "driver-issues"];
+            if (typeof safeArgs.category !== "string" || !validCategories.includes(safeArgs.category)) {
+              return jsonRpcError(responseId, -32602, `Invalid params: 'category' must be one of: ${validCategories.join(", ")}`);
+            }
+          }
+
+          if (safeArgs.limit !== undefined && (typeof safeArgs.limit !== "number" || safeArgs.limit <= 0 || !Number.isFinite(safeArgs.limit))) {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'limit' must be a positive number");
+          }
+
+          const query = String(safeArgs.query).toLowerCase();
+          const category = safeArgs.category;
+          const limit = typeof safeArgs.limit === "number" ? Math.min(Math.floor(safeArgs.limit), 10) : 3;
 
           const queryTokens = query.split(/\s+/).filter((t) => t.length > 1);
           const allIssues = Object.values(ISSUES);
@@ -269,7 +320,7 @@ export async function POST(req: NextRequest) {
             }));
 
           resultData = {
-            query: args.query,
+            query: safeArgs.query,
             matchesFound: scored.length,
             guides: scored,
           };
@@ -277,7 +328,15 @@ export async function POST(req: NextRequest) {
         }
 
         case "pcfix_get_guide": {
-          const slug = String(args.slug || "").trim();
+          if (!safeArgs.slug || typeof safeArgs.slug !== "string" || !safeArgs.slug.trim()) {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'slug' is required and must be a non-empty string");
+          }
+
+          const slug = safeArgs.slug.trim();
+          if (!/^[a-zA-Z0-9_-]{1,120}$/.test(slug)) {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'slug' contains invalid characters or exceeds 120 characters");
+          }
+
           const issue = ISSUES[slug];
           if (!issue) {
             resultData = {
@@ -299,7 +358,15 @@ export async function POST(req: NextRequest) {
         }
 
         case "pcfix_motherboard_qcode": {
-          const code = String(args.code || "").trim().toUpperCase();
+          if (!safeArgs.code || typeof safeArgs.code !== "string" || !safeArgs.code.trim()) {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'code' is required and must be a non-empty string");
+          }
+
+          const code = safeArgs.code.trim().toUpperCase();
+          if (code.length > 10) {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'code' length exceeds maximum of 10 characters");
+          }
+
           const match = Q_CODES.find((q) => q.code.toUpperCase() === code);
           if (!match) {
             resultData = {
@@ -322,7 +389,11 @@ export async function POST(req: NextRequest) {
         }
 
         case "pcfix_check_silicon_defects": {
-          const comp = String(args.component || "").toLowerCase();
+          if (safeArgs.component !== undefined && typeof safeArgs.component !== "string") {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'component' must be a string");
+          }
+
+          const comp = String(safeArgs.component || "").toLowerCase();
           const matches = (siliconDefects as any[]).filter((d) => {
             if (!comp) return true;
             const hay = `${d.id} ${d.component} ${d.flawNameEn} ${d.category}`.toLowerCase();
@@ -351,6 +422,10 @@ export async function POST(req: NextRequest) {
         }
 
         case "pcfix_front_panel_pinout": {
+          if (safeArgs.mode !== undefined && safeArgs.mode !== "wiring" && safeArgs.mode !== "jumpstart") {
+            return jsonRpcError(responseId, -32602, "Invalid params: 'mode' must be 'wiring' or 'jumpstart'");
+          }
+
           resultData = {
             standard: "Intel 9-Pin Front Panel (JFP1) Header",
             pins: [
@@ -371,48 +446,44 @@ export async function POST(req: NextRequest) {
         }
 
         default:
-          return NextResponse.json({
-            jsonrpc: "2.0",
-            id,
-            error: { code: -32601, message: `Method not found: unknown tool '${toolName}'` },
-          });
+          return jsonRpcError(responseId, -32601, `Tool not found: unknown tool '${toolName}'`);
       }
 
-      return NextResponse.json({
-        jsonrpc: "2.0",
-        id,
-        result: {
-          content: [
-            {
-              type: "text",
-              text: JSON.stringify(resultData, null, 2),
-            },
-          ],
-        },
+      return jsonRpcResponse(responseId, {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(resultData, null, 2),
+          },
+        ],
       });
     } catch (err: any) {
-      return NextResponse.json({
-        jsonrpc: "2.0",
-        id,
-        error: { code: -32000, message: `Tool execution failed: ${err.message}` },
-      });
+      return jsonRpcError(responseId, -32000, `Tool execution failed: ${err.message}`);
     }
   }
 
   // 6. Resources List
   if (method === "resources/list") {
-    return NextResponse.json({
-      jsonrpc: "2.0",
-      id,
-      result: {
-        resources: RESOURCES,
-      },
+    return jsonRpcResponse(responseId, {
+      resources: RESOURCES,
     });
   }
 
   // 7. Resources Read
   if (method === "resources/read") {
-    const uri = params?.uri;
+    if (!params || typeof params !== "object" || Array.isArray(params)) {
+      return jsonRpcError(responseId, -32602, "Invalid params: resources/read requires a params object with 'uri'");
+    }
+
+    const uri = params.uri;
+    if (!uri || typeof uri !== "string" || !uri.trim()) {
+      return jsonRpcError(responseId, -32602, "Invalid params: 'uri' is required and must be a non-empty string");
+    }
+
+    if (!uri.startsWith("pcfix://")) {
+      return jsonRpcError(responseId, -32602, `Invalid resource URI scheme: must start with 'pcfix://' (received '${uri}')`);
+    }
+
     let contentText = "";
 
     if (uri === "pcfix://categories") {
@@ -422,31 +493,19 @@ export async function POST(req: NextRequest) {
     } else if (uri === "pcfix://wizard-tree") {
       contentText = JSON.stringify(wizardTree, null, 2);
     } else {
-      return NextResponse.json({
-        jsonrpc: "2.0",
-        id,
-        error: { code: -32602, message: `Resource not found: '${uri}'` },
-      });
+      return jsonRpcError(responseId, -32602, `Resource not found: '${uri}'. Valid URIs: ${RESOURCES.map((r) => r.uri).join(", ")}`);
     }
 
-    return NextResponse.json({
-      jsonrpc: "2.0",
-      id,
-      result: {
-        contents: [
-          {
-            uri,
-            mimeType: "application/json",
-            text: contentText,
-          },
-        ],
-      },
+    return jsonRpcResponse(responseId, {
+      contents: [
+        {
+          uri,
+          mimeType: "application/json",
+          text: contentText,
+        },
+      ],
     });
   }
 
-  return NextResponse.json({
-    jsonrpc: "2.0",
-    id,
-    error: { code: -32601, message: `Method not found: '${method}'` },
-  });
+  return jsonRpcError(responseId, -32601, `Method not found: '${method}'`);
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ZoomIn, X, Eye, CheckCircle2, ShieldCheck, Camera } from "lucide-react";
@@ -344,6 +344,16 @@ export default function HardwareVisualGuide({
   const isMs = language === "ms";
   const [isZoomed, setIsZoomed] = useState(false);
 
+  // Close zoomed photo on Escape key
+  useEffect(() => {
+    if (!isZoomed) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setIsZoomed(false);
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isZoomed]);
+
   const guide = overrideGuideId ? HARDWARE_GUIDES[overrideGuideId] : resolveHardwareGuide(slug, categorySlug);
 
   if (!guide) return null;
@@ -457,6 +467,9 @@ export default function HardwareVisualGuide({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/85 backdrop-blur-sm"
             onClick={() => setIsZoomed(false)}
           >
@@ -481,7 +494,7 @@ export default function HardwareVisualGuide({
                 <button
                   type="button"
                   onClick={() => setIsZoomed(false)}
-                  className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-ink-secondary dark:text-dark-ink-secondary transition-colors"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 text-ink-secondary dark:text-dark-ink-secondary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label="Close photo"
                 >
                   <X className="h-5 w-5" />

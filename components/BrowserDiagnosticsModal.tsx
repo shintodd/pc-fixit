@@ -193,17 +193,38 @@ export default function BrowserDiagnosticsModal({
     }
   }
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        {/* Backdrop */}
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          aria-hidden="true"
+        />
+
+        {/* Modal Window */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.96 }}
           transition={{ duration: 0.16 }}
-          className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-3xl bg-white dark:bg-dark-card border border-line dark:border-dark-line shadow-2xl overflow-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="browser-diag-title"
+          className="relative z-10 w-full max-w-2xl max-h-[92vh] flex flex-col rounded-3xl bg-white dark:bg-dark-card border border-line dark:border-dark-line shadow-2xl overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-line dark:border-dark-line shrink-0">
@@ -212,7 +233,7 @@ export default function BrowserDiagnosticsModal({
                 <Activity className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-bold text-[16px] text-ink dark:text-dark-ink">
+                <h2 id="browser-diag-title" className="font-bold text-[16px] text-ink dark:text-dark-ink">
                   {isMs ? "Makmal Diagnostik Browser" : "Browser Hardware Diagnostic Lab"}
                 </h2>
                 <p className="text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
@@ -226,19 +247,19 @@ export default function BrowserDiagnosticsModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Tab Switcher */}
-          <div className="grid grid-cols-4 rounded-xl bg-subtle dark:bg-dark-subtle p-1 mx-5 mt-4 shrink-0 gap-1 text-[12px]">
+          {/* Tab Switcher (Horizontal scroll on mobile, 4-grid on sm) */}
+          <div className="flex items-center overflow-x-auto no-scrollbar touch-scroll sm:grid sm:grid-cols-4 rounded-xl bg-subtle dark:bg-dark-subtle p-1 mx-5 mt-4 shrink-0 gap-1 text-[12px]">
             <button
               type="button"
               onClick={() => setActiveTab("screen")}
-              className={`flex items-center justify-center gap-1.5 py-2 rounded-lg font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-1.5 py-2 px-3 whitespace-nowrap rounded-lg font-semibold transition-all ${
                 activeTab === "screen"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -250,7 +271,7 @@ export default function BrowserDiagnosticsModal({
             <button
               type="button"
               onClick={() => setActiveTab("refreshrate")}
-              className={`flex items-center justify-center gap-1.5 py-2 rounded-lg font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-1.5 py-2 px-3 whitespace-nowrap rounded-lg font-semibold transition-all ${
                 activeTab === "refreshrate"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -262,26 +283,26 @@ export default function BrowserDiagnosticsModal({
             <button
               type="button"
               onClick={() => setActiveTab("keyboard")}
-              className={`flex items-center justify-center gap-1.5 py-2 rounded-lg font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-1.5 py-2 px-3 whitespace-nowrap rounded-lg font-semibold transition-all ${
                 activeTab === "keyboard"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
               }`}
             >
               <Keyboard className="h-3.5 w-3.5" />
-              <span>{isMs ? "Chatter Papan Kekunci" : "Key Chatter"}</span>
+              <span>{isMs ? "Chatter Keyboard" : "Key Chatter"}</span>
             </button>
             <button
               type="button"
               onClick={() => setActiveTab("audio")}
-              className={`flex items-center justify-center gap-1.5 py-2 rounded-lg font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-1.5 py-2 px-3 whitespace-nowrap rounded-lg font-semibold transition-all ${
                 activeTab === "audio"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
               }`}
             >
               <Volume2 className="h-3.5 w-3.5" />
-              <span>{isMs ? "Audio Kiri/Kanan" : "Audio Phase"}</span>
+              <span>{isMs ? "Audio L / R" : "Audio Phase"}</span>
             </button>
           </div>
 
@@ -312,26 +333,31 @@ export default function BrowserDiagnosticsModal({
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-1">
                     {SCREEN_COLORS.map((col, idx) => (
                       <button
                         key={col.hex}
                         type="button"
                         onClick={() => setColorIndex(idx)}
-                        style={{ backgroundColor: col.hex }}
-                        className={`w-6 h-6 rounded-full border border-slate-400 transition-transform ${
-                          colorIndex === idx ? "scale-125 ring-2 ring-accent" : "opacity-80"
-                        }`}
+                        aria-label={`Select color: ${col.nameEn}`}
+                        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         title={col.nameEn}
-                      />
+                      >
+                        <span
+                          style={{ backgroundColor: col.hex }}
+                          className={`w-6 h-6 rounded-full border border-slate-400 transition-transform block ${
+                            colorIndex === idx ? "scale-125 ring-2 ring-accent" : "opacity-80"
+                          }`}
+                        />
+                      </button>
                     ))}
                   </div>
 
                   <button
                     type="button"
                     onClick={toggleFullscreen}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-subtle dark:bg-dark-subtle hover:bg-line dark:hover:bg-dark-line text-ink dark:text-dark-ink font-semibold text-[12px] transition-colors"
+                    className="inline-flex min-h-[44px] items-center gap-1.5 px-3.5 py-2 rounded-xl bg-subtle dark:bg-dark-subtle hover:bg-line dark:hover:bg-dark-line text-ink dark:text-dark-ink font-semibold text-[12px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
                     <Maximize2 className="h-3.5 w-3.5" />
                     <span>{isMs ? "Skrin Penuh (Fullscreen)" : "Fullscreen Test"}</span>
@@ -412,9 +438,9 @@ export default function BrowserDiagnosticsModal({
                         setPressedKeys([]);
                         setChatterLog([]);
                       }}
-                      className="text-[11px] text-accent hover:underline flex items-center gap-1"
+                      className="inline-flex min-h-[44px] items-center gap-1.5 px-2.5 py-1 text-[12px] font-semibold text-accent hover:underline rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
-                      <RotateCcw className="h-3 w-3" />
+                      <RotateCcw className="h-3.5 w-3.5" />
                       <span>{isMs ? "Padam Log" : "Clear Log"}</span>
                     </button>
                   </div>
@@ -488,43 +514,43 @@ export default function BrowserDiagnosticsModal({
                   <button
                     type="button"
                     onClick={() => playAudioChannel("left")}
-                    className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 ${
+                    className={`p-4 min-h-[80px] rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2 ${
                       playingAudio === "left"
-                        ? "border-blue-500 bg-blue-500/15 text-blue-600 scale-105"
+                        ? "border-blue-500 bg-blue-500/15 text-blue-600 dark:text-blue-400 scale-105"
                         : "border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 text-ink dark:text-dark-ink hover:border-accent"
                     }`}
                   >
                     <Volume2 className="h-5 w-5 text-blue-500" />
                     <span className="font-bold text-[13px]">{isMs ? "Saluran Kiri" : "Left Ear"}</span>
-                    <span className="text-[10px] text-ink-tertiary">440Hz Sine Tone</span>
+                    <span className="text-[10px] text-ink-tertiary dark:text-dark-ink-tertiary">440Hz Sine Tone</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => playAudioChannel("both")}
-                    className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 ${
+                    className={`p-4 min-h-[80px] rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2 ${
                       playingAudio === "both"
-                        ? "border-purple-500 bg-purple-500/15 text-purple-600 scale-105"
+                        ? "border-purple-500 bg-purple-500/15 text-purple-600 dark:text-purple-400 scale-105"
                         : "border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 text-ink dark:text-dark-ink hover:border-accent"
                     }`}
                   >
                     <Volume2 className="h-5 w-5 text-purple-500" />
                     <span className="font-bold text-[13px]">{isMs ? "Tengah (Stereo)" : "Center"}</span>
-                    <span className="text-[10px] text-ink-tertiary">Balanced</span>
+                    <span className="text-[10px] text-ink-tertiary dark:text-dark-ink-tertiary">Balanced</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => playAudioChannel("right")}
-                    className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 ${
+                    className={`p-4 min-h-[80px] rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2 ${
                       playingAudio === "right"
-                        ? "border-emerald-500 bg-emerald-500/15 text-emerald-600 scale-105"
+                        ? "border-emerald-500 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 scale-105"
                         : "border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 text-ink dark:text-dark-ink hover:border-accent"
                     }`}
                   >
                     <Volume2 className="h-5 w-5 text-emerald-500" />
                     <span className="font-bold text-[13px]">{isMs ? "Saluran Kanan" : "Right Ear"}</span>
-                    <span className="text-[10px] text-ink-tertiary">440Hz Sine Tone</span>
+                    <span className="text-[10px] text-ink-tertiary dark:text-dark-ink-tertiary">440Hz Sine Tone</span>
                   </button>
                 </div>
               </div>

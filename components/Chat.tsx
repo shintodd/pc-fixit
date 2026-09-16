@@ -128,6 +128,21 @@ export default function Chat({
     };
   }, []);
 
+  // Close image preview or mobile history on Escape key
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        if (previewImage) {
+          setPreviewImage(null);
+        } else if (showHistoryMobile) {
+          setShowHistoryMobile(false);
+        }
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [previewImage, showHistoryMobile]);
+
   const diagnosticTools = [
     {
       id: "port",
@@ -806,7 +821,7 @@ export default function Chat({
           <button
             type="button"
             onClick={() => setShowHistoryMobile((v) => !v)}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3 py-1.5 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary shadow-xs"
+            className="min-h-[44px] inline-flex items-center gap-1.5 rounded-xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3.5 py-2 text-[12px] font-medium text-ink-secondary dark:text-dark-ink-secondary shadow-xs hover:border-accent/40 transition-colors"
           >
             <History className="h-3.5 w-3.5 text-accent" />
             <span>{t("chat_recent_title")}</span>
@@ -817,7 +832,7 @@ export default function Chat({
           <button
             type="button"
             onClick={handleNewSession}
-            className="inline-flex items-center gap-1 rounded-xl bg-accent px-3 py-1.5 text-[12px] font-semibold text-white shadow-xs"
+            className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-accent px-3.5 py-2 text-[12px] font-semibold text-white shadow-xs hover:bg-accent-hover transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>{t("chat_new_session")}</span>
@@ -840,10 +855,10 @@ export default function Chat({
                 <button
                   type="button"
                   onClick={() => setShowHistoryMobile(false)}
-                  className="p-1 text-ink-tertiary hover:text-ink"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors"
                   aria-label="Close history"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
               <div className="flex flex-col gap-1 max-h-48 overflow-y-auto touch-scroll">
@@ -851,17 +866,17 @@ export default function Chat({
                   <div
                     key={sess.id}
                     onClick={() => handleSelectSession(sess)}
-                    className={`flex items-center justify-between rounded-xl px-2.5 py-2 text-[12px] cursor-pointer ${
+                    className={`min-h-[44px] flex items-center justify-between rounded-xl px-2.5 py-2 text-[12px] cursor-pointer transition-colors ${
                       sess.id === currentSessionId
-                        ? "bg-accent/10 text-accent font-semibold"
-                        : "text-ink-secondary hover:bg-subtle"
+                        ? "bg-accent/10 dark:bg-accent/15 text-accent font-semibold"
+                        : "text-ink-secondary dark:text-dark-ink-secondary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-ink dark:hover:text-dark-ink"
                     }`}
                   >
                     <span className="truncate pr-2">{sess.title}</span>
                     <button
                       type="button"
                       onClick={(e) => handleDeleteSession(e, sess.id)}
-                      className="p-1 text-ink-tertiary hover:text-critical"
+                      className="min-h-[44px] min-w-[44px] flex items-center justify-center p-1 text-ink-tertiary hover:text-critical transition-colors"
                       aria-label="Delete session"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -1018,7 +1033,7 @@ export default function Chat({
                 <button
                   type="button"
                   onClick={scrollToBottomSmooth}
-                  className="flex min-h-[36px] items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card hover:border-accent/40 text-ink-secondary dark:text-dark-ink-secondary hover:text-accent backdrop-blur-md text-[12px] font-medium transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex min-h-[44px] items-center gap-1.5 px-4 py-2 rounded-full bg-white/95 dark:bg-dark-card/95 border border-line dark:border-dark-line shadow-card hover:border-accent/40 text-ink-secondary dark:text-dark-ink-secondary hover:text-accent backdrop-blur-md text-[12px] font-medium transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label={language === "ms" ? "Ke mesej terkini" : "Scroll to bottom"}
                   title={language === "ms" ? "Ke mesej terkini" : "Scroll to bottom"}
                 >
@@ -1056,7 +1071,7 @@ export default function Chat({
                 <button
                   type="button"
                   onClick={() => setPendingImage(null)}
-                  className="ml-2 p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-critical transition-colors rounded-full"
+                  className="ml-2 min-h-[44px] min-w-[44px] flex items-center justify-center p-1.5 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-critical transition-colors rounded-full"
                   title={t("chat_remove_image")}
                   aria-label={t("chat_remove_image")}
                 >
@@ -1100,7 +1115,7 @@ export default function Chat({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={loading || isProcessingImage}
-              className="flex min-h-[40px] min-w-[40px] shrink-0 items-center justify-center rounded-full text-ink-tertiary dark:text-dark-ink-tertiary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-accent dark:hover:text-dark-accent transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full text-ink-tertiary dark:text-dark-ink-tertiary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-accent dark:hover:text-dark-accent transition-colors disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               title={t("chat_upload_image")}
               aria-label={t("chat_upload_image")}
             >
@@ -1134,7 +1149,7 @@ export default function Chat({
                   exit={{ opacity: 0, scale: 0.7 }}
                   transition={{ duration: 0.12 }}
                   onClick={() => { setInput(""); inputRef.current?.focus(); }}
-                  className="flex min-h-[36px] min-w-[36px] items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                  className="flex min-h-[44px] min-w-[44px] items-center justify-center p-1 text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   aria-label="Clear input"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
@@ -1147,7 +1162,7 @@ export default function Chat({
               disabled={(!input.trim() && !pendingImage) || loading}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.93 }}
-              className="flex min-h-[40px] min-w-[40px] shrink-0 items-center justify-center rounded-full bg-accent dark:bg-accent text-white shadow-sm transition-all hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              className="flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full bg-accent dark:bg-accent text-white shadow-sm transition-all hover:bg-accent-hover disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               aria-label={loading ? t("chat_thinking") : t("chat_send_btn")}
               title={t("chat_send_btn")}
             >
@@ -1177,6 +1192,9 @@ export default function Chat({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Enlarged screenshot preview"
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
             onClick={() => setPreviewImage(null)}
           >
@@ -1187,7 +1205,7 @@ export default function Chat({
               <button
                 type="button"
                 onClick={() => setPreviewImage(null)}
-                className="absolute -top-10 right-0 p-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors"
+                className="absolute -top-12 right-0 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Close image preview"
               >
                 <X className="h-5 w-5" />

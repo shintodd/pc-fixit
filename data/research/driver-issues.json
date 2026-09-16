@@ -26,6 +26,10 @@
       {
         "title": "Roll back recently updated drivers",
         "detail": "If the issue started after an automatic update, right-click the device in Device Manager → Properties → Driver tab → click 'Roll Back Driver'."
+      },
+      {
+        "title": "Reseat hardware component (Safety Procedure)",
+        "detail": "If device code 10 or 43 persists, shut down Windows, switch off the PSU (O), disconnect the AC power cord, and hold the power button for 15 seconds to discharge stored electrical charge. Gently reseat the PCIe expansion card into its slot or relocate the USB device to an unshared rear I/O port."
       }
     ],
     "related_error_codes": [

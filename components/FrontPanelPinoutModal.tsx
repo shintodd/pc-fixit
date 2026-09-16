@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Wrench, ShieldAlert, Zap } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -124,6 +124,16 @@ export default function FrontPanelPinoutModal({
 
   const isMs = language === "ms";
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   function triggerJumpstart() {
     if (isJumpstarting) return;
     setIsJumpstarting(true);
@@ -141,13 +151,24 @@ export default function FrontPanelPinoutModal({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        {/* Backdrop */}
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+          aria-hidden="true"
+        />
+
+        {/* Modal Window */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.96 }}
           transition={{ duration: 0.16 }}
-          className="relative w-full max-w-2xl max-h-[92vh] flex flex-col rounded-3xl bg-white dark:bg-dark-card border border-line dark:border-dark-line shadow-2xl overflow-hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="pinout-modal-title"
+          className="relative z-10 w-full max-w-2xl max-h-[92vh] flex flex-col rounded-3xl bg-white dark:bg-dark-card border border-line dark:border-dark-line shadow-2xl overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-line dark:border-dark-line shrink-0">
@@ -156,7 +177,7 @@ export default function FrontPanelPinoutModal({
                 <Wrench className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="font-bold text-[16px] text-ink dark:text-dark-ink">
+                <h2 id="pinout-modal-title" className="font-bold text-[16px] text-ink dark:text-dark-ink">
                   {isMs ? "Visualizer Pin Front Panel & Jumpstart" : "Front-Panel Pinout & Jumpstart Visualizer"}
                 </h2>
                 <p className="text-[12px] text-ink-tertiary dark:text-dark-ink-tertiary">
@@ -170,7 +191,7 @@ export default function FrontPanelPinoutModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-ink-tertiary hover:text-ink hover:bg-subtle dark:hover:bg-dark-subtle dark:hover:text-dark-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               aria-label="Close modal"
             >
               <X className="h-5 w-5" />
@@ -182,7 +203,7 @@ export default function FrontPanelPinoutModal({
             <button
               type="button"
               onClick={() => setActiveMode("wiring")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
                 activeMode === "wiring"
                   ? "bg-white dark:bg-dark-card text-accent dark:text-dark-accent shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -194,7 +215,7 @@ export default function FrontPanelPinoutModal({
             <button
               type="button"
               onClick={() => setActiveMode("jumpstart")}
-              className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 flex min-h-[44px] items-center justify-center gap-2 py-2 rounded-lg text-[13px] font-semibold transition-all ${
                 activeMode === "jumpstart"
                   ? "bg-white dark:bg-dark-card text-rose-500 dark:text-rose-400 shadow-xs"
                   : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink"
@@ -234,7 +255,8 @@ export default function FrontPanelPinoutModal({
                         key={pinNum}
                         type="button"
                         onClick={() => pin && setSelectedPin(pin)}
-                        className="flex flex-col items-center group relative focus-visible:outline-none"
+                        aria-label={`Pin ${pinNum}: ${isKey ? "Keyed Blank" : pin.label}`}
+                        className="flex flex-col items-center group relative min-h-[44px] justify-center focus-visible:outline-none"
                         disabled={isKey}
                       >
                         <span className="text-[10px] font-mono text-slate-400 mb-1">
@@ -280,7 +302,8 @@ export default function FrontPanelPinoutModal({
                         key={pinNum}
                         type="button"
                         onClick={() => pin && setSelectedPin(pin)}
-                        className="flex flex-col items-center group relative focus-visible:outline-none"
+                        aria-label={`Pin ${pinNum}: ${isBlank ? "Empty" : pin?.label}`}
+                        className="flex flex-col items-center group relative min-h-[44px] justify-center focus-visible:outline-none"
                         disabled={isBlank}
                       >
                         <span className="text-[10px] font-mono text-slate-400 mb-1">
@@ -324,7 +347,7 @@ export default function FrontPanelPinoutModal({
                     type="button"
                     onClick={triggerJumpstart}
                     disabled={isJumpstarting}
-                    className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[12px] font-bold transition-all shrink-0 ${
+                    className={`inline-flex min-h-[44px] items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold transition-all shrink-0 ${
                       jumpstartSuccess
                         ? "bg-emerald-600 text-white shadow-lg"
                         : "bg-rose-600 hover:bg-rose-500 text-white"

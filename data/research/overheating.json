@@ -533,8 +533,8 @@
         "detail": "Pull out the sliding mesh filter at the bottom rear of the case and wash out carpet fibers and accumulated dust."
       },
       {
-        "title": "Flip PSU orientation if carpet placement is unavoidable",
-        "detail": "If you must place the PC on carpet and lack a stand, reinstall the PSU with its fan facing upward into the chassis to pull air from inside the case."
+        "title": "Flip PSU orientation if carpet placement is unavoidable (Safety First)",
+        "detail": "If you must place the PC on carpet and lack a riser, first power off the PC, switch off the PSU (O), disconnect the AC power cord, and hold the chassis power button for 15 seconds to discharge residual capacitor energy. Then carefully unscrew and reinstall the PSU with its intake fan facing upward into the chassis to pull air from within the case."
       },
       {
         "title": "Inspect PSU bottom intake fan with a flashlight",

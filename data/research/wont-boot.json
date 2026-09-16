@@ -339,6 +339,10 @@
       {
         "title": "Check system file integrity with SFC",
         "detail": "In Recovery Command Prompt, run 'sfc /scannow /offbootdir=C:\\ /offwindir=C:\\Windows' to replace corrupted kernel storage drivers."
+      },
+      {
+        "title": "Inspect physical drive seating (Safety Protocol)",
+        "detail": "If software repair fails, shut down the PC, switch off the PSU (O), disconnect the AC power cable, and hold the power button for 15 seconds to discharge residual power. Verify that SATA data and power cables are fully locked in place, or reseat the M.2 NVMe SSD firmly into its slot and retighten the retaining screw."
       }
     ],
     "related_error_codes": [
