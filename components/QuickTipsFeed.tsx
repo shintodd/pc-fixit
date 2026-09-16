@@ -285,49 +285,80 @@ export default function QuickTipsFeed({
                     )}
                   </div>
 
-                  {/* Action Links & Direct Download */}
-                  {(item.downloadUrl || item.officialUrl || item.githubUrl) && (
-                    <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex flex-wrap items-center justify-between gap-2 text-[12px]">
-                      {item.downloadUrl ? (
-                        <a
-                          href={item.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-accent text-white px-3 py-1.5 min-h-[36px] text-[12px] font-semibold hover:bg-accent/90 shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-95"
-                          title={language === "ms" ? "Muat turun pemasang rasmi" : "Download official release"}
-                        >
-                          <Download className="h-3.5 w-3.5" />
-                          <span>{language === "ms" ? "Muat Turun" : "Download"}</span>
-                        </a>
-                      ) : (
-                        <div />
+                  {/* Action Links & Downloads */}
+                  {(item.directDownloadUrl || item.downloadPageUrl || item.downloadUrl || item.officialUrl || item.githubUrl) && (
+                    <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex flex-col gap-2.5 text-[12px]">
+                      {/* Download Buttons Row */}
+                      {(item.directDownloadUrl || item.downloadPageUrl || item.downloadUrl) && (
+                        <div className="flex flex-wrap items-center gap-2">
+                          {item.directDownloadUrl && (
+                            <a
+                              href={item.directDownloadUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-emerald-500 text-white px-3 py-1.5 min-h-[34px] text-[12px] font-semibold hover:bg-emerald-700 dark:hover:bg-emerald-600 shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-95"
+                              title={
+                                language === "ms"
+                                  ? `Muat turun fail terus (${item.fileType || "fail"})`
+                                  : `Direct file download (${item.fileType || "file"})`
+                              }
+                            >
+                              <Download className="h-3.5 w-3.5" />
+                              <span>
+                                {language === "ms"
+                                  ? `Muat Turun Terus ${item.fileType || ""}`
+                                  : `Direct ${item.fileType || "Download"}`}
+                              </span>
+                            </a>
+                          )}
+
+                          {(item.downloadPageUrl || item.downloadUrl) && (
+                            <a
+                              href={item.downloadPageUrl || item.downloadUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-line dark:border-dark-line bg-subtle/60 dark:bg-dark-subtle/60 text-ink dark:text-dark-ink hover:text-accent dark:hover:text-dark-accent hover:border-accent dark:hover:border-dark-accent px-3 py-1.5 min-h-[34px] text-[12px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-95"
+                              title={
+                                language === "ms"
+                                  ? "Buka portal muat turun rasmi vendor"
+                                  : "Open official vendor download portal"
+                              }
+                            >
+                              <span>{language === "ms" ? "Laman Muat Turun" : "Download Page"}</span>
+                              <ExternalLink className="h-3 w-3 opacity-70" />
+                            </a>
+                          )}
+                        </div>
                       )}
 
-                      <div className="flex items-center gap-3">
-                        {item.officialUrl && (
-                          <a
-                            href={item.officialUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-semibold text-accent dark:text-dark-accent hover:underline min-h-[36px] py-1"
-                          >
-                            <span>{language === "ms" ? "Laman Rasmi" : "Official Website"}</span>
-                            <ExternalLink className="h-3 w-3" />
-                          </a>
-                        )}
+                      {/* Official Info Links Row */}
+                      {(item.officialUrl || item.githubUrl) && (
+                        <div className="flex items-center gap-3 pt-0.5 text-[11.5px]">
+                          {item.officialUrl && (
+                            <a
+                              href={item.officialUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 font-medium text-ink-secondary dark:text-dark-ink-secondary hover:text-accent dark:hover:text-dark-accent transition-colors"
+                            >
+                              <span>{language === "ms" ? "Laman Rasmi" : "Official Site"}</span>
+                              <ExternalLink className="h-3 w-3 opacity-60" />
+                            </a>
+                          )}
 
-                        {item.githubUrl && (
-                          <a
-                            href={item.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-semibold text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink transition-colors min-h-[36px] py-1"
-                          >
-                            <span>GitHub</span>
-                            <ExternalLink className="h-3 w-3" />
-                          </a>
-                        )}
-                      </div>
+                          {item.githubUrl && (
+                            <a
+                              href={item.githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 font-medium text-ink-tertiary dark:text-dark-ink-tertiary hover:text-ink dark:hover:text-dark-ink transition-colors"
+                            >
+                              <span>GitHub</span>
+                              <ExternalLink className="h-3 w-3 opacity-60" />
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </motion.article>
