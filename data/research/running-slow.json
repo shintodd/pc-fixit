@@ -143,6 +143,10 @@
       {
         "title": "Use PoolMon to track memory tag allocations",
         "detail": "Run PoolMon from the Windows Driver Kit to find the 4-letter tag allocating the leaked non-paged memory."
+      },
+      {
+        "title": "Clear bloated Standby List cache with ISLC or RAMMap",
+        "detail": "If high RAM is consumed by cached standby memory rather than active processes, use Intelligent Standby List Cleaner (ISLC) or Microsoft Sysinternals RAMMap (Empty > Empty Standby List) to reclaim memory safely without disk paging."
       }
     ],
     "related_error_codes": [
