@@ -13,6 +13,7 @@ import {
   X,
   ChevronDown,
   ChevronUp,
+  Download,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
@@ -284,32 +285,49 @@ export default function QuickTipsFeed({
                     )}
                   </div>
 
-                  {/* External Links (Website / GitHub) */}
-                  {(item.officialUrl || item.githubUrl) && (
-                    <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex items-center justify-between text-[12px]">
-                      {item.officialUrl && (
+                  {/* Action Links & Direct Download */}
+                  {(item.downloadUrl || item.officialUrl || item.githubUrl) && (
+                    <div className="mt-4 pt-3 border-t border-line/60 dark:border-dark-line/60 flex flex-wrap items-center justify-between gap-2 text-[12px]">
+                      {item.downloadUrl ? (
                         <a
-                          href={item.officialUrl}
+                          href={item.downloadUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-semibold text-accent dark:text-dark-accent hover:underline"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-accent text-white px-3 py-1.5 min-h-[36px] text-[12px] font-semibold hover:bg-accent/90 shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent active:scale-95"
+                          title={language === "ms" ? "Muat turun pemasang rasmi" : "Download official release"}
                         >
-                          <span>{language === "ms" ? "Laman Rasmi" : "Official Website"}</span>
-                          <ExternalLink className="h-3 w-3" />
+                          <Download className="h-3.5 w-3.5" />
+                          <span>{language === "ms" ? "Muat Turun" : "Download"}</span>
                         </a>
+                      ) : (
+                        <div />
                       )}
 
-                      {item.githubUrl && (
-                        <a
-                          href={item.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-semibold text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink transition-colors"
-                        >
-                          <span>GitHub</span>
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
-                      )}
+                      <div className="flex items-center gap-3">
+                        {item.officialUrl && (
+                          <a
+                            href={item.officialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-semibold text-accent dark:text-dark-accent hover:underline min-h-[36px] py-1"
+                          >
+                            <span>{language === "ms" ? "Laman Rasmi" : "Official Website"}</span>
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
+
+                        {item.githubUrl && (
+                          <a
+                            href={item.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-semibold text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink transition-colors min-h-[36px] py-1"
+                          >
+                            <span>GitHub</span>
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        )}
+                      </div>
                     </div>
                   )}
                 </motion.article>
