@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="fanGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#06b6d4"/>
+        <stop offset="1" stop-color="#0891b2"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="url(#fanGrad)"/>
+    <circle cx="32" cy="32" r="18" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 2"/>
+    <circle cx="32" cy="32" r="5" fill="#ffffff"/>
+    <path d="M32 27c0-8 6-12 10-12s3 6-2 10l-8 2zM37 32c8 0 12 6 12 10s-6 3-10-2l-2-8zM32 37c0 8-6 12-10 12s-3-6 2-10l8-2zM27 32c-8 0-12-6-12-10s6-3 10 2l2 8z" fill="#ffffff"/>
+  </svg>

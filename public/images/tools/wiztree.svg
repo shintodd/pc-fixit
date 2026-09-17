@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="wizGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#10b981"/>
+        <stop offset="1" stop-color="#047857"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="url(#wizGrad)"/>
+    <rect x="14" y="14" width="22" height="20" rx="3" fill="#a7f3d0"/>
+    <rect x="38" y="14" width="12" height="20" rx="3" fill="#6ee7b7"/>
+    <rect x="14" y="36" width="14" height="14" rx="3" fill="#34d399"/>
+    <rect x="30" y="36" width="20" height="14" rx="3" fill="#059669"/>
+    <path d="M25 24l-3 4h6l-4 6 7-7h-5l3-3z" fill="#047857"/>
+  </svg>

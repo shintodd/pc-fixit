@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="dduGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#e11d48"/>
+        <stop offset="1" stop-color="#9f1239"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="url(#dduGrad)"/>
+    <rect x="14" y="18" width="36" height="24" rx="4" fill="#1e1b4b" stroke="#f43f5e" stroke-width="2"/>
+    <circle cx="26" cy="30" r="6" stroke="#f43f5e" stroke-width="2"/>
+    <circle cx="38" cy="30" r="6" stroke="#f43f5e" stroke-width="2"/>
+    <path d="M20 46h24v4H20z" fill="#cbd5e1"/>
+    <path d="M40 12l8 8M48 12l-8 8" stroke="#fecdd3" stroke-width="3" stroke-linecap="round"/>
+  </svg>

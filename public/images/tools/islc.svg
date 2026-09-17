@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="islcGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#8b5cf6"/>
+        <stop offset="1" stop-color="#6d28d9"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="url(#islcGrad)"/>
+    <rect x="14" y="22" width="36" height="20" rx="3" fill="#1e1b4b" stroke="#c4b5fd" stroke-width="2"/>
+    <rect x="18" y="26" width="4" height="6" fill="#a78bfa"/>
+    <rect x="24" y="26" width="4" height="6" fill="#a78bfa"/>
+    <rect x="30" y="26" width="4" height="6" fill="#a78bfa"/>
+    <rect x="36" y="26" width="4" height="6" fill="#a78bfa"/>
+    <rect x="42" y="26" width="4" height="6" fill="#a78bfa"/>
+    <path d="M18 42h28" stroke="#fbbf24" stroke-width="2" stroke-dasharray="2 2"/>
+    <path d="M36 12l-6 10h6l-3 8 9-11h-5l4-7z" fill="#fef08a"/>
+  </svg>

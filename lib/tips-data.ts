@@ -18,6 +18,7 @@ export interface TipItem {
   downloadUrl?: string;
   fileType?: ".exe" | ".zip" | ".msi";
   developer?: string;
+  iconImage?: string;
   details?: string;
   detailsMs?: string;
   safetyNote?: string;

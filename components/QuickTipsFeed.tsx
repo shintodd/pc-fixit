@@ -83,6 +83,40 @@ export default function QuickTipsFeed({
     }
   };
 
+  const getTipIconImage = (item: TipItem): string => {
+    if (item.iconImage) return item.iconImage;
+
+    // Tool specific logos
+    if (item.id === "tool-ctt-winutil") return "/images/tools/winutil.svg";
+    if (item.id === "tool-oo-shutup10") return "/images/tools/oo-shutup10.svg";
+    if (item.id === "tool-atlasos") return "/images/tools/atlasos.svg";
+    if (item.id === "tool-ddu") return "/images/tools/ddu.svg";
+    if (item.id === "tool-everything") return "/images/tools/everything.svg";
+    if (item.id === "tool-wiztree") return "/images/tools/wiztree.svg";
+    if (item.id === "tool-crystaldiskinfo") return "/images/tools/crystaldiskinfo.svg";
+    if (item.id === "tool-hwinfo64") return "/images/tools/hwinfo64.svg";
+    if (item.id === "tool-fancontrol") return "/images/tools/fancontrol.svg";
+    if (item.id === "tool-latencymon") return "/images/tools/latencymon.svg";
+    if (item.id === "tool-powertoys") return "/images/tools/powertoys.svg";
+    if (item.id === "tool-rufus") return "/images/tools/rufus.svg";
+    if (item.id === "tool-ventoy") return "/images/tools/ventoy.svg";
+    if (item.id === "tool-eartrumpet") return "/images/tools/eartrumpet.svg";
+    if (item.id === "tool-screentogif") return "/images/tools/screentogif.svg";
+    if (item.id === "tool-bcuninstaller") return "/images/tools/bcuninstaller.svg";
+    if (item.id === "tool-islc") return "/images/tools/islc.svg";
+    if (item.id === "tool-rammap") return "/images/tools/rammap.svg";
+
+    // PC Tips
+    if (item.id === "tip-powercfg-battery") return "/images/tools/tip-battery.svg";
+    if (item.id === "tip-wifi-password") return "/images/tools/tip-wifi.svg";
+    if (item.id === "tip-dism-restorehealth" || item.id === "tip-sfc-scannow") return "/images/tools/tip-repair.svg";
+    if (item.id === "tip-god-mode") return "/images/tools/tip-godmode.svg";
+    if (item.category === "pc-tips") return "/images/tools/tip-terminal.svg";
+
+    // Fun stuff
+    return "/images/tools/fun-retro.svg";
+  };
+
   return (
     <div className="w-full space-y-6">
       {/* Category Pills & Search Controls */}
@@ -173,6 +207,7 @@ export default function QuickTipsFeed({
               const summary = language === "ms" ? item.summaryMs : item.summary;
               const details = language === "ms" ? item.detailsMs : item.details;
               const safetyNote = language === "ms" ? item.safetyNoteMs : item.safetyNote;
+              const iconSrc = getTipIconImage(item);
 
               return (
                 <motion.article
@@ -189,27 +224,45 @@ export default function QuickTipsFeed({
                   className="group relative flex flex-col justify-between rounded-2xl border border-line/80 dark:border-dark-line/80 bg-white/85 dark:bg-dark-card/85 p-5 shadow-card dark:shadow-card-dark hover:border-accent/40 dark:hover:border-dark-accent/40 hover:shadow-card-hover transition-[border-color,box-shadow] duration-200 backdrop-blur-md overflow-hidden"
                 >
                   <div>
-                    {/* Top Header: Badge & Category */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span
-                        className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${item.badgeColor}`}
-                      >
-                        <Icon className="h-3 w-3" aria-hidden="true" />
-                        <span>{item.badge}</span>
-                      </span>
+                    {/* Top Header: App Icon / Logo + Badge & Developer */}
+                    <div className="flex items-start gap-3.5 mb-3">
+                      {/* Recognizable Software Logo / Icon */}
+                      <div className="relative shrink-0 h-12 w-12 rounded-2xl border border-line/80 dark:border-dark-line/80 bg-subtle/60 dark:bg-dark-subtle/60 p-1.5 shadow-2xs group-hover:scale-105 group-hover:shadow-xs transition-transform duration-200 overflow-hidden flex items-center justify-center">
+                        <img
+                          src={iconSrc}
+                          alt={`${title} logo`}
+                          className="h-full w-full object-contain rounded-xl"
+                          loading="lazy"
+                          width={48}
+                          height={48}
+                        />
+                      </div>
 
-                      {item.developer && (
-                        <span className="text-[11px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary truncate">
-                          {item.developer}
-                        </span>
-                      )}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wider ${item.badgeColor}`}
+                          >
+                            <Icon className="h-2.5 w-2.5" aria-hidden="true" />
+                            <span>{item.badge}</span>
+                          </span>
+
+                          {item.developer && (
+                            <span className="text-[11px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary truncate">
+                              {item.developer}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-[15px] font-bold text-ink dark:text-dark-ink leading-snug group-hover:text-accent dark:group-hover:text-dark-accent transition-colors">
+                          {title}
+                        </h3>
+                      </div>
                     </div>
 
-                    {/* Title & Summary */}
-                    <h3 className="text-[15px] font-bold text-ink dark:text-dark-ink leading-snug group-hover:text-accent dark:group-hover:text-dark-accent transition-colors">
-                      {title}
-                    </h3>
-                    <p className="mt-2 text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
+                    {/* Summary */}
+                    <p className="text-[13px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
                       {summary}
                     </p>
 

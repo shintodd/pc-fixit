@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="atlasGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#0f172a"/>
+        <stop offset="1" stop-color="#1e293b"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="url(#atlasGrad)" stroke="#38bdf8" stroke-width="2"/>
+    <path d="M32 14l16 10v20l-16 10-16-10V24L32 14z" stroke="#38bdf8" stroke-width="2" fill="none"/>
+    <path d="M32 20l11 20H21l11-20z" fill="#0284c7"/>
+    <path d="M32 26l6 11H26l6-11z" fill="#0f172a"/>
+  </svg>

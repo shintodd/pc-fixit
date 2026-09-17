@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+    <defs>
+      <linearGradient id="ramGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#3b82f6"/>
+        <stop offset="1" stop-color="#1e40af"/>
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="16" fill="url(#ramGrad)"/>
+    <rect x="14" y="14" width="36" height="36" rx="4" fill="#0f172a" stroke="#93c5fd" stroke-width="2"/>
+    <rect x="18" y="18" width="8" height="8" rx="1" fill="#3b82f6"/>
+    <rect x="28" y="18" width="8" height="8" rx="1" fill="#10b981"/>
+    <rect x="38" y="18" width="8" height="8" rx="1" fill="#f59e0b"/>
+    <rect x="18" y="28" width="8" height="8" rx="1" fill="#8b5cf6"/>
+    <rect x="28" y="28" width="8" height="8" rx="1" fill="#ec4899"/>
+    <rect x="38" y="28" width="8" height="8" rx="1" fill="#06b6d4"/>
+    <rect x="18" y="38" width="8" height="8" rx="1" fill="#64748b"/>
+    <rect x="28" y="38" width="8" height="8" rx="1" fill="#3b82f6"/>
+    <rect x="38" y="38" width="8" height="8" rx="1" fill="#22c55e"/>
+  </svg>
