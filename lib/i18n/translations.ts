@@ -75,6 +75,16 @@ export const translations = {
     cat_driver_issues_desc: "GPU, audio, or peripheral not working",
     cat_guides_count: "{count} researched guides",
 
+    // Product Demo Showcase Section
+    demo_badge: "Product Demo",
+    demo_title: "See pcfix in Action",
+    demo_subtitle:
+      "Watch how pcfix analyzes failure symptoms and delivers structured, hardware-level diagnostic guides.",
+    demo_sound_unmute: "Unmute audio",
+    demo_sound_mute: "Mute audio",
+    demo_play: "Play video",
+    demo_pause: "Pause video",
+
     // How It Works Section
     how_badge: "How We Help",
     how_title: "Three Simple Steps to Fix Your PC",
@@ -246,6 +256,16 @@ export const translations = {
     cat_driver_issues_title: "Masalah Driver",
     cat_driver_issues_desc: "Graphic card, sound, atau USB tak detect",
     cat_guides_count: "{count} panduan baiki",
+
+    // Product Demo Showcase Section
+    demo_badge: "Video Demo",
+    demo_title: "Tonton pcfix Berfungsi",
+    demo_subtitle:
+      "Lihat bagaimana pcfix menganalisis kerosakan PC dan memberi panduan diagnosis perkakasan secara teratur.",
+    demo_sound_unmute: "Buka bunyi",
+    demo_sound_mute: "Senyapkan bunyi",
+    demo_play: "Main video",
+    demo_pause: "Jeda video",
 
     // How It Works Section
     how_badge: "Cara Kami Bantu",

@@ -15,6 +15,7 @@ import HeroInput from "@/components/HeroInput";
 import QuickTriageDeck from "@/components/QuickTriageDeck";
 import QuickToolsBar from "@/components/QuickToolsBar";
 import HomeTipsPreview from "@/components/HomeTipsPreview";
+import DemoVideoShowcase from "@/components/DemoVideoShowcase";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function HomePage() {
@@ -109,6 +110,9 @@ export default function HomePage() {
 
       {/* Curated Power Tips, Cool Tools & Windows Easter Eggs */}
       <HomeTipsPreview />
+
+      {/* Product Video Demo Showcase */}
+      <DemoVideoShowcase />
 
       {/* How It Works */}
       <section className="border-t border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 py-16 sm:py-24">
