@@ -13,7 +13,7 @@ const config: Config = {
         // Light mode (soft, eye-friendly matte palette)
         ink: "#1c2128",
         "ink-secondary": "#57606a",
-        "ink-tertiary": "#8c959f",
+        "ink-tertiary": "#6b7280",
         surface: "#f6f8fa",
         "surface-raised": "#ffffff",
         subtle: "#eaeef2",
@@ -36,7 +36,7 @@ const config: Config = {
           "surface-raised": "#161b22",
           ink: "#e6edf3",
           "ink-secondary": "#8b949e",
-          "ink-tertiary": "#6e7681",
+          "ink-tertiary": "#737d88",
           subtle: "#161b22",
           "subtle-hover": "#1f2937",
           line: "rgba(230, 237, 243, 0.08)",
@@ -50,7 +50,19 @@ const config: Config = {
         pill: "999px",
         "2xs": "2px",
       },
+      spacing: {
+        "4.5": "1.125rem",
+        "13": "3.25rem",
+      },
+      scale: {
+        98: "0.98",
+      },
+      backdropBlur: {
+        xs: "2px",
+      },
       boxShadow: {
+        xs: "0 1px 2px rgba(17,19,24,0.04)",
+        "2xs": "0 1px 1px rgba(17,19,24,0.03)",
         card: "0 1px 2px rgba(17,19,24,0.04), 0 4px 16px rgba(17,19,24,0.06)",
         "card-hover": "0 4px 12px rgba(17,19,24,0.06), 0 12px 32px rgba(17,19,24,0.08)",
         "card-active": "0 1px 3px rgba(17,19,24,0.08)",

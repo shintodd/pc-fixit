@@ -58,7 +58,7 @@ export default function HomePage() {
           <h1 className="text-4xl font-extrabold leading-[1.12] tracking-tight text-ink dark:text-dark-ink sm:text-6xl md:text-7xl 2xl:text-8xl">
             {t("hero_title_prefix")}
             <br />
-            <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300">
+            <span className="bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300">
               {t("hero_title_accent")}
             </span>
           </h1>
@@ -101,7 +101,7 @@ export default function HomePage() {
 
           <Link
             href="/troubleshoot"
-            className="inline-flex items-center gap-2 text-[14px] font-semibold text-accent dark:text-dark-accent hover:underline shrink-0"
+            className="inline-flex min-h-[44px] items-center gap-2 text-[14px] font-semibold text-accent dark:text-dark-accent hover:underline shrink-0"
           >
             <span>{t("cat_ask_ai")}</span>
             <ArrowRight className="h-4 w-4" aria-hidden="true" />

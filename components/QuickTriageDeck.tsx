@@ -435,7 +435,7 @@ export default function QuickTriageDeck() {
 
         <Link
           href="/wizard"
-          className="inline-flex items-center gap-2 text-[14px] font-semibold text-accent dark:text-dark-accent hover:underline shrink-0"
+          className="inline-flex min-h-[44px] items-center gap-2 text-[14px] font-semibold text-accent dark:text-dark-accent hover:underline shrink-0"
         >
           <span>{t("triage_need_wizard")}</span>
           <ArrowRight className="h-4 w-4" aria-hidden="true" />

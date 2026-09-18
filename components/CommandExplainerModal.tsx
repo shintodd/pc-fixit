@@ -201,7 +201,7 @@ export default function CommandExplainerModal({
               </div>
 
               <div className="flex items-center justify-between gap-3 pt-1">
-                <code className="font-mono text-[14px] text-accent-light dark:text-dark-accent select-all break-all">
+                <code className="font-mono text-[14px] text-accent dark:text-dark-accent select-all break-all">
                   {selectedCmd.command}
                 </code>
 

@@ -71,7 +71,7 @@ export default function JargonTooltip({
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-label={`Definition for ${term}: ${explanation}`}
-        className="inline font-semibold text-accent dark:text-dark-accent underline decoration-dotted decoration-accent/60 underline-offset-4 hover:decoration-solid cursor-help transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-xs"
+        className="inline font-semibold text-accent dark:text-dark-accent underline decoration-dotted decoration-accent/60 underline-offset-4 hover:decoration-solid cursor-help transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-md"
       >
         {children || term}
       </button>

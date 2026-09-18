@@ -71,7 +71,7 @@ export default function HeroInput() {
         {/* Luminous refraction halo that shines through the liquid frosted glass */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-1.5 -z-10 rounded-[30px] bg-gradient-to-r from-blue-500/28 via-cyan-400/32 to-indigo-500/28 blur-xl opacity-80 dark:opacity-65 transition-all duration-300 group-focus-within:opacity-100 group-focus-within:scale-[1.02]"
+          className="pointer-events-none absolute -inset-1.5 -z-10 rounded-[30px] bg-gradient-to-r from-blue-500/30 via-cyan-400/30 to-indigo-500/30 blur-xl opacity-80 dark:opacity-65 transition-all duration-300 group-focus-within:opacity-100 group-focus-within:scale-[1.02]"
         />
 
         <LiquidGlassCard

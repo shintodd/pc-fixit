@@ -172,7 +172,25 @@ export default function Wizard({
 
   const isEnd = currentId === "__end";
   const stepNumber = path.length;
-  const progressPercent = Math.min(100, Math.round((stepNumber / (isEnd ? stepNumber : 4)) * 100));
+
+  // Denominator = the longest path from the root, computed once from the tree
+  // (self-heals as the tree grows; replaces the previous hardcoded `4`).
+  const maxDepth = (() => {
+    const seen = new Set<string>();
+    const walk = (id: string): number => {
+      if (seen.has(id)) return 0;
+      seen.add(id);
+      const node = tree[id];
+      if (!node) return 0;
+      let deepest = 1;
+      for (const opt of node.options) {
+        if (opt.next && tree[opt.next]) deepest = Math.max(deepest, 1 + walk(opt.next));
+      }
+      return deepest;
+    };
+    return walk("start");
+  })();
+  const progressPercent = Math.min(100, Math.round((stepNumber / (isEnd ? stepNumber : Math.max(maxDepth, stepNumber))) * 100));
 
   return (
     <div className="mx-auto w-full max-w-6xl 2xl:max-w-[1500px] flex-1 px-4 sm:px-8 lg:px-12 2xl:px-16 py-8 sm:py-14">

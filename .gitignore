@@ -44,3 +44,6 @@ pcfixit-test-report.json
 PROJECT.md
 TEST_INFRA.md
 TEST_READY.md
+
+# QA audit scratch artifacts
+/.qa-audit/

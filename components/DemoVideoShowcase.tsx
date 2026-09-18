@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Volume2,
   VolumeX,
@@ -18,6 +18,17 @@ export default function DemoVideoShowcase() {
   const { language } = useLanguage();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [respectsReducedMotion, setRespectsReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setRespectsReducedMotion(mq.matches);
+    // If the user prefers reduced motion, ensure the video is not playing
+    // (covers both initial mount and cases where autoplay already began).
+    if (mq.matches && videoRef.current && !videoRef.current.paused) {
+      videoRef.current.pause();
+    }
+  }, []);
 
   const toggleMute = () => {
     const video = videoRef.current;
@@ -51,7 +62,7 @@ export default function DemoVideoShowcase() {
           ref={videoRef}
           src="/videos/pcfix-demo.mp4"
           poster="/videos/pcfix-demo-poster.jpg"
-          autoPlay
+          autoPlay={!respectsReducedMotion}
           loop
           muted={isMuted}
           playsInline

@@ -134,7 +134,8 @@ export default function QuickTipsFeed({
                   key={cat.id}
                   type="button"
                   onClick={() => setSelectedCategory(cat.id as any)}
-                  className={`flex shrink-0 items-center gap-2 rounded-full px-3.5 py-1.5 text-[12.5px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  aria-pressed={isSelected}
+                  className={`flex shrink-0 min-h-[40px] items-center gap-2 rounded-full px-3.5 text-[12.5px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                     isSelected
                       ? "bg-accent text-white shadow-xs"
                       : "border border-line/80 dark:border-dark-line/80 bg-white/70 dark:bg-dark-card/70 text-ink-secondary dark:text-dark-ink-secondary hover:bg-subtle dark:hover:bg-dark-subtle hover:text-ink dark:hover:text-dark-ink"
@@ -142,7 +143,7 @@ export default function QuickTipsFeed({
                 >
                   <span>{language === "ms" ? cat.labelMs : cat.label}</span>
                   <span
-                    className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
+                    className={`rounded-full px-1.5 py-px text-[10px] font-bold ${
                       isSelected
                         ? "bg-white/20 text-white"
                         : "bg-ink/5 dark:bg-white/10 text-ink-tertiary dark:text-dark-ink-tertiary"
@@ -278,7 +279,7 @@ export default function QuickTipsFeed({
                           onClick={() => handleCopy(item.id, item.commandOrAction!)}
                           aria-label={isCopied ? "Copied" : "Copy to clipboard"}
                           title={isCopied ? "Copied" : "Copy to clipboard"}
-                          className={`shrink-0 flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                          className={`shrink-0 flex min-h-[36px] items-center gap-1 rounded-lg px-2 text-[11px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                             isCopied
                               ? "bg-emerald-500 text-white"
                               : "bg-white dark:bg-dark-card border border-line dark:border-dark-line text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink hover:border-accent"
@@ -313,7 +314,7 @@ export default function QuickTipsFeed({
                         <button
                           type="button"
                           onClick={() => setExpandedId((curr) => (curr === item.id ? null : item.id))}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary hover:text-accent transition-colors"
+                          className="inline-flex min-h-[44px] items-center gap-1 text-[11px] font-semibold text-ink-tertiary dark:text-dark-ink-tertiary hover:text-accent transition-colors"
                         >
                           <span>{isExpanded ? (language === "ms" ? "Tutup nota" : "Hide details") : (language === "ms" ? "Ketahui lebih lanjut" : "Technical note")}</span>
                           {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}

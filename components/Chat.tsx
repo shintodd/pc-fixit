@@ -825,7 +825,7 @@ export default function Chat({
           >
             <History className="h-3.5 w-3.5 text-accent" />
             <span>{t("chat_recent_title")}</span>
-            <span className="ml-1 rounded-full bg-accent/10 px-1.5 py-0.2 text-[10px] font-bold text-accent">
+            <span className="ml-1 rounded-full bg-accent/10 px-1.5 py-px text-[10px] font-bold text-accent">
               {sessions.length}
             </span>
           </button>
@@ -1170,13 +1170,13 @@ export default function Chat({
             </motion.button>
           </LiquidGlassPill>
 
-          <p className="text-center text-[11px] text-ink-tertiary/75 dark:text-dark-ink-tertiary/75 pt-0.5">
+          <p className="text-center text-[11px] text-ink-secondary dark:text-dark-ink-secondary pt-0.5">
             {language === "ms"
               ? "pcfix dalam pembangunan aktif. Ada sebarang masalah atau cadangan? "
               : "pcfix is under active development. Have an issue or suggestion? "}
             <a
               href="mailto:pcfixtechsupport@gmail.com"
-              className="underline underline-offset-2 hover:text-ink dark:hover:text-dark-ink transition-colors font-medium"
+              className="inline-flex min-h-[44px] items-center underline underline-offset-2 hover:text-ink dark:hover:text-dark-ink transition-colors font-medium"
             >
               pcfixtechsupport@gmail.com
             </a>
@@ -1442,7 +1442,7 @@ function Bubble({
         <button
           type="button"
           onClick={copyText}
-          className="inline-flex items-center gap-1.5 rounded-md px-1.5 py-0.5 hover:text-ink dark:hover:text-dark-ink hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          className="inline-flex min-h-[44px] items-center gap-1.5 rounded-md px-2 py-1 hover:text-ink dark:hover:text-dark-ink hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           aria-label={copied ? t("chat_copied_btn") : t("chat_copy_btn")}
         >
           {copied ? (
@@ -1468,20 +1468,20 @@ function Bubble({
               <button
                 type="button"
                 onClick={() => setFeedback("up")}
-                className="rounded-md p-0.5 hover:text-ok hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md hover:text-ok hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 title={language === "ms" ? "Membantu" : "Helpful"}
                 aria-label="Mark response as helpful"
               >
-                <ThumbsUp className="h-3 w-3" aria-hidden="true" />
+                <ThumbsUp className="h-4 w-4" aria-hidden="true" />
               </button>
               <button
                 type="button"
                 onClick={() => setFeedback("down")}
-                className="rounded-md p-0.5 hover:text-critical hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md hover:text-critical hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                 title={language === "ms" ? "Tidak membantu" : "Not helpful"}
                 aria-label="Mark response as unhelpful"
               >
-                <ThumbsDown className="h-3 w-3" aria-hidden="true" />
+                <ThumbsDown className="h-4 w-4" aria-hidden="true" />
               </button>
             </>
           )}

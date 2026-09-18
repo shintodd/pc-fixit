@@ -32,7 +32,7 @@ export default function Footer() {
             {t("footer_disclaimer")}{" "}
             <a
               href="mailto:pcfixtechsupport@gmail.com"
-              className="font-medium underline underline-offset-2 hover:text-ink dark:hover:text-dark-ink transition-colors"
+              className="inline-flex min-h-[44px] items-center font-medium underline underline-offset-2 hover:text-ink dark:hover:text-dark-ink transition-colors"
             >
               pcfixtechsupport@gmail.com
             </a>

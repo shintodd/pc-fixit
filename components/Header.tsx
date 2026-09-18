@@ -134,7 +134,7 @@ export default function Header() {
           </span>
           <a
             href="mailto:pcfixtechsupport@gmail.com"
-            className="font-semibold underline underline-offset-2 hover:text-amber-700 dark:hover:text-white transition-colors"
+            className="inline-flex min-h-[44px] items-center font-semibold underline underline-offset-2 hover:text-amber-700 dark:hover:text-white transition-colors"
           >
             pcfixtechsupport@gmail.com
           </a>
@@ -157,7 +157,7 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`relative rounded-lg px-3 py-1.5 text-[13px] font-medium transition-colors duration-150 ${
+                className={`relative inline-flex min-h-[44px] items-center rounded-lg px-3 text-[13px] font-medium transition-colors duration-150 ${
                   isActive
                     ? "text-ink dark:text-dark-ink bg-subtle dark:bg-dark-subtle"
                     : "text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink hover:bg-subtle dark:hover:bg-dark-subtle"

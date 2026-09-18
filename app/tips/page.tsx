@@ -13,7 +13,7 @@ export default function TipsPage() {
     <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16 py-8 sm:py-12">
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[12.5px] text-ink-tertiary dark:text-dark-ink-tertiary">
-        <Link href="/" className="hover:text-ink dark:hover:text-dark-ink transition-colors">
+        <Link href="/" className="inline-flex min-h-[44px] items-center hover:text-ink dark:hover:text-dark-ink transition-colors">
           {language === "ms" ? "Utama" : "Home"}
         </Link>
         <ChevronRight className="h-3.5 w-3.5" />
@@ -31,7 +31,7 @@ export default function TipsPage() {
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-ink dark:text-dark-ink leading-[1.15]">
           {language === "ms" ? "Koleksi Tips Padu, " : "Curated Power Tips, "}
-          <span className="bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300">
+          <span className="bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-sky-300 dark:to-indigo-300">
             {language === "ms" ? "Alatan Hebat & Rahsia PC." : "Cool Tools & Hidden Gems."}
           </span>
         </h1>
