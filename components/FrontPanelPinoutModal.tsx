@@ -397,7 +397,7 @@ export default function FrontPanelPinoutModal({
             {/* Vital Safety Warnings */}
             <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-300 space-y-1">
               <div className="flex items-center gap-2 font-bold text-[12px]">
-                <ShieldAlert className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                <ShieldAlert className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
                 <span>
                   {isMs ? "Peraturan Keselamatan Penting" : "Critical Safety Rules"}
                 </span>

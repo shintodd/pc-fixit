@@ -37,8 +37,8 @@ const TRIAGE_TABS: Array<{
 }> = [
   { id: "wont-boot", labelKey: "triage_tab_wont_boot", icon: Power, animation: "pulse", color: "text-rose-500", activeBg: "bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400" },
   { id: "blue-screen", labelKey: "triage_tab_blue_screen", icon: MonitorX, animation: "shake", color: "text-blue-500", activeBg: "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400" },
-  { id: "running-slow", labelKey: "triage_tab_running_slow", icon: Gauge, animation: "gauge", color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400" },
-  { id: "no-internet", labelKey: "triage_tab_no_internet", icon: WifiOff, animation: "bounce", color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/30 text-sky-600 dark:text-sky-400" },
+  { id: "running-slow", labelKey: "triage_tab_running_slow", icon: Gauge, animation: "gauge", color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400" },
+  { id: "no-internet", labelKey: "triage_tab_no_internet", icon: WifiOff, animation: "bounce", color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/30 text-sky-700 dark:text-sky-400" },
   { id: "overheating", labelKey: "triage_tab_overheating", icon: Flame, animation: "flicker", color: "text-orange-500", activeBg: "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400" },
   { id: "driver-issues", labelKey: "triage_tab_driver_issues", icon: Cpu, animation: "pulse", color: "text-purple-500", activeBg: "bg-purple-500/10 border-purple-500/30 text-purple-600 dark:text-purple-400" },
 ];
@@ -486,7 +486,7 @@ export default function QuickTriageDeck() {
                     className={`inline-flex items-center gap-1 rounded-pill px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
                       prob.severity === "critical"
                         ? "bg-rose-500/10 text-rose-600 dark:text-rose-400"
-                        : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        : "bg-amber-500/10 text-amber-700 dark:text-amber-400"
                     }`}
                   >
                     <AlertTriangle className="h-3 w-3" aria-hidden="true" />

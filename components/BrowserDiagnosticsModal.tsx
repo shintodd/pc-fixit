@@ -470,7 +470,7 @@ export default function BrowserDiagnosticsModal({
                   </span>
                   {chatterLog.length === 0 ? (
                     <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 flex items-center gap-2 text-[12px]">
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-400" />
                       <span>
                         {isMs
                           ? "Tiada suis chatter dikesan. Suis mekanikal anda berfungsi dengan stabil."
@@ -544,7 +544,7 @@ export default function BrowserDiagnosticsModal({
                     onClick={() => playAudioChannel("right")}
                     className={`p-4 min-h-[80px] rounded-2xl border text-center transition-all flex flex-col items-center justify-center gap-2 ${
                       playingAudio === "right"
-                        ? "border-emerald-500 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 scale-105"
+                        ? "border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 scale-105"
                         : "border-line dark:border-dark-line bg-subtle/50 dark:bg-dark-subtle/50 text-ink dark:text-dark-ink hover:border-accent"
                     }`}
                   >

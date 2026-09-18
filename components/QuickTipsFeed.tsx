@@ -281,7 +281,7 @@ export default function QuickTipsFeed({
                           title={isCopied ? "Copied" : "Copy to clipboard"}
                           className={`shrink-0 flex min-h-[36px] items-center gap-1 rounded-lg px-2 text-[11px] font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                             isCopied
-                              ? "bg-emerald-500 text-white"
+                              ? "bg-emerald-700 text-white"
                               : "bg-white dark:bg-dark-card border border-line dark:border-dark-line text-ink-secondary dark:text-dark-ink-secondary hover:text-ink dark:hover:text-dark-ink hover:border-accent"
                           }`}
                         >
@@ -350,7 +350,7 @@ export default function QuickTipsFeed({
                               href={item.directDownloadUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 dark:bg-emerald-500 text-white px-3 py-1.5 min-h-[34px] text-[12px] font-semibold hover:bg-emerald-700 dark:hover:bg-emerald-600 shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-95"
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 dark:bg-emerald-500 text-white px-3 py-1.5 min-h-[34px] text-[12px] font-semibold hover:bg-emerald-800 dark:hover:bg-emerald-600 shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 active:scale-95"
                               title={
                                 language === "ms"
                                   ? `Muat turun fail terus (${item.fileType || "fail"})`

@@ -42,7 +42,7 @@ export default function RepairFeasibilityModal({
     },
     psu: {
       score: pcAge === "old" ? "MEDIUM" : "HIGH",
-      badgeClass: pcAge === "old" ? "bg-amber-500/10 text-amber-600 border-amber-500/30" : "bg-ok/10 text-ok border-ok/30",
+      badgeClass: pcAge === "old" ? "bg-amber-500/10 text-amber-700 border-amber-500/30" : "bg-ok/10 text-ok border-ok/30",
       costEn: "$45 - $85 (New Power Supply)",
       costMs: "RM 160 - RM 280 (Power Supply Baru)",
       verdictEn: pcAge === "old" ? "Consider carefully. PSU replacement is viable, but system platform is aged." : "Highly Recommended. A quality modern power supply protects your entire PC.",
@@ -52,7 +52,7 @@ export default function RepairFeasibilityModal({
     },
     gpu: {
       score: pcAge === "old" ? "LOW" : "MEDIUM",
-      badgeClass: pcAge === "old" ? "bg-critical/10 text-critical border-critical/30" : "bg-amber-500/10 text-amber-600 border-amber-500/30",
+      badgeClass: pcAge === "old" ? "bg-critical/10 text-critical border-critical/30" : "bg-amber-500/10 text-amber-700 border-amber-500/30",
       costEn: "$150 - $400+ (New Graphics Card)",
       costMs: "RM 600 - RM 1,600+ (Kad Grafik Baru)",
       verdictEn: pcAge === "old" ? "Better to Upgrade Entire System. Putting expensive parts into an obsolete PC wastes money." : "Worth Replacing if CPU and motherboard are modern.",

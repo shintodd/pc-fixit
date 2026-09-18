@@ -155,7 +155,7 @@ export default function SiliconDefectsModal({
                         className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                           item.severity === "CRITICAL"
                             ? "bg-rose-500/15 text-rose-600 dark:text-rose-400"
-                            : "bg-amber-500/15 text-amber-600 dark:text-amber-400"
+                            : "bg-amber-500/15 text-amber-700 dark:text-amber-400"
                         }`}
                       >
                         {item.severity}
@@ -196,7 +196,7 @@ export default function SiliconDefectsModal({
                   {/* Symptoms Card */}
                   <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-900 dark:text-amber-300 space-y-1.5">
                     <div className="flex items-center gap-2 font-bold text-[12px]">
-                      <AlertOctagon className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                      <AlertOctagon className="h-4 w-4 text-amber-700 dark:text-amber-400 shrink-0" />
                       <span>{isMs ? "Gejala / Tanda Kerosakan:" : "Observed Symptoms:"}</span>
                     </div>
                     <p className="text-[12px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary pl-6">
@@ -207,7 +207,7 @@ export default function SiliconDefectsModal({
                   {/* Fix Steps Card */}
                   <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-900 dark:text-emerald-300 space-y-1.5">
                     <div className="flex items-center gap-2 font-bold text-[12px]">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
                       <span>{isMs ? "Penyelesaian / Tindakan Pengeluar:" : "Official Remediation:"}</span>
                     </div>
                     <p className="text-[12px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary pl-6">

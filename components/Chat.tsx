@@ -722,7 +722,7 @@ export default function Chat({
             <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">
               {language === "ms" ? "Kaunter Technician PC" : "PC Technician Desk"}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               {language === "ms" ? "Sedia Bantu" : "Ready to Help"}
             </span>

@@ -229,6 +229,14 @@
     @apply border-line-strong shadow-card-hover;
   }
 
+  /* ── Semantic status colors flip to a dark-mode-safe shade automatically ── */
+  .dark .text-critical { color: #f85149; }
+  .dark .text-warn { color: #d29922; }
+  .dark .text-ok { color: #3fb950; }
+  .dark .bg-critical\/10 { background-color: rgba(248, 81, 73, 0.1); }
+  .dark .bg-warn\/10 { background-color: rgba(210, 153, 34, 0.1); }
+  .dark .bg-ok\/10 { background-color: rgba(63, 185, 80, 0.1); }
+
   /* ── Typing dots (Apple-style) ── */
   .typing-dot-1 { animation: typing-dot 1.4s infinite ease-in-out; }
   .typing-dot-2 { animation: typing-dot 1.4s infinite ease-in-out 0.2s; }
