@@ -12,7 +12,8 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const STORAGE_KEY = "pc-fixit-language";
+const STORAGE_KEY = "pcfix-language";
+const OLD_STORAGE_KEY = "pc-fixit-language";
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
@@ -20,7 +21,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setIsMounted(true);
-    const saved = localStorage.getItem(STORAGE_KEY) as Language | null;
+    const saved = (localStorage.getItem(STORAGE_KEY) || localStorage.getItem(OLD_STORAGE_KEY)) as Language | null;
     if (saved === "en" || saved === "ms") {
       setLanguageState(saved);
       document.documentElement.lang = saved;

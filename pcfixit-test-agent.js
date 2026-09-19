@@ -330,7 +330,7 @@ async function testWizard(page, baseUrl, results, maxSteps = 6) {
 // Orchestrator - this is the function to import programmatically
 // ---------------------------------------------------------------------------
 /**
- * Run the full PC Fixit test suite against a running instance.
+ * Run the full PCFix test suite against a running instance.
  * @param {string} baseUrl - e.g. 'http://localhost:3000' or a tunnel URL
  * @param {object} [opts]
  * @param {boolean} [opts.headed=false] - show the browser window
@@ -342,7 +342,7 @@ async function runAll(baseUrl = DEFAULT_URL, opts = {}) {
   const { headed = false, writeReport = true, reportPath } = opts;
   const results = { baseUrl, routes: [], ai: [], wizard: [], notes: [] };
 
-  log(`PC Fixit test agent - target: ${baseUrl}`);
+  log(`PCFix test agent - target: ${baseUrl}`);
   await testRoutes(baseUrl, results);
 
   const browser = await chromium.launch({ headless: !headed });

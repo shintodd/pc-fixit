@@ -10,8 +10,10 @@ export interface ChatSession {
   scrollY?: number;
 }
 
-const STORAGE_KEY = "pcfixit_recent_chats_v1";
-const ACTIVE_SESSION_KEY = "pcfixit_active_session_id_v1";
+const STORAGE_KEY = "pcfix_recent_chats_v1";
+const OLD_STORAGE_KEY = "pcfixit_recent_chats_v1";
+const ACTIVE_SESSION_KEY = "pcfix_active_session_id_v1";
+const OLD_ACTIVE_SESSION_KEY = "pcfixit_active_session_id_v1";
 const MAX_SESSIONS = 25;
 const MAX_MESSAGES_PER_SESSION = 30;
 
@@ -25,7 +27,7 @@ function isClient(): boolean {
 export function getActiveSessionId(): string | null {
   if (!isClient()) return null;
   try {
-    return window.localStorage.getItem(ACTIVE_SESSION_KEY);
+    return window.localStorage.getItem(ACTIVE_SESSION_KEY) || window.localStorage.getItem(OLD_ACTIVE_SESSION_KEY);
   } catch (_) {
     return null;
   }
@@ -41,6 +43,7 @@ export function setActiveSessionId(id: string | null): void {
       window.localStorage.setItem(ACTIVE_SESSION_KEY, id);
     } else {
       window.localStorage.removeItem(ACTIVE_SESSION_KEY);
+      window.localStorage.removeItem(OLD_ACTIVE_SESSION_KEY);
     }
   } catch (_) {}
 }
@@ -62,7 +65,10 @@ export function generateSessionTitle(messages: ChatMessage[], defaultTitle = "Ne
 export function loadSessions(): ChatSession[] {
   if (!isClient()) return [];
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    let raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      raw = window.localStorage.getItem(OLD_STORAGE_KEY);
+    }
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];

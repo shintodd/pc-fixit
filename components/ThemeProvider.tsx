@@ -10,7 +10,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       defaultTheme="light"
       enableSystem={true}
       disableTransitionOnChange
-      storageKey="pc-fixit-theme"
+      storageKey="pcfix-theme"
     >
       {children}
     </NextThemesProvider>
