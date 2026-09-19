@@ -438,6 +438,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const userMessageCount = history.filter((m) => m.role === "user").length;
+    const isFollowUp = userMessageCount > 1;
+
     // 2b. Prompt Injection & Exfiltration Defense Guard
     if (isPromptExfiltrationOrInjection(userQuery)) {
       const safeReply =
@@ -671,11 +674,19 @@ export async function POST(req: NextRequest) {
         "REFERENCE FACTS FROM KNOWLEDGE BASE:\nNo local guide matched this exact query. Provide general, easy-to-follow computer troubleshooting steps.";
     }
 
+    const openingInstructionMs = isFollowUp
+      ? `- TIADA KATA SAPAAN: Ini perbualan bersambung. DILARANG memulakan mesej dengan "Hai", "Helo", "Hey" atau sebarang kata sapaan pembuka. Terus jawab intipati masalah atau berikan langkah teknikal seterusnya (cth: "Faham, kalau kipas dah pusing tapi skrin tetap gelap, jom semak bahagian ini:").`
+      : `- AYAT PEMBUKA: Tepat 1 baris pendek sahaja untuk mula (cth: "Masalah ni selalunya punca daripada kabel power longgar atau isu RAM. Jom terus semak langkah ni:"). Sapaan mesra dibenarkan sekali sahaja di awal perbualan.`;
+
+    const openingInstructionEn = isFollowUp
+      ? `- NO REPEATED GREETINGS: This is an ongoing conversation. NEVER begin follow-up responses with greetings like "Hey", "Hey there", "Hi", or "Hello". Start immediately with substantive diagnosis, acknowledging their update, or giving the next diagnostic check (e.g. "Understood. If the power light turns on, check this next:").`
+      : `- OPENING: Exactly 1 brief, friendly sentence pinpointing the likely cause (e.g. "That usually points to a loose power connection or static build-up. Let's check these first:"). Greet only once at the start.`;
+
     const langInstruction =
       lang === "ms"
         ? `5. GAYA BAHASA & NADA (MESRA TAPI TERUS KE PUNCA / STRAIGHT TO THE POINT):
    - NADA: Ramah dan santai macam kawan technician, tapi JANGAN berleter panjang. Terus beri punca utama dan langkah penyelesaian.
-   - AYAT PEMBUKA: Tepat 1 baris pendek sahaja (cth: "Hai! Masalah ni selalunya punca daripada kabel power longgar atau isu RAM. Jom terus semak langkah ni:").
+   ${openingInstructionMs}
    - BAHASA: Bahasa Melayu santai harian Malaysia. JANGAN guna bahasa buku teks rasmi atau istilah kaku (ELAKKAN: 'papan induk', 'wayar kuasa', 'bicu', 'persimpangan termal', 'peranti penyesuai', 'menderu').
    - ISTILAH PC: Guna istilah harian (motherboard, kabel power, cucuk balik, cabut, screen hitam, restart, kipas pusing, RAM, GPU, CPU, SSD, BIOS, Windows, casing).
    - FORMAT: 2 hingga 4 langkah bernombor (1., 2., 3.) yang pendek, padat, terus ke tindakan. Setiap langkah ada tajuk 'bold' dan 1-2 ayat arahan jelas.
@@ -684,7 +695,7 @@ export async function POST(req: NextRequest) {
    - LUAR TOPIK: Tolak secara ringkas dan mesra dalam 1 baris: "Saya cuma pakar baiki PC dan laptop je bos. Ada apa-apa isu komputer yang nak saya bantu?"`
         : `5. LANGUAGE & TONE (FRIENDLY BUT STRAIGHT TO THE POINT):
    - TONE: Warm and friendly, but ZERO fluff. No long lectures or excessive soothing. Jump straight to the point.
-   - OPENING: Exactly 1 brief, friendly sentence pinpointing the likely cause (e.g. "Hey! That usually points to a loose power connection or static build-up. Let's check these first:").
+   ${openingInstructionEn}
    - FORMAT: 2 to 4 punchy, numbered action steps (1., 2., 3.). Bold the action title, keep instructions direct and clear.
    - CLOSING: Exactly 1 friendly sign-off line (e.g. "Give those a quick try and let me know what happens!").
    - LENGTH: Under 120 words total.
@@ -699,7 +710,7 @@ CRITICAL INSTRUCTIONS:
 
 2. FRIENDLY BUT STRICTLY STRAIGHT TO THE POINT:
    - ZERO long essays, ZERO over-explaining, ZERO lengthy comforting preambles.
-   - Friendly greeting + pinpoint likely culprit in exactly 1 single sentence.
+   - ${isFollowUp ? "NO GREETINGS: Conversation in progress. Never repeat greetings like 'Hey' or 'Hello'. Jump straight to next check." : "Opening: 1 single sentence pinpointing likely culprit."}
    - Immediate numbered action steps: 1., 2., 3.
    - Keep each step actionable, punchy, and clear.
    - Friendly 1-line check-in at the end.
@@ -759,8 +770,8 @@ ${referenceSection}`;
 
         const fallbackReply =
           lang === "ms"
-            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
+            ? `${isFollowUp ? "Berikut" : "Hai! Berikut"} adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
+            : `${isFollowUp ? "Here" : "Hey there! Here"} are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`;
 
         return NextResponse.json(
           {
@@ -805,8 +816,8 @@ ${referenceSection}`;
 
       const fallbackReply =
         lang === "ms"
-          ? `Hai! Berikut adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Langkah diagnosis disahkan daripada sistem pcfix. Beritahu saya sekiranya anda memerlukan bantuan lanjut.)*`
-          : `Hey there! Here is the verified diagnostic guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Verified steps from the pcfix diagnostic system. Let me know what you observe!)*`;
+          ? `${isFollowUp ? "Berikut" : "Hai! Berikut"} adalah panduan penyelesaian langkah demi langkah untuk **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Langkah diagnosis disahkan daripada sistem pcfix. Beritahu saya sekiranya anda memerlukan bantuan lanjut.)*`
+          : `${isFollowUp ? "Here" : "Hey there! Here"} is the verified diagnostic guide for **${triageCategoryTitle}**:\n\n${triageStepsText}\n\n*(Verified steps from the pcfix diagnostic system. Let me know what you observe!)*`;
 
       return NextResponse.json(
         {
@@ -878,7 +889,7 @@ ${referenceSection}`;
     let isRateLimited = false;
 
     // Fast response path: Serve cached AI diagnosis if query matches recent request
-    const aiCacheKey = `${lang}:${cleanSearchQuery.trim().toLowerCase()}:${hasImageInContents ? "img" : "text"}`;
+    const aiCacheKey = `${lang}:${isFollowUp ? "follow" : "first"}:${cleanSearchQuery.trim().toLowerCase()}:${hasImageInContents ? "img" : "text"}`;
     const cachedAi = aiResponseCache.get(aiCacheKey);
     if (cachedAi && Date.now() - cachedAi.timestamp < AI_CACHE_TTL_MS) {
       const sanitizedCachedReply = sanitizeTextChunk(cachedAi.reply);
@@ -974,15 +985,46 @@ ${referenceSection}`;
           start(controller) {
             (async () => {
               try {
+                let pendingGreetingFilter = isFollowUp;
+                let greetingBuffer = "";
+
                 for await (const chunk of streamResponse) {
                   let text = chunk.text || "";
+                  if (!text) continue;
+                  text = sanitizeTextChunk(text);
+
+                  if (pendingGreetingFilter) {
+                    greetingBuffer += text;
+                    if (greetingBuffer.length >= 25 || /[.!?\n]/.test(greetingBuffer)) {
+                      greetingBuffer = greetingBuffer.replace(/^(?:hey(?: there)?|hi(?: there)?|hello|hai|helo)[!,.]?\s*/i, "");
+                      pendingGreetingFilter = false;
+                      text = greetingBuffer;
+                      greetingBuffer = "";
+                    } else {
+                      continue;
+                    }
+                  }
+
                   if (text) {
-                    text = sanitizeTextChunk(text);
                     fullOutput += text;
                     if (isSse) {
                       controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
                     } else {
                       controller.enqueue(encoder.encode(text));
+                    }
+                  }
+                }
+
+                if (greetingBuffer) {
+                  const remaining = pendingGreetingFilter
+                    ? greetingBuffer.replace(/^(?:hey(?: there)?|hi(?: there)?|hello|hai|helo)[!,.]?\s*/i, "")
+                    : greetingBuffer;
+                  if (remaining) {
+                    fullOutput += remaining;
+                    if (isSse) {
+                      controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: remaining })}\n\n`));
+                    } else {
+                      controller.enqueue(encoder.encode(remaining));
                     }
                   }
                 }
@@ -1058,8 +1100,8 @@ ${referenceSection}`;
 
         const fallbackReply = sanitizeTextChunk(
           lang === "ms"
-            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
+            ? `${isFollowUp ? "Berikut" : "Hai! Berikut"} adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
+            : `${isFollowUp ? "Here" : "Hey there! Here"} are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
         );
 
         const encoder = new TextEncoder();
@@ -1113,7 +1155,9 @@ ${referenceSection}`;
           config,
         });
         if (response.text) {
-          responseText = response.text;
+          responseText = isFollowUp
+            ? response.text.replace(/^(?:hey(?: there)?|hi(?: there)?|hello|hai|helo)[!,.]?\s*/i, "")
+            : response.text;
           break;
         }
       } catch (err: any) {
@@ -1135,7 +1179,9 @@ ${referenceSection}`;
               config: noToolConfig,
             });
             if (retryResponse.text) {
-              responseText = retryResponse.text;
+              responseText = isFollowUp
+                ? retryResponse.text.replace(/^(?:hey(?: there)?|hi(?: there)?|hello|hai|helo)[!,.]?\s*/i, "")
+                : retryResponse.text;
               break;
             }
           } catch (retryErr: any) {
@@ -1165,8 +1211,8 @@ ${referenceSection}`;
 
         responseText = sanitizeTextChunk(
           lang === "ms"
-            ? `Hai! Berikut adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `Hey there! Here are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
+            ? `${isFollowUp ? "Berikut" : "Hai! Berikut"} adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
+            : `${isFollowUp ? "Here" : "Hey there! Here"} are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
         );
       } else {
         return NextResponse.json(
