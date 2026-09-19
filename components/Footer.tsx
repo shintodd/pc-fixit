@@ -21,8 +21,7 @@ export default function Footer() {
             <Logo size={28} />
           </Link>
 
-          <div className="flex items-center gap-2 rounded-full border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3 py-1 text-[12px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs">
-            <span className="h-2 w-2 rounded-full bg-ok" aria-hidden="true" />
+          <div className="flex items-center rounded-full border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 px-3 py-1 text-[12px] font-medium text-ok shadow-xs">
             <span>{t("footer_status")}</span>
           </div>
         </div>

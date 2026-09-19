@@ -375,7 +375,7 @@ export default function BeepLedDecoderModal({
                             : "border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 hover:bg-subtle"
                         }`}
                       >
-                        <span className={`h-4 w-4 rounded-full ${led.color} shadow-xs mb-1.5`} />
+                        <span className={`h-2 w-6 rounded-xs ${led.color} shadow-xs mb-2`} />
                         <span className="font-bold text-ink dark:text-dark-ink">{led.id}</span>
                         <span className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary">
                           {led.id === "DRAM" ? (isMs ? "RAM" : "RAM") : led.id === "VGA" ? (isMs ? "GPU" : "GPU") : led.id}
@@ -388,8 +388,8 @@ export default function BeepLedDecoderModal({
                 {/* LED Diagnostic Details Card */}
                 <div className="rounded-2xl border border-line dark:border-dark-line bg-white/80 dark:bg-dark-card/80 p-5 space-y-3.5 shadow-xs">
                   <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className={`h-3 w-3 rounded-full ${selectedLed.color}`} />
+                    <div className="flex items-center gap-2.5">
+                      <span className={`h-2.5 w-6 rounded-xs ${selectedLed.color} shadow-xs`} />
                       <h3 className="font-bold text-[15px] text-ink dark:text-dark-ink">
                         {isMs ? selectedLed.nameMs : selectedLed.nameEn}
                       </h3>

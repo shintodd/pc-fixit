@@ -722,8 +722,7 @@ export default function Chat({
             <span className="text-[13px] font-bold tracking-tight text-ink dark:text-dark-ink">
               {language === "ms" ? "Kaunter Technician PC" : "PC Technician Desk"}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            <span className="inline-flex items-center rounded-full bg-emerald-500/10 dark:bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
               {language === "ms" ? "Sedia Bantu" : "Ready to Help"}
             </span>
           </div>
@@ -895,7 +894,6 @@ export default function Chat({
             className="mb-2 shrink-0 flex items-center justify-between gap-3 rounded-2xl border border-line dark:border-dark-line bg-subtle/80 dark:bg-dark-subtle/80 px-4 py-2.5 backdrop-blur-sm shadow-xs"
           >
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
               <span className="text-[14px] font-medium text-ink dark:text-dark-ink">{category.title}</span>
             </div>
             {targetGuideSlug && (
@@ -978,7 +976,6 @@ export default function Chat({
                     aria-label={`Start with: ${starter.label}`}
                     className="flex items-center gap-2 rounded-pill border border-line dark:border-dark-line bg-white dark:bg-dark-card px-4 py-2 text-left text-[13px] text-ink-secondary dark:text-dark-ink-secondary shadow-xs transition-colors hover:border-accent/40 hover:bg-accent-soft dark:hover:bg-dark-accent/15 hover:text-accent dark:hover:text-dark-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                   >
-                    <span className={`h-1.5 w-1.5 rounded-full ${starter.color}`} aria-hidden="true" />
                     <span>{starter.label}</span>
                   </motion.button>
                 ))}
@@ -1402,8 +1399,8 @@ function Bubble({
           if (isBullet) {
             const content = cleanLine.replace(/^[\*\-]\s+/, "");
             return (
-              <div key={idx} className="flex items-start gap-3 pl-1">
-                <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+              <div key={idx} className="flex items-start gap-2.5 pl-1">
+                <span className="shrink-0 text-accent font-bold select-none" aria-hidden="true">-</span>
                 <span className="flex-1">{renderFormattedText(content)}</span>
               </div>
             );
@@ -1511,7 +1508,7 @@ function TypingBubble() {
         {[0, 1, 2].map((i) => (
           <span
             key={i}
-            className={`h-[9px] w-[9px] rounded-full bg-ink-tertiary dark:bg-dark-ink-tertiary ${
+            className={`h-3 w-1.5 rounded-xs bg-ink-tertiary dark:bg-dark-ink-tertiary ${
               i === 0 ? "typing-dot-1" : i === 1 ? "typing-dot-2" : "typing-dot-3"
             }`}
           />

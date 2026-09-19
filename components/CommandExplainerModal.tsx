@@ -190,7 +190,7 @@ export default function CommandExplainerModal({
             <div className="rounded-2xl border border-line dark:border-dark-line bg-slate-950 p-4 text-white space-y-2 shadow-inner">
               <div className="flex items-center justify-between text-[11px] text-slate-400">
                 <div className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-ok" />
+                  <span className="font-mono text-ok font-bold">&gt;</span>
                   <span>{isMs ? "Jalankan dalam Command Prompt (Admin)" : "Run in Command Prompt (Admin)"}</span>
                 </div>
                 {selectedCmd.runAsAdmin && (

@@ -451,8 +451,7 @@ export default function HardwareVisualGuide({
 
           {/* Pro Tip / Callout */}
           {callout && (
-            <div className="rounded-xl border border-accent/25 bg-accent/5 dark:bg-dark-accent/10 p-3.5 text-[12px] text-ink dark:text-dark-ink leading-relaxed flex items-start gap-2.5">
-              <div className="mt-0.5 h-2 w-2 shrink-0 rounded-full bg-accent" />
+            <div className="rounded-xl border border-accent/25 bg-accent/5 dark:bg-dark-accent/10 p-3.5 text-[12px] text-ink dark:text-dark-ink leading-relaxed">
               <div className="font-medium">{callout}</div>
             </div>
           )}

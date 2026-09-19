@@ -341,13 +341,13 @@ export default function BrowserDiagnosticsModal({
                         type="button"
                         onClick={() => setColorIndex(idx)}
                         aria-label={`Select color: ${col.nameEn}`}
-                        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                         title={col.nameEn}
                       >
                         <span
                           style={{ backgroundColor: col.hex }}
-                          className={`w-6 h-6 rounded-full border border-slate-400 transition-transform block ${
-                            colorIndex === idx ? "scale-125 ring-2 ring-accent" : "opacity-80"
+                          className={`w-6 h-6 rounded-md border border-slate-400 transition-transform block ${
+                            colorIndex === idx ? "scale-110 ring-2 ring-accent" : "opacity-80"
                           }`}
                         />
                       </button>

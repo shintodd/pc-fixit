@@ -297,7 +297,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
             <ul className="mt-3 space-y-2">
               {issue.symptoms.map((s, idx) => (
                 <li key={idx} className="flex items-start gap-2.5 text-[14px] text-ink dark:text-dark-ink">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                  <span className="shrink-0 text-accent font-bold select-none" aria-hidden="true">-</span>
                   <span className="break-words [overflow-wrap:anywhere]">{renderTextWithJargon(s)}</span>
                 </li>
               ))}
