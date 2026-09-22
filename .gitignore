@@ -47,3 +47,10 @@ TEST_READY.md
 
 # QA audit scratch artifacts
 /.qa-audit/
+
+# zip archives
+*.zip
+
+# local desktop scanner (retained on local machine only)
+/desktop-scanner/
+/public/downloads/
