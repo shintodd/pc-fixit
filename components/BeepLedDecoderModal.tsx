@@ -481,6 +481,19 @@ export default function BeepLedDecoderModal({
                   </div>
                 </div>
 
+                {/* Volume Warning Banner */}
+                <div
+                  role="alert"
+                  className="flex items-center gap-2.5 rounded-xl border border-warn/30 bg-warn/10 dark:border-warn/30 dark:bg-warn/15 px-3.5 py-2.5 text-warn shadow-xs"
+                >
+                  <AlertCircle className="h-4 w-4 shrink-0 text-warn" aria-hidden="true" />
+                  <span className="text-[12px] font-bold tracking-wide leading-snug">
+                    {isMs
+                      ? "PERINGATAN: SILA PERLAHANKAN VOLUME ANDA SEBELUM MEMAINKAN BUNYI"
+                      : "PLEASE LOWER YOUR VOLUME BEFORE PLAYING THE SOUND"}
+                  </span>
+                </div>
+
                 <div className="space-y-3">
                   <span className="text-[12px] font-semibold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary block mb-1">
                     {isMs ? "Tekan butang play untuk dengar contoh bunyi:" : "Click play to listen and match your PC beep sound:"}
