@@ -154,23 +154,23 @@ export default function CategoryGrid() {
           >
             <Link
               href={`/categories/${cat.slug}`}
-              className={`flex h-full flex-col justify-between rounded-2xl border border-line dark:border-dark-line bg-white/95 dark:bg-dark-card/95 p-6 shadow-card dark:shadow-card-dark backdrop-blur-md transition-all duration-200 ${theme.glow} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
+              className={`flex h-full flex-col justify-between rounded-[18px] border border-line dark:border-dark-line bg-white dark:bg-dark-card p-6 transition-all duration-200 hover:border-line-strong dark:hover:border-dark-line-strong hover:scale-[1.01] active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}
             >
               <div>
                 {/* Header row */}
                 <div className="mb-4 flex items-center justify-between">
                   <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl shadow-xs transition-all duration-200 group-hover:scale-105 ${theme.iconBg}`}
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-105 ${theme.iconBg}`}
                   >
                     <MovingIcon
                       icon={IconComponent}
                       animation={theme.animation}
-                      className="h-6 w-6"
+                      className="h-5 w-5"
                     />
                   </div>
                   <div className="flex items-center gap-2">
                     <span
-                      className={`inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide ${
+                      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tracking-wide ${
                         SEVERITY_STYLE[cat.severity]
                       }`}
                     >
@@ -190,10 +190,10 @@ export default function CategoryGrid() {
                 </div>
 
                 {/* Title and Description */}
-                <h3 className="text-[17px] font-bold tracking-tight text-ink dark:text-dark-ink group-hover:text-accent dark:group-hover:text-dark-accent transition-colors duration-150">
+                <h3 className="text-[17px] font-semibold tracking-tight text-ink dark:text-dark-ink group-hover:text-accent dark:group-hover:text-dark-accent transition-colors duration-150">
                   {title}
                 </h3>
-                <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
+                <p className="mt-1.5 text-[14px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
                   {description}
                 </p>
 
@@ -202,7 +202,7 @@ export default function CategoryGrid() {
                   {theme.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-md bg-subtle/80 dark:bg-dark-subtle/80 px-2 py-0.5 text-[11px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary border border-line/40 dark:border-dark-line/40"
+                      className="rounded-full bg-subtle/80 dark:bg-dark-subtle/80 px-2.5 py-0.5 text-[11px] font-medium text-ink-secondary dark:text-dark-ink-secondary border border-line/40 dark:border-dark-line/40"
                     >
                       {tag}
                     </span>

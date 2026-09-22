@@ -118,9 +118,9 @@ export default function HeroInput() {
 
           <motion.button
             type="submit"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
-            className="flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-xl bg-accent dark:bg-accent px-3 sm:px-4 text-[13px] sm:text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 rounded-full bg-accent dark:bg-accent px-4 sm:px-5 text-[13px] sm:text-[14px] font-semibold text-white transition-all duration-150 hover:bg-accent-hover shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
             aria-label={t("hero_btn_diagnose")}
           >
             <span>{t("hero_btn_diagnose")}</span>
