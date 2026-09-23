@@ -374,15 +374,23 @@ export default function Chat({
       let streamed = "";
       setMessages((m) => [...m, { role: "assistant", content: "" }]);
 
-      mockDiagnose(messages, (chunk) => {
-        if (!isMounted) return;
-        streamed += chunk;
-        setMessages((m) => {
-          const updated = [...m];
-          updated[updated.length - 1] = { role: "assistant", content: streamed };
-          return updated;
-        });
-      }, language)
+      let receivedHandoff: any = null;
+      mockDiagnose(
+        messages,
+        (chunk) => {
+          if (!isMounted) return;
+          streamed += chunk;
+          setMessages((m) => {
+            const updated = [...m];
+            updated[updated.length - 1] = { role: "assistant", content: streamed };
+            return updated;
+          });
+        },
+        language,
+        (handoff) => {
+          receivedHandoff = handoff;
+        }
+      )
         .then((finalText) => {
           if (!isMounted) return;
           const reply =
@@ -395,6 +403,7 @@ export default function Chat({
             updated[updated.length - 1] = {
               role: "assistant",
               content: reply,
+              partsHandoff: receivedHandoff,
             };
             persistSession(updated);
             return updated;
@@ -522,24 +531,35 @@ export default function Chat({
     persistSession(next, activeId);
 
     let streamed = "";
+    let receivedHandoff: any = null;
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
 
     try {
-      const reply = await mockDiagnose(next, (chunk) => {
-        streamed += chunk;
-        setMessages((m) => {
-          const updated = [...m];
-          updated[updated.length - 1] = { role: "assistant", content: streamed };
-          return updated;
-        });
-      }, language);
+      const reply = await mockDiagnose(
+        next,
+        (chunk) => {
+          streamed += chunk;
+          setMessages((m) => {
+            const updated = [...m];
+            updated[updated.length - 1] = { role: "assistant", content: streamed };
+            return updated;
+          });
+        },
+        language,
+        (handoff) => {
+          receivedHandoff = handoff;
+        }
+      );
 
       const finalReply =
         reply ||
         streamed ||
         `[DIAGNOSTIC_ERROR]: ${language === "ms" ? "Sambungan diagnostik terputus tanpa respons. Sila tekan Cuba semula." : "The diagnosis connection ended without a response. Please tap Retry."}`;
 
-      const finalMessages = [...next, { role: "assistant" as const, content: finalReply }];
+      const finalMessages = [
+        ...next,
+        { role: "assistant" as const, content: finalReply, partsHandoff: receivedHandoff },
+      ];
       setMessages(finalMessages);
       persistSession(finalMessages, activeId);
     } catch (err: any) {
@@ -1432,6 +1452,42 @@ function Bubble({
             className="inline-block ml-0.5 h-4 w-[3px] rounded-sm bg-accent align-middle"
             aria-hidden="true"
           />
+        )}
+
+        {message.partsHandoff && !isStreaming && (
+          <div className="mt-3.5 pt-3 border-t border-line dark:border-dark-line">
+            <div className="rounded-[16px] border border-accent/25 bg-accent/5 dark:bg-accent/10 p-3.5 space-y-2.5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-white">
+                    <Wrench className="h-3 w-3" aria-hidden="true" />
+                  </div>
+                  <span className="text-[12px] font-semibold text-accent">
+                    {language === "ms" ? "Cadangan Penggantian Perkakasan" : "Hardware Replacement Suggestion"}
+                  </span>
+                </div>
+                <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20">
+                  {message.partsHandoff.componentType}
+                </span>
+              </div>
+              <p className="text-[13px] text-ink-secondary dark:text-dark-ink-secondary leading-snug">
+                {language === "ms" ? message.partsHandoff.reasonMs : message.partsHandoff.reasonEn}
+              </p>
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <Link
+                  href={message.partsHandoff.ctaUrl}
+                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-pill bg-accent px-3.5 py-1.5 text-[12px] font-semibold text-white shadow-sm hover:bg-accent-hover active:scale-95 transition-all"
+                >
+                  <span>
+                    {language === "ms"
+                      ? message.partsHandoff.actionLabelMs
+                      : message.partsHandoff.actionLabelEn}
+                  </span>
+                  <ChevronRight className="h-3 w-3" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+          </div>
         )}
       </div>
 

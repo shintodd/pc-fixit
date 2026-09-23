@@ -5,6 +5,7 @@ export const translations = {
     // Navigation & Header
     nav_diagnostician: "AI Technician",
     nav_guided_fix: "Guided Fix",
+    nav_parts: "Parts & Builds",
     nav_tips: "Tips & Tools",
     nav_knowledge_base: "Knowledge Base",
     nav_start_diagnosis: "Start diagnosis",
@@ -187,6 +188,7 @@ export const translations = {
     // Navigation & Header
     nav_diagnostician: "Technician AI",
     nav_guided_fix: "Panduan Baiki",
+    nav_parts: "Komponen & Bina PC",
     nav_tips: "Tips & Alatan",
     nav_knowledge_base: "Koleksi Panduan",
     nav_start_diagnosis: "Mula semak",
