@@ -82,3 +82,138 @@ model WizardNode {
   @@map("wizard_nodes")
 }
 
+enum ComponentType {
+  CPU
+  GPU
+  MOTHERBOARD
+  RAM
+  STORAGE
+  PSU
+  CASE
+  COOLER
+}
+
+model Part {
+  id             String          @id @default(cuid())
+  slug           String          @unique
+  name           String
+  brand          String
+  model          String
+  type           ComponentType
+  specs          Json
+  benchmarkScore Int             @default(0)
+  imageUrl       String?
+  prices         PartPrice[]
+  priceHistory   PriceHistory[]
+  watchlists     PartWatchlist[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([type])
+  @@index([brand])
+  @@index([type, benchmarkScore])
+  @@map("parts")
+}
+
+model Retailer {
+  id           String         @id @default(cuid())
+  name         String
+  slug         String         @unique
+  websiteUrl   String
+  logoUrl      String?
+  isActive     Boolean        @default(true)
+  prices       PartPrice[]
+  priceHistory PriceHistory[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("retailers")
+}
+
+model PartPrice {
+  id               String   @id @default(cuid())
+  partId           String
+  part             Part     @relation(fields: [partId], references: [id], onDelete: Cascade)
+  retailerId       String
+  retailer         Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  priceMyr         Decimal  @db.Decimal(10, 2)
+  originalPriceMyr Decimal? @db.Decimal(10, 2)
+  inStock          Boolean  @default(true)
+  stockQuantity    Int?
+  productUrl       String
+  affiliateUrl     String?
+  sku              String?
+  lastScrapedAt    DateTime @default(now())
+
+  @@unique([partId, retailerId])
+  @@index([partId, priceMyr])
+  @@index([retailerId])
+  @@map("part_prices")
+}
+
+model PriceHistory {
+  id         String   @id @default(cuid())
+  partId     String
+  part       Part     @relation(fields: [partId], references: [id], onDelete: Cascade)
+  retailerId String
+  retailer   Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+  priceMyr   Decimal  @db.Decimal(10, 2)
+  inStock    Boolean  @default(true)
+  recordedAt DateTime @default(now())
+
+  @@index([partId, recordedAt])
+  @@map("price_histories")
+}
+
+model PartWatchlist {
+  id             String    @id @default(cuid())
+  userEmail      String
+  partId         String
+  part           Part      @relation(fields: [partId], references: [id], onDelete: Cascade)
+  targetPriceMyr Decimal   @db.Decimal(10, 2)
+  notifyChannel  String    @default("in_app")
+  webhookUrl     String?
+  isActive       Boolean   @default(true)
+  lastNotifiedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([partId, isActive])
+  @@index([userEmail])
+  @@map("part_watchlists")
+}
+
+model SavedBuild {
+  id                  String   @id @default(cuid())
+  title               String
+  description         String?
+  budgetMyr           Decimal  @db.Decimal(10, 2)
+  useCase             String
+  parts               Json
+  totalPriceMyr       Decimal  @db.Decimal(10, 2)
+  isCompatible        Boolean  @default(true)
+  compatibilityReport Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("saved_builds")
+}
+
+model InstallationGuide {
+  id               String        @id @default(cuid())
+  componentType    ComponentType @unique
+  title            String
+  summary          String
+  difficulty       String
+  estimatedMinutes Int
+  videoEmbedUrl    String?
+  toolsNeeded      String[]
+  precautions      String[]
+  steps            Json
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@map("installation_guides")
+}
+
+

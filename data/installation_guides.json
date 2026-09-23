@@ -1,0 +1,197 @@
+[
+  {
+    "componentType": "CPU",
+    "title": "CPU Socket Installation Guide (AMD AM5 / Intel LGA1700)",
+    "summary": "Step-by-step procedure for safely seating processors into Land Grid Array (LGA) sockets without bending delicate motherboard socket pins.",
+    "difficulty": "Intermediate",
+    "estimatedMinutes": 8,
+    "videoEmbedUrl": "https://www.youtube-nocookie.com/embed/BL4DCEp7blY",
+    "toolsNeeded": ["Clean dry hands / ESD grounding strap", "Microfiber cloth"],
+    "precautions": [
+      "Never touch the gold pins inside the motherboard socket or the golden pads on the bottom of the processor.",
+      "Zero insertion force: The CPU must drop in under its own weight. If force is required, alignment is wrong."
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "Open Socket Retention Arm",
+        "body": "Gently press down on the metal retention lever, unhook it from the plastic catch tab by swinging it outwards, and lift it all the way open (approx 100 degrees).",
+        "warning": "Do not remove the black protective socket cap manually. It pops off automatically when the lever locks down later."
+      },
+      {
+        "order": 2,
+        "title": "Locate Golden Triangle Alignment Notch",
+        "body": "Look for the small golden embossed triangle on one corner of your CPU. Match it with the corresponding engraved triangle marker on the motherboard socket."
+      },
+      {
+        "order": 3,
+        "title": "Seat Processor Vertically",
+        "body": "Holding the CPU strictly by its PCB edges between your thumb and index finger, lower it vertically straight down into the socket. Verify it sits flush and cannot slide side to side."
+      },
+      {
+        "order": 4,
+        "title": "Lock Retention Lever",
+        "body": "Lower the socket bracket lid over the CPU. Push the metal lever back down. Significant resistance is normal as the spring clamp applies uniform mounting pressure. Hook the lever securely under the metal catch tab."
+      }
+    ]
+  },
+  {
+    "componentType": "RAM",
+    "title": "DDR4 / DDR5 Memory Modules Installation Guide",
+    "summary": "How to seat dual-channel desktop memory correctly in primary DIMM slots 2 and 4 for maximum stability and XMP / EXPO operation.",
+    "difficulty": "Beginner",
+    "estimatedMinutes": 5,
+    "videoEmbedUrl": "https://www.youtube-nocookie.com/embed/zH0u3iJ8P-Q",
+    "toolsNeeded": ["None (Toolless installation)"],
+    "precautions": [
+      "Always insert memory into slots A2 and B2 (slots 2 and 4 away from the CPU) when running two sticks to enable dual-channel trace routing.",
+      "DDR4 and DDR5 have different notch positions and are physically non-interchangeable."
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "Open DIMM Retention Latches",
+        "body": "Locate slots 2 and 4. Push the top (and bottom, if dual-latch) plastic wing clips outwards until they lock open at a 45-degree angle."
+      },
+      {
+        "order": 2,
+        "title": "Align Key Notch",
+        "body": "Check the offset key notch in the gold pin contact array of the RAM stick. Align it with the plastic ridge inside the motherboard memory slot."
+      },
+      {
+        "order": 3,
+        "title": "Firm Dual-Thumb Insertion",
+        "body": "Place the stick into the slot grooves. Using both thumbs on the outer top corners of the heatspreader, apply firm and even downward pressure until the retention clips snap shut with an audible click."
+      }
+    ]
+  },
+  {
+    "componentType": "GPU",
+    "title": "Dedicated Graphics Card (PCIe x16) Installation Guide",
+    "summary": "Mounting high-performance discrete GPUs into the primary PCIe slot and routing high-current PCIe/12VHPWR power delivery safely.",
+    "difficulty": "Beginner",
+    "estimatedMinutes": 10,
+    "videoEmbedUrl": "https://www.youtube-nocookie.com/embed/NYyVp6p5QeU",
+    "toolsNeeded": ["#2 Phillips Screwdriver"],
+    "precautions": [
+      "Always insert the GPU into the topmost PCIe x16 slot directly wired to CPU lanes.",
+      "Ensure 12VHPWR 16-pin power cables are seated 100% flush with zero gap to prevent terminal resistance heating."
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "Remove Rear Chassis Expansion Covers",
+        "body": "Unscrew and remove the 2 or 3 metal slot covers on the rear of your PC case that align with the top PCIe x16 slot."
+      },
+      {
+        "order": 2,
+        "title": "Release PCIe Slot Lock",
+        "body": "Ensure the plastic lock tab on the right side of the motherboard top PCIe x16 slot is pushed open/flat."
+      },
+      {
+        "order": 3,
+        "title": "Seat GPU and Fasten Bracket",
+        "body": "Align the GPU metal bracket with the rear chassis slots and the gold PCIe edge with the motherboard slot. Push firmly down until the slot lock snaps upward. Secure the metal rear bracket using two chassis screws."
+      },
+      {
+        "order": 4,
+        "title": "Connect Power Delivery",
+        "body": "Plug in the required 8-pin PCIe or 12VHPWR cables. Listen and feel for the physical plastic locking click."
+      }
+    ]
+  },
+  {
+    "componentType": "STORAGE",
+    "title": "M.2 NVMe PCIe High-Speed SSD Installation Guide",
+    "summary": "Installing M.2 2280 solid-state drives under motherboard thermal heatsinks.",
+    "difficulty": "Beginner",
+    "estimatedMinutes": 5,
+    "videoEmbedUrl": "https://www.youtube-nocookie.com/embed/5F_1fK0kXjI",
+    "toolsNeeded": ["#1 or #0 Precision Phillips Screwdriver"],
+    "precautions": [
+      "MANDATORY: Peel off the blue/clear protective plastic film from the heatsink thermal pad before reinstalling the cover."
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "Remove Motherboard M.2 Shield",
+        "body": "Unscrew the primary M.2 metal heatsink located directly above or below the top PCIe slot."
+      },
+      {
+        "order": 2,
+        "title": "Insert at 30-Degree Angle",
+        "body": "Slide the gold pins of the M.2 drive into the slot at a 30-degree angle until fully inserted. The drive will naturally stay tilted up."
+      },
+      {
+        "order": 3,
+        "title": "Secure Standoff & Reattach Heatsink",
+        "body": "Gently push the drive down flat against the standoff. Fasten the small retention screw or rotate the EZ-Latch. Peel the thermal pad cover and screw down the heatsink."
+      }
+    ]
+  },
+  {
+    "componentType": "COOLER",
+    "title": "CPU Air / Liquid AIO Cooler Installation Guide",
+    "summary": "Correct mounting bracket setup, thermal compound application, and coldplate tensioning.",
+    "difficulty": "Intermediate",
+    "estimatedMinutes": 15,
+    "videoEmbedUrl": "https://www.youtube-nocookie.com/embed/g2qJ1sFmZ6E",
+    "toolsNeeded": ["#2 Long Magnetic Phillips Screwdriver", "Thermal paste tube"],
+    "precautions": [
+      "CRITICAL: Always peel off the transparent plastic warning label on the copper coldplate before mounting.",
+      "Tighten screws in a cross pattern (diagonal X) 1 to 2 turns at a time to spread mounting pressure evenly across the IHS."
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "Install Socket Backplate and Stand-offs",
+        "body": "Place the cooler socket backplate behind the motherboard and screw in the 4 matching threaded stand-offs from the front."
+      },
+      {
+        "order": 2,
+        "title": "Apply Thermal Interface Material (TIM)",
+        "body": "Place a pea-sized dot (or five-dot pattern) of quality thermal paste in the center of the CPU metal heatspreader (IHS)."
+      },
+      {
+        "order": 3,
+        "title": "Mount and Tighten Coldplate",
+        "body": "Lower the cooler coldplate directly onto the CPU. Tighten the spring-loaded screws in an alternating diagonal sequence until hand-tight."
+      },
+      {
+        "order": 4,
+        "title": "Connect Fan and Pump Headers",
+        "body": "Plug the primary fan cable into CPU_FAN on the motherboard. For AIO pumps, plug the pump cable into PUMP_FAN or AIO_PUMP."
+      }
+    ]
+  },
+  {
+    "componentType": "PSU",
+    "title": "Power Supply Unit (PSU) Installation Guide",
+    "summary": "Mounting the power supply into the chassis basement and routing primary wiring harnesses.",
+    "difficulty": "Beginner",
+    "estimatedMinutes": 10,
+    "videoEmbedUrl": "https://www.youtube-nocookie.com/embed/V7Jq843Y1qE",
+    "toolsNeeded": ["#2 Phillips Screwdriver"],
+    "precautions": [
+      "Never mix modular cables from different PSU brands or models: pinouts on the power supply side are not standardized and can short components.",
+      "Orient the PSU intake fan facing downwards toward the bottom chassis dust filter."
+    ],
+    "steps": [
+      {
+        "order": 1,
+        "title": "Connect Modular Cables First",
+        "body": "Plug required power cables (24-pin ATX, 8-pin CPU EPS, PCIe cables) into the PSU backplane before sliding the unit into the chassis tunnel."
+      },
+      {
+        "order": 2,
+        "title": "Slide into Case Basement",
+        "body": "Slide the PSU into the rear bottom chamber with the intake fan pointing down toward the bottom ventilated dust mesh."
+      },
+      {
+        "order": 3,
+        "title": "Fasten 4 Rear Chassis Screws",
+        "body": "Fasten the four coarse-threaded 6-32 screws through the rear case bracket into the power supply frame."
+      }
+    ]
+  }
+]
