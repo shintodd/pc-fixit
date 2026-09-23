@@ -14,12 +14,12 @@ function PartsStudioContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const tabParam = searchParams.get("tab") || "generator";
+  const tabParam = searchParams.get("tab") || "catalog";
   const typeParam = (searchParams.get("type") as ComponentType) || undefined;
   const conditionParam = (searchParams.get("condition") as "all" | "new" | "used") || "all";
 
   const [activeTab, setActiveTab] = useState<"generator" | "catalog">(
-    tabParam === "catalog" ? "catalog" : "generator"
+    tabParam === "generator" ? "generator" : "catalog"
   );
 
   // Modals launched via top tabs or query params
@@ -54,12 +54,25 @@ function PartsStudioContent() {
             Parts & Build Studio
           </h1>
           <p className="max-w-2xl mx-auto text-sm text-ink-muted-80 dark:text-dark-muted leading-relaxed">
-            Live quotes from Shopee MY, Lazada, and second-hand markets (Carousell MY, Mudah). Dynamic build generator, 10-rule deterministic compatibility engine, and DIY installation guides.
+            Real Malaysian market valuations from brand-new retail to second-hand street prices. Dynamic compatibility testing, tier rankings, and expert hardware advice.
           </p>
 
           {/* Master Mode Switcher Bar */}
           <div className="pt-4 flex flex-wrap items-center justify-center gap-2.5">
             <div className="inline-flex p-1 rounded-full bg-canvas dark:bg-dark-surface border border-line dark:border-dark-line shadow-sm text-xs font-medium">
+              <button
+                type="button"
+                onClick={() => handleTabChange("catalog")}
+                className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  activeTab === "catalog"
+                    ? "bg-accent text-white shadow-sm dark:bg-dark-accent dark:text-white"
+                    : "text-ink-muted-80 hover:text-ink dark:text-dark-muted dark:hover:text-white"
+                }`}
+              >
+                <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Hardware Catalog & Compatibility</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => handleTabChange("generator")}
@@ -71,19 +84,6 @@ function PartsStudioContent() {
               >
                 <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Smart Build Generator</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleTabChange("catalog")}
-                className={`flex items-center gap-1.5 px-5 py-2.5 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                  activeTab === "catalog"
-                    ? "bg-accent text-white shadow-sm dark:bg-dark-accent dark:text-white"
-                    : "text-ink-muted-80 hover:text-ink dark:text-dark-muted dark:hover:text-white"
-                }`}
-              >
-                <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>Parts & Price Tracker</span>
               </button>
             </div>
 
