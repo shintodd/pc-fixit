@@ -1,4 +1,4 @@
-import { BuildSelection, CpuSpecs, GpuSpecs, MotherboardSpecs, RamSpecs, StorageSpecs, PsuSpecs, CaseSpecs, CoolerSpecs } from "@/lib/parts/types";
+import { BuildSelection, PartItem, CpuSpecs, GpuSpecs, MotherboardSpecs, RamSpecs, StorageSpecs, PsuSpecs, CaseSpecs, CoolerSpecs } from "@/lib/parts/types";
 import { CompatibilityReport, CompatibilityIssue } from "@/lib/parts/compatibility/types";
 
 export function checkCompatibility(build: BuildSelection): CompatibilityReport {
@@ -239,4 +239,40 @@ export function checkCompatibility(build: BuildSelection): CompatibilityReport {
     recommendedPsuWattage,
     checks,
   };
+}
+
+/**
+ * Validates a single candidate part against an active or partial build selection.
+ * Returns true if compatible, or false with the exact conflict explanation.
+ */
+export function checkCandidateCompatibility(
+  candidate: PartItem,
+  selection: BuildSelection
+): { isCompatible: boolean; conflictReason?: string; conflictReasonMs?: string } {
+  const testSelection: BuildSelection = {
+    ...selection,
+    [candidate.type.toLowerCase()]: candidate,
+  };
+  const report = checkCompatibility(testSelection);
+  // When testing a single candidate or partial selection in catalog browsing,
+  // ignore whole-system display check if no GPU is chosen yet.
+  const isPartialSelection = !testSelection.gpu;
+  const failure = report.checks.find((c) => {
+    if (!c.passed && c.level === "CRITICAL") {
+      if (c.ruleId === "NO_DISPLAY_OUTPUT" && isPartialSelection) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  });
+
+  if (failure) {
+    return {
+      isCompatible: false,
+      conflictReason: failure.messageEn,
+      conflictReasonMs: failure.messageMs,
+    };
+  }
+  return { isCompatible: true };
 }

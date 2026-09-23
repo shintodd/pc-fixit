@@ -88,7 +88,7 @@ export async function evaluatePriceAlerts(): Promise<{
       currentPriceMyr: samplePart.bestPriceMyr,
       savingsMyr: 450 - samplePart.bestPriceMyr,
       notifyChannel: "in_app",
-      productUrl: samplePart.prices[0]?.productUrl || "https://shopee.com.my",
+      productUrl: samplePart.prices?.[0]?.productUrl || "#",
     });
   }
 

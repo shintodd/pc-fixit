@@ -1436,9 +1436,9 @@ async function runPartsRecommendationSuite() {
 
   // Pass case
   const cpu = parts.find((p) => p.slug === "amd-ryzen-7-7800x3d")!;
-  const mobo = parts.find((p) => p.slug === "msi-mag-b650-tomahawk-wifi")!;
+  const mobo = parts.find((p) => p.slug === "asrock-b650m-hdv-m2-am5-motherboard")!;
   const ram = parts.find((p) => p.slug === "gskill-ripjaws-s5-32gb-2x16gb-ddr5-6000-cl30")!;
-  const gpu = parts.find((p) => p.slug === "zotac-gaming-geforce-rtx-4070-super-twin-edge-12gb")!;
+  const gpu = parts.find((p) => p.slug === "nvidia-geforce-rtx-4070-super-12gb")!;
   const psu = parts.find((p) => p.slug === "corsair-rm750e-750w-80-plus-gold-atx3")!;
   const cs = parts.find((p) => p.slug === "montech-air-903-max-atx-case")!;
 
@@ -1446,7 +1446,7 @@ async function runPartsRecommendationSuite() {
   assert(validReport.isCompatible, "Compatible build reports isCompatible: true");
 
   // Fail cases
-  const moboB550 = parts.find((p) => p.slug === "msi-b550m-pro-vdh-wifi")!;
+  const moboB550 = parts.find((p) => p.slug === "msi-b550m-pro-vdh-wifi-am4-motherboard")!;
   const badSocket = checkCompatibility({ cpu, motherboard: moboB550, ram, gpu, psu, case: cs });
   assert(!badSocket.isCompatible, "Socket mismatch (AM5 CPU on AM4 board) fails compatibility check");
 

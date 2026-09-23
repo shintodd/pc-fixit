@@ -110,6 +110,28 @@ export interface RetailerQuote {
   lastScrapedAt: string;
 }
 
+export interface MarketPriceRange {
+  newRange?: { min: number; max: number; typical: number };
+  usedRange?: { min: number; max: number; typical: number };
+  fairTargetPriceMyr: number;
+  availability: "abundant" | "moderate" | "scarce" | "discontinued_used_only";
+}
+
+export type TierRanking = "S" | "A" | "B" | "C" | "D";
+export type SourcingRecommendation = "must_buy_used" | "safe_buy_new" | "skip_poor_value" | "enthusiast_tier";
+export type TargetResolution = "1080p Budget" | "1080p High" | "1440p Sweet Spot" | "4K Enthusiast" | "Workstation / Production";
+
+export interface PartOpinion {
+  verdict: string;
+  recommendation: SourcingRecommendation;
+  recommendationLabel: string;
+  pros: string[];
+  cons: string[];
+  targetResolution?: TargetResolution;
+  upgradeAdvice: string;
+  tierRanking: TierRanking;
+}
+
 export interface PartItem {
   id: string;
   slug: string;
@@ -125,7 +147,9 @@ export interface PartItem {
   bestUsedPriceMyr?: number;
   hasUsedListings: boolean;
   inStock: boolean;
-  prices: RetailerQuote[];
+  prices?: RetailerQuote[];
+  marketPricing?: MarketPriceRange;
+  opinion?: PartOpinion;
 }
 
 export interface BuildSelection {

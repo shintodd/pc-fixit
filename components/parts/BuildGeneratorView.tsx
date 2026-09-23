@@ -9,7 +9,6 @@ import {
   Coins,
   ShieldCheck,
   Zap,
-  ExternalLink,
   Copy,
   Check,
   AlertTriangle,
@@ -444,22 +443,8 @@ export default function BuildGeneratorView({
               {result.allocations.map((alloc) => {
                 const item = (result.selection as any)[alloc.componentType.toLowerCase()];
                 const isStockCooler = alloc.componentType === "COOLER" && !item;
-
-                // Match exact retailer quote for this component
-                const matchingQuote = item?.prices
-                  ? (item.prices.find((q: any) =>
-                      (alloc.condition === "new" ? q.condition === "new" : q.condition !== "new") &&
-                      q.priceMyr === alloc.actualMyr
-                    ) ||
-                    item.prices
-                      .filter((q: any) => alloc.condition === "new" ? q.condition === "new" : q.condition !== "new")
-                      .sort((a: any, b: any) => a.priceMyr - b.priceMyr)[0] ||
-                    item.prices[0])
-                  : null;
-
-                const retailerName = alloc.selectedRetailer || matchingQuote?.retailerName || "Malaysian Retailer";
-                const productUrl = alloc.selectedProductUrl || matchingQuote?.productUrl || "#";
-                const sellerLocation = alloc.sellerLocation || matchingQuote?.sellerLocation;
+                const pricing = item?.marketPricing;
+                const opinion = item?.opinion;
 
                 return (
                   <div
@@ -468,10 +453,15 @@ export default function BuildGeneratorView({
                   >
                     <div>
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-muted-80 dark:text-dark-muted">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-accent dark:text-dark-accent">
                           {alloc.componentType}
                         </span>
                         <div className="flex items-center gap-1.5">
+                          {opinion?.tierRanking && (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-accent text-white dark:bg-dark-accent">
+                              Tier {opinion.tierRanking}
+                            </span>
+                          )}
                           {alloc.condition && (
                             <span
                               className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
@@ -480,7 +470,7 @@ export default function BuildGeneratorView({
                                   : "bg-amber-500/10 text-amber-700 dark:text-amber-300"
                               }`}
                             >
-                              {alloc.condition === "new" ? "Brand New" : "Tested Used"}
+                              {alloc.condition === "new" ? "Brand New" : "Pre-Owned Market"}
                             </span>
                           )}
                           <span className="text-xs font-bold text-ink dark:text-white">
@@ -496,7 +486,7 @@ export default function BuildGeneratorView({
                               AMD/Intel Bundled Thermal Solution
                             </p>
                             <p className="text-xs text-ink-muted-80 dark:text-dark-muted mt-0.5">
-                              Free stock boxed cooler included with processor - zero added cost
+                              Free stock boxed cooler included with processor, zero added cost
                             </p>
                           </div>
                         ) : item ? (
@@ -504,20 +494,50 @@ export default function BuildGeneratorView({
                             <p className="text-sm font-semibold text-ink dark:text-white line-clamp-1">
                               {item.name}
                             </p>
-                            <p className="text-xs text-ink-muted-80 dark:text-dark-muted mt-0.5">
-                              Quote source: <span className="font-semibold text-ink dark:text-white">{retailerName}</span>
-                              {sellerLocation ? ` (${sellerLocation})` : ""}
-                            </p>
+
+                            {/* Market Value Range */}
+                            <div className="mt-2 p-2 rounded-lg bg-canvas-parchment/60 dark:bg-dark-subtle/30 text-[11px] space-y-1">
+                              <div className="flex items-center justify-between text-ink-muted-80 dark:text-dark-muted">
+                                <span>Fair Market Target:</span>
+                                <span className="font-semibold text-ink dark:text-white">
+                                  RM{pricing?.fairTargetPriceMyr || alloc.actualMyr}
+                                </span>
+                              </div>
+                              {pricing?.newRange && (
+                                <div className="flex items-center justify-between text-[10px] text-ink-muted-80 dark:text-dark-muted">
+                                  <span>Brand New Retail Band:</span>
+                                  <span>RM{pricing.newRange.min} to RM{pricing.newRange.max}</span>
+                                </div>
+                              )}
+                              {pricing?.usedRange && (
+                                <div className="flex items-center justify-between text-[10px] text-ink-muted-80 dark:text-dark-muted">
+                                  <span>Second-Hand Street Band:</span>
+                                  <span>RM{pricing.usedRange.min} to RM{pricing.usedRange.max}</span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Expert Verdict / Rationale */}
+                            {opinion && (
+                              <div className="mt-2 text-xs">
+                                <span className="inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-subtle dark:bg-dark-subtle text-ink dark:text-white mb-1">
+                                  {opinion.recommendationLabel}
+                                </span>
+                                <p className="text-[11px] text-ink-muted-80 dark:text-dark-muted line-clamp-2 leading-relaxed">
+                                  {opinion.verdict}
+                                </p>
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <p className="text-xs text-ink-muted-80 dark:text-dark-muted italic">
-                            Optional / Integrated
+                            Optional or Integrated
                           </p>
                         )}
                       </div>
                     </div>
 
-                    {/* Action buttons per component */}
+                    {/* Action button per component */}
                     {!isStockCooler && item && (
                       <div className="mt-4 pt-3 border-t border-line dark:border-dark-line flex items-center justify-between text-xs">
                         <button
@@ -526,18 +546,12 @@ export default function BuildGeneratorView({
                           className="flex items-center gap-1 text-ink-muted-80 hover:text-ink dark:text-dark-muted dark:hover:text-white transition-colors"
                         >
                           <Wrench className="h-3.5 w-3.5" />
-                          <span>Install Guide</span>
+                          <span>Hardware Guide</span>
                         </button>
 
-                        <a
-                          href={productUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-accent font-medium hover:underline dark:text-dark-accent"
-                        >
-                          <span>Buy on {retailerName} (RM{alloc.actualMyr})</span>
-                          <ExternalLink className="h-3 w-3" />
-                        </a>
+                        <span className="text-[11px] font-medium text-ink-muted-80 dark:text-dark-muted">
+                          Malaysian Market Estimate
+                        </span>
                       </div>
                     )}
                   </div>

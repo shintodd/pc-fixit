@@ -278,17 +278,17 @@ export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<Bu
     const isUsed = Boolean((selectedItem as any)?.isUsedSelection);
     const targetCond = isUsed ? "used" : "new";
 
-    // Match quote by condition and price
+    // Match quote by condition and price if quotes exist
     const condQuotes = (selectedItem?.prices || []).filter((q) =>
       targetCond === "new" ? q.condition === "new" : q.condition !== "new"
     );
     const matchingQuote =
       condQuotes.find((q) => q.priceMyr === selectedItem?.bestPriceMyr) ||
       condQuotes.sort((a, b) => a.priceMyr - b.priceMyr)[0] ||
-      selectedItem?.prices[0];
+      (selectedItem?.prices ? selectedItem.prices[0] : undefined);
 
     // Reorder selectedItem.prices so the chosen quote is guaranteed at index 0
-    if (selectedItem && matchingQuote) {
+    if (selectedItem && matchingQuote && selectedItem.prices) {
       selectedItem.prices = [
         matchingQuote,
         ...selectedItem.prices.filter((q) => q !== matchingQuote),
@@ -301,7 +301,7 @@ export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<Bu
       actualMyr: selectedItem?.bestPriceMyr || 0,
       condition: isUsed ? (matchingQuote?.condition as any || "used_good") : "new",
       selectedRetailer: matchingQuote?.retailerName,
-      selectedProductUrl: matchingQuote?.productUrl,
+      selectedProductUrl: undefined,
       sellerLocation: matchingQuote?.sellerLocation,
     };
   });

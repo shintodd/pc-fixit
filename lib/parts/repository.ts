@@ -74,6 +74,8 @@ export async function getAllParts(filter?: {
               ? Math.min(...inStockPrices.map((pr) => pr.priceMyr))
               : (prices.length > 0 ? Math.min(...prices.map((pr) => pr.priceMyr)) : 0);
 
+            const seedMatch = SEED_PARTS.find((s) => s.slug === p.slug || s.model === p.model);
+
             return {
               id: p.id,
               slug: p.slug,
@@ -84,6 +86,8 @@ export async function getAllParts(filter?: {
               specs: p.specs as any,
               benchmarkScore: p.benchmarkScore,
               imageUrl: p.imageUrl ?? undefined,
+              marketPricing: seedMatch?.marketPricing,
+              opinion: seedMatch?.opinion,
               bestPriceMyr,
               bestNewPriceMyr,
               bestUsedPriceMyr,
@@ -126,9 +130,9 @@ export async function getAllParts(filter?: {
     }
     return true;
   }).map((p) => {
-    const sortedAll = p.prices.slice().sort((a, b) => a.priceMyr - b.priceMyr);
+    const sortedAll = (p.prices ?? []).slice().sort((a, b) => a.priceMyr - b.priceMyr);
     if (filter?.condition === "new") {
-      const newQuotes = p.prices.filter((pr) => pr.condition === "new").sort((a, b) => a.priceMyr - b.priceMyr);
+      const newQuotes = (p.prices ?? []).filter((pr) => pr.condition === "new").sort((a, b) => a.priceMyr - b.priceMyr);
       return {
         ...p,
         bestPriceMyr: p.bestNewPriceMyr || (newQuotes[0]?.priceMyr ?? p.bestPriceMyr),
@@ -136,7 +140,7 @@ export async function getAllParts(filter?: {
       };
     }
     if (filter?.condition === "used") {
-      const usedQuotes = p.prices.filter((pr) => pr.condition !== "new").sort((a, b) => a.priceMyr - b.priceMyr);
+      const usedQuotes = (p.prices ?? []).filter((pr) => pr.condition !== "new").sort((a, b) => a.priceMyr - b.priceMyr);
       return {
         ...p,
         bestPriceMyr: p.bestUsedPriceMyr || (usedQuotes[0]?.priceMyr ?? p.bestPriceMyr),
@@ -189,6 +193,8 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
           ? Math.min(...inStockPrices.map((pr) => pr.priceMyr))
           : (prices.length > 0 ? Math.min(...prices.map((pr) => pr.priceMyr)) : 0);
 
+        const seedMatch = SEED_PARTS.find((s) => s.slug === dbPart.slug || s.model === dbPart.model);
+
         return {
           id: dbPart.id,
           slug: dbPart.slug,
@@ -199,6 +205,8 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
           specs: dbPart.specs as any,
           benchmarkScore: dbPart.benchmarkScore,
           imageUrl: dbPart.imageUrl ?? undefined,
+          marketPricing: seedMatch?.marketPricing,
+          opinion: seedMatch?.opinion,
           bestPriceMyr,
           bestNewPriceMyr,
           bestUsedPriceMyr,
@@ -216,7 +224,7 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
   if (!found) return null;
   return {
     ...found,
-    prices: found.prices.slice().sort((a, b) => a.priceMyr - b.priceMyr),
+    prices: (found.prices ?? []).slice().sort((a, b) => a.priceMyr - b.priceMyr),
   };
 }
 

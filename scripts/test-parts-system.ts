@@ -1,4 +1,4 @@
-import { checkCompatibility } from "../lib/parts/compatibility/checker";
+import { checkCompatibility, checkCandidateCompatibility } from "../lib/parts/compatibility/checker";
 import { generateSmartBuild } from "../lib/parts/build-generator/generator";
 import { getAllParts, getPartBySlug, getPriceHistory } from "../lib/parts/repository";
 import { detectHardwareHandoff } from "../lib/parts/handoff";
@@ -39,7 +39,7 @@ async function runPartsSuite() {
     assert(componentTypes.has(t as any), `Catalog includes ${t} components`);
   }
 
-  const allHaveValidPrices = parts.every((p) => p.bestPriceMyr > 0 && p.prices.length > 0);
+  const allHaveValidPrices = parts.every((p) => p.bestPriceMyr > 0 && (p.prices ?? []).length > 0);
   assert(allHaveValidPrices, "All parts contain valid non-zero MYR pricing and retailer quotes");
 
   const sampleSlug = "amd-ryzen-7-7800x3d";
@@ -54,9 +54,9 @@ async function runPartsSuite() {
   // ------------------------------------------------------------------
   console.log("\n--- Suite 2: Compatibility Engine (Pass Cases) ---");
   const cpu7800 = parts.find((p) => p.slug === "amd-ryzen-7-7800x3d")!;
-  const moboB650 = parts.find((p) => p.slug === "msi-mag-b650-tomahawk-wifi")!;
+  const moboB650 = parts.find((p) => p.slug === "asrock-b650m-hdv-m2-am5-motherboard")!;
   const ramD5 = parts.find((p) => p.slug === "gskill-ripjaws-s5-32gb-2x16gb-ddr5-6000-cl30")!;
-  const gpu4070S = parts.find((p) => p.slug === "zotac-gaming-geforce-rtx-4070-super-twin-edge-12gb")!;
+  const gpu4070S = parts.find((p) => p.slug === "nvidia-geforce-rtx-4070-super-12gb")!;
   const psu750 = parts.find((p) => p.slug === "corsair-rm750e-750w-80-plus-gold-atx3")!;
   const caseAir = parts.find((p) => p.slug === "montech-air-903-max-atx-case")!;
   const coolerPA120 = parts.find((p) => p.slug === "thermalright-peerless-assassin-120-se-argb")!;
@@ -85,7 +85,7 @@ async function runPartsSuite() {
   console.log("\n--- Suite 3: Compatibility Engine (Fail & Conflict Cases) ---");
 
   // Rule 1: Socket mismatch (AM5 CPU on AM4 Motherboard)
-  const moboB550 = parts.find((p) => p.slug === "msi-b550m-pro-vdh-wifi")!;
+  const moboB550 = parts.find((p) => p.slug === "msi-b550m-pro-vdh-wifi-am4-motherboard")!;
   const badSocketReport = checkCompatibility({ ...validBuild, motherboard: moboB550 });
   assert(!badSocketReport.isCompatible, "Fails when AM5 CPU is paired with AM4 motherboard");
   const socketCheck = badSocketReport.checks.find((c) => c.ruleId === "CPU_SOCKET_MATCH");
@@ -224,14 +224,14 @@ async function runPartsSuite() {
   const usedParts = await getAllParts({ condition: "used" });
   assert(usedParts.length >= 8, `Catalog contains second-hand listings (found: ${usedParts.length})`);
 
-  const rx6600 = usedParts.find((p) => p.slug === "sapphire-pulse-radeon-rx-6600-8gb");
+  const rx6600 = usedParts.find((p) => p.slug === "amd-radeon-rx-6600-8gb");
   assert(rx6600 !== undefined && rx6600.hasUsedListings, "RX 6600 includes verified second-hand listings");
   assert(
     rx6600 !== undefined && (rx6600.bestUsedPriceMyr || 0) < (rx6600.bestNewPriceMyr || 9999),
     `Used price (RM${rx6600?.bestUsedPriceMyr}) provides significant savings over retail (RM${rx6600?.bestNewPriceMyr})`
   );
 
-  const carousellQuote = rx6600?.prices.find((pr) => pr.retailerSlug === "carousell-my");
+  const carousellQuote = rx6600?.prices?.find((pr) => pr.retailerSlug === "carousell-my");
   assert(carousellQuote !== undefined && carousellQuote.isMarketplace === true, "Carousell MY quote marked as marketplace");
   assert(Boolean(carousellQuote?.sellerLocation), `Used listing includes seller location (${carousellQuote?.sellerLocation})`);
 
@@ -261,6 +261,35 @@ async function runPartsSuite() {
   });
   assert(usedBuild.success, "Generates successful Second-Hand Value build at RM1,800");
   assert(usedBuild.compatibility.isCompatible, "Second-Hand build passes 100% of compatibility checks");
+
+  // ------------------------------------------------------------------
+  // 9. Hardware Intelligence, Valuation & Candidate Compatibility
+  // ------------------------------------------------------------------
+  console.log("\n--- Suite 9: Hardware Intelligence & Candidate Compatibility ---");
+
+  // Every part must have realistic market pricing and expert opinion
+  const allHaveMarketPricing = parts.every((p) => p.marketPricing && p.marketPricing.fairTargetPriceMyr > 0);
+  assert(allHaveMarketPricing, "All catalog parts contain comprehensive marketPricing with non-zero fair target price");
+
+  const allHaveOpinion = parts.every((p) => p.opinion && p.opinion.verdict && p.opinion.tierRanking);
+  assert(allHaveOpinion, "All catalog parts contain expert opinion with verdict and tier ranking");
+
+  // Candidate compatibility testing
+  const am4Candidate = parts.find((p) => p.slug === "amd-ryzen-5-5600")!;
+  const am5Candidate = parts.find((p) => p.slug === "amd-ryzen-7-7800x3d")!;
+  const am4Mobo = parts.find((p) => p.slug === "msi-b550m-pro-vdh-wifi-am4-motherboard")!;
+
+  const am4Match = checkCandidateCompatibility(am4Candidate, { motherboard: am4Mobo });
+  assert(am4Match.isCompatible === true, "checkCandidateCompatibility: AM4 CPU passes when tested against AM4 motherboard");
+
+  const am5Mismatch = checkCandidateCompatibility(am5Candidate, { motherboard: am4Mobo });
+  assert(am5Mismatch.isCompatible === false, "checkCandidateCompatibility: AM5 CPU fails when tested against AM4 motherboard");
+  assert(Boolean(am5Mismatch.conflictReason), `checkCandidateCompatibility provides explicit conflict reason: ${am5Mismatch.conflictReason}`);
+
+  // Outbound links removed from build generation
+  const testGen = await generateSmartBuild({ budgetMyr: 3500, useCase: "gaming" });
+  const zeroOutboundLinks = testGen.allocations.every((a) => a.selectedProductUrl === undefined);
+  assert(zeroOutboundLinks, "Generated builds contain zero direct outbound product links to external sellers");
 
   console.log("\n======================================================");
   console.log(`PARTS SYSTEM SUMMARY: ${totalPassed} Passed, ${totalFailed} Failed`);
