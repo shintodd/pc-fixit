@@ -257,6 +257,21 @@ export default function PartsCatalogView({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredAndSortedParts.map((part) => {
+            const sortedQuotes = [...part.prices].sort((a, b) => a.priceMyr - b.priceMyr);
+            const bestQuote =
+              condition === "new"
+                ? (sortedQuotes.filter((q) => q.condition === "new")[0] || sortedQuotes[0])
+                : condition === "used"
+                ? (sortedQuotes.filter((q) => q.condition !== "new")[0] || sortedQuotes[0])
+                : sortedQuotes[0];
+
+            const displayPrice =
+              condition === "new"
+                ? (part.bestNewPriceMyr || bestQuote?.priceMyr || part.bestPriceMyr)
+                : condition === "used"
+                ? (part.bestUsedPriceMyr || bestQuote?.priceMyr || part.bestPriceMyr)
+                : part.bestPriceMyr;
+
             const hasSavings =
               part.bestNewPriceMyr &&
               part.bestUsedPriceMyr &&
@@ -288,14 +303,33 @@ export default function PartsCatalogView({
                   </h3>
 
                   {/* Pricing Overview */}
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <span className="text-xl font-bold text-ink dark:text-white">
-                      RM{part.bestPriceMyr}
-                    </span>
-                    {part.bestNewPriceMyr && part.bestUsedPriceMyr && (
-                      <span className="text-[11px] text-ink-muted-80 dark:text-dark-muted">
-                        (New: RM{part.bestNewPriceMyr} / Used: RM{part.bestUsedPriceMyr})
+                  <div className="mt-3">
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                      <span className="text-xl font-bold text-ink dark:text-white">
+                        RM{displayPrice}
                       </span>
+                      {bestQuote && (
+                        <span className="text-xs text-ink-muted-80 dark:text-dark-muted">
+                          on <span className="font-semibold text-ink dark:text-white">{bestQuote.retailerName}</span>
+                          <span
+                            className={`ml-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                              bestQuote.condition === "new"
+                                ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                                : "bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                            }`}
+                          >
+                            {bestQuote.condition === "new" ? "New" : "Used"}
+                          </span>
+                        </span>
+                      )}
+                    </div>
+
+                    {condition === "all" && part.bestNewPriceMyr && part.bestUsedPriceMyr && (
+                      <div className="mt-1 flex items-center gap-2 text-[11px] text-ink-muted-80 dark:text-dark-muted">
+                        <span>New: RM{part.bestNewPriceMyr}</span>
+                        <span className="opacity-40">|</span>
+                        <span>Used: RM{part.bestUsedPriceMyr}</span>
+                      </div>
                     )}
                   </div>
 
@@ -377,7 +411,7 @@ export default function PartsCatalogView({
                     className="w-full flex items-center justify-between text-xs font-medium text-ink-muted-80 hover:text-ink dark:text-dark-muted dark:hover:text-white"
                   >
                     <span>
-                      {part.prices.length} Seller Quote{part.prices.length > 1 ? "s" : ""}
+                      {sortedQuotes.length} Seller Quote{sortedQuotes.length > 1 ? "s" : ""}
                     </span>
                     <ChevronDown
                       className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
@@ -388,13 +422,13 @@ export default function PartsCatalogView({
                   {/* Expanded Quotes List */}
                   {isExpanded && (
                     <div className="space-y-2 pt-1 text-xs divide-y divide-line/60 dark:divide-dark-line/40">
-                      {part.prices.map((q, idx) => (
+                      {sortedQuotes.map((q, idx) => (
                         <div key={idx} className="pt-2 first:pt-0 flex items-center justify-between gap-2">
                           <div>
                             <div className="flex items-center gap-1.5">
                               <span className="font-semibold text-ink dark:text-white">{q.retailerName}</span>
                               <span
-                                className={`px-2 py-0.2 rounded-full text-[10px] ${
+                                className={`px-2 py-0.5 rounded-full text-[10px] ${
                                   q.condition === "new"
                                     ? "bg-blue-500/10 text-blue-600 dark:text-blue-400"
                                     : "bg-amber-500/10 text-amber-700 dark:text-amber-300"
@@ -402,6 +436,11 @@ export default function PartsCatalogView({
                               >
                                 {q.condition === "new" ? "Brand New" : "Used"}
                               </span>
+                              {idx === 0 && (
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300">
+                                  Lowest
+                                </span>
+                              )}
                             </div>
                             {q.sellerLocation && (
                               <p className="text-[10px] text-ink-muted-80 dark:text-dark-muted">
@@ -417,7 +456,7 @@ export default function PartsCatalogView({
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex h-7 w-7 items-center justify-center rounded-full bg-subtle hover:bg-line transition-colors text-ink dark:bg-dark-subtle dark:hover:bg-dark-line dark:text-white"
-                              aria-label={`Buy from ${q.retailerName}`}
+                              aria-label={`Buy from ${q.retailerName} for RM${q.priceMyr}`}
                             >
                               <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
                             </a>
@@ -460,12 +499,12 @@ export default function PartsCatalogView({
                     </div>
 
                     <a
-                      href={part.prices[0]?.productUrl || "#"}
+                      href={bestQuote?.productUrl || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-3.5 py-1.5 rounded-full bg-accent text-white text-xs font-medium hover:bg-accent-hover transition-colors flex items-center gap-1 dark:bg-dark-accent dark:hover:bg-dark-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
-                      <span>Buy Best Quote</span>
+                      <span>Buy on {bestQuote?.retailerName || "Store"} (RM{displayPrice})</span>
                       <ExternalLink className="h-3 w-3" aria-hidden="true" />
                     </a>
                   </div>

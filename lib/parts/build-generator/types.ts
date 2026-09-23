@@ -15,6 +15,9 @@ export interface CategoryAllocation {
   allocatedMyr: number;
   actualMyr: number;
   condition?: "new" | "used_excellent" | "used_good" | "refurbished";
+  selectedRetailer?: string;
+  selectedProductUrl?: string;
+  sellerLocation?: string;
 }
 
 export interface BuildGeneratorResult {

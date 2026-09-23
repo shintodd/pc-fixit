@@ -276,11 +276,33 @@ export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<Bu
   const allocations: CategoryAllocation[] = (Object.keys(slices) as ComponentType[]).map((type) => {
     const selectedItem = (selection as any)[type.toLowerCase()] as PartItem | null;
     const isUsed = Boolean((selectedItem as any)?.isUsedSelection);
+    const targetCond = isUsed ? "used" : "new";
+
+    // Match quote by condition and price
+    const condQuotes = (selectedItem?.prices || []).filter((q) =>
+      targetCond === "new" ? q.condition === "new" : q.condition !== "new"
+    );
+    const matchingQuote =
+      condQuotes.find((q) => q.priceMyr === selectedItem?.bestPriceMyr) ||
+      condQuotes.sort((a, b) => a.priceMyr - b.priceMyr)[0] ||
+      selectedItem?.prices[0];
+
+    // Reorder selectedItem.prices so the chosen quote is guaranteed at index 0
+    if (selectedItem && matchingQuote) {
+      selectedItem.prices = [
+        matchingQuote,
+        ...selectedItem.prices.filter((q) => q !== matchingQuote),
+      ];
+    }
+
     return {
       componentType: type,
       allocatedMyr: slices[type],
       actualMyr: selectedItem?.bestPriceMyr || 0,
-      condition: isUsed ? "used_excellent" : "new",
+      condition: isUsed ? (matchingQuote?.condition as any || "used_good") : "new",
+      selectedRetailer: matchingQuote?.retailerName,
+      selectedProductUrl: matchingQuote?.productUrl,
+      sellerLocation: matchingQuote?.sellerLocation,
     };
   });
 

@@ -62,6 +62,8 @@ export async function getAllParts(filter?: {
               lastScrapedAt: pr.lastScrapedAt.toISOString(),
             }));
 
+            prices.sort((a, b) => a.priceMyr - b.priceMyr);
+
             const inStockPrices = prices.filter((pr) => pr.inStock);
             const newPrices = inStockPrices.filter((pr) => pr.condition === "new");
             const usedPrices = inStockPrices.filter((pr) => pr.condition !== "new");
@@ -124,23 +126,27 @@ export async function getAllParts(filter?: {
     }
     return true;
   }).map((p) => {
+    const sortedAll = p.prices.slice().sort((a, b) => a.priceMyr - b.priceMyr);
     if (filter?.condition === "new") {
-      const newQuotes = p.prices.filter((pr) => pr.condition === "new");
+      const newQuotes = p.prices.filter((pr) => pr.condition === "new").sort((a, b) => a.priceMyr - b.priceMyr);
       return {
         ...p,
-        bestPriceMyr: p.bestNewPriceMyr || p.bestPriceMyr,
-        prices: newQuotes.length > 0 ? newQuotes : p.prices,
+        bestPriceMyr: p.bestNewPriceMyr || (newQuotes[0]?.priceMyr ?? p.bestPriceMyr),
+        prices: newQuotes.length > 0 ? newQuotes : sortedAll,
       };
     }
     if (filter?.condition === "used") {
-      const usedQuotes = p.prices.filter((pr) => pr.condition !== "new");
+      const usedQuotes = p.prices.filter((pr) => pr.condition !== "new").sort((a, b) => a.priceMyr - b.priceMyr);
       return {
         ...p,
-        bestPriceMyr: p.bestUsedPriceMyr || p.bestPriceMyr,
-        prices: usedQuotes.length > 0 ? usedQuotes : p.prices,
+        bestPriceMyr: p.bestUsedPriceMyr || (usedQuotes[0]?.priceMyr ?? p.bestPriceMyr),
+        prices: usedQuotes.length > 0 ? usedQuotes : sortedAll,
       };
     }
-    return p;
+    return {
+      ...p,
+      prices: sortedAll,
+    };
   });
 }
 
@@ -206,7 +212,12 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
     }
   }
 
-  return SEED_PARTS.find((p) => p.slug === slug || p.id === slug) || null;
+  const found = SEED_PARTS.find((p) => p.slug === slug || p.id === slug);
+  if (!found) return null;
+  return {
+    ...found,
+    prices: found.prices.slice().sort((a, b) => a.priceMyr - b.priceMyr),
+  };
 }
 
 export async function getPriceHistory(partId: string): Promise<{ date: string; priceMyr: number; retailerName: string }[]> {

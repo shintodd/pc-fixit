@@ -170,12 +170,19 @@ export default function BuildGeneratorView({
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-bold text-ink dark:text-white">RM</span>
               <input
+                id="budget-input"
+                name="budgetValue"
                 type="number"
                 min={1500}
                 max={20000}
                 step={100}
                 value={budget}
                 onChange={(e) => setBudget(Number(e.target.value))}
+                onBlur={() => handleGenerate(budget, useCase, marketPreference)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleGenerate(budget, useCase, marketPreference);
+                }}
+                aria-label="Target Budget in Malaysian Ringgit"
                 className="w-24 text-right px-2.5 py-1 text-sm font-bold rounded-lg border border-line bg-canvas text-ink dark:border-dark-line dark:bg-dark-surface dark:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               />
             </div>
@@ -183,12 +190,21 @@ export default function BuildGeneratorView({
 
           <input
             id="budget-slider"
+            name="budgetSlider"
             type="range"
             min={1500}
             max={15000}
             step={100}
             value={budget}
             onChange={(e) => setBudget(Number(e.target.value))}
+            onPointerUp={() => handleGenerate(budget, useCase, marketPreference)}
+            onTouchEnd={() => handleGenerate(budget, useCase, marketPreference)}
+            onKeyUp={(e) => {
+              if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                handleGenerate(budget, useCase, marketPreference);
+              }
+            }}
+            aria-label="Target Budget Slider"
             className="w-full h-2 bg-subtle dark:bg-dark-subtle rounded-lg appearance-none cursor-pointer accent-accent dark:accent-dark-accent"
           />
           <div className="flex justify-between text-[11px] text-ink-muted-80 dark:text-dark-muted">
@@ -213,7 +229,10 @@ export default function BuildGeneratorView({
                   <button
                     key={uc.id}
                     type="button"
-                    onClick={() => setUseCase(uc.id)}
+                    onClick={() => {
+                      setUseCase(uc.id);
+                      handleGenerate(budget, uc.id, marketPreference);
+                    }}
                     className={`flex items-start gap-2.5 p-3 rounded-[12px] border text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                       isSelected
                         ? "border-accent bg-accent/5 dark:border-dark-accent dark:bg-dark-accent/10"
@@ -272,7 +291,10 @@ export default function BuildGeneratorView({
                   <button
                     key={mp.id}
                     type="button"
-                    onClick={() => setMarketPreference(mp.id as MarketPreference)}
+                    onClick={() => {
+                      setMarketPreference(mp.id as MarketPreference);
+                      handleGenerate(budget, useCase, mp.id as MarketPreference);
+                    }}
                     className={`flex items-center justify-between p-3 rounded-[12px] border text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                       isSelected
                         ? "border-accent bg-accent/5 dark:border-dark-accent dark:bg-dark-accent/10"
@@ -423,6 +445,22 @@ export default function BuildGeneratorView({
                 const item = (result.selection as any)[alloc.componentType.toLowerCase()];
                 const isStockCooler = alloc.componentType === "COOLER" && !item;
 
+                // Match exact retailer quote for this component
+                const matchingQuote = item?.prices
+                  ? (item.prices.find((q: any) =>
+                      (alloc.condition === "new" ? q.condition === "new" : q.condition !== "new") &&
+                      q.priceMyr === alloc.actualMyr
+                    ) ||
+                    item.prices
+                      .filter((q: any) => alloc.condition === "new" ? q.condition === "new" : q.condition !== "new")
+                      .sort((a: any, b: any) => a.priceMyr - b.priceMyr)[0] ||
+                    item.prices[0])
+                  : null;
+
+                const retailerName = alloc.selectedRetailer || matchingQuote?.retailerName || "Malaysian Retailer";
+                const productUrl = alloc.selectedProductUrl || matchingQuote?.productUrl || "#";
+                const sellerLocation = alloc.sellerLocation || matchingQuote?.sellerLocation;
+
                 return (
                   <div
                     key={alloc.componentType}
@@ -467,8 +505,8 @@ export default function BuildGeneratorView({
                               {item.name}
                             </p>
                             <p className="text-xs text-ink-muted-80 dark:text-dark-muted mt-0.5">
-                              Best price quote: {item.prices[0]?.retailerName || "Malaysian Retailer"}
-                              {item.prices[0]?.sellerLocation ? ` (${item.prices[0].sellerLocation})` : ""}
+                              Quote source: <span className="font-semibold text-ink dark:text-white">{retailerName}</span>
+                              {sellerLocation ? ` (${sellerLocation})` : ""}
                             </p>
                           </div>
                         ) : (
@@ -492,12 +530,12 @@ export default function BuildGeneratorView({
                         </button>
 
                         <a
-                          href={item.prices[0]?.productUrl || "#"}
+                          href={productUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-1 text-accent font-medium hover:underline dark:text-dark-accent"
                         >
-                          <span>Buy from {item.prices[0]?.retailerName || "Store"}</span>
+                          <span>Buy on {retailerName} (RM{alloc.actualMyr})</span>
                           <ExternalLink className="h-3 w-3" />
                         </a>
                       </div>
