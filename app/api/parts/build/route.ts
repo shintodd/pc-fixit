@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
 
     const budgetMyr = Number(body.budget || body.budgetMyr || 3500);
     const useCase: UseCase = body.useCase || "gaming";
+    const marketPreference = body.marketPreference || "new";
     const preferredFormFactor = body.preferredFormFactor;
     const preferredChipBrand = body.preferredChipBrand;
     const inStockOnly = body.inStockOnly !== false;
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
     const result = await generateSmartBuild({
       budgetMyr,
       useCase,
+      marketPreference,
       preferredFormFactor,
       preferredChipBrand,
       inStockOnly,

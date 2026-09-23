@@ -73,12 +73,56 @@ function scorePartValue(part: PartItem, targetSlice: number, maxScoreInCategory:
 export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<BuildGeneratorResult> {
   const budget = Math.max(1500, req.budgetMyr);
   const useCase = req.useCase || "gaming";
+  const marketPreference = req.marketPreference || "new";
   const reallocationNotes: string[] = [];
 
-  const allParts = await getAllParts({ inStockOnly: req.inStockOnly !== false });
+  if (marketPreference === "hybrid") {
+    reallocationNotes.push(
+      "Smart Hybrid Strategy: Power Supply (PSU) and NVMe Storage are strictly brand-new with manufacturer warranty for electrical safety and 100% NAND drive endurance. Core compute (CPU, GPU, RAM, Motherboard) leverages tested second-hand market listings to maximize performance per ringgit."
+    );
+  } else if (marketPreference === "used") {
+    reallocationNotes.push(
+      "Second-Hand Value Maximizer: Utilizing Malaysian pre-owned market (Carousell MY, Mudah.my, Lowyat Garage) across all components for maximum hardware horsepower within budget."
+    );
+  }
+
+  const rawParts = await getAllParts({ inStockOnly: req.inStockOnly !== false });
+
+  // Map parts with effective price based on market preference
+  const allParts = rawParts.map((p) => {
+    let effectivePrice = p.bestPriceMyr;
+    let isUsedChoice = false;
+
+    if (marketPreference === "new") {
+      effectivePrice = p.bestNewPriceMyr || p.bestPriceMyr;
+    } else if (marketPreference === "used") {
+      if (p.hasUsedListings && p.bestUsedPriceMyr) {
+        effectivePrice = p.bestUsedPriceMyr;
+        isUsedChoice = true;
+      } else {
+        effectivePrice = p.bestNewPriceMyr || p.bestPriceMyr;
+      }
+    } else if (marketPreference === "hybrid") {
+      // PSU and Storage strictly brand new
+      if (p.type === "PSU" || p.type === "STORAGE") {
+        effectivePrice = p.bestNewPriceMyr || p.bestPriceMyr;
+      } else if (p.hasUsedListings && p.bestUsedPriceMyr) {
+        effectivePrice = p.bestUsedPriceMyr;
+        isUsedChoice = true;
+      } else {
+        effectivePrice = p.bestNewPriceMyr || p.bestPriceMyr;
+      }
+    }
+
+    return {
+      ...p,
+      bestPriceMyr: effectivePrice,
+      isUsedSelection: isUsedChoice,
+    };
+  });
 
   // Group by component type
-  const catalog: Record<ComponentType, PartItem[]> = {
+  const catalog: Record<ComponentType, typeof allParts> = {
     CPU: allParts.filter((p) => p.type === "CPU"),
     GPU: allParts.filter((p) => p.type === "GPU"),
     MOTHERBOARD: allParts.filter((p) => p.type === "MOTHERBOARD"),
@@ -108,7 +152,7 @@ export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<Bu
     slices.COOLER -= Math.round(shift * 0.6);
     slices.CASE -= Math.round(shift * 0.4);
     reallocationNotes.push(
-      `Market reallocation: GPU prices elevated in current retail stock. Shifted RM${shift} from case and cooling allowance to preserve target gaming GPU tier.`
+      `Market reallocation: GPU prices elevated in current stock. Shifted RM${shift} from case and cooling allowance to preserve target gaming GPU tier.`
     );
   }
 
@@ -231,10 +275,12 @@ export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<Bu
   // Compute actual spent and category allocations
   const allocations: CategoryAllocation[] = (Object.keys(slices) as ComponentType[]).map((type) => {
     const selectedItem = (selection as any)[type.toLowerCase()] as PartItem | null;
+    const isUsed = Boolean((selectedItem as any)?.isUsedSelection);
     return {
       componentType: type,
       allocatedMyr: slices[type],
       actualMyr: selectedItem?.bestPriceMyr || 0,
+      condition: isUsed ? "used_excellent" : "new",
     };
   });
 
@@ -250,6 +296,7 @@ export async function generateSmartBuild(req: BuildGeneratorRequest): Promise<Bu
     success: finalCompatibility.isCompatible,
     budgetMyr: budget,
     useCase,
+    marketPreference,
     totalPriceMyr,
     remainingBudgetMyr,
     selection,

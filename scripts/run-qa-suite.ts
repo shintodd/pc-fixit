@@ -1463,6 +1463,14 @@ async function runPartsRecommendationSuite() {
   assert(build5000.success, "Generates successful gaming build at RM5,000");
   assert(build5000.selection.gpu !== null, "Gaming build allocates dedicated GPU");
 
+  // Second-hand market & hybrid build support
+  const usedParts = await getAllParts({ condition: "used" });
+  assert(usedParts.length >= 8, "Catalog contains Malaysian second-hand market listings");
+
+  const hybridBuild = await generateSmartBuild({ budgetMyr: 2500, useCase: "gaming", marketPreference: "hybrid" });
+  assert(hybridBuild.success, "Generates successful Smart Hybrid build at RM2,500");
+  assert(hybridBuild.allocations.find((a) => a.componentType === "PSU")?.condition === "new", "Hybrid build enforces new PSU for safety");
+
   // Handoff detection
   const ramHandoff = detectHardwareHandoff("DRAM LED is solid orange, no post", "Test each RAM stick");
   assert(ramHandoff !== null && ramHandoff.componentType === "RAM", "Troubleshooting handoff detects RAM hardware fault");

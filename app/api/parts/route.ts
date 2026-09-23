@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
     const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined;
     const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
     const search = searchParams.get("q") || searchParams.get("search") || undefined;
+    const condition = (searchParams.get("condition") as "all" | "new" | "used") || undefined;
 
     const parts = await getAllParts({
       type: type || undefined,
@@ -21,6 +22,7 @@ export async function GET(req: NextRequest) {
       minPrice,
       maxPrice,
       search,
+      condition,
     });
 
     return NextResponse.json({

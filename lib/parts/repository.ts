@@ -9,6 +9,7 @@ export async function getAllParts(filter?: {
   minPrice?: number;
   maxPrice?: number;
   search?: string;
+  condition?: "all" | "new" | "used";
 }): Promise<PartItem[]> {
   const dbAvailable = await isDatabaseAvailable();
 
@@ -24,10 +25,18 @@ export async function getAllParts(filter?: {
         ];
       }
 
+      const priceWhere: any = {};
+      if (filter?.condition === "new") {
+        priceWhere.condition = "new";
+      } else if (filter?.condition === "used") {
+        priceWhere.condition = { not: "new" };
+      }
+
       const dbParts = await prisma.part.findMany({
         where,
         include: {
           prices: {
+            where: Object.keys(priceWhere).length > 0 ? priceWhere : undefined,
             include: { retailer: true },
           },
         },
@@ -37,12 +46,16 @@ export async function getAllParts(filter?: {
       if (dbParts.length > 0) {
         return dbParts
           .map((p) => {
-            const prices: RetailerQuote[] = p.prices.map((pr) => ({
+            const prices: RetailerQuote[] = p.prices.map((pr: any) => ({
               retailerId: pr.retailerId,
               retailerName: pr.retailer.name,
               retailerSlug: pr.retailer.slug,
               priceMyr: Number(pr.priceMyr),
               originalPriceMyr: pr.originalPriceMyr ? Number(pr.originalPriceMyr) : undefined,
+              condition: (pr.condition as any) || "new",
+              sellerLocation: pr.sellerLocation ?? undefined,
+              listingTitle: (pr as any).listingTitle ?? undefined,
+              isMarketplace: Boolean(pr.retailer.isMarketplace),
               inStock: pr.inStock,
               stockQuantity: pr.stockQuantity ?? undefined,
               productUrl: pr.productUrl,
@@ -50,6 +63,11 @@ export async function getAllParts(filter?: {
             }));
 
             const inStockPrices = prices.filter((pr) => pr.inStock);
+            const newPrices = inStockPrices.filter((pr) => pr.condition === "new");
+            const usedPrices = inStockPrices.filter((pr) => pr.condition !== "new");
+
+            const bestNewPriceMyr = newPrices.length > 0 ? Math.min(...newPrices.map((pr) => pr.priceMyr)) : undefined;
+            const bestUsedPriceMyr = usedPrices.length > 0 ? Math.min(...usedPrices.map((pr) => pr.priceMyr)) : undefined;
             const bestPriceMyr = inStockPrices.length > 0
               ? Math.min(...inStockPrices.map((pr) => pr.priceMyr))
               : (prices.length > 0 ? Math.min(...prices.map((pr) => pr.priceMyr)) : 0);
@@ -65,11 +83,15 @@ export async function getAllParts(filter?: {
               benchmarkScore: p.benchmarkScore,
               imageUrl: p.imageUrl ?? undefined,
               bestPriceMyr,
+              bestNewPriceMyr,
+              bestUsedPriceMyr,
+              hasUsedListings: usedPrices.length > 0,
               inStock: inStockPrices.length > 0,
               prices,
             };
           })
           .filter((p) => {
+            if (filter?.condition === "used" && !p.hasUsedListings) return false;
             if (filter?.inStockOnly && !p.inStock) return false;
             if (filter?.minPrice && p.bestPriceMyr < filter.minPrice) return false;
             if (filter?.maxPrice && p.bestPriceMyr > filter.maxPrice) return false;
@@ -86,8 +108,14 @@ export async function getAllParts(filter?: {
     if (filter?.type && p.type !== filter.type) return false;
     if (filter?.brand && p.brand.toLowerCase() !== filter.brand.toLowerCase()) return false;
     if (filter?.inStockOnly && !p.inStock) return false;
-    if (filter?.minPrice && p.bestPriceMyr < filter.minPrice) return false;
-    if (filter?.maxPrice && p.bestPriceMyr > filter.maxPrice) return false;
+    if (filter?.condition === "used" && !p.hasUsedListings) return false;
+    if (filter?.condition === "new" && !p.bestNewPriceMyr) return false;
+    const effectivePrice = filter?.condition === "used"
+      ? (p.bestUsedPriceMyr || p.bestPriceMyr)
+      : (filter?.condition === "new" ? (p.bestNewPriceMyr || p.bestPriceMyr) : p.bestPriceMyr);
+
+    if (filter?.minPrice && effectivePrice < filter.minPrice) return false;
+    if (filter?.maxPrice && effectivePrice > filter.maxPrice) return false;
     if (filter?.search) {
       const q = filter.search.toLowerCase();
       if (!p.name.toLowerCase().includes(q) && !p.model.toLowerCase().includes(q)) {
@@ -95,6 +123,24 @@ export async function getAllParts(filter?: {
       }
     }
     return true;
+  }).map((p) => {
+    if (filter?.condition === "new") {
+      const newQuotes = p.prices.filter((pr) => pr.condition === "new");
+      return {
+        ...p,
+        bestPriceMyr: p.bestNewPriceMyr || p.bestPriceMyr,
+        prices: newQuotes.length > 0 ? newQuotes : p.prices,
+      };
+    }
+    if (filter?.condition === "used") {
+      const usedQuotes = p.prices.filter((pr) => pr.condition !== "new");
+      return {
+        ...p,
+        bestPriceMyr: p.bestUsedPriceMyr || p.bestPriceMyr,
+        prices: usedQuotes.length > 0 ? usedQuotes : p.prices,
+      };
+    }
+    return p;
   });
 }
 
@@ -111,12 +157,16 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
       });
 
       if (dbPart) {
-        const prices: RetailerQuote[] = dbPart.prices.map((pr) => ({
+        const prices: RetailerQuote[] = dbPart.prices.map((pr: any) => ({
           retailerId: pr.retailerId,
           retailerName: pr.retailer.name,
           retailerSlug: pr.retailer.slug,
           priceMyr: Number(pr.priceMyr),
           originalPriceMyr: pr.originalPriceMyr ? Number(pr.originalPriceMyr) : undefined,
+          condition: (pr.condition as any) || "new",
+          sellerLocation: pr.sellerLocation ?? undefined,
+          listingTitle: (pr as any).listingTitle ?? undefined,
+          isMarketplace: Boolean(pr.retailer.isMarketplace),
           inStock: pr.inStock,
           stockQuantity: pr.stockQuantity ?? undefined,
           productUrl: pr.productUrl,
@@ -124,6 +174,11 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
         }));
 
         const inStockPrices = prices.filter((pr) => pr.inStock);
+        const newPrices = inStockPrices.filter((pr) => pr.condition === "new");
+        const usedPrices = inStockPrices.filter((pr) => pr.condition !== "new");
+
+        const bestNewPriceMyr = newPrices.length > 0 ? Math.min(...newPrices.map((pr) => pr.priceMyr)) : undefined;
+        const bestUsedPriceMyr = usedPrices.length > 0 ? Math.min(...usedPrices.map((pr) => pr.priceMyr)) : undefined;
         const bestPriceMyr = inStockPrices.length > 0
           ? Math.min(...inStockPrices.map((pr) => pr.priceMyr))
           : (prices.length > 0 ? Math.min(...prices.map((pr) => pr.priceMyr)) : 0);
@@ -139,6 +194,9 @@ export async function getPartBySlug(slug: string): Promise<PartItem | null> {
           benchmarkScore: dbPart.benchmarkScore,
           imageUrl: dbPart.imageUrl ?? undefined,
           bestPriceMyr,
+          bestNewPriceMyr,
+          bestUsedPriceMyr,
+          hasUsedListings: usedPrices.length > 0,
           inStock: inStockPrices.length > 0,
           prices,
         };

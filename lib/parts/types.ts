@@ -91,12 +91,19 @@ export type PartSpecs =
   | CaseSpecs
   | CoolerSpecs;
 
+export type ItemCondition = "new" | "used_excellent" | "used_good" | "refurbished";
+export type MarketPreference = "new" | "used" | "hybrid";
+
 export interface RetailerQuote {
   retailerId: string;
   retailerName: string;
   retailerSlug: string;
   priceMyr: number;
   originalPriceMyr?: number;
+  condition: ItemCondition;
+  sellerLocation?: string;
+  listingTitle?: string;
+  isMarketplace?: boolean;
   inStock: boolean;
   stockQuantity?: number;
   productUrl: string;
@@ -114,6 +121,9 @@ export interface PartItem {
   benchmarkScore: number;
   imageUrl?: string;
   bestPriceMyr: number;
+  bestNewPriceMyr?: number;
+  bestUsedPriceMyr?: number;
+  hasUsedListings: boolean;
   inStock: boolean;
   prices: RetailerQuote[];
 }

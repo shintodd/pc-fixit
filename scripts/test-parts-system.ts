@@ -217,6 +217,51 @@ async function runPartsSuite() {
   const alertReport = await evaluatePriceAlerts();
   assert(alertReport.evaluatedCount >= 1, `Evaluated active watchlists (count: ${alertReport.evaluatedCount})`);
 
+  // ------------------------------------------------------------------
+  // 8. Second-Hand Market & Hybrid Build Strategy
+  // ------------------------------------------------------------------
+  console.log("\n--- Suite 8: Second-Hand Market & Hybrid Strategy ---");
+  const usedParts = await getAllParts({ condition: "used" });
+  assert(usedParts.length >= 8, `Catalog contains second-hand listings (found: ${usedParts.length})`);
+
+  const rx6600 = usedParts.find((p) => p.slug === "sapphire-pulse-radeon-rx-6600-8gb");
+  assert(rx6600 !== undefined && rx6600.hasUsedListings, "RX 6600 includes verified second-hand listings");
+  assert(
+    rx6600 !== undefined && (rx6600.bestUsedPriceMyr || 0) < (rx6600.bestNewPriceMyr || 9999),
+    `Used price (RM${rx6600?.bestUsedPriceMyr}) provides significant savings over retail (RM${rx6600?.bestNewPriceMyr})`
+  );
+
+  const carousellQuote = rx6600?.prices.find((pr) => pr.retailerSlug === "carousell-my");
+  assert(carousellQuote !== undefined && carousellQuote.isMarketplace === true, "Carousell MY quote marked as marketplace");
+  assert(Boolean(carousellQuote?.sellerLocation), `Used listing includes seller location (${carousellQuote?.sellerLocation})`);
+
+  // Test Smart Hybrid Build (RM2,500 budget)
+  const hybridBuild = await generateSmartBuild({
+    budgetMyr: 2500,
+    useCase: "gaming",
+    marketPreference: "hybrid",
+  });
+  assert(hybridBuild.success, "Generates successful Smart Hybrid build at RM2,500");
+  assert(hybridBuild.marketPreference === "hybrid", "Reports marketPreference: hybrid in build result");
+
+  const psuAlloc = hybridBuild.allocations.find((a) => a.componentType === "PSU");
+  assert(psuAlloc?.condition === "new", "Hybrid mode strictly enforces brand-new PSU for electrical protection");
+
+  const storageAlloc = hybridBuild.allocations.find((a) => a.componentType === "STORAGE");
+  assert(storageAlloc?.condition === "new", "Hybrid mode strictly enforces brand-new Storage for data integrity");
+
+  assert(hybridBuild.compatibility.isCompatible, "Smart Hybrid build passes 100% of deterministic compatibility checks");
+  assert(hybridBuild.totalPriceMyr <= 2600, `Smart Hybrid build adheres to target budget (total: RM${hybridBuild.totalPriceMyr})`);
+
+  // Test Second-Hand Maximizer Build (RM1,800 budget)
+  const usedBuild = await generateSmartBuild({
+    budgetMyr: 1800,
+    useCase: "budget",
+    marketPreference: "used",
+  });
+  assert(usedBuild.success, "Generates successful Second-Hand Value build at RM1,800");
+  assert(usedBuild.compatibility.isCompatible, "Second-Hand build passes 100% of compatibility checks");
+
   console.log("\n======================================================");
   console.log(`PARTS SYSTEM SUMMARY: ${totalPassed} Passed, ${totalFailed} Failed`);
   console.log("======================================================");
