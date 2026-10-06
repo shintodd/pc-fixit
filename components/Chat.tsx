@@ -7,7 +7,6 @@ import {
   FileText,
   Copy,
   Check,
-  Sparkles,
   Wrench,
   ThumbsUp,
   ThumbsDown,
@@ -978,7 +977,7 @@ export default function Chat({
               className="pt-2"
             >
               <div className="text-[12px] font-medium text-ink-tertiary dark:text-dark-ink-tertiary mb-3 flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                <Terminal className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
                 <span>
                   {language === "ms"
                     ? "Atau pilih simptom biasa untuk mula:"

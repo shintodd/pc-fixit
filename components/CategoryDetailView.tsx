@@ -21,7 +21,6 @@ import {
   Filter,
   CheckCircle2,
   Clock,
-  Sparkles,
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

@@ -8,7 +8,7 @@ import {
   ExternalLink,
   Terminal,
   Wrench,
-  Sparkles,
+  Gamepad2,
   ShieldAlert,
   X,
   ChevronDown,
@@ -77,9 +77,9 @@ export default function QuickTipsFeed({
       case "cool-tools":
         return Wrench;
       case "fun-stuff":
-        return Sparkles;
+        return Gamepad2;
       default:
-        return Sparkles;
+        return Terminal;
     }
   };
 

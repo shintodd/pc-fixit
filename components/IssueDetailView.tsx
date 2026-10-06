@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Check,
   MessageSquare,
-  Sparkles,
   Share2,
   ShieldAlert,
   Smartphone,
@@ -475,7 +474,7 @@ export default function IssueDetailView({ issue }: { issue: IssueDetail }) {
           {/* Still Stuck Call to Action */}
           <div className="mt-14 rounded-2xl border border-line-strong dark:border-dark-line-strong bg-white dark:bg-dark-card p-6 shadow-card dark:shadow-card-dark no-print">
             <div className="flex items-center gap-2 text-accent dark:text-dark-accent">
-              <Sparkles className="h-4 w-4" aria-hidden="true" />
+              <MessageSquare className="h-4 w-4" aria-hidden="true" />
               <span className="text-[12px] font-semibold uppercase tracking-wider">
                 {isMs ? "Perlukan Bantuan Tambahan?" : "Need Live Assistance?"}
               </span>

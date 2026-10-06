@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, Terminal, Wrench, ChevronRight, ShieldCheck } from "lucide-react";
+import { Terminal, Wrench, ChevronRight, ShieldCheck } from "lucide-react";
 import QuickTipsFeed from "@/components/QuickTipsFeed";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { TIPS_DATA } from "@/lib/tips-data";
@@ -25,7 +25,7 @@ export default function TipsPage() {
       {/* Hero Header */}
       <div className="mb-10 max-w-3xl">
         <div className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-3 py-1 text-[12px] font-semibold uppercase tracking-wider text-accent dark:text-dark-accent shadow-xs mb-3">
-          <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+          <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
           <span>{language === "ms" ? "Pustaka Alatan Berkuasa" : "Power User Resource Hub"}</span>
         </div>
 

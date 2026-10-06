@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Terminal } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import QuickTipsFeed from "@/components/QuickTipsFeed";
 import { TIPS_DATA } from "@/lib/tips-data";
@@ -15,7 +15,7 @@ export default function HomeTipsPreview() {
       <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-3 py-1 text-[12px] font-semibold uppercase tracking-wider text-accent dark:text-dark-accent shadow-xs mb-2.5">
-            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{language === "ms" ? "Tips Pilihan & Alatan Hebat" : "Featured Power Tips & Tools"}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-ink dark:text-dark-ink">

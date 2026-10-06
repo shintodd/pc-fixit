@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import {
-  Sparkles,
   MessageSquare,
   Cpu,
   Wrench,
@@ -24,27 +23,30 @@ export default function HomePage() {
   const HOW_IT_WORKS = [
     {
       step: "01",
+      phase: "Stage 01",
+      tag: "Symptom Intake",
       icon: MessageSquare,
       title: t("how_step1_title"),
       body: t("how_step1_desc"),
-      glow: "border-blue-500/20 bg-blue-500/5",
-      iconColor: "text-blue-500",
+      telemetry: "POST beeps, Q-LED codes, or BSOD stop codes",
     },
     {
       step: "02",
+      phase: "Stage 02",
+      tag: "Fault Mapping",
       icon: Cpu,
       title: t("how_step2_title"),
       body: t("how_step2_desc"),
-      glow: "border-purple-500/20 bg-purple-500/5",
-      iconColor: "text-purple-500",
+      telemetry: "180 researched guides, vendor schematics and event logs",
     },
     {
       step: "03",
+      phase: "Stage 03",
+      tag: "Actionable Fix",
       icon: Wrench,
       title: t("how_step3_title"),
       body: t("how_step3_desc"),
-      glow: "border-emerald-500/20 bg-emerald-500/5",
-      iconColor: "text-emerald-500",
+      telemetry: "Zero-risk physical isolation before firmware or kernel",
     },
   ];
 
@@ -114,12 +116,12 @@ export default function HomePage() {
       {/* Curated Power Tips, Cool Tools & Windows Easter Eggs */}
       <HomeTipsPreview />
 
-      {/* How It Works */}
-      <section className="border-t border-line dark:border-dark-line bg-subtle/40 dark:bg-dark-subtle/40 py-16 sm:py-24">
+      {/* How It Works: Diagnostic Progression Pipeline */}
+      <section className="border-t border-line dark:border-dark-line bg-subtle/30 dark:bg-dark-subtle/30 py-16 sm:py-24">
         <div className="mx-auto w-full max-w-7xl 2xl:max-w-[1720px] px-4 sm:px-8 lg:px-12 2xl:px-16">
           <div className="mb-14 text-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-line dark:border-dark-line bg-white dark:bg-dark-card px-3.5 py-1 text-[12px] font-semibold text-ink-secondary dark:text-dark-ink-secondary shadow-xs mb-3">
-              <Sparkles className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-line dark:border-dark-line bg-surface dark:bg-dark-surface px-3.5 py-1 text-[12px] font-semibold text-ink-secondary dark:text-dark-ink-secondary shadow-xs mb-3">
+              <Wrench className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
               <span>{t("how_badge")}</span>
             </div>
             <h2 className="text-2xl font-bold tracking-tight text-ink dark:text-dark-ink sm:text-4xl">
@@ -130,28 +132,40 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {HOW_IT_WORKS.map(({ step, icon: Icon, title, body, glow, iconColor }) => (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {HOW_IT_WORKS.map(({ step, phase, tag, icon: Icon, title, body, telemetry }) => (
               <div
                 key={step}
-                className={`relative flex flex-col justify-between rounded-2xl border ${glow} bg-white/95 dark:bg-dark-card/95 p-7 shadow-card dark:shadow-card-dark backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover`}
+                className="group relative flex flex-col justify-between rounded-xl border border-line/80 dark:border-dark-line/80 bg-surface dark:bg-dark-surface p-6 shadow-xs hover:border-line-strong dark:hover:border-dark-line-strong transition-all duration-150"
               >
                 <div>
-                  <div className="mb-6 flex items-center justify-between">
-                    <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-subtle dark:bg-dark-subtle ${iconColor} shadow-2xs`}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
+                  <div className="mb-5 flex items-center justify-between border-b border-line/50 dark:border-dark-line/50 pb-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-line dark:border-dark-line bg-subtle dark:bg-dark-subtle text-accent dark:text-dark-accent">
+                        <Icon className="h-4.5 w-4.5" aria-hidden="true" />
+                      </div>
+                      <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-ink-tertiary dark:text-dark-ink-tertiary">
+                        {tag}
+                      </span>
                     </div>
-                    <span className="text-3xl font-black tracking-tight text-ink-tertiary/30 dark:text-dark-ink-tertiary/30 tabular select-none" aria-hidden="true">
-                      {step}
+                    <span className="font-mono text-xs font-bold text-ink-secondary dark:text-dark-ink-secondary px-2 py-0.5 rounded bg-subtle dark:bg-dark-subtle border border-line dark:border-dark-line">
+                      {phase}
                     </span>
                   </div>
 
-                  <h3 className="text-[17px] font-bold tracking-tight text-ink dark:text-dark-ink mb-2">
+                  <h3 className="text-[16px] font-bold tracking-tight text-ink dark:text-dark-ink mb-2">
                     {title}
                   </h3>
-                  <p className="text-[14px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary">
+                  <p className="text-[13.5px] leading-relaxed text-ink-secondary dark:text-dark-ink-secondary mb-4">
                     {body}
                   </p>
+                </div>
+
+                <div className="pt-3 border-t border-line/40 dark:border-dark-line/40">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-ink-tertiary dark:text-dark-ink-tertiary">
+                    <span className="text-accent font-semibold">{">"}</span>
+                    <span>{telemetry}</span>
+                  </div>
                 </div>
               </div>
             ))}

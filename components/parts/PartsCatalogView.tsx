@@ -8,7 +8,6 @@ import {
   Wrench,
   ShieldAlert,
   ChevronDown,
-  Sparkles,
   Tag,
   Check,
   CheckCircle2,

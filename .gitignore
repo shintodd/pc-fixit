@@ -54,3 +54,6 @@ TEST_READY.md
 # local desktop scanner (retained on local machine only)
 /desktop-scanner/
 /public/downloads/
+
+# hyperframes cache
+.hyperframes/

@@ -1,101 +1,102 @@
 # Brag Plan: pcfix
 
 ## What is this app?
-An interactive PC hardware diagnostic and troubleshooting platform featuring instant failure triage, 220+ verified error code resolutions, guided decision tree wizards, and an AI technician with zero fluff.
+pcfix is a self-hosted PC diagnostic tool: describe what's wrong with your computer in plain language and get AI-powered step-by-step repair guides, a decision-tree wizard, 220+ researched hardware troubleshooting guides, and a full hardware parts catalog with compatibility checking.
 
 ## The angle
-The modern, Apple-sleek emergency room for your PC: no bloated forums, no 45-minute YouTube tutorials, no hallucinated fixes. Just describe the symptom, pinpoint the exact circuit/driver failure point, and get an engineer-grade fix in seconds.
+Your PC is broken. You're panicking. You Google it and get 47 forum threads from 2014 telling you to reinstall Windows. pcfix asks you one question, then walks you through the actual fix. No ads, no affiliate links, no "have you tried turning it off and on again."
 
 ## Hook (first 2-3 seconds)
-High-contrast opening: "Got a PC Problem?" with the realistic user despair prompt typing into the command bar: `"Fans spin for 1s then click off..."`
+A blue screen crash error fills the frame. Giant white stop code text on blue. Then it glitches and dissolves into the pcfix interface, clean and calm.
 
 ## Key moments (the middle)
-- Rapid triage deck showing the 3 biggest PC nightmares: No Boot, Kernel BSOD (0x154), and Thermal Junction Throttle (>105°C).
-- Cursor clicks "Won't Boot" → instant diagnosis with zero latency.
-- Verified fix card unfolds with actionable electrical checks: PS_ON# green wire jump test, 12VHPWR sense pin inspection, and 220+ hardware failure mode coverage badge.
+- The chat interface: a user types "my PC won't boot, DRAM LED is red" and the AI streams back a structured, step-by-step diagnosis in real time with iMessage-style bubbles.
+- The quick tools bar: a row of diagnostic utilities (Port Locator, Beep/LED Decoder, Front Panel Pinout, Command Explainer) fans out, showing the depth of the toolkit.
+- Stat line: "220+ guides. 309 error codes. Zero ads."
 
 ## Outro / punchline
-"Your 24/7 PC Repair Tech. 220+ hardware failure modes. Zero fluff."
+pcfix logo. "Describe the problem. Get the fix." Clean fade to dark.
 
 ## User flow worth showing
-1. User enters raw symptom into command deck (`"Fans spin for 1s then click off..."`).
-2. Triage engine isolates failure category to Power Sequence / ATX Rail short.
-3. System outputs verified 3-step hardware resolution with diagnostic pinout checks.
+Entry: User lands on homepage, types a symptom into the command-line-style input.
+Key action: AI chat streams a diagnosis with structured steps, code blocks, and actionable next moves.
+Result: User sees the specific fix, with related guides and error code lookups linked inline.
 
 ## Tone
-- Preset: `polished`
-- Creative direction: "Apple-inspired hardware lab — clean, fast, authoritative"
-- Interpretation: Restrained typography, precision micro-animations, confidence without gimmicks, high-contrast dark mode palette.
+- Preset: polished
+- Creative direction: quiet confidence, clinical precision, Apple-grade restraint
+- Interpretation: Slow reveals, generous holds, confidence through stillness. The product speaks for itself. No hype, no exclamation marks. Every frame is clean.
 
-## Format: landscape — 1920x1080
-## Duration: 20.0 seconds
+## Format: landscape -- 1920x1080
+## Duration: 20 seconds
 
 ## Visual identity (from the project)
-- Background: `#0d0f12` (dark surface) / `#161b22` (dark surface raised)
-- Accent: `#1a73e8` / `#58a6ff` (electric diagnostic blue)
-- Text: `#e6edf3` (ink) / `#8b949e` (secondary ink)
-- Border / Line: `rgba(230, 237, 243, 0.12)`
-- Display font: `Inter, -apple-system, BlinkMacSystemFont, sans-serif`
-- Body font: `Inter, -apple-system, BlinkMacSystemFont, sans-serif`
-- Strongest visual element: Glass command bar with pill tags, Apple-style liquid glass cards, and status checkmarks.
+- Background: #f5f5f7 (light), #161617 (dark)
+- Accent: #0066cc (light), #2997ff (dark)
+- Text: #1d1d1f (light), #f5f5f7 (dark)
+- Display font: Inter (system stack fallback)
+- Body font: Inter (system stack fallback)
+- Strongest visual element: The iMessage-style AI chat with blue user bubbles and white assistant bubbles, streaming text response with typing indicator dots
 
 ## Share copy (draft)
-PC won't boot, fans at 100%, or random blue screen? pcfix diagnoses your exact hardware failure with 220+ verified fixes in seconds.
+Built pcfix. Describe what's wrong with your PC, get a real diagnosis. 220+ guides, zero ads, self-hosted.
 
 ## Audio direction
-- Role: Rhythmic electronic bed with crisp interface SFX
-- Music: `happy-beats-business-moves-vol-1-by-ende-dot-app.mp3`
-- Music treatment: Starts at 0.0s, steady drive, gentle fade out during outro (18.5s-20.0s)
-- Music cue guidance: 120.19 BPM (~0.50s per beat). Major beats at 3.52s, 8.52s, 14.52s, 17.02s, 20.02s.
-- Audio-reactive treatment: Subtle ambient blue radial glow in background breathes with volume.
-- SFX posture: Sparse, motion-matched UI clicks and crisp soft impacts.
+- Role: warm bed with clinical precision
+- Music: happy-beats-business-moves-vol-12-by-ende-dot-app.mp3
+- Music treatment: fade in over first 0.5s at 0.30 volume, steady through middle, gentle fade-out under final logo hold
+- Music cue guidance: bundled preset at assets/music/cues/happy-beats-business-moves-vol-12-by-ende-dot-app.music-cues.json; tempo 110 BPM. Strong cues at 8.74s for the chat reveal, 13.11s for the tools fan-out, 17.47s for the stat line.
+- Audio-reactive treatment: subtle; use music RMS to make the chat panel border glow breathe gently and the background warmth pulse. No waveform visuals.
+- SFX posture: sparse, professional restraint. 3-4 well-placed cues total.
 - Audio-coupled moments:
-  - 1.0s: Typing key clicks during prompt entry.
-  - 4.0s - 5.0s: Card slide ticks on triage deck reveals.
-  - 7.5s: Click SFX on symptom selection.
-  - 12.0s: Success chime on verified resolution status.
-  - 19.0s: Soft bell hit on final logo lockup.
-- Restraint rule: No siren sounds, no harsh buzzer noises. Keep sound strictly Apple-grade subtle.
+  - Scene 2 chat typing: subtle keyboard ticks as the symptom text types out
+  - Scene 3 tools fan-out: sequential card-slide sounds as each tool appears
+  - Scene 4 stat line: single soft impact for the final stat reveal
+  - Scene 5 logo: one clean bell hit on logo landing
+- Restraint rule: no SFX stacking, no aggressive hits. Every sound must feel clinical and intentional.
 
 ## Storyboard
 
-### Scene 1 — The Hook — 3.5s (0.0s - 3.5s)
-Black canvas with subtle ambient blue radial glow. Large typography slams in: "Got a PC Problem?"
-Search command bar reveals with blinking caret and simulated typing: "Fans spin for 1s then shut off..."
-Sequential/interaction: Yes — simulated typing in search bar.
-Audio intent: Immediate energetic intrigue.
-Audio-coupled idea: Soft keyboard ticks on simulated typing.
-Music: Upbeat bed starts.
-Transition mood: Fast smooth wipe → Scene 2
+### Scene 1 -- BSOD Hook -- 2.5s
+Full-screen blue (#0078d7) with white text: "STOP CODE: CRITICAL_PROCESS_DIED" in monospace. Screen glitches (subtle pixel scatter or scan-line tear) and dissolves into the pcfix homepage on a clean #f5f5f7 background.
+Sequential/interaction: none
+Audio intent: sharp digital disruption, then calm
+Audio-coupled idea: a single glitch_002 SFX on the BSOD, then silence as pcfix appears
+Music: begins fading in as pcfix surfaces
+Transition mood: dramatic glitch to clean
 
-### Scene 2 — Instant Triage Deck — 5.0s (3.5s - 8.5s)
-Command bar docks up. Three failure mode cards slide into view on consecutive beats (4.0s, 4.5s, 5.0s):
-1. [Won't Boot] Power sequence & rail trip
-2. [Blue Screen] Stop Code 0x154 UNEXPECTED_STORE_EXCEPTION
-3. [Overheating] GPU VRAM Junction >105°C
-Simulated cursor glides to "Won't Boot" and clicks at 7.5s.
-Sequential/interaction: Yes — 3 cards appear sequentially, cursor clicks card 1.
-Audio intent: High responsiveness and precision.
-Audio-coupled idea: Soft card clicks on reveal; click sound on selection.
-Transition mood: Zoom focus into selected card → Scene 3
+### Scene 2 -- AI Diagnosis in Action -- 5s
+Dark mode pcfix chat view. A user bubble slides in: "My PC won't boot, DRAM LED is red on the motherboard." Below, three typing dots animate (Apple iMessage style), then the AI response streams in with structured steps: "1. Reseat your RAM modules..." The text builds line by line.
+Sequential/interaction: yes -- user message slides in, typing dots animate, AI response text streams character by character
+Audio intent: focused, clinical, the product doing its thing
+Audio-coupled idea: subtle keyboard ticks as the user message types, then quiet as AI streams
+Music: steady warm bed
+Transition mood: soft crossfade to Scene 3
 
-### Scene 3 — Diagnostic Resolution — 6.0s (8.5s - 14.5s)
-Detailed diagnosis card unfolds.
-Header: "DIAGNOSTIC ENGINE: ATX Power Sequence Fault"
-Badge: "0 Hallucinations • 220+ Researched Failure Modes"
-Step 1: "Green wire (PS_ON#) paperclip jump test"
-Step 2: "Verify 12V EPS 8-pin connector seating"
-Step 3: "Inspect 12VHPWR sense pin contact"
-Status pill pulses green: "✓ Resolution Verified".
-Sequential/interaction: Yes — 3 fix steps cascade into view.
-Audio intent: Authoritative solution and relief.
-Audio-coupled idea: Success bell on green verified badge at 12.0s.
-Transition mood: Smooth pull-back into brand lockup → Scene 4
+### Scene 3 -- Diagnostic Toolkit -- 4s
+Light mode. The Quick Tools Bar from the homepage. Five tool cards fan out one by one: Port Locator, Beep/LED Decoder, Front Panel Pinout, Command Explainer, Repair Feasibility. Each card is a rounded pill with an icon.
+Sequential/interaction: yes -- 5 tool cards slide in one by one, left to right, 0.5s apart
+Audio intent: competence, depth, "there's more here than you expected"
+Audio-coupled idea: card-slide SFX on each tool card entrance, beat-grid aligned
+Music: steady
+Transition mood: soft crossfade to Scene 4
 
-### Scene 4 — Brand Lockup & CTA — 5.5s (14.5s - 20.0s)
-Center stage: "pcfix." with glowing blue accent dot.
-Tagline: "Your 24/7 PC Repair Tech."
-Features: "Decision Wizard • AI Diagnostician • Real Fixes"
-Pill CTA: "Start Free Diagnosis →"
-Audio intent: Confident completion.
-Audio-coupled idea: Music fades gently, final subtle logo bell chime.
+### Scene 4 -- The Numbers -- 4s
+Dark mode. Three stat blocks appear sequentially, centered and large:
+"220+ Guides" (fade up), "309 Error Codes" (fade up), "Zero Ads" (fade up, slightly larger, accent blue color).
+Sequential/interaction: yes -- three stats appear one by one, 0.8s apart, each holding for readability
+Audio intent: quiet authority, the numbers speak
+Audio-coupled idea: soft chip-lay or drop sound on each stat appearance
+Music: slight swell approaching the outro
+Transition mood: soft crossfade to Scene 5
+
+### Scene 5 -- Logo & Tagline -- 4.5s
+Dark mode (#161617). pcfix logo scales in clean from 0.9 to 1.0. Below, tagline fades up: "Describe the problem. Get the fix." Hold for 2.5s. URL fades in small below: pcfixtech.my.id
+Sequential/interaction: none
+Audio intent: resolution, confidence, one clean bell note
+Audio-coupled idea: impactBell_heavy_000 on logo landing, music fades under
+Music: gentle fade-out over last 2s
+Transition mood: final hold, cut to black
+
+**Music mood for this video:** steady, clean, warm professional
+**Audio summary:** A low, warm music bed supports the clinical visual pace. SFX are sparse: one BSOD glitch, subtle typing on the chat, card sounds on the toolkit, quiet drops on the stats, and a single bell on the logo. Nothing calls attention to itself.

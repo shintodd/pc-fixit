@@ -10,7 +10,7 @@ import {
   Wifi,
   Flame,
   Cpu,
-  Sparkles,
+  Terminal,
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
@@ -45,7 +45,7 @@ export default function DemoVideoShowcase() {
     { icon: Wifi, label: language === "ms" ? "Rangkaian & Wi-Fi" : "Network & Wi-Fi" },
     { icon: Flame, label: language === "ms" ? "Suhu & Kipas" : "Thermals & Fans" },
     { icon: Cpu, label: language === "ms" ? "GPU & Pemproses" : "GPU & Silicon" },
-    { icon: Sparkles, label: language === "ms" ? "Teknisi AI" : "AI Technician" },
+    { icon: Terminal, label: language === "ms" ? "Terminal Diagnostik" : "Diagnostic AI" },
   ];
 
   return (

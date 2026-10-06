@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Sparkles, ShoppingBag, ShieldCheck, Wrench, ShieldAlert } from "lucide-react";
+import { Cpu, ShoppingBag, ShieldCheck, Wrench, ShieldAlert } from "lucide-react";
 import BuildGeneratorView from "@/components/parts/BuildGeneratorView";
 import PartsCatalogView from "@/components/parts/PartsCatalogView";
 import CompatibilityCheckerModal from "@/components/parts/CompatibilityCheckerModal";
@@ -46,7 +46,7 @@ function PartsStudioContent() {
         {/* Studio Hero Header */}
         <div className="text-center space-y-3 pt-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-accent/10 text-accent dark:bg-dark-accent/10 dark:text-dark-accent">
-            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+            <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
             <span>Malaysian Hardware Intelligence</span>
           </div>
 
@@ -82,7 +82,7 @@ function PartsStudioContent() {
                     : "text-ink-muted-80 hover:text-ink dark:text-dark-muted dark:hover:text-white"
                 }`}
               >
-                <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                <Cpu className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>Smart Build Generator</span>
               </button>
             </div>

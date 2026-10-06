@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, FileQuestion, Sparkles, Wrench } from "lucide-react";
+import { ArrowLeft, FileQuestion, MessageSquare, Wrench } from "lucide-react";
 
 export default function NotFound() {
   return (
@@ -31,7 +31,7 @@ export default function NotFound() {
             href="/troubleshoot"
             className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-pill border border-line dark:border-dark-line bg-surface dark:bg-dark-card px-5 py-2.5 text-sm font-medium text-ink dark:text-dark-ink hover:bg-subtle dark:hover:bg-dark-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
-            <Sparkles className="h-4 w-4 text-accent" aria-hidden="true" />
+            <MessageSquare className="h-4 w-4 text-accent" aria-hidden="true" />
             <span>Ask AI Technician</span>
           </Link>
           <Link

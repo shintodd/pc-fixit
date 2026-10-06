@@ -12,6 +12,7 @@ import {
   Zap,
   Activity,
   Cpu,
+  Video,
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { LiquidGlassCard } from "@/components/LiquidGlassCard";
@@ -24,11 +25,12 @@ const SiliconDefectsModal = dynamic(() => import("@/components/SiliconDefectsMod
 const PhoneQrModal = dynamic(() => import("@/components/PhoneQrModal"), { ssr: false });
 const CommandExplainerModal = dynamic(() => import("@/components/CommandExplainerModal"), { ssr: false });
 const RepairFeasibilityModal = dynamic(() => import("@/components/RepairFeasibilityModal"), { ssr: false });
+const DiagnosticPlayerModal = dynamic(() => import("@/components/DiagnosticPlayerModal"), { ssr: false });
 
 export default function QuickToolsBar({ className = "" }: { className?: string }) {
   const { t, language } = useLanguage();
   const [activeModal, setActiveModal] = useState<
-    "port" | "beep" | "pinout" | "lab" | "defects" | "phone" | "cmd" | "calc" | null
+    "port" | "beep" | "pinout" | "lab" | "defects" | "phone" | "cmd" | "calc" | "motion" | null
   >(null);
 
   const isMs = language === "ms";
@@ -83,6 +85,13 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
       sub: isMs ? "Kira kos baiki" : "Cost vs replacement",
       color: "text-indigo-500 bg-indigo-500/10",
     },
+    {
+      id: "motion",
+      icon: Video,
+      label: isMs ? "Video Gerakan" : "Motion Triage",
+      sub: isMs ? "Pemain Remotion" : "Remotion player",
+      color: "text-sky-500 bg-sky-500/10",
+    },
   ];
 
   return (
@@ -97,7 +106,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
             <span>{isMs ? "Alatan Interaktif Pantas" : "Interactive Diagnostic Suite"}</span>
           </div>
           <span className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary hidden sm:inline">
-            {isMs ? "7 alat diagnostik terus dalam pelayar web" : "7 zero-install browser diagnostic tools"}
+            {isMs ? "8 alat diagnostik terus dalam pelayar web" : "8 zero-install browser diagnostic tools"}
           </span>
         </div>
 
@@ -107,7 +116,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
             aria-hidden="true"
             className="pointer-events-none absolute -inset-2 -z-10 rounded-2xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 blur-xl opacity-60 dark:opacity-40"
           />
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-2.5">
             {tools.map((item) => {
               const Icon = item.icon;
               return (
@@ -145,6 +154,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
       <PhoneQrModal isOpen={activeModal === "phone"} onClose={() => setActiveModal(null)} />
       <CommandExplainerModal isOpen={activeModal === "cmd"} onClose={() => setActiveModal(null)} />
       <RepairFeasibilityModal isOpen={activeModal === "calc"} onClose={() => setActiveModal(null)} />
+      <DiagnosticPlayerModal isOpen={activeModal === "motion"} onClose={() => setActiveModal(null)} />
     </>
   );
 }

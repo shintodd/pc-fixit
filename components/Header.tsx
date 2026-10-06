@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, Sparkles, Moon, Sun } from "lucide-react";
+import { Menu, X, Wrench, Moon, Sun } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
 import Logo from "@/components/Logo";
@@ -186,7 +186,7 @@ export default function Header() {
             href="/troubleshoot"
             className="ml-2 group inline-flex items-center gap-1.5 rounded-pill bg-accent px-4 py-1.5 text-[13px] font-medium text-white transition-all duration-200 hover:bg-accent-hover active:scale-95 shadow-sm shadow-accent/20"
           >
-            <MovingIcon icon={Sparkles} animation="spin" className="h-3.5 w-3.5 opacity-90" />
+            <MovingIcon icon={Wrench} animation="wrench" className="h-3.5 w-3.5 opacity-90" />
             <span>{t("nav_start_diagnosis")}</span>
           </Link>
         </nav>
@@ -259,7 +259,7 @@ export default function Header() {
                     className="flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-accent py-3 text-[14px] font-semibold text-white shadow-sm shadow-accent/20 active:scale-98"
                     onClick={() => setOpen(false)}
                   >
-                    <MovingIcon icon={Sparkles} animation="spin" className="h-4 w-4 opacity-90" />
+                    <MovingIcon icon={Wrench} animation="wrench" className="h-4 w-4 opacity-90" />
                     <span>{t("nav_start_diagnosis")}</span>
                   </Link>
                 </div>

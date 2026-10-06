@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  Sparkles,
+  Cpu,
   Gamepad2,
   Briefcase,
   Tv,
@@ -130,7 +130,7 @@ export default function BuildGeneratorView({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold text-ink dark:text-white flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-accent dark:text-dark-accent" aria-hidden="true" />
+              <Cpu className="h-5 w-5 text-accent dark:text-dark-accent" aria-hidden="true" />
               Dynamic Smart Build Generator
             </h2>
             <p className="text-xs text-ink-muted-80 dark:text-dark-muted">
@@ -332,7 +332,7 @@ export default function BuildGeneratorView({
               </>
             ) : (
               <>
-                <Sparkles className="h-4 w-4" aria-hidden="true" />
+                <Cpu className="h-4 w-4" aria-hidden="true" />
                 Generate Value-Optimized Build (RM{budget.toLocaleString()})
               </>
             )}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>pcfix — The Silicon Seam</title>
+  <!-- Top-Right Half of Hex Die -->
+  <path
+    fill="currentColor"
+    d="M 128 36 C 132.8 36 137.4 38.6 139.8 42.8 L 204.2 154.2 C 206.6 158.4 206.6 163.6 204.2 167.8 L 194.8 184 C 191.6 189.6 184.2 191.2 179 187.4 L 118 143.2 C 114.2 140.4 112 135.9 112 131.2 L 112 50 C 112 42.27 118.27 36 126 36 Z"
+  />
+  <!-- Bottom-Left Interlocking Half of Hex Die -->
+  <path
+    fill="currentColor"
+    d="M 128 220 C 123.2 220 118.6 217.4 116.2 213.2 L 51.8 101.8 C 49.4 97.6 49.4 92.4 51.8 88.2 L 61.2 72 C 64.4 66.4 71.8 64.8 77 68.6 L 138 112.8 C 141.8 115.6 144 120.1 144 124.8 L 144 206 C 144 213.73 137.73 220 130 220 Z"
+  />
+  <!-- Center Micro-Core Node -->
+  <circle cx="128" cy="128" r="14" fill="currentColor" />
+</svg>

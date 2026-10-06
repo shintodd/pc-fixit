@@ -1,3 +1,1 @@
-PC won't boot, fans roaring at 100%, or random BSOD stop code?
-
-Introducing pcfix: an intelligent hardware diagnostic technician delivering verified, step-by-step resolution plans across 220+ failure modes in seconds. Zero fluff, zero hallucinations.
+Built pcfix. Describe what's wrong with your PC, get a real diagnosis. 220+ guides, 309 error codes, zero ads. Self-hosted, open source.

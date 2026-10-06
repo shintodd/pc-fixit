@@ -6,7 +6,8 @@ import Link from "next/link";
 import {
   ArrowRight,
   Search,
-  Sparkles,
+  AlertTriangle,
+  Terminal,
   X,
   Wrench,
   CornerDownLeft,
@@ -43,7 +44,7 @@ export default function HeroInput() {
   }> = [
     { label: t("hero_pill_no_display"), icon: MonitorX, color: "text-rose-500", animation: "shake" },
     { label: t("hero_pill_clicks_off"), icon: Zap, color: "text-amber-500", animation: "pulse" },
-    { label: t("hero_pill_bsod"), icon: Sparkles, color: "text-blue-500", animation: "spin" },
+    { label: t("hero_pill_bsod"), icon: AlertTriangle, color: "text-blue-500", animation: "pulse" },
     { label: t("hero_pill_no_internet"), icon: WifiOff, color: "text-sky-500", animation: "bounce" },
     { label: t("hero_pill_fans_100"), icon: Flame, color: "text-orange-500", animation: "flicker" },
   ];
@@ -188,7 +189,7 @@ export default function HeroInput() {
           href="/troubleshoot"
           className="group flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-pill bg-ink dark:bg-white px-6 py-3 text-[14.5px] font-semibold text-white dark:text-ink shadow-sm transition-all duration-150 hover:bg-ink/90 dark:hover:bg-white/90 active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          <MovingIcon icon={Sparkles} animation="spin" className="h-4 w-4 text-accent dark:text-accent" />
+          <MovingIcon icon={Terminal} animation="pulse" className="h-4 w-4 text-accent dark:text-accent" />
           <span>{t("hero_action_launch_ai")}</span>
         </Link>
 
