@@ -1416,66 +1416,6 @@ async function runChatStoragePersistenceSuite() {
   delete (globalThis as any).window;
 }
 
-async function runPartsRecommendationSuite() {
-  console.log(`\n======================================================`);
-  console.log(`SUITE: 10. Parts Recommendation & Compatibility Engine`);
-  console.log(`======================================================`);
-
-  const { checkCompatibility } = await import("../lib/parts/compatibility/checker");
-  const { generateSmartBuild } = await import("../lib/parts/build-generator/generator");
-  const { getAllParts } = await import("../lib/parts/repository");
-  const { detectHardwareHandoff } = await import("../lib/parts/handoff");
-
-  const parts = await getAllParts();
-  assert(parts.length >= 20, `Catalog contains at least 20 hardware components (found: ${parts.length})`);
-
-  const types = new Set(parts.map((p) => p.type));
-  for (const t of ["CPU", "GPU", "MOTHERBOARD", "RAM", "STORAGE", "PSU", "CASE", "COOLER"]) {
-    assert(types.has(t as any), `Catalog includes ${t} components`);
-  }
-
-  // Pass case
-  const cpu = parts.find((p) => p.slug === "amd-ryzen-7-7800x3d")!;
-  const mobo = parts.find((p) => p.slug === "asrock-b650m-hdv-m2-am5-motherboard")!;
-  const ram = parts.find((p) => p.slug === "gskill-ripjaws-s5-32gb-2x16gb-ddr5-6000-cl30")!;
-  const gpu = parts.find((p) => p.slug === "nvidia-geforce-rtx-4070-super-12gb")!;
-  const psu = parts.find((p) => p.slug === "corsair-rm750e-750w-80-plus-gold-atx3")!;
-  const cs = parts.find((p) => p.slug === "montech-air-903-max-atx-case")!;
-
-  const validReport = checkCompatibility({ cpu, motherboard: mobo, ram, gpu, psu, case: cs });
-  assert(validReport.isCompatible, "Compatible build reports isCompatible: true");
-
-  // Fail cases
-  const moboB550 = parts.find((p) => p.slug === "msi-b550m-pro-vdh-wifi-am4-motherboard")!;
-  const badSocket = checkCompatibility({ cpu, motherboard: moboB550, ram, gpu, psu, case: cs });
-  assert(!badSocket.isCompatible, "Socket mismatch (AM5 CPU on AM4 board) fails compatibility check");
-
-  const ramD4 = parts.find((p) => p.slug === "kingston-fury-beast-16gb-2x8gb-ddr4-3200")!;
-  const badRam = checkCompatibility({ cpu, motherboard: mobo, ram: ramD4, gpu, psu, case: cs });
-  assert(!badRam.isCompatible, "RAM generation mismatch (DDR4 on DDR5 board) fails compatibility check");
-
-  // Build generator
-  const build2500 = await generateSmartBuild({ budgetMyr: 2500, useCase: "budget" });
-  assert(build2500.success, "Generates successful budget build at RM2,500");
-  assert(build2500.compatibility.isCompatible, "Generated build passes 100% of compatibility rules");
-
-  const build5000 = await generateSmartBuild({ budgetMyr: 5000, useCase: "gaming" });
-  assert(build5000.success, "Generates successful gaming build at RM5,000");
-  assert(build5000.selection.gpu !== null, "Gaming build allocates dedicated GPU");
-
-  // Second-hand market & hybrid build support
-  const usedParts = await getAllParts({ condition: "used" });
-  assert(usedParts.length >= 8, "Catalog contains Malaysian second-hand market listings");
-
-  const hybridBuild = await generateSmartBuild({ budgetMyr: 2500, useCase: "gaming", marketPreference: "hybrid" });
-  assert(hybridBuild.success, "Generates successful Smart Hybrid build at RM2,500");
-  assert(hybridBuild.allocations.find((a) => a.componentType === "PSU")?.condition === "new", "Hybrid build enforces new PSU for safety");
-
-  // Handoff detection
-  const ramHandoff = detectHardwareHandoff("DRAM LED is solid orange, no post", "Test each RAM stick");
-  assert(ramHandoff !== null && ramHandoff.componentType === "RAM", "Troubleshooting handoff detects RAM hardware fault");
-}
-
 async function main() {
   console.log(`======================================================`);
   console.log(`pcfix - AUTOMATED QA TEST SUITE`);
@@ -1493,7 +1433,6 @@ async function main() {
     await runPostgresAndPrismaIntegritySuite();
     await runDataSchemaAndIntegritySuite();
     await runChatStoragePersistenceSuite();
-    await runPartsRecommendationSuite();
     await runLiveServerSuiteIfAvailable();
   } catch (err: any) {
     console.error("Fatal exception during QA suite execution:", err);

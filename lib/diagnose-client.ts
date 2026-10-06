@@ -1,10 +1,7 @@
-import { detectHardwareHandoff, PartsHandoff } from "@/lib/parts/handoff";
-
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
   image?: string; // base64 data URI
-  partsHandoff?: PartsHandoff | null;
 }
 
 /**
@@ -62,8 +59,7 @@ export async function compressImage(
 export async function diagnoseProblem(
   history: ChatMessage[],
   onChunk?: (chunk: string) => void,
-  lang: "en" | "ms" = "en",
-  onHandoff?: (handoff: PartsHandoff) => void
+  lang: "en" | "ms" = "en"
 ): Promise<string> {
   try {
     const streamQuery = onChunk ? "&stream=true" : "";
@@ -105,14 +101,6 @@ export async function diagnoseProblem(
       if (!fullText.trim()) {
         return "[DIAGNOSTIC_ERROR]: Connection closed before receiving diagnostic steps. Please tap Retry.";
       }
-
-      // Check hardware handoff after stream completes
-      const lastUser = history[history.length - 1]?.content || "";
-      const handoff = detectHardwareHandoff(lastUser, fullText);
-      if (handoff && onHandoff) {
-        onHandoff(handoff);
-      }
-
       return fullText;
     }
 
@@ -120,17 +108,6 @@ export async function diagnoseProblem(
     if (data.error) {
       return `[DIAGNOSTIC_ERROR]: ${data.error}`;
     }
-
-    if (data.partsHandoff && onHandoff) {
-      onHandoff(data.partsHandoff);
-    } else {
-      const lastUser = history[history.length - 1]?.content || "";
-      const handoff = detectHardwareHandoff(lastUser, data.reply || "");
-      if (handoff && onHandoff) {
-        onHandoff(handoff);
-      }
-    }
-
     return (
       data.reply ||
       "I evaluated your description, but received an empty response. Please try describing the symptom again."

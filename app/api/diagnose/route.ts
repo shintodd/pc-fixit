@@ -5,7 +5,6 @@ import { prisma, isDatabaseAvailable } from "@/lib/prisma";
 export const runtime = "nodejs";
 
 import { checkRateLimit, extractClientIp } from "@/lib/rate-limiter";
-import { detectHardwareHandoff } from "@/lib/parts/handoff";
 
 const STOP_WORDS = new Set([
   "the", "and", "for", "with", "this", "that", "from", "into", "some",
@@ -1257,14 +1256,11 @@ ${referenceSection}`;
       });
     }
 
-    const partsHandoff = detectHardwareHandoff(cleanSearchQuery, responseText);
-
     return NextResponse.json(
       {
         reply: responseText,
         path: pathUsed,
         matchedKbEntries: totalMatches,
-        partsHandoff: partsHandoff ?? undefined,
       },
       {
         headers: {

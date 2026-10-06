@@ -88,7 +88,6 @@ export default function Header() {
   const navLinks = [
     { href: "/troubleshoot", label: t("nav_diagnostician") },
     { href: "/wizard", label: t("nav_guided_fix") },
-    { href: "/parts", label: t("nav_parts") },
     { href: "/tips", label: t("nav_tips") },
     { href: "/", label: t("nav_knowledge_base") },
   ];

@@ -44,9 +44,6 @@ export default function Footer() {
             <Link href="/wizard" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("footer_nav_guided_fix")}
             </Link>
-            <Link href="/parts" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
-              {t("nav_parts" as any) || "Parts & Builds"}
-            </Link>
             <Link href="/tips" className="py-1.5 hover:text-ink dark:hover:text-dark-ink transition-colors">
               {t("nav_tips" as any) || "Tips & Tools"}
             </Link>
