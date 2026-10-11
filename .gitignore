@@ -51,9 +51,8 @@ TEST_READY.md
 # zip archives
 *.zip
 
-# local desktop scanner (retained on local machine only)
+# local desktop scanner source (retained in separate repo)
 /desktop-scanner/
-/public/downloads/
 
 # hyperframes cache
 .hyperframes/
