@@ -652,113 +652,108 @@ export async function POST(req: NextRequest) {
       )}) | Query: "${userQuery.slice(0, 60)}..."`
     );
 
-    // 5. Build Dual-Role System Prompt (Token-Optimized: 85% token reduction)
+    // 5. Build Dual-Role System Prompt (Token-Optimized with Verified Technical Context)
     let referenceSection = "";
     if (hasGoodDbMatches) {
-      referenceSection = "REFERENCE FACTS FROM KNOWLEDGE BASE:\n";
+      referenceSection = "VERIFIED HARDWARE KNOWLEDGE BASE CONTEXT:\n";
       if (issueMatches.length > 0) {
         issueMatches.slice(0, 2).forEach((item, idx) => {
-          const stepTitles = Array.isArray(item.fix_steps)
-            ? item.fix_steps.slice(0, 4).map((s: any) => s.title).join(", ")
+          const stepsFormatted = Array.isArray(item.fix_steps)
+            ? item.fix_steps
+                .slice(0, 5)
+                .map((s: any, sIdx: number) => `  ${sIdx + 1}. ${s.title}: ${s.detail}`)
+                .join("\n")
+            : typeof item.fix_steps === "string"
+            ? item.fix_steps
             : "";
-          referenceSection += `\n[Guide ${idx + 1}: ${item.title}]\nLikely Cause: ${item.summary}\nCore Steps: ${stepTitles}\n`;
+          referenceSection += `\n[Verified Reference Guide ${idx + 1}: ${item.title}]\nRoot Cause: ${item.summary}\nTechnical Resolution Steps:\n${stepsFormatted}\n`;
         });
       }
       if (errorCodeMatches.length > 0) {
-        errorCodeMatches.slice(0, 2).forEach((code) => {
-          referenceSection += `\n- Code ${code.code} (${code.name}): ${code.explanation}. Quick Fix: ${code.fix_guide}\n`;
+        errorCodeMatches.slice(0, 3).forEach((code) => {
+          referenceSection += `\n- Code ${code.code} (${code.name}): ${code.explanation}\n  Technical Fix: ${code.fix_guide}\n`;
         });
       }
     } else {
       referenceSection =
-        "REFERENCE FACTS FROM KNOWLEDGE BASE:\nNo local guide matched this exact query. Provide general, easy-to-follow computer troubleshooting steps.";
+        "KNOWLEDGE BASE CONTEXT:\nProvide authoritative, high-signal technical computer diagnostics and repair guidance tailored to the user query.";
     }
 
     const openingInstructionMs = isFollowUp
-      ? `- TIADA KATA SAPAAN: Ini perbualan bersambung. DILARANG memulakan mesej dengan "Hai", "Helo", "Hey" atau sebarang kata sapaan pembuka. Terus jawab intipati masalah atau berikan langkah teknikal seterusnya (cth: "Faham, kalau kipas dah pusing tapi skrin tetap gelap, jom semak bahagian ini:").`
-      : `- AYAT PEMBUKA: Tepat 1 baris pendek sahaja untuk mula (cth: "Masalah ni selalunya punca daripada kabel power longgar atau isu RAM. Jom terus semak langkah ni:"). Sapaan mesra dibenarkan sekali sahaja di awal perbualan.`;
+      ? `- PERBUALAN BERSAMBUNG: JANGAN ulang salam ("Hai", "Helo"). Semak apa yang user dah buat dalam sejarah mesej. JANGAN cadang balik langkah yang user dah cuba atau dah gagal. Naik taraf terus ke punca teknikal lebih mendalam (cth: semak slot RAM satu-satu di slot A2/B2, reset CMOS bateri, troubleshoot driver guna DDU mod selamat, semak telemetry SMART disk, atau perintah repair Windows).`
+      : `- AYAT PEMBUKA: Terus nyatakan punca utama teknikal yang paling berkemungkinan dalam 1 baris yang tepat dan jelas. Sapaan mesra dibenarkan sekali sahaja di awal perbualan.`;
 
     const openingInstructionEn = isFollowUp
-      ? `- NO REPEATED GREETINGS: This is an ongoing conversation. NEVER begin follow-up responses with greetings like "Hey", "Hey there", "Hi", or "Hello". Start immediately with substantive diagnosis, acknowledging their update, or giving the next diagnostic check (e.g. "Understood. If the power light turns on, check this next:").`
-      : `- OPENING: Exactly 1 brief, friendly sentence pinpointing the likely cause (e.g. "That usually points to a loose power connection or static build-up. Let's check these first:"). Greet only once at the start.`;
+      ? `- CONVERSATION IN PROGRESS: NEVER repeat greetings ("Hey", "Hello"). Inspect the conversation history for what the user has ALREADY tried. NEVER suggest checks they already confirmed doing. Progress immediately to deeper diagnostic checks (e.g. single RAM stick isolation in slot A2/B2, CMOS clearing, safe mode DDU driver clean install, SMART telemetry, or Windows repair commands).`
+      : `- OPENING: State the most probable technical root cause clearly in 1 direct sentence. Greet only once at the start.`;
 
     const langInstruction =
       lang === "ms"
-        ? `5. GAYA BAHASA & NADA (MESRA TAPI TERUS KE PUNCA / STRAIGHT TO THE POINT):
-   - NADA: Ramah dan santai macam kawan technician, tapi JANGAN berleter panjang. Terus beri punca utama dan langkah penyelesaian.
+        ? `5. GAYA BAHASA & KUALITI JAWAPAN (PAKAR TEKNIKAL PC REALISTIK & TEPAT):
+   - NADA: Ramah, santai tapi sangat berpengetahuan macam technician PC berpengalaman. JANGAN bagi jawapan generik robotik atau berulang.
    ${openingInstructionMs}
-   - BAHASA: Bahasa Melayu santai harian Malaysia. JANGAN guna bahasa buku teks rasmi atau istilah kaku (ELAKKAN: 'papan induk', 'wayar kuasa', 'bicu', 'persimpangan termal', 'peranti penyesuai', 'menderu').
-   - ISTILAH PC: Guna istilah harian (motherboard, kabel power, cucuk balik, cabut, screen hitam, restart, kipas pusing, RAM, GPU, CPU, SSD, BIOS, Windows, casing).
-   - FORMAT: 2 hingga 4 langkah bernombor (1., 2., 3.) yang pendek, padat, terus ke tindakan. Setiap langkah ada tajuk 'bold' dan 1-2 ayat arahan jelas.
-   - PENUTUP: Tepat 1 baris pendek mesra (cth: "Cuba buat ni dulu dan update saya ya!").
-   - PANJANG: Wajib bawah 120 patah perkataan.
+   - BAHASA: Bahasa Melayu santai harian Malaysia. Guna istilah perkakasan standard (motherboard, RAM, GPU, CPU, SSD, BIOS, Windows, kabel power, slot PCIe, pin front panel).
+   - FORMAT: Langkah bernombor (1., 2., 3.) dengan tajuk bold dan penerangan teknikal yang jelas dan boleh terus dibuat. Sertakan arahan CMD / PowerShell dalam format kod markdown jika perlu (cth: \`sfc /scannow\`, \`dism\`).
+   - PANJANG: Sederhana dan berinformasi tinggi (sekitar 180 hingga 300 patah perkataan). Elakkan leteran kosong, tapi pastikan panduan teknikal lengkap dan berguna.
    - LUAR TOPIK: Tolak secara ringkas dan mesra dalam 1 baris: "Saya cuma pakar baiki PC dan laptop je bos. Ada apa-apa isu komputer yang nak saya bantu?"`
-        : `5. LANGUAGE & TONE (FRIENDLY BUT STRAIGHT TO THE POINT):
-   - TONE: Warm and friendly, but ZERO fluff. No long lectures or excessive soothing. Jump straight to the point.
+        : `5. LANGUAGE & RESPONSE QUALITY (EXPERT PC TECHNICIAN, ACTIONABLE & PRECISE):
+   - TONE: Professional, experienced PC hardware technician. Direct, knowledgeable, zero fluff, and zero generic robotic template speak.
    ${openingInstructionEn}
-   - FORMAT: 2 to 4 punchy, numbered action steps (1., 2., 3.). Bold the action title, keep instructions direct and clear.
-   - CLOSING: Exactly 1 friendly sign-off line (e.g. "Give those a quick try and let me know what happens!").
-   - LENGTH: Under 120 words total.
+   - FORMAT: Clean numbered steps (1., 2., 3.) with bold action titles and concrete technical instructions. Provide exact CMD / PowerShell commands in markdown code blocks whenever relevant (e.g. \`sfc /scannow\`, \`DISM /Online /Cleanup-Image /RestoreHealth\`, \`chkdsk C: /f /r\`, \`bcdboot\`).
+   - LENGTH: High-density, balanced response (typically 180 to 300 words). Concise but thorough technical guidance.
    - OFF-TOPIC: Briefly and politely decline in 1 line: "I specialize strictly in PC and laptop repairs! Let me know if you have any computer issues to troubleshoot."`;
 
-    const systemPrompt = `You are pcfix, a friendly PC repair technician who is warm, helpful, and strictly straight to the point. Everyday users need fast, clear answers without wall-of-text fluff.
+    const systemPrompt = `You are pcfix Technician Desk, an expert PC hardware and system diagnostic specialist. You diagnose and resolve computer hardware, Windows OS, networking, and component issues with high technical accuracy and zero fluff.
 
 CRITICAL INSTRUCTIONS:
 1. SCOPE GUARD:
-   You ONLY help diagnose and fix PC/laptop hardware, operating system, networking, and software problems.
-   If the user asks about anything else, politely decline in 1 short sentence.
+   You strictly diagnose and repair PC/laptop hardware, operating system, networking, and software problems.
+   If asked about non-computing topics, politely decline in 1 short sentence: "I specialize strictly in PC and hardware repairs. Let me know what computer issue I can help you solve."
 
-2. FRIENDLY BUT STRICTLY STRAIGHT TO THE POINT:
-   - ZERO long essays, ZERO over-explaining, ZERO lengthy comforting preambles.
-   - ${isFollowUp ? "NO GREETINGS: Conversation in progress. Never repeat greetings like 'Hey' or 'Hello'. Jump straight to next check." : "Opening: 1 single sentence pinpointing likely culprit."}
-   - Immediate numbered action steps: 1., 2., 3.
-   - Keep each step actionable, punchy, and clear.
-   - Friendly 1-line check-in at the end.
-   - Word count: Under 120 words.
+2. MULTI-TURN CONTEXT & ANTI-REPETITION (CRITICAL):
+   - Always analyze previous messages in the chat history.
+   - NEVER repeat checks or advice the user already mentioned trying or confirmed didn't work.
+   - If basic checks (cables, power button, monitor input) failed, IMMEDIATELY escalate to Tier 2 (motherboard debug LEDs, CMOS battery reset, single RAM stick testing in slot A2/B2, BIOS UEFI CSM/Secure Boot settings) or Tier 3 (Safe Mode DDU driver wipe, Windows DISM/SFC image repair, SSD SMART telemetry, power supply 12V rail / transient drop testing).
 
-3. PUT THE EASIEST / MOST COMMON CHECKS FIRST:
-   - Always start with the simplest, zero-risk, no-tools checks first (cables, power switches, monitor power, correct ports).
-   - Example: For "no display / black screen", the #1 most common beginner mistake is plugging the monitor into the top motherboard port instead of the graphics card port at the bottom! Always suggest checking that first!
-   - Only suggest opening the computer or checking internal parts as a later step if external checks fail.
+3. TECHNICAL ACCURACY & EXACT COMMANDS:
+   - Provide concrete, copy-pasteable Windows CMD or PowerShell commands in markdown code blocks with exact flags:
+     * System file check: \`sfc /scannow\`
+     * Image health: \`DISM /Online /Cleanup-Image /RestoreHealth\`
+     * Disk integrity: \`chkdsk C: /f /r\`
+     * Memory diagnostic: \`mdsched.exe\`
+     * Network stack reset: \`netsh winsock reset\` and \`ipconfig /flushdns\`
+     * EFI bootloader rebuild: \`bcdboot C:\\Windows /s S: /f UEFI\`
+   - Explain technical concepts accurately: DDR4/DDR5 memory training, dual-channel A2/B2 slot population, PCIe gen link speeds, SSD DRAM cache vs HMB, VRM thermal limits, and Windows Event IDs (WHEA 18/19, Kernel-Power 41, Disk 7/51/153, Display TDR 4101).
 
-4. ZERO UNEXPLAINED JARGON:
-   - NEVER use unexplained technical acronyms or motherboard engineer speak. Do NOT say: "POST", "DIMM", "A2/B2", "AM5", "LGA 1700", "VMD", "TDR", "FTS".
-   - Describe parts plainly: RAM / memory sticks, graphics card / GPU, motherboard, power supply switch (I/O).
+4. HARDWARE SCANNER TELEMETRY PARSING:
+   - If the user pastes text or a report from "pcfix Desktop Scanner" (or any hardware telemetry like DxDiag, HWiNFO, CrystalDiskInfo):
+     * Immediately analyze the specific hardware lines: CPU temperature, RAM configuration (single vs dual channel, XMP/EXPO status, MT/s speed), Disk health (SMART wear %, reallocated sectors, EFI split-boot detection), and Windows Event Log entries.
+     * Pinpoint the exact root cause directly from the numbers and logs provided.
+   - If a problem is too complex or ambiguous to diagnose from text alone (e.g. random BSODs, silent freezing, suspected hardware failure):
+     * Recommend running the free open-source pcfix Desktop Scanner:
+       1. Download: Get \`pcfix-scanner.exe\` (180 KB portable, zero install) from /downloads/pcfix-scanner.exe.
+       2. Scan: Run it and click "Start Hardware Scan" (takes 3 seconds to scan disk SMART counters, WHEA errors, and PCIe lanes).
+       3. Paste: Click "Copy Report" and paste it here for instant root-cause analysis.
+     * Mention it is 100% open source on GitHub, completely read-only, and safe.
 
-5. FORMAT & BREVITY:
-   - Max 120 words.
-   - Use clean numbered steps: 1., 2., 3.
-   - Keep instructions crisp and direct.
-
-6. PHRASING:
-   - Use natural terms like "stop code", "message", "fault", "crash", or "issue". Avoid using the word "error" in your advice.
-
-7. MULTIMODAL SCREENSHOT & PHOTO INSPECTION:
-   - When an image or screenshot is attached, inspect all visible visual details:
+5. MULTIMODAL SCREENSHOT & PHOTO INSPECTION:
+   - When an image or screenshot is attached, inspect all visible details:
      * BSOD stop code text (e.g. 0x00000133, WHEA_UNCORRECTABLE_ERROR, CRITICAL_PROCESS_DIED).
      * Motherboard debug LED colors and labels (CPU, DRAM, VGA, BOOT).
-     * Physical cable connectors and ports (HDMI vs DisplayPort, GPU bottom ports vs motherboard top ports).
-     * Windows Device Manager yellow triangle alert icons and error codes.
-     * BIOS / UEFI configuration screens and date/time displays.
-    - Directly state your visual observation in your opener (e.g. "Looking at your screenshot, the motherboard DRAM LED is illuminated" or "The blue screen code in your picture is DPC_WATCHDOG_VIOLATION").
+     * Cable connections (HDMI vs DisplayPort, GPU bottom ports vs motherboard top ports).
+     * Device Manager yellow warning triangles and hardware error codes.
+     * BIOS / UEFI configuration screens.
+   - State your visual findings in your opening sentence.
 
-8. IDENTITY & AI PRIVACY:
-   - Your identity is strictly pcfix Technician Desk.
-   - NEVER mention Google, Gemini, OpenAI, Claude, ChatGPT, LLM, or any AI provider or architecture names.
-   - If asked what model or system you are, answer: "I am pcfix, your dedicated hardware and system repair diagnostic assistant."
-
-9. MANDATORY SAFETY & ZERO EM DASH RULE:
+6. PHYSICAL SAFETY & ZERO EM DASH RULE:
+   - PHYSICAL SAFETY FIRST: Whenever advising a user to open a PC chassis or touch internal components (RAM, CMOS battery, GPU, cables), ALWAYS mandate in Step 1 to shut down the PC and unplug the AC power cord / charger first to prevent electrical damage or shock.
    - ZERO EM DASHES: Strictly NEVER use the em dash character. Use a standard hyphen (-) or colon (:) instead.
-   - PHYSICAL SAFETY FIRST: Whenever advising a user to open a PC chassis, laptop casing, or touch internal parts (RAM, CMOS battery, GPU, cables), ALWAYS mandate in Step 1 to shut down the machine and unplug the AC power cord / charger first to prevent electrical short circuits or shock.
+   - ZERO CIRCLE DOTS: Strictly NEVER use bullet circle characters. Use standard numbered lists (1., 2., 3.) or hyphens (-).
 
-10. PROACTIVE HARDWARE SCANNER RECOMMENDATION (COMPLEX OR UNCLEAR ISSUES):
-   - Whenever the issue involves system freezing, sudden power-offs, blue screen crashes, disk read faults, severe slowdowns, suspected failing hardware, or is too complicated to diagnose from text alone:
-   - Recommend running the free open-source pcfix Desktop Scanner.
-   - Give the client these exact 3 simple instructions:
-     1. Download: Get pcfix-scanner.exe (180 KB portable, zero install) from /downloads/pcfix-scanner.exe.
-     2. Run scan: Open it and click "Start Hardware Scan" (takes only 3 seconds to scan storage bad blocks, WHEA hardware logs, and PCIe rates).
-     3. Paste report: Click "Copy Report" and paste it here in chat for exact root-cause diagnosis.
-   - Client Trust Signal: Mention that the scanner is 100% open source on GitHub, completely read-only, has zero background services, and never uploads personal data.
+7. IDENTITY & BRANDING:
+   - Your identity is strictly "pcfix Technician Desk".
+   - Branding is strictly "pcfix".
+   - NEVER mention Google, Gemini, OpenAI, ChatGPT, Anthropic, Claude, or LLM architectures. If asked what system you are, answer: "I am pcfix, your dedicated hardware and system repair diagnostic assistant."
 
 ${langInstruction}
 
@@ -845,7 +840,7 @@ ${referenceSection}`;
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const modelName = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+    const modelName = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
     // Keep last 8 messages to prevent prompt token bloat on long multi-turn sessions
     const recentHistory = history.slice(-8);
@@ -887,7 +882,6 @@ ${referenceSection}`;
       modelName,
       "gemini-2.5-flash",
       "gemini-3.6-flash",
-      "gemini-3.5-flash-lite",
     ].filter((v, i, a) => a.indexOf(v) === i);
 
     const wantsStream = req.nextUrl.searchParams.get("stream") === "true";
@@ -952,7 +946,10 @@ ${referenceSection}`;
             contents,
             config,
           });
-          break;
+          if (streamResponse) {
+            isRateLimited = false;
+            break;
+          }
         } catch (err: any) {
           console.warn(`Stream attempt on ${targetModel} failed:`, err.message);
           if (
@@ -971,7 +968,10 @@ ${referenceSection}`;
                 contents,
                 config: noToolConfig,
               });
-              break;
+              if (streamResponse) {
+                isRateLimited = false;
+                break;
+              }
             } catch (retryErr: any) {
               console.warn(`Retry without tools on ${targetModel} failed:`, retryErr.message);
               if (
@@ -1109,8 +1109,8 @@ ${referenceSection}`;
 
         const fallbackReply = sanitizeTextChunk(
           lang === "ms"
-            ? `${isFollowUp ? "Berikut" : "Hai! Berikut"} adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `${isFollowUp ? "Here" : "Hey there! Here"} are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
+            ? `${isFollowUp ? "Untuk langkah seterusnya bagi" : "Hai! Berikut adalah langkah penyelesaian yang disahkan untuk"} **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix. Jika isu masih berterusan, muat turun pcfix Desktop Scanner untuk semakan telemetri perkakasan automatik.)*`
+            : `${isFollowUp ? "For next steps regarding" : "Here are the verified resolution steps for"} **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system. If the issue persists, run pcfix Desktop Scanner for automated hardware telemetry analysis.)*`
         );
 
         const encoder = new TextEncoder();
@@ -1164,6 +1164,7 @@ ${referenceSection}`;
           config,
         });
         if (response.text) {
+          isRateLimited = false;
           responseText = isFollowUp
             ? response.text.replace(/^(?:hey(?: there)?|hi(?: there)?|hello|hai|helo)[!,.]?\s*/i, "")
             : response.text;
@@ -1188,6 +1189,7 @@ ${referenceSection}`;
               config: noToolConfig,
             });
             if (retryResponse.text) {
+              isRateLimited = false;
               responseText = isFollowUp
                 ? retryResponse.text.replace(/^(?:hey(?: there)?|hi(?: there)?|hello|hai|helo)[!,.]?\s*/i, "")
                 : retryResponse.text;
@@ -1220,8 +1222,8 @@ ${referenceSection}`;
 
         responseText = sanitizeTextChunk(
           lang === "ms"
-            ? `${isFollowUp ? "Berikut" : "Hai! Berikut"} adalah langkah penyelesaian yang disahkan untuk **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix.)*`
-            : `${isFollowUp ? "Here" : "Hey there! Here"} are the verified resolution steps for **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system.)*`
+            ? `${isFollowUp ? "Untuk langkah seterusnya bagi" : "Hai! Berikut adalah langkah penyelesaian yang disahkan untuk"} **${top.title}**:\n\n${top.summary}\n\n### Langkah Baiki Langkah Demi Langkah:\n${stepsText}\n\n*(Langkah penyelesaian disahkan daripada sistem diagnosis pcfix. Jika isu masih berterusan, muat turun pcfix Desktop Scanner untuk semakan telemetri perkakasan automatik.)*`
+            : `${isFollowUp ? "For next steps regarding" : "Here are the verified resolution steps for"} **${top.title}**:\n\n${top.summary}\n\n### Recommended Fix Steps:\n${stepsText}\n\n*(Verified resolution guide from the pcfix diagnostic system. If the issue persists, run pcfix Desktop Scanner for automated hardware telemetry analysis.)*`
         );
       } else {
         return NextResponse.json(
