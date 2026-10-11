@@ -27,6 +27,8 @@ import {
   Maximize2,
   Loader2,
   ChevronDown,
+  Cpu,
+  Download,
 } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
 import {
@@ -52,6 +54,7 @@ import BeepLedDecoderModal from "@/components/BeepLedDecoderModal";
 import PhoneQrModal from "@/components/PhoneQrModal";
 import CommandExplainerModal from "@/components/CommandExplainerModal";
 import RepairFeasibilityModal from "@/components/RepairFeasibilityModal";
+import DesktopScannerModal from "@/components/DesktopScannerModal";
 import { LiquidGlassPill } from "@/components/LiquidGlassCard";
 
 export default function Chat({
@@ -107,15 +110,23 @@ export default function Chat({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [showHistoryMobile, setShowHistoryMobile] = useState(false);
   const [showScrollBottom, setShowScrollBottom] = useState(false);
-  const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | null>(null);
+  const [activeModal, setActiveModal] = useState<"port" | "beep" | "phone" | "cmd" | "calc" | "scanner" | null>(null);
 
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
   const lastUserMessageRef = useRef<HTMLDivElement | null>(null);
   const messageListRef = useRef<HTMLDivElement | null>(null);
   const isSelectingSessionRef = useRef(false);
   const hasRun = useRef(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-grow the chat textarea to fit pasted multi-line text (scanner reports), capped by max-h-48.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [input]);
 
   // Lock document viewport on /troubleshoot so chat acts as a docked app without page scrolling
   useEffect(() => {
@@ -144,11 +155,18 @@ export default function Chat({
 
   const diagnosticTools = [
     {
+      id: "scanner",
+      icon: Cpu,
+      label: t("tool_scanner"),
+      sub: language === "ms" ? "180 KB utiliti tanpa pasang" : "180 KB portable diagnostic",
+      color: "text-blue-500 bg-blue-500/10",
+    },
+    {
       id: "port",
       icon: Monitor,
       label: t("tool_port_locator"),
       sub: language === "ms" ? "GPU vs Motherboard" : "GPU vs Motherboard",
-      color: "text-blue-500 bg-blue-500/10",
+      color: "text-sky-500 bg-sky-500/10",
     },
     {
       id: "beep",
@@ -673,6 +691,46 @@ export default function Chat({
     <div className="mx-auto flex w-full max-w-7xl 2xl:max-w-[1720px] flex-1 min-h-0 flex-col lg:flex-row gap-6 px-4 sm:px-8 lg:px-12 2xl:px-16 py-3 sm:py-4 h-full overflow-hidden">
       {/* Desktop Sidebar: Diagnostics Console, Recent Sessions & Fast Starters */}
       <aside className="hidden lg:flex flex-col w-80 shrink-0 gap-4 h-full overflow-y-auto pr-1 touch-scroll">
+        {/* Desktop Hardware Scanner Banner */}
+        <div className="rounded-2xl border border-blue-500/25 bg-blue-500/5 dark:bg-blue-500/10 p-3.5 backdrop-blur-md">
+          <div className="flex items-start gap-2.5">
+            <div className="p-2 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shrink-0">
+              <Cpu className="h-4 w-4" />
+            </div>
+            <div className="space-y-1 min-w-0 flex-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[12.5px] font-bold text-ink dark:text-dark-ink truncate">
+                  {language === "ms" ? "Pengimbas PC" : "PC Scanner"}
+                </span>
+                <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
+                  180 KB
+                </span>
+              </div>
+              <p className="text-[11px] text-ink-secondary dark:text-dark-ink-secondary leading-tight">
+                {language === "ms" ? "Imbas bad blocks & log WHEA tanpa pasang" : "Scan bad blocks & WHEA logs with zero install"}
+              </p>
+              <div className="pt-1 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveModal("scanner")}
+                  className="text-[11px] font-semibold text-accent hover:underline inline-flex items-center gap-1"
+                >
+                  <span>{language === "ms" ? "Maklumat" : "Details"}</span>
+                </button>
+                <span className="text-ink-tertiary text-[10px]">/</span>
+                <a
+                  href="/downloads/pcfix-scanner.exe"
+                  download="pcfix-scanner.exe"
+                  className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center gap-1"
+                >
+                  <Download className="h-3 w-3" />
+                  <span>{language === "ms" ? "Muat turun" : "Download"}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Recent Diagnoses Client History */}
         <div className="rounded-2xl border border-line dark:border-dark-line bg-white/85 dark:bg-dark-card/85 p-4 shadow-card dark:shadow-card-dark backdrop-blur-md">
           <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-line/70 dark:border-dark-line/70">
@@ -838,14 +896,25 @@ export default function Chat({
               {sessions.length}
             </span>
           </button>
-          <button
-            type="button"
-            onClick={handleNewSession}
-            className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-accent px-3.5 py-2 text-[12px] font-semibold text-white shadow-xs hover:bg-accent-hover transition-colors"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            <span>{t("chat_new_session")}</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setActiveModal("scanner")}
+              className="min-h-[44px] inline-flex items-center gap-1 rounded-xl border border-blue-500/20 bg-blue-500/10 px-2.5 py-2 text-[12px] font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-500/15 transition-colors"
+              title={language === "ms" ? "Pengimbas PC" : "PC Scanner"}
+            >
+              <Cpu className="h-3.5 w-3.5" />
+              <span className="text-[11px]">180KB</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleNewSession}
+              className="min-h-[44px] inline-flex items-center gap-1 rounded-xl bg-accent px-3 py-2 text-[12px] font-semibold text-white shadow-xs hover:bg-accent-hover transition-colors"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>{t("chat_new_session")}</span>
+            </button>
+          </div>
         </div>
 
         {/* Mobile History Dropdown Accordion */}
@@ -1129,13 +1198,20 @@ export default function Chat({
               <ImageIcon className="h-4 w-4" />
             </button>
 
-            <input
+            <textarea
               ref={inputRef}
               id="chat-input"
               name="message"
-              type="text"
+              rows={1}
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                // Enter sends, Shift+Enter adds a newline. Skip while an IME is composing.
+                if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+                  e.preventDefault();
+                  e.currentTarget.form?.requestSubmit();
+                }
+              }}
               placeholder={
                 pendingImage
                   ? (language === "ms" ? "Tambah nota jika ada, atau tekan Hantar..." : "Add details or press Send...")
@@ -1143,7 +1219,7 @@ export default function Chat({
               }
               aria-label={t("chat_input_placeholder")}
               autoComplete="off"
-              className="min-w-0 flex-1 bg-transparent py-2 text-base text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
+              className="min-w-0 flex-1 resize-none self-center bg-transparent py-2 text-base leading-6 max-h-48 overflow-y-auto text-ink dark:text-dark-ink placeholder:text-ink-tertiary dark:placeholder:text-dark-ink-tertiary focus:outline-none"
             />
 
             {/* Clear button */}
@@ -1228,6 +1304,7 @@ export default function Chat({
       </AnimatePresence>
 
       {/* Interactive Helper Modals */}
+      <DesktopScannerModal isOpen={activeModal === "scanner"} onClose={() => setActiveModal(null)} />
       <PortLocatorModal isOpen={activeModal === "port"} onClose={() => setActiveModal(null)} />
       <BeepLedDecoderModal isOpen={activeModal === "beep"} onClose={() => setActiveModal(null)} />
       <PhoneQrModal isOpen={activeModal === "phone"} onClose={() => setActiveModal(null)} />
@@ -1442,6 +1519,39 @@ function Bubble({
             className="inline-block ml-0.5 h-4 w-[3px] rounded-sm bg-accent align-middle"
             aria-hidden="true"
           />
+        )}
+
+        {/* Interactive Desktop Scanner Download Card */}
+        {message.content.includes("pcfix-scanner.exe") && (
+          <div className="mt-3 pt-3 border-t border-line/70 dark:border-dark-line/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-blue-500/5 dark:bg-blue-500/10 -mx-5 -mb-4 p-4 rounded-b-[19px]">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 shrink-0">
+                <Cpu className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="text-[13px] font-bold text-ink dark:text-dark-ink flex items-center gap-1.5">
+                  <span>pcfix Desktop Scanner</span>
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">
+                    180 KB / Open Source
+                  </span>
+                </div>
+                <div className="text-[11.5px] text-ink-secondary dark:text-dark-ink-secondary">
+                  {language === "ms" ? "Zero install, baca sahaja, 3 saat imbasan" : "Zero install, read-only, 3-second scan"}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <a
+                href="/downloads/pcfix-scanner.exe"
+                download="pcfix-scanner.exe"
+                className="inline-flex min-h-[38px] flex-1 sm:flex-initial items-center justify-center gap-1.5 rounded-lg bg-accent px-3.5 py-1.5 text-[12px] font-bold text-white hover:bg-accent-hover transition-colors shadow-xs"
+              >
+                <Download className="h-3.5 w-3.5" />
+                <span>{language === "ms" ? "Muat Turun .EXE" : "Download .EXE"}</span>
+              </a>
+            </div>
+          </div>
         )}
       </div>
 

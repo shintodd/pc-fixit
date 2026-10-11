@@ -158,6 +158,7 @@ export const translations = {
     issue_all_steps_done: "All steps completed!",
 
     // Usability Suite Tools
+    tool_scanner: "Hardware Scanner",
     tool_port_locator: "Port & Cable Guide",
     tool_beep_led: "Beeps & LED Lights",
     tool_phone_qr: "Send to Phone",
@@ -340,6 +341,7 @@ export const translations = {
     issue_all_steps_done: "Semua langkah dah siap!",
 
     // Usability Suite Tools
+    tool_scanner: "Pengimbas Hardware",
     tool_port_locator: "Panduan Port & Wayar",
     tool_beep_led: "Bunyi Beep & Lampu LED",
     tool_phone_qr: "Buka di Telefon",

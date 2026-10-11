@@ -26,22 +26,30 @@ const PhoneQrModal = dynamic(() => import("@/components/PhoneQrModal"), { ssr: f
 const CommandExplainerModal = dynamic(() => import("@/components/CommandExplainerModal"), { ssr: false });
 const RepairFeasibilityModal = dynamic(() => import("@/components/RepairFeasibilityModal"), { ssr: false });
 const DiagnosticPlayerModal = dynamic(() => import("@/components/DiagnosticPlayerModal"), { ssr: false });
+const DesktopScannerModal = dynamic(() => import("@/components/DesktopScannerModal"), { ssr: false });
 
 export default function QuickToolsBar({ className = "" }: { className?: string }) {
   const { t, language } = useLanguage();
   const [activeModal, setActiveModal] = useState<
-    "port" | "beep" | "pinout" | "lab" | "defects" | "phone" | "cmd" | "calc" | "motion" | null
+    "port" | "beep" | "pinout" | "lab" | "defects" | "phone" | "cmd" | "calc" | "motion" | "scanner" | null
   >(null);
 
   const isMs = language === "ms";
 
   const tools = [
     {
+      id: "scanner",
+      icon: Cpu,
+      label: t("tool_scanner"),
+      sub: isMs ? "180 KB utiliti tanpa pasang" : "180 KB portable diagnostic",
+      color: "text-blue-500 bg-blue-500/10",
+    },
+    {
       id: "port",
       icon: Monitor,
       label: t("tool_port_locator"),
       sub: isMs ? "Port GPU vs Motherboard" : "GPU vs Motherboard Ports",
-      color: "text-blue-500 bg-blue-500/10",
+      color: "text-sky-500 bg-sky-500/10",
     },
     {
       id: "beep",
@@ -106,7 +114,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
             <span>{isMs ? "Alatan Interaktif Pantas" : "Interactive Diagnostic Suite"}</span>
           </div>
           <span className="text-[11px] text-ink-tertiary dark:text-dark-ink-tertiary hidden sm:inline">
-            {isMs ? "8 alat diagnostik terus dalam pelayar web" : "8 zero-install browser diagnostic tools"}
+            {isMs ? "9 alat diagnostik: web & pengimbas desktop" : "9 diagnostic tools: web & portable desktop"}
           </span>
         </div>
 
@@ -116,7 +124,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
             aria-hidden="true"
             className="pointer-events-none absolute -inset-2 -z-10 rounded-2xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-emerald-500/10 blur-xl opacity-60 dark:opacity-40"
           />
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 gap-2.5">
             {tools.map((item) => {
               const Icon = item.icon;
               return (
@@ -146,6 +154,7 @@ export default function QuickToolsBar({ className = "" }: { className?: string }
       </section>
 
       {/* Modals */}
+      <DesktopScannerModal isOpen={activeModal === "scanner"} onClose={() => setActiveModal(null)} />
       <PortLocatorModal isOpen={activeModal === "port"} onClose={() => setActiveModal(null)} />
       <BeepLedDecoderModal isOpen={activeModal === "beep"} onClose={() => setActiveModal(null)} />
       <FrontPanelPinoutModal isOpen={activeModal === "pinout"} onClose={() => setActiveModal(null)} />

@@ -22,15 +22,19 @@ export const metadata: Metadata = {
 export default function TroubleshootPage({
   searchParams,
 }: {
-  searchParams: { q?: string; topic?: string };
+  searchParams: { q?: string; topic?: string; hw?: string };
 }) {
+  // Desktop scanner handoff (pcfix-scanner.exe): ?hw=<compact findings>. Capped to keep the seed message sane.
+  const hwSeed = searchParams.hw ? searchParams.hw.slice(0, 2000) : undefined;
+  const initialQuery = searchParams.q || hwSeed;
+
   const guideSlug =
     searchParams.topic && ISSUES[searchParams.topic] ? searchParams.topic : undefined;
 
   return (
     <Chat
-      key={`${searchParams.q || ""}_${searchParams.topic || ""}`}
-      initialQuery={searchParams.q}
+      key={`${initialQuery || ""}_${searchParams.topic || ""}`}
+      initialQuery={initialQuery}
       topic={searchParams.topic}
       guideSlug={guideSlug}
     />

@@ -751,6 +751,15 @@ CRITICAL INSTRUCTIONS:
    - ZERO EM DASHES: Strictly NEVER use the em dash character. Use a standard hyphen (-) or colon (:) instead.
    - PHYSICAL SAFETY FIRST: Whenever advising a user to open a PC chassis, laptop casing, or touch internal parts (RAM, CMOS battery, GPU, cables), ALWAYS mandate in Step 1 to shut down the machine and unplug the AC power cord / charger first to prevent electrical short circuits or shock.
 
+10. PROACTIVE HARDWARE SCANNER RECOMMENDATION (COMPLEX OR UNCLEAR ISSUES):
+   - Whenever the issue involves system freezing, sudden power-offs, blue screen crashes, disk read faults, severe slowdowns, suspected failing hardware, or is too complicated to diagnose from text alone:
+   - Recommend running the free open-source pcfix Desktop Scanner.
+   - Give the client these exact 3 simple instructions:
+     1. Download: Get pcfix-scanner.exe (180 KB portable, zero install) from /downloads/pcfix-scanner.exe.
+     2. Run scan: Open it and click "Start Hardware Scan" (takes only 3 seconds to scan storage bad blocks, WHEA hardware logs, and PCIe rates).
+     3. Paste report: Click "Copy Report" and paste it here in chat for exact root-cause diagnosis.
+   - Client Trust Signal: Mention that the scanner is 100% open source on GitHub, completely read-only, has zero background services, and never uploads personal data.
+
 ${langInstruction}
 
 ${referenceSection}`;
